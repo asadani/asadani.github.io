@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The LiteLLM PyPI Attack: A Supply Chain Postmortem</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne+Mono&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #181818;
+    --border: #222222;
+    --text: #e8e8e8;
+    --text-muted: #666;
+    --text-dim: #999;
+    --accent: #ff3c3c;
+    --accent2: #ff7c3c;
+    --accent-glow: rgba(255, 60, 60, 0.15);
+    --green: #3cffa0;
+    --yellow: #ffd93c;
+    --blue: #3cb8ff;
+    --mono: 'Syne Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+    --display: 'Syne', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* SCANLINE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* HEADER */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+
+  .header-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+  }
+
+  .header-meta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* HERO */
+  .hero {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 80px 40px 60px;
+    position: relative;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100px; right: -100px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0.4;
+  }
+
+  .tag-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    padding: 4px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+
+  .tag-critical {
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+    animation: pulse-tag 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-tag {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  .tag-date { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
+  .tag-topic { background: var(--surface2); color: var(--blue); border: 1px solid #1a3a50; }
+
+  .hero-title {
+    font-family: var(--display);
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+
+  .hero-title .accent { color: var(--accent); }
+  .hero-title .dim { color: var(--text-muted); }
+
+  .hero-subtitle {
+    font-size: 18px;
+    color: var(--text-dim);
+    font-weight: 300;
+    max-width: 620px;
+    line-height: 1.65;
+    margin-bottom: 40px;
+    font-style: italic;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .stat {
+    background: var(--surface);
+    padding: 20px 24px;
+  }
+
+  .stat-value {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* MAIN CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 40px 100px;
+  }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 72px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    position: relative;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-number {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .section-title {
+    font-family: var(--display);
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 28px;
+    letter-spacing: -0.01em;
+  }
+
+  p { margin-bottom: 20px; color: var(--text); }
+
+  p:last-child { margin-bottom: 0; }
+
+  strong { color: #fff; font-weight: 500; }
+
+  /* CODE BLOCKS */
+  .code-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 4px;
+    padding: 24px 28px;
+    margin: 28px 0;
+    overflow-x: auto;
+    position: relative;
+  }
+
+  .code-block-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .code-block code, pre {
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.7;
+    color: #c8c8c8;
+    white-space: pre;
+  }
+
+  code { font-family: var(--mono); font-size: 0.88em; }
+
+  .inline-code {
+    font-family: var(--mono);
+    font-size: 0.85em;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 7px;
+    border-radius: 3px;
+    color: var(--blue);
+  }
+
+  /* ATTACK STAGES */
+  .stages {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 28px 0;
+  }
+
+  .stage {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 20px;
+    align-items: start;
+    transition: border-color 0.2s;
+  }
+
+  .stage:hover { border-color: var(--accent); }
+
+  .stage-num {
+    font-family: var(--mono);
+    font-size: 28px;
+    color: var(--border);
+    font-weight: 700;
+    line-height: 1;
+    padding-top: 4px;
+  }
+
+  .stage:hover .stage-num { color: var(--accent); }
+
+  .stage-title {
+    font-family: var(--display);
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+
+  .stage-desc { font-size: 15px; color: var(--text-dim); margin: 0; }
+
+  .stage-tags {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+
+  .stage-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+  }
+
+  .st-red { background: rgba(255,60,60,0.12); color: var(--accent); border: 1px solid rgba(255,60,60,0.2); }
+  .st-yellow { background: rgba(255,217,60,0.1); color: var(--yellow); border: 1px solid rgba(255,217,60,0.2); }
+  .st-green { background: rgba(60,255,160,0.08); color: var(--green); border: 1px solid rgba(60,255,160,0.15); }
+
+  /* CALLOUT BOXES */
+  .callout {
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin: 28px 0;
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+
+  .callout-warn {
+    background: rgba(255,217,60,0.06);
+    border: 1px solid rgba(255,217,60,0.2);
+  }
+
+  .callout-danger {
+    background: rgba(255,60,60,0.06);
+    border: 1px solid rgba(255,60,60,0.2);
+  }
+
+  .callout-info {
+    background: rgba(60,184,255,0.06);
+    border: 1px solid rgba(60,184,255,0.2);
+  }
+
+  .callout-safe {
+    background: rgba(60,255,160,0.06);
+    border: 1px solid rgba(60,255,160,0.2);
+  }
+
+  .callout-icon { font-size: 18px; padding-top: 2px; }
+
+  .callout-body p { margin-bottom: 8px; font-size: 15px; }
+  .callout-body p:last-child { margin-bottom: 0; }
+  .callout-title { font-family: var(--display); font-weight: 700; font-size: 14px; margin-bottom: 8px; }
+  .callout-warn .callout-title { color: var(--yellow); }
+  .callout-danger .callout-title { color: var(--accent); }
+  .callout-info .callout-title { color: var(--blue); }
+  .callout-safe .callout-title { color: var(--green); }
+
+  /* VERSION TABLE */
+  .version-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 28px 0;
+    font-size: 14px;
+  }
+
+  .version-table th {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .version-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .version-table tr:hover td { background: var(--surface); }
+
+  .badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 2px;
+    font-weight: 700;
+    display: inline-block;
+  }
+
+  .badge-clean { background: rgba(60,255,160,0.12); color: var(--green); border: 1px solid rgba(60,255,160,0.25); }
+  .badge-danger { background: rgba(255,60,60,0.12); color: var(--accent); border: 1px solid rgba(255,60,60,0.25); }
+  .badge-critical { background: var(--accent); color: #000; }
+
+  /* CHECKLIST */
+  .checklist {
+    list-style: none;
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    font-size: 15px;
+    color: var(--text-dim);
+    padding: 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+  }
+
+  .checklist li::before {
+    content: '□';
+    font-family: var(--mono);
+    color: var(--accent);
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* PREVENTION GRID */
+  .prevention-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2px;
+    background: var(--border);
+    margin: 28px 0;
+  }
+
+  .prevention-card {
+    background: var(--surface);
+    padding: 28px;
+  }
+
+  .prevention-icon {
+    font-size: 24px;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .prevention-title {
+    font-family: var(--display);
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+
+  .prevention-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* TIMELINE */
+  .timeline {
+    position: relative;
+    margin: 28px 0;
+    padding-left: 28px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 8px; bottom: 8px;
+    width: 1px;
+    background: linear-gradient(180deg, var(--accent), transparent);
+  }
+
+  .timeline-item {
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -32px;
+    top: 7px;
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  .timeline-time {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+
+  .timeline-event {
+    font-size: 15px;
+    color: var(--text-dim);
+  }
+
+  .timeline-event strong { color: var(--text); }
+
+  /* QUOTE */
+  .pull-quote {
+    border-left: 3px solid var(--accent);
+    padding: 20px 28px;
+    margin: 36px 0;
+    background: var(--surface);
+  }
+
+  .pull-quote p {
+    font-family: var(--display);
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    font-style: italic;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* FOOTER */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 40px;
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: gap;
+    gap: 20px;
+  }
+
+  .footer-note {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+  }
+
+  .footer-links a {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--accent); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  @media (max-width: 600px) {
+    .header { padding: 16px 20px; }
+    .hero, .content { padding-left: 20px; padding-right: 20px; }
+    .footer { padding: 30px 20px; flex-direction: column; }
+    .stage { grid-template-columns: 1fr; }
+    .stage-num { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <span class="header-logo">// SECURITY ADVISORY</span>
+  <span class="header-meta">March 24, 2026 &nbsp;·&nbsp; CVE IN PROGRESS</span>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="tag-row">
+      <span class="tag tag-critical">⚠ Critical</span>
+      <span class="tag tag-date">2026-03-24</span>
+      <span class="tag tag-topic">Supply Chain</span>
+      <span class="tag tag-topic">PyPI</span>
+      <span class="tag tag-topic">MCP Ecosystem</span>
+    </div>
+
+    <h1 class="hero-title">
+      The <span class="accent">LiteLLM</span> PyPI Attack<br>
+      <span class="dim">A Supply Chain Postmortem</span>
+    </h1>
+
+    <p class="hero-subtitle">
+      How a hijacked maintainer account, a malicious <code>.pth</code> file, and the booming MCP plugin ecosystem combined into one of the most targeted credential-theft operations against AI developers to date.
+    </p>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-value">95M</span>
+        <span class="stat-label">Monthly Downloads</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">1.82.7–8</span>
+        <span class="stat-label">Compromised Versions</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">~13 min</span>
+        <span class="stat-label">Between Malicious Releases</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">TeamPCP</span>
+        <span class="stat-label">Threat Actor</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="content">
+
+    <!-- SECTION 1: WHAT HAPPENED -->
+    <section class="section">
+      <span class="section-number">01 / What Happened</span>
+      <h2 class="section-title">A Maintainer Account Gets Hijacked</h2>
+
+      <p>On March 24, 2026 at <strong>10:39 UTC</strong>, <span class="inline-code">litellm==1.82.7</span> was uploaded to PyPI. Thirteen minutes later, <span class="inline-code">1.82.8</span> followed. Neither version had a corresponding Git tag or GitHub release. Both were uploaded directly by the threat actor after compromising the PyPI account of <span class="inline-code">krrishdholakia</span>, the litellm maintainer — bypassing the project's entire CI/CD pipeline.</p>
+
+      <p>The attack was only discovered by accident. A developer at FutureSearch installed an MCP plugin in Cursor IDE. That plugin pulled in litellm as a transitive dependency. Within seconds, the machine ran out of RAM and crashed — caused by an exponential fork bomb, a <em>bug in the malware itself</em>. Without that bug, the attack would have been completely silent.</p>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-time">March 23, 12:58 UTC</div>
+          <div class="timeline-event">TeamPCP compromises <strong>KICS GitHub Actions</strong> — previous operation in this campaign</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">March 24, 10:39 UTC</div>
+          <div class="timeline-event"><strong>litellm 1.82.7</strong> uploaded to PyPI — malicious payload in <span class="inline-code">proxy/proxy_server.py</span></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">March 24, 10:52 UTC</div>
+          <div class="timeline-event"><strong>litellm 1.82.8</strong> uploaded — escalated attack via <span class="inline-code">litellm_init.pth</span>, no import needed</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">March 24, afternoon</div>
+          <div class="timeline-event">FutureSearch <strong>discovers the attack</strong> via fork bomb crash in Cursor. Community report filed as GitHub issue #24512</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">March 24, evening</div>
+          <div class="timeline-event">PyPI <strong>quarantines the entire litellm package</strong>. MLflow emergency-pins to <span class="inline-code">&lt;=1.82.6</span></div>
+        </div>
+      </div>
+
+      <div class="callout callout-danger">
+        <span class="callout-icon">🚨</span>
+        <div class="callout-body">
+          <div class="callout-title">Attacker Calling Card</div>
+          <p>A commit pushed to a forked repository by the attacker reads: <span class="inline-code">"teampcp owns BerriAI"</span>. The same group was responsible for the Trivy scanner attack (March 19) and the KICS compromise. The exfiltrated archive filename — <span class="inline-code">tpcp.tar.gz</span> — is a direct reference to the group's name.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: HOW THE ATTACK WORKS -->
+    <section class="section">
+      <span class="section-number">02 / How the Attack Works</span>
+      <h2 class="section-title">Anatomy of the Payload</h2>
+
+      <p>The attack operates differently across the two versions, with 1.82.8 representing an escalated, more aggressive iteration. Here's what version 1.82.8 does from the moment litellm is installed:</p>
+
+      <h3 style="font-family: var(--display); font-size: 17px; font-weight: 700; margin: 28px 0 16px; color: #fff;">The .pth Trick — Why No Import Is Needed</h3>
+
+      <p>Python's <span class="inline-code">site</span> module processes all <span class="inline-code">.pth</span> files in <span class="inline-code">site-packages/</span> at interpreter startup. The malicious file <span class="inline-code">litellm_init.pth</span> (34,628 bytes, listed in the package's own <span class="inline-code">RECORD</span>) contains:</p>
+
+      <div class="code-block">
+        <span class="code-block-label">litellm_init.pth — obfuscated trigger</span>
+        <pre><code>import os, subprocess, sys; subprocess.Popen([
+  sys.executable, "-c",
+  "import base64; exec(base64.b64decode('...[34KB of double-encoded payload]...'))"
+])</code></pre>
+      </div>
+
+      <p>This spawns a child Python process carrying the full payload. Because <span class="inline-code">.pth</span> files trigger on <em>every</em> interpreter startup, the child re-triggers the same file — creating an exponential fork bomb. The fork bomb was not intentional. It is a bug. Without it, this attack would still be undetected in countless environments.</p>
+
+      <p>Version 1.82.7 was slightly less aggressive — the payload was embedded directly in <span class="inline-code">proxy/proxy_server.py</span>, requiring an explicit <span class="inline-code">import litellm</span> to trigger. Version 1.82.8 removed that requirement entirely.</p>
+
+      <div class="stages">
+        <div class="stage">
+          <div class="stage-num">01</div>
+          <div>
+            <div class="stage-title">Credential Harvesting</div>
+            <p class="stage-desc">Sweeps the filesystem for SSH private keys, <span class="inline-code">.env</span> files, AWS/GCP/Azure credentials, Kubernetes configs, database passwords, shell history, Docker configs, npm tokens, crypto wallet files, and CI/CD configs. Also runs <span class="inline-code">printenv</span> to capture all live environment variables — API keys, secrets, tokens, anything in the process environment.</p>
+            <div class="stage-tags">
+              <span class="stage-tag st-red">SSH Keys</span>
+              <span class="stage-tag st-red">Cloud Creds</span>
+              <span class="stage-tag st-red">API Keys</span>
+              <span class="stage-tag st-red">K8s Secrets</span>
+              <span class="stage-tag st-red">Crypto Wallets</span>
+            </div>
+          </div>
+        </div>
+        <div class="stage">
+          <div class="stage-num">02</div>
+          <div>
+            <div class="stage-title">Encrypted Exfiltration</div>
+            <p class="stage-desc">Collected data is encrypted using AES-256-CBC with a random 32-byte session key. The session key is itself encrypted with a hardcoded 4096-bit RSA public key. Both are bundled into <span class="inline-code">tpcp.tar.gz</span> and POSTed to <span class="inline-code">https://models.litellm.cloud/</span> — a lookalike domain registered specifically for this attack (the legitimate domain is <span class="inline-code">litellm.ai</span>).</p>
+            <div class="stage-tags">
+              <span class="stage-tag st-yellow">AES-256-CBC</span>
+              <span class="stage-tag st-yellow">RSA-4096</span>
+              <span class="stage-tag st-yellow">models.litellm.cloud</span>
+            </div>
+          </div>
+        </div>
+        <div class="stage">
+          <div class="stage-num">03</div>
+          <div>
+            <div class="stage-title">Lateral Movement + Persistence</div>
+            <p class="stage-desc">If a Kubernetes service account token is present, the payload reads all secrets across all namespaces and attempts to create a privileged <span class="inline-code">alpine:latest</span> pod on every node in <span class="inline-code">kube-system</span>. Each pod mounts the host filesystem and drops a persistent backdoor at <span class="inline-code">~/.config/sysmon/sysmon.py</span> with a systemd service that polls a C2 server for updated binaries.</p>
+            <div class="stage-tags">
+              <span class="stage-tag st-red">K8s Privilege Escalation</span>
+              <span class="stage-tag st-red">systemd Persistence</span>
+              <span class="stage-tag st-red">C2 Polling</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">⚡</span>
+        <div class="callout-body">
+          <div class="callout-title">Why LiteLLM Specifically?</div>
+          <p>LiteLLM is an LLM API gateway — its entire purpose is to manage API keys for OpenAI, Anthropic, Google, and 100+ other providers. Any machine running it is, by definition, a treasure chest of high-value credentials. The attacker knew exactly what they'd find.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: VERSION TABLE -->
+    <section class="section">
+      <span class="section-number">03 / Affected Versions</span>
+      <h2 class="section-title">What's Safe, What's Not</h2>
+
+      <table class="version-table">
+        <thead>
+          <tr>
+            <th>Version</th>
+            <th>Status</th>
+            <th>Trigger Mechanism</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="inline-code">≤ 1.82.6</span></td>
+            <td><span class="badge badge-clean">CLEAN</span></td>
+            <td>—</td>
+            <td>Last known-good release. Pin here.</td>
+          </tr>
+          <tr>
+            <td><span class="inline-code">1.82.7</span></td>
+            <td><span class="badge badge-danger">COMPROMISED</span></td>
+            <td>Requires <span class="inline-code">import litellm</span></td>
+            <td>Payload in <span class="inline-code">proxy/proxy_server.py</span></td>
+          </tr>
+          <tr>
+            <td><span class="inline-code">1.82.8</span></td>
+            <td><span class="badge badge-critical">CRITICAL</span></td>
+            <td>Triggers on Python startup — no import needed</td>
+            <td>Malicious <span class="inline-code">.pth</span> file. Fork bomb bug caused discovery.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">ℹ</span>
+        <div class="callout-body">
+          <div class="callout-title">Transitive Dependency Risk</div>
+          <p>You may have never run <span class="inline-code">pip install litellm</span> yourself. LiteLLM is a dependency of many AI agent frameworks, MCP servers, and LLM orchestration tools. Check <em>all</em> your Python environments, not just your primary one. CI/CD containers, virtual envs in project directories, and tool-managed environments like Cursor and Claude Code are all in scope.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: HOW TO CHECK -->
+    <section class="section">
+      <span class="section-number">04 / Incident Response</span>
+      <h2 class="section-title">How to Check if You're Affected</h2>
+
+      <p>Run these commands on any machine where you use Python-based AI tooling — especially Cursor, Claude Code, or any environment with MCP plugins installed.</p>
+
+      <div class="code-block">
+        <span class="code-block-label">Step 1 — Check installed version</span>
+        <pre><code>pip show litellm
+# Look for: Version: 1.82.7 or 1.82.8 → you are affected</code></pre>
+      </div>
+
+      <div class="code-block">
+        <span class="code-block-label">Step 2 — Search for the malicious .pth file</span>
+        <pre><code>find / -name "litellm_init.pth" 2>/dev/null
+find ~/.cache/uv -name "litellm_init.pth" 2>/dev/null
+find ~/.local -name "litellm_init.pth" 2>/dev/null</code></pre>
+      </div>
+
+      <div class="code-block">
+        <span class="code-block-label">Step 3 — Check for persistence backdoor</span>
+        <pre><code>ls ~/.config/sysmon/sysmon.py 2>/dev/null
+ls ~/.config/systemd/user/sysmon.service 2>/dev/null</code></pre>
+      </div>
+
+      <div class="code-block">
+        <span class="code-block-label">Step 4 — Check Kubernetes (if applicable)</span>
+        <pre><code>kubectl get pods -n kube-system | grep node-setup
+kubectl get secrets --all-namespaces | grep -i suspicious</code></pre>
+      </div>
+
+      <div class="callout callout-danger">
+        <span class="callout-icon">🔴</span>
+        <div class="callout-body">
+          <div class="callout-title">If You Find Any of the Above</div>
+          <p>Treat the machine as <strong>fully compromised</strong>. The window between install and exfiltration is seconds. Assume all of the following were stolen and rotate immediately:</p>
+          <p>SSH keys · AWS/GCP/Azure credentials · All <span class="inline-code">.env</span> API keys · Kubernetes configs · GitHub tokens · Database passwords · Docker credentials · Shell history (may contain secrets passed as args)</p>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <span class="code-block-label">Step 5 — Clean up</span>
+        <pre><code># Remove the package
+pip uninstall litellm -y
+
+# Purge package manager caches to prevent re-install from cache
+rm -rf ~/.cache/uv
+pip cache purge
+
+# Remove persistence if found
+rm -rf ~/.config/sysmon/
+systemctl --user disable sysmon.service 2>/dev/null
+rm ~/.config/systemd/user/sysmon.service 2>/dev/null</code></pre>
+      </div>
+    </section>
+
+    <!-- SECTION 5: MCP ECOSYSTEM RISKS -->
+    <section class="section">
+      <span class="section-number">05 / Broader Risk</span>
+      <h2 class="section-title">The MCP Ecosystem Is an Emerging Attack Surface</h2>
+
+      <p>This attack didn't just exploit a Python package. It exploited a structural property of how modern AI tooling gets assembled — and it landed on machines running Cursor and Claude Code because of it.</p>
+
+      <div class="pull-quote">
+        <p>"The person who discovered this attack only found it because their machine crashed. Without that bug, this would still be running silently on thousands of developer machines right now."</p>
+      </div>
+
+      <p>MCP (Model Context Protocol) plugins are a young, largely unvetted ecosystem. There is no curated review process. Plugins can pull in arbitrary Python packages. And the machines running these tools — developer workstations, CI runners — are loaded with the exact credentials attackers want.</p>
+
+      <p><strong>Claude Code users face compounded risk.</strong> Claude Code is an agentic tool with broad file system access and code execution capabilities by design. It also has documented support for LiteLLM proxy as an MCP integration. Beyond the litellm vector, Check Point Research separately disclosed vulnerabilities in Claude Code where malicious repository configuration files could trigger arbitrary shell commands and API key exfiltration simply by opening a project — all issues now patched by Anthropic.</p>
+
+      <p>The pattern here is the same across all these attacks: <strong>configuration and tooling layers have become part of the execution surface.</strong> A <span class="inline-code">.pth</span> file is not code you write. An MCP plugin dependency is not a package you explicitly chose. But both run with full privileges on your machine.</p>
+    </section>
+
+    <!-- SECTION 6: PREVENTION -->
+    <section class="section">
+      <span class="section-number">06 / Prevention</span>
+      <h2 class="section-title">How to Reduce Your Exposure</h2>
+
+      <p>No single control fully prevents supply chain attacks, but layered defenses significantly shrink the blast radius.</p>
+
+      <div class="prevention-grid">
+        <div class="prevention-card">
+          <span class="prevention-icon">📌</span>
+          <div class="prevention-title">Pin and Lock Dependencies</div>
+          <p class="prevention-desc">Use lockfiles (<span class="inline-code">uv.lock</span>, <span class="inline-code">poetry.lock</span>, pinned <span class="inline-code">requirements.txt</span>). Never upgrade blindly. <span class="inline-code">litellm==1.82.6</span> would have been safe here. Treat upgrades as intentional decisions, not automatic steps.</p>
+        </div>
+        <div class="prevention-card">
+          <span class="prevention-icon">🔍</span>
+          <div class="prevention-title">Audit Transitive Dependencies</div>
+          <p class="prevention-desc">Use <span class="inline-code">pip-audit</span>, <span class="inline-code">uv tree</span>, or <span class="inline-code">pipdeptree</span> to know what you've actually installed and why. If you didn't explicitly install a package, you should know what pulled it in.</p>
+        </div>
+        <div class="prevention-card">
+          <span class="prevention-icon">⚡</span>
+          <div class="prevention-title">Flag PyPI/GitHub Mismatches</div>
+          <p class="prevention-desc">The biggest tell here: 1.82.7 and 1.82.8 existed on PyPI with no GitHub tag. Tools like Socket.dev, Endor Labs, or Sigstore can detect packages published outside normal CI/CD pipelines automatically.</p>
+        </div>
+        <div class="prevention-card">
+          <span class="prevention-icon">🔒</span>
+          <div class="prevention-title">Use Short-Lived Credentials</div>
+          <p class="prevention-desc">AWS OIDC tokens in CI instead of long-lived access keys. Rotate API keys regularly. Use a secrets manager instead of <span class="inline-code">.env</span> files on disk. Static secrets sitting on developer machines are the attacker's jackpot.</p>
+        </div>
+        <div class="prevention-card">
+          <span class="prevention-icon">🐳</span>
+          <div class="prevention-title">Isolate MCP Plugins</div>
+          <p class="prevention-desc">Run MCP servers in Docker containers rather than directly in your host Python environment. Docker MCP Toolkit provides isolated execution compatible with Claude Desktop, Cursor, and VS Code, preventing installed packages from touching your host filesystem.</p>
+        </div>
+        <div class="prevention-card">
+          <span class="prevention-icon">🚩</span>
+          <div class="prevention-title">Alert on .pth Files</div>
+          <p class="prevention-desc">A <span class="inline-code">.pth</span> file in a third-party package has essentially no legitimate use. Add a CI check or SAST rule that flags any <span class="inline-code">.pth</span> file appearing in installed dependencies. This is low noise, high signal.</p>
+        </div>
+      </div>
+
+      <h3 style="font-family: var(--display); font-size: 17px; font-weight: 700; margin: 36px 0 16px; color: #fff;">Immediate Action Checklist</h3>
+
+      <ul class="checklist">
+        <li>Run <span class="inline-code">pip show litellm</span> in every Python environment on developer machines and CI runners</li>
+        <li>Search for <span class="inline-code">litellm_init.pth</span> in all site-packages directories and package manager caches</li>
+        <li>Check for persistence indicators: <span class="inline-code">~/.config/sysmon/</span> and <span class="inline-code">sysmon.service</span></li>
+        <li>If found: rotate all credentials accessible from that machine immediately</li>
+        <li>Pin all projects to <span class="inline-code">litellm&lt;=1.82.6</span> until a verified clean release is available</li>
+        <li>Audit MCP plugins for their transitive dependency trees before installation</li>
+        <li>Enable PyPI Trusted Publishers for any packages your team maintains</li>
+      </ul>
+
+      <div class="callout callout-safe">
+        <span class="callout-icon">✓</span>
+        <div class="callout-body">
+          <div class="callout-title">The Uncomfortable Baseline</div>
+          <p>Assume that at some point, a dependency in your stack will be compromised. Design your credential hygiene around that assumption: minimal secrets on any given machine, short-lived tokens, isolated execution environments, and regular rotation. The goal isn't to make compromise impossible — it's to make it survivable.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLOSING -->
+    <section class="section">
+      <span class="section-number">07 / Closing Thoughts</span>
+      <h2 class="section-title">This Campaign Isn't Over</h2>
+
+      <p>TeamPCP has now crossed five supply chain ecosystems in under a month — GitHub Actions, Docker Hub, npm, OpenVSX, and PyPI. Each compromised environment yields credentials that unlock the next target. The 13-minute gap between litellm 1.82.7 and 1.82.8 shows an attacker actively iterating during the attack window, escalating the trigger mechanism in real time.</p>
+
+      <p>The AI developer tooling ecosystem is a particularly attractive target: high-privilege machines, dense credential environments, a young and fast-moving plugin ecosystem with minimal security review, and the implicit trust developers place in tools they use every day. That combination will continue to be exploited.</p>
+
+      <p>The best defense is treating every layer of your tooling stack — not just your own code — as part of your attack surface.</p>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">📎</span>
+        <div class="callout-body">
+          <div class="callout-title">References</div>
+          <p>FutureSearch: <span class="inline-code">futuresearch.ai/blog/litellm-pypi-supply-chain-attack</span></p>
+          <p>GitHub Issue #24512: <span class="inline-code">github.com/BerriAI/litellm/issues/24512</span></p>
+          <p>Endor Labs Analysis: <span class="inline-code">endorlabs.com/learn/teampcp-isnt-done</span></p>
+          <p>Check Point Research (Claude Code): <span class="inline-code">blog.checkpoint.com/research/check-point-researchers-expose-critical-claude-code-flaws</span></p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <span class="footer-note">// Published 2026-03-24 · Based on community disclosure & independent analysis</span>
+  <div class="footer-links">
+    <a href="https://github.com/BerriAI/litellm/issues/24512">GitHub Issue</a>
+    <a href="https://futuresearch.ai/blog/litellm-pypi-supply-chain-attack/">FutureSearch</a>
+    <a href="https://www.endorlabs.com/learn/teampcp-isnt-done">Endor Labs</a>
+  </div>
+</footer>
+
+</body>
+</html>
