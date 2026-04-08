@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amazon S3 Files: Breaking the Object-File Barrier</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne+Mono&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #181818;
+    --surface3: #1e1e1e;
+    --border: #222222;
+    --text: #e8e8e8;
+    --text-muted: #666;
+    --text-dim: #999;
+    --accent: #f90;
+    --accent2: #ffb340;
+    --accent-glow: rgba(255, 153, 0, 0.15);
+    --green: #3cffa0;
+    --yellow: #ffd93c;
+    --blue: #3cb8ff;
+    --red: #ff5c5c;
+    --mono: 'Syne Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+    --display: 'Syne', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* HEADER */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+  .header-logo { font-family: var(--mono); font-size: 13px; color: var(--accent); letter-spacing: 0.08em; }
+  .header-meta { font-family: var(--mono); font-size: 12px; color: var(--text-muted); }
+  .header-tag {
+    font-family: var(--mono); font-size: 11px; color: var(--accent);
+    border: 1px solid var(--accent); padding: 3px 10px; border-radius: 2px;
+    background: var(--accent-glow);
+  }
+
+  /* HERO */
+  .hero {
+    padding: 80px 40px 60px;
+    max-width: 900px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-label {
+    font-family: var(--mono); font-size: 12px; color: var(--accent);
+    letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .hero-label::before { content: ''; display: block; width: 30px; height: 1px; background: var(--accent); }
+  .hero h1 {
+    font-family: var(--display); font-size: clamp(32px, 5vw, 56px);
+    font-weight: 800; line-height: 1.05; letter-spacing: -0.02em;
+    color: #fff; margin-bottom: 24px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub {
+    font-size: 19px; color: var(--text-dim); max-width: 640px; line-height: 1.65;
+    font-weight: 300;
+  }
+  .hero-meta {
+    margin-top: 32px; display: flex; gap: 24px; flex-wrap: wrap;
+    font-family: var(--mono); font-size: 12px; color: var(--text-muted);
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; }
+
+  /* MAIN LAYOUT */
+  .content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 40px;
+  }
+
+  /* ANNOUNCEMENT BANNER */
+  .announcement-banner {
+    background: linear-gradient(135deg, rgba(255,153,0,0.08), rgba(255,153,0,0.03));
+    border: 1px solid rgba(255,153,0,0.3);
+    border-left: 3px solid var(--accent);
+    border-radius: 4px;
+    padding: 18px 22px;
+    margin-bottom: 48px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .announcement-banner .badge {
+    font-family: var(--mono); font-size: 10px; color: var(--bg);
+    background: var(--accent); padding: 3px 8px; border-radius: 2px;
+    white-space: nowrap; margin-top: 2px; flex-shrink: 0;
+  }
+  .announcement-banner p { font-size: 14px; color: var(--text-dim); line-height: 1.6; }
+  .announcement-banner a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(255,153,0,0.3); }
+  .announcement-banner a:hover { border-bottom-color: var(--accent); }
+
+  /* SECTION HEADERS */
+  .section-header {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 28px; margin-top: 56px;
+  }
+  .section-num {
+    font-family: var(--mono); font-size: 11px; color: var(--accent);
+    border: 1px solid rgba(255,153,0,0.3); padding: 4px 9px; border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: var(--display); font-size: 24px; font-weight: 700;
+    color: #fff; letter-spacing: -0.01em;
+  }
+
+  /* INTRO PARAGRAPH */
+  .intro-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin-bottom: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .intro-block::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+  .intro-block p { color: var(--text-dim); font-size: 16px; line-height: 1.8; }
+  .intro-block p + p { margin-top: 14px; }
+  .intro-block strong { color: var(--text); font-weight: 500; }
+
+  /* BODY TEXT */
+  p { color: var(--text-dim); margin-bottom: 18px; }
+  p strong { color: var(--text); font-weight: 500; }
+
+  /* CALLOUT CARDS */
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin: 28px 0; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 22px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: rgba(255,153,0,0.3); }
+  .card-icon { font-size: 22px; margin-bottom: 12px; }
+  .card h4 {
+    font-family: var(--display); font-size: 15px; font-weight: 700;
+    color: #fff; margin-bottom: 8px;
+  }
+  .card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .card .accent-line {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .card:hover .accent-line { opacity: 1; }
+
+  /* BULLET LIST */
+  ul.detail-list { list-style: none; padding: 0; margin: 0 0 24px 0; }
+  ul.detail-list li {
+    padding: 10px 0 10px 22px;
+    position: relative;
+    color: var(--text-dim);
+    font-size: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  ul.detail-list li:last-child { border-bottom: none; }
+  ul.detail-list li::before {
+    content: '›';
+    position: absolute; left: 0;
+    color: var(--accent); font-size: 16px;
+  }
+  ul.detail-list li strong { color: var(--text); font-weight: 500; }
+
+  /* HIGHLIGHT BOX */
+  .highlight-box {
+    background: rgba(255,153,0,0.06);
+    border: 1px solid rgba(255,153,0,0.2);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 24px 0;
+  }
+  .highlight-box .hl-label {
+    font-family: var(--mono); font-size: 10px; color: var(--accent);
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .highlight-box p { color: var(--text-dim); font-size: 15px; margin: 0; }
+  .highlight-box strong { color: var(--accent); }
+
+  /* ARCHITECTURE DIAGRAM */
+  .arch-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 32px;
+    margin: 28px 0;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-dim);
+    overflow-x: auto;
+  }
+  .arch-diagram .arch-title {
+    font-size: 11px; color: var(--text-muted); letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 24px;
+  }
+  .arch-row { display: flex; align-items: center; gap: 0; margin: 6px 0; flex-wrap: wrap; }
+  .arch-box {
+    padding: 8px 14px; border-radius: 4px; border: 1px solid;
+    font-size: 12px; white-space: nowrap;
+  }
+  .arch-box.app { border-color: var(--blue); color: var(--blue); background: rgba(60,184,255,0.06); }
+  .arch-box.nfs { border-color: var(--accent); color: var(--accent); background: rgba(255,153,0,0.08); }
+  .arch-box.api { border-color: var(--green); color: var(--green); background: rgba(60,255,160,0.06); }
+  .arch-box.efs { border-color: var(--yellow); color: var(--yellow); background: rgba(255,217,60,0.06); }
+  .arch-box.s3 { border-color: var(--text-dim); color: var(--text-dim); background: rgba(255,255,255,0.04); }
+  .arch-arrow { color: var(--text-muted); padding: 0 10px; font-size: 16px; }
+  .arch-label { font-size: 11px; color: var(--text-muted); margin-left: 8px; }
+  .arch-sep { border-top: 1px dashed var(--border); margin: 16px 0; }
+  .arch-section-label { font-size: 10px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+
+  /* COMPARISON TABLE */
+  .table-wrap { overflow-x: auto; margin: 28px 0; }
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px;
+  }
+  thead tr { border-bottom: 1px solid var(--border); }
+  thead th {
+    text-align: left; padding: 12px 16px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text-muted); font-weight: 400;
+  }
+  thead th:first-child { color: var(--accent); }
+  tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
+  tbody tr:hover { background: rgba(255,255,255,0.02); }
+  tbody td { padding: 12px 16px; vertical-align: top; color: var(--text-dim); line-height: 1.5; }
+  tbody td:first-child { font-family: var(--mono); font-size: 12px; color: var(--text-dim); }
+  .td-s3 { color: var(--blue) !important; }
+  .td-efs { color: var(--green) !important; }
+  .td-s3files { color: var(--accent) !important; }
+  .td-winner { color: var(--green) !important; font-weight: 600; }
+
+  /* PRICING TABLE */
+  .pricing-table {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 28px 0;
+  }
+  .pricing-table table { font-size: 14px; }
+  .pricing-table thead th {
+    background: var(--surface2); padding: 14px 20px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text-muted); font-weight: 400;
+  }
+  .pricing-table tbody td { padding: 14px 20px; border-bottom: 1px solid var(--border); }
+  .pricing-table tbody tr:last-child td { border-bottom: none; }
+  .pricing-table .price-val { color: var(--accent); font-family: var(--mono); font-weight: 600; }
+  .pricing-table .price-free { color: var(--green); font-family: var(--mono); font-weight: 600; }
+  .pricing-table .price-label { color: var(--text-dim); font-size: 13px; }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+  /* INTERACTIVE ESTIMATOR */
+  .estimator {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 28px 0;
+  }
+  .estimator-header {
+    background: var(--surface2);
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .estimator-header h3 {
+    font-family: var(--display); font-size: 16px; font-weight: 700; color: #fff;
+  }
+  .estimator-header .live-badge {
+    font-family: var(--mono); font-size: 10px; color: var(--green);
+    border: 1px solid var(--green); padding: 3px 10px; border-radius: 2px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .estimator-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  @media (max-width: 680px) { .estimator-body { grid-template-columns: 1fr; } }
+
+  .estimator-inputs {
+    padding: 28px;
+    border-right: 1px solid var(--border);
+  }
+  @media (max-width: 680px) {
+    .estimator-inputs { border-right: none; border-bottom: 1px solid var(--border); }
+  }
+
+  .slider-group { margin-bottom: 24px; }
+  .slider-label {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 8px;
+    font-size: 13px; font-weight: 400; color: var(--text-dim);
+  }
+  .slider-val {
+    font-family: var(--mono); font-size: 13px; color: var(--accent); font-weight: 600;
+  }
+  input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%; height: 3px;
+    background: var(--border);
+    border-radius: 2px; outline: none; cursor: pointer;
+    accent-color: var(--accent);
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--accent); cursor: pointer;
+    box-shadow: 0 0 8px rgba(255,153,0,0.4);
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 14px; height: 14px; border-radius: 50%; border: none;
+    background: var(--accent); cursor: pointer;
+  }
+  .slider-hints { display: flex; justify-content: space-between; margin-top: 4px; font-family: var(--mono); font-size: 10px; color: var(--text-muted); }
+
+  /* RESULTS PANEL */
+  .estimator-results { padding: 28px; }
+  .result-card {
+    padding: 16px 18px; margin-bottom: 12px;
+    border: 1px solid var(--border); border-radius: 6px;
+    transition: all 0.25s ease;
+    position: relative; overflow: hidden;
+  }
+  .result-card.winner {
+    border-color: rgba(60,255,160,0.4);
+    background: rgba(60,255,160,0.04);
+  }
+  .result-card.winner::before {
+    content: 'LOWEST COST';
+    position: absolute; top: 8px; right: 10px;
+    font-family: var(--mono); font-size: 9px; color: var(--green);
+    letter-spacing: 0.08em;
+  }
+  .result-card-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 6px;
+  }
+  .rc-name { font-size: 13px; font-weight: 500; color: var(--text-dim); }
+  .rc-name.s3 { color: var(--blue); }
+  .rc-name.efs { color: var(--green); }
+  .rc-name.s3files { color: var(--accent); }
+  .rc-price {
+    font-family: var(--mono); font-size: 22px; font-weight: 700; color: #fff;
+    transition: color 0.25s;
+  }
+  .result-card.winner .rc-price { color: var(--green); }
+  .rc-breakdown { font-family: var(--mono); font-size: 10px; color: var(--text-muted); line-height: 1.8; }
+
+  /* RECOMMENDATION BOX */
+  .recommendation {
+    margin-top: 16px;
+    background: rgba(255,153,0,0.06);
+    border: 1px solid rgba(255,153,0,0.2);
+    border-radius: 6px;
+    padding: 14px 16px;
+  }
+  .recommendation .rec-label {
+    font-family: var(--mono); font-size: 10px; color: var(--accent);
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .recommendation p { font-size: 13px; color: var(--text-dim); margin: 0; line-height: 1.6; }
+  .recommendation strong { color: var(--accent); }
+
+  /* TRADEOFFS */
+  .tradeoff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 28px 0; }
+  @media (max-width: 600px) { .tradeoff-grid { grid-template-columns: 1fr; } }
+  .tradeoff-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 22px;
+  }
+  .tradeoff-card h4 {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em;
+    text-transform: uppercase; margin-bottom: 14px;
+  }
+  .tradeoff-card.pro h4 { color: var(--green); }
+  .tradeoff-card.con h4 { color: var(--red); }
+  .tradeoff-card ul { list-style: none; padding: 0; }
+  .tradeoff-card ul li {
+    font-size: 13px; color: var(--text-muted);
+    padding: 7px 0 7px 18px; position: relative;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .tradeoff-card ul li:last-child { border-bottom: none; }
+  .tradeoff-card.pro ul li::before { content: '+'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+  .tradeoff-card.con ul li::before { content: '−'; position: absolute; left: 0; color: var(--red); font-weight: 700; }
+
+  /* CONCLUSION */
+  .conclusion {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--accent);
+    border-radius: 6px;
+    padding: 32px;
+    margin: 48px 0;
+  }
+  .conclusion h3 {
+    font-family: var(--display); font-size: 20px; font-weight: 700;
+    color: #fff; margin-bottom: 16px;
+  }
+  .conclusion p { color: var(--text-dim); margin-bottom: 14px; font-size: 15px; }
+  .conclusion p:last-child { margin-bottom: 0; }
+
+  /* FOOTER */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-left { font-family: var(--mono); font-size: 12px; color: var(--text-muted); }
+  .footer-right { font-family: var(--mono); font-size: 12px; color: var(--text-muted); }
+  .footer-right a { color: var(--accent); text-decoration: none; }
+  .footer-right a:hover { text-decoration: underline; }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .header { padding: 16px 20px; }
+    .hero { padding: 48px 20px 40px; }
+    .content { padding: 40px 20px; }
+    .footer { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-logo">asadani.github.io</div>
+  <div class="header-tag">NEW — APR 7, 2026</div>
+  <div class="header-meta">AWS DEEP DIVE</div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-label">Amazon S3 Files</div>
+  <h1>Breaking the<br><span>Object-File</span> Barrier</h1>
+  <p class="hero-sub">
+    How AWS S3 native NFS v4.1 support erases the decade-long architectural divide
+    between object storage and high-performance file systems — and what it means for AI, ML, and enterprise architecture.
+  </p>
+  <div class="hero-meta">
+    <span><span class="dot"></span> April 7, 2026 — General Availability</span>
+    <span><span class="dot"></span> NFSv4.1 · EFS Cache Layer · Sub-ms Latency</span>
+    <span><span class="dot"></span> Multi-TB/s Aggregate Throughput</span>
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<main class="content">
+
+  <!-- ANNOUNCEMENT BANNER -->
+  <div class="announcement-banner">
+    <div class="badge">OFFICIAL</div>
+    <p>
+      Amazon S3 Files launched on April 7, 2026. This article covers the technical architecture, pricing model, and real-world implications.
+      <a href="https://aws.amazon.com/about-aws/whats-new/2026/04/amazon-s3-files/" target="_blank" rel="noopener">View the official AWS announcement →</a>
+    </p>
+  </div>
+
+  <!-- INTRO -->
+  <div class="intro-block">
+    <p>
+      For over a decade, cloud architects have lived in a bifurcated world: <strong>Amazon S3</strong> for massive, cost-effective object storage,
+      and <strong>Amazon EFS or FSx</strong> when applications demanded a real file system. The tax of bridging these two worlds — DataSync jobs,
+      S3 File Gateways, pre-hydration pipelines — was a known cost of doing business at scale.
+    </p>
+    <p>
+      <strong>Amazon S3 Files changes that equation entirely.</strong> By embedding native NFSv4.1 support directly into S3 buckets,
+      backed by EFS-powered caching technology, AWS has effectively converged object and file storage into a single, unified layer.
+      The same bucket can now serve your REST API consumers <em>and</em> your NFS-mounted ML training jobs simultaneously, without any data duplication.
+    </p>
+  </div>
+
+  <!-- SECTION 1: WHY IT MATTERS -->
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <div class="section-title">The Architecture Shift</div>
+  </div>
+
+  <p>
+    The fundamental change here is deceptively simple: S3 buckets can now be mounted as file systems using standard NFS v4.1 clients.
+    No gateway appliance. No data duplication. No sync delay. The S3 bucket <em>is</em> the file system.
+  </p>
+
+  <div class="arch-diagram">
+    <div class="arch-title">// Before S3 Files: The "Old World" Data Movement Tax</div>
+    <div class="arch-row"><div class="arch-box app">ML Training Job</div><div class="arch-arrow">→</div><div class="arch-box efs">EFS Volume ($/GB/mo)</div><div class="arch-arrow">←sync→</div><div class="arch-box s3">S3 Bucket (archive)</div></div>
+    <div class="arch-row" style="margin-top:6px;"><div class="arch-box app">Web App</div><div class="arch-arrow">→</div><div class="arch-box api">S3 REST API</div><div class="arch-label" style="color:#ff5c5c;">↑ Different datasets, duplicate storage, sync complexity</div></div>
+    <div class="arch-sep"></div>
+    <div class="arch-title">// After S3 Files: Unified Compute-on-Data</div>
+    <div class="arch-row"><div class="arch-box app">ML Training Job</div><div class="arch-arrow">→</div><div class="arch-box nfs">NFS v4.1 Mount</div><div class="arch-arrow" style="color:var(--accent);">⤵</div></div>
+    <div class="arch-row" style="margin-left:150px;"><div class="arch-box efs">EFS Cache Layer</div><div class="arch-arrow">⤵</div><div class="arch-box s3">Single S3 Bucket</div><div class="arch-label" style="color:var(--green);">← single source of truth</div></div>
+    <div class="arch-row"><div class="arch-box app">Web App</div><div class="arch-arrow">→</div><div class="arch-box api">S3 REST API</div><div class="arch-arrow">⤴</div></div>
+  </div>
+
+  <p>
+    The caching layer is the key technical insight. AWS uses Amazon EFS technology to maintain an active working set of
+    <strong>metadata and small files in a high-performance cache</strong>, delivering sub-millisecond latency for hot data.
+    Large files (>128 KB) stream directly from S3 to the NFS client, bypassing the cache entirely — which is also why large-file reads
+    are effectively free under the new pricing model.
+  </p>
+
+  <!-- SECTION 2: USE CASES -->
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div class="section-title">Who Wins — And How</div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="card">
+      <div class="card-icon">⚡</div>
+      <h4>ML / AI Training</h4>
+      <p>Training pipelines interact with S3 as a local directory. PyTorch and TensorFlow data loaders work unmodified. GPUs stay saturated without pre-hydration waits. Aggregate throughput scales to multiple TB/s.</p>
+      <div class="accent-line"></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🤖</div>
+      <h4>Agentic AI Systems</h4>
+      <p>AI agents that use file-based Python tooling (pathlib, open()) can now share state and persist memory across distributed pipelines without custom S3 API wrappers. The S3 bucket becomes the agent's shared scratchpad.</p>
+      <div class="accent-line"></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🗂️</div>
+      <h4>Legacy App Migration</h4>
+      <p>Applications that assume a POSIX file system — CMS platforms, ERP systems, monolithic backends — can be lifted to cloud-native S3 storage without code changes. NFS mount replaces the old NAS or EFS volume.</p>
+      <div class="accent-line"></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🏗️</div>
+      <h4>Simplified Architecture</h4>
+      <p>Eliminate separate EFS volumes for app configs and S3 buckets for assets. One bucket serves both NFS-mounting services and REST API consumers simultaneously, from a single source of truth.</p>
+      <div class="accent-line"></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔬</div>
+      <h4>Scientific Computing</h4>
+      <p>HPC workloads running across thousands of instances can now use S3 as a shared scratch space with NFS semantics, without provisioning and paying for a dedicated parallel file system like FSx for Lustre.</p>
+      <div class="accent-line"></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📊</div>
+      <h4>Data Engineering</h4>
+      <p>ETL pipelines that write intermediate results can use standard file operations against S3. No more choosing between S3 object semantics and temporary EFS volumes just to process a multi-TB Parquet dataset.</p>
+      <div class="accent-line"></div>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <div class="hl-label">The Key Insight</div>
+    <p>
+      We are moving from a <strong>"Copy-to-Compute"</strong> model to a true <strong>"Compute-on-Data"</strong> architecture.
+      The GPU cluster comes to the data, not the other way around. For large-scale ML where dataset sizes dwarf GPU memory by orders of magnitude,
+      this is a fundamental change in how training economics work.
+    </p>
+  </div>
+
+  <!-- SECTION 3: TECHNICAL DEEP DIVE -->
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <div class="section-title">Technical Architecture</div>
+  </div>
+
+  <p>
+    The implementation details matter for understanding when S3 Files excels and where its boundaries are.
+    Here is what the engineering looks like under the hood:
+  </p>
+
+  <ul class="detail-list">
+    <li><strong>Protocol:</strong> NFSv4.1 — not v3, not v4.0. v4.1 is significant because it provides compound operations, better caching semantics, and pNFS support for parallel file access across multiple servers.</li>
+    <li><strong>Consistency Model:</strong> Close-to-open consistency. Changes written by one NFS client become visible to other clients after the writing client closes the file. This is the same model as Amazon EFS and works well for shared read-heavy workloads.</li>
+    <li><strong>Cache Architecture:</strong> EFS-powered. Active metadata and small files (&lt;128 KB) are cached in a high-performance EFS layer. Cache state is managed automatically — you don't provision or manage it.</li>
+    <li><strong>Large File Path:</strong> Files &gt;128 KB bypass the EFS cache layer entirely and stream directly from S3. This delivers full S3 throughput for large sequential reads (the dominant access pattern for ML training).</li>
+    <li><strong>Throughput Ceiling:</strong> Aggregate throughput scales to multiple TB/s across concurrent clients. This is a function of S3's distributed architecture, not a single-node file system limit.</li>
+    <li><strong>Durability:</strong> Inherits S3's 11-nines durability. Data written via NFS is committed to S3 storage — the cache is a read/write performance accelerator, not the durable store.</li>
+    <li><strong>S3 Metadata Integration:</strong> Works with the new S3 Metadata feature for fast directory listings and file attribute queries at millions-of-objects scale.</li>
+    <li><strong>IAM Integration:</strong> Permissions are governed by standard S3 bucket policies and IAM. POSIX UID/GID are handled via a mapping layer.</li>
+  </ul>
+
+  <!-- SECTION 4: PRICING -->
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <div class="section-title">Pricing Model</div>
+  </div>
+
+  <p>
+    The pricing model reflects the hybrid architecture: you pay standard S3 rates for storage at rest,
+    plus data-access surcharges for the caching and movement overhead introduced by NFS operations.
+    Understanding the large-file free-read rule is critical for sizing the cost correctly.
+  </p>
+
+  <div class="pricing-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Pricing Component</th>
+          <th>Rate</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="price-label">Data at Rest (S3 Standard)</span></td>
+          <td><span class="price-val">$0.023 / GB-mo</span></td>
+          <td style="color:var(--text-muted);font-size:13px;">Standard S3 pricing. S3-IT tiers apply as normal.</td>
+        </tr>
+        <tr>
+          <td><span class="price-label">Cache Storage (EFS layer)</span></td>
+          <td><span class="price-val">$0.30 / GB-mo</span></td>
+          <td style="color:var(--text-muted);font-size:13px;">Only charged for the active working set in cache — typically 1–5% of total bucket size.</td>
+        </tr>
+        <tr>
+          <td><span class="price-label">NFS Writes</span></td>
+          <td><span class="price-val">$0.06 / GB</span></td>
+          <td style="color:var(--text-muted);font-size:13px;">All data written via NFS goes through the cache layer first, then syncs to S3.</td>
+        </tr>
+        <tr>
+          <td><span class="price-label">NFS Reads — Small (&lt;128 KB)</span></td>
+          <td><span class="price-val">$0.03 / GB</span></td>
+          <td style="color:var(--text-muted);font-size:13px;">First-read "import" to cache costs $0.06/GB; subsequent reads of same file cost $0.03/GB.</td>
+        </tr>
+        <tr>
+          <td><span class="price-label">NFS Reads — Large (&gt;128 KB)</span></td>
+          <td><span class="price-free">FREE</span></td>
+          <td style="color:var(--text-muted);font-size:13px;">Large files stream directly from S3. Standard S3 GET request fees only (~$0.0004/1000 GETs).</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="highlight-box">
+    <div class="hl-label">The ML Training Sweet Spot</div>
+    <p>
+      ML training datasets are almost entirely large files — multi-GB Parquet shards, TFRecords, checkpoint files.
+      Under S3 Files pricing, <strong>large-file reads are essentially free</strong>, making it dramatically cheaper than EFS ($0.30/GB-mo)
+      for the massive, read-heavy access patterns that define model training at scale.
+    </p>
+  </div>
+
+  <!-- SECTION 5: INTERACTIVE ESTIMATOR -->
+  <div class="section-header">
+    <div class="section-num">05</div>
+    <div class="section-title">Interactive Cost Estimator</div>
+  </div>
+
+  <p>
+    Adjust the sliders to match your workload profile. The estimator calculates monthly costs for all three storage options
+    in real time and highlights the most cost-effective choice for your scenario.
+  </p>
+
+  <div class="estimator">
+    <div class="estimator-header">
+      <h3>AWS Storage Cost Estimator</h3>
+      <div class="live-badge"><span class="live-dot"></span> LIVE CALCULATION</div>
+    </div>
+    <div class="estimator-body">
+      <!-- INPUTS -->
+      <div class="estimator-inputs">
+
+        <div class="slider-group">
+          <div class="slider-label">
+            Total Storage
+            <span class="slider-val" id="lbl-storage">1,000 GB</span>
+          </div>
+          <input type="range" id="sl-storage" min="100" max="50000" step="100" value="1000">
+          <div class="slider-hints"><span>100 GB</span><span>50,000 GB</span></div>
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-label">
+            Hot / Cached Data
+            <span class="slider-val" id="lbl-hot">10%</span>
+          </div>
+          <input type="range" id="sl-hot" min="1" max="100" step="1" value="10">
+          <div class="slider-hints"><span>1%</span><span>100%</span></div>
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-label">
+            Monthly Read Volume
+            <span class="slider-val" id="lbl-read">500 GB</span>
+          </div>
+          <input type="range" id="sl-read" min="0" max="20000" step="100" value="500">
+          <div class="slider-hints"><span>0</span><span>20,000 GB</span></div>
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-label">
+            Small-File Read Fraction (&lt;128 KB)
+            <span class="slider-val" id="lbl-small">50%</span>
+          </div>
+          <input type="range" id="sl-small" min="0" max="100" step="1" value="50">
+          <div class="slider-hints"><span>0% (all large)</span><span>100% (all small)</span></div>
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-label">
+            Monthly Write Volume
+            <span class="slider-val" id="lbl-write">100 GB</span>
+          </div>
+          <input type="range" id="sl-write" min="0" max="10000" step="50" value="100">
+          <div class="slider-hints"><span>0</span><span>10,000 GB</span></div>
+        </div>
+
+      </div>
+
+      <!-- RESULTS -->
+      <div class="estimator-results">
+
+        <div id="card-s3" class="result-card">
+          <div class="result-card-header">
+            <div class="rc-name s3">Amazon S3 (Native Object)</div>
+          </div>
+          <div class="rc-price" id="cost-s3">$23.00</div>
+          <div class="rc-breakdown" id="brk-s3">Storage: $23.00</div>
+        </div>
+
+        <div id="card-efs" class="result-card">
+          <div class="result-card-header">
+            <div class="rc-name efs">Amazon EFS (Native File)</div>
+          </div>
+          <div class="rc-price" id="cost-efs">$300.00</div>
+          <div class="rc-breakdown" id="brk-efs">Storage: $300.00</div>
+        </div>
+
+        <div id="card-s3files" class="result-card">
+          <div class="result-card-header">
+            <div class="rc-name s3files">Amazon S3 Files (NFS + Cache)</div>
+          </div>
+          <div class="rc-price" id="cost-s3files">$68.50</div>
+          <div class="rc-breakdown" id="brk-s3files">Base + Cache + Reads + Writes</div>
+        </div>
+
+        <div class="recommendation">
+          <div class="rec-label">Recommendation</div>
+          <p id="rec-text">Loading...</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: COMPARISON TABLE -->
+  <div class="section-header">
+    <div class="section-num">06</div>
+    <div class="section-title">S3 vs. EFS vs. S3 Files</div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th class="td-s3">Amazon S3</th>
+          <th class="td-efs">Amazon EFS</th>
+          <th class="td-s3files">Amazon S3 Files</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Core Architecture</td>
+          <td>Native Object Storage</td>
+          <td>Distributed File System</td>
+          <td>Object Storage + EFS Cache Layer</td>
+        </tr>
+        <tr>
+          <td>Access Protocol</td>
+          <td>REST / HTTPS</td>
+          <td>NFSv4.1 (POSIX)</td>
+          <td>NFSv4.1 AND REST API simultaneously</td>
+        </tr>
+        <tr>
+          <td>Latency</td>
+          <td>~1–10ms (TTFB)</td>
+          <td>Sub-millisecond</td>
+          <td>Sub-ms (cached); ~ms (cold miss)</td>
+        </tr>
+        <tr>
+          <td>Throughput Ceiling</td>
+          <td>Multiple GB/s per prefix</td>
+          <td>Up to multiple GB/s</td>
+          <td>Multiple TB/s (aggregate)</td>
+        </tr>
+        <tr>
+          <td>Storage Pricing</td>
+          <td>~$0.023/GB-mo</td>
+          <td>~$0.30/GB-mo</td>
+          <td>$0.023/GB-mo + $0.30/GB-mo (hot data only)</td>
+        </tr>
+        <tr>
+          <td>Read Pricing</td>
+          <td>Near zero (API fees)</td>
+          <td>Included in throughput</td>
+          <td>FREE (large files); $0.03/GB (small files)</td>
+        </tr>
+        <tr>
+          <td>Write Pricing</td>
+          <td>Near zero (API fees)</td>
+          <td>~$0.06/GB (Perf-Optimized)</td>
+          <td>$0.06/GB</td>
+        </tr>
+        <tr>
+          <td>Consistency</td>
+          <td>Strong (read-after-write)</td>
+          <td>Close-to-open NFS</td>
+          <td>Close-to-open NFS</td>
+        </tr>
+        <tr>
+          <td>Concurrent Clients</td>
+          <td>Unlimited (API)</td>
+          <td>Thousands</td>
+          <td>Thousands</td>
+        </tr>
+        <tr>
+          <td>Single Source of Truth</td>
+          <td>Yes (object)</td>
+          <td>Yes (file)</td>
+          <td class="td-winner">Yes — unified for both access modes</td>
+        </tr>
+        <tr>
+          <td>Best Use Case</td>
+          <td>Cold data lakes, archives, web assets</td>
+          <td>Shared app configs, legacy apps</td>
+          <td>ML training, agentic AI, large-scale data prep</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECTION 7: TRADE-OFFS -->
+  <div class="section-header">
+    <div class="section-num">07</div>
+    <div class="section-title">Honest Trade-offs</div>
+  </div>
+
+  <p>
+    No architecture decision is universally correct. Here is a balanced view of where S3 Files
+    adds undeniable value and where the trade-offs warrant careful thought:
+  </p>
+
+  <div class="tradeoff-grid">
+    <div class="tradeoff-card pro">
+      <h4>Advantages</h4>
+      <ul>
+        <li>Eliminates data duplication between EFS and S3</li>
+        <li>No DataSync or File Gateway to manage or pay for</li>
+        <li>Large-file reads are essentially free — massive win for ML workloads</li>
+        <li>Single IAM policy governs both NFS and REST access</li>
+        <li>Inherits S3's 11-nines durability automatically</li>
+        <li>Architecture diagrams get dramatically simpler</li>
+        <li>Compatible with S3 Intelligent-Tiering for cost optimization</li>
+      </ul>
+    </div>
+    <div class="tradeoff-card con">
+      <h4>Considerations</h4>
+      <ul>
+        <li>$0.06/GB write fee — expensive for heavy-write workloads (logging, scratch space)</li>
+        <li>Small-file read overhead — randomized access to millions of tiny files will accumulate fees</li>
+        <li>Close-to-open consistency: last-writer-wins under concurrent writes requires app-level coordination</li>
+        <li>Deep recursive directory scans still slower than local NVMe</li>
+        <li>Cold cache on first read introduces latency spike for first-time file access</li>
+        <li>May not fully replace FSx for Lustre for striped, low-latency HPC scratch at extreme scale</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <div class="hl-label">Cost Warning</div>
+    <p>
+      If your workload is <strong>write-heavy</strong> — compiling code, rotating log files, frequent checkpoint saves —
+      the <strong>$0.06/GB NFS write fee</strong> can add up fast. For intensive ephemeral scratch space,
+      pure EFS or local NVMe may still be the right call. Run the estimator above with your actual write volume
+      before migrating.
+    </p>
+  </div>
+
+  <!-- CONCLUSION -->
+  <div class="conclusion">
+    <h3>The Bottom Line</h3>
+    <p>
+      Amazon S3 Files is the most significant change to AWS storage architecture in years. It doesn't just add a feature to S3 —
+      it eliminates an entire category of infrastructure complexity that teams have been building workarounds for since 2006.
+    </p>
+    <p>
+      For AI and ML teams, the value is immediate and measurable: no more pre-hydration steps, no more managing separate EFS volumes
+      per training cluster, no more data duplication costs. The GPU cluster talks directly to S3 via NFS, and the economics
+      (especially the free large-file reads) make it the obvious default for any read-heavy training workload.
+    </p>
+    <p>
+      For platform engineers and architects, the convergence of object and file APIs on a single data layer opens up a
+      class of architectures that simply wasn't practical before — truly unified data planes where the same dataset is
+      queryable by S3 Select, accessible via NFS by legacy apps, and consumed by modern REST APIs, all without a
+      line of synchronization code.
+    </p>
+    <p>
+      The open question is whether this makes FSx for Lustre obsolete for extreme-scale HPC. For most teams — even those
+      running large GPU clusters — S3 Files will be sufficient. For the edge cases that need striped, sub-millisecond
+      access to petabytes of scratch space, Lustre still has a role. But that edge just got much smaller.
+    </p>
+  </div>
+
+  <hr class="divider">
+
+  <p style="font-size:14px;color:var(--text-muted);">
+    Official announcement:
+    <a href="https://aws.amazon.com/about-aws/whats-new/2026/04/amazon-s3-files/" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(255,153,0,0.3);">
+      amazon.com/about-aws/whats-new/2026/04/amazon-s3-files/
+    </a>
+    &nbsp;·&nbsp; S3 pricing: <a href="https://aws.amazon.com/s3/pricing/" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(255,153,0,0.3);">aws.amazon.com/s3/pricing/</a>
+  </p>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-left">asadani.github.io — AWS Deep Dives</div>
+  <div class="footer-right">
+    Published April 8, 2026 &nbsp;·&nbsp;
+    <a href="https://aws.amazon.com/about-aws/whats-new/2026/04/amazon-s3-files/" target="_blank" rel="noopener">Official Announcement</a>
+  </div>
+</footer>
+
+<script>
+  // Pricing rates
+  const R = {
+    s3:        0.023,  // $/GB-mo storage
+    efs:       0.30,   // $/GB-mo storage
+    cache:     0.30,   // $/GB-mo (S3 Files EFS cache layer)
+    nfsWrite:  0.06,   // $/GB
+    nfsSmall:  0.03,   // $/GB (small reads <128KB)
+  };
+
+  function fmt(n) {
+    return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function fmtGB(n) {
+    return n >= 1000 ? (n/1000).toFixed(1) + ' TB' : n.toLocaleString() + ' GB';
+  }
+
+  function calculate() {
+    const storage = +document.getElementById('sl-storage').value;
+    const hot     = +document.getElementById('sl-hot').value / 100;
+    const read    = +document.getElementById('sl-read').value;
+    const small   = +document.getElementById('sl-small').value / 100;
+    const write   = +document.getElementById('sl-write').value;
+
+    // Update labels
+    document.getElementById('lbl-storage').textContent = fmtGB(storage);
+    document.getElementById('lbl-hot').textContent     = Math.round(hot * 100) + '%';
+    document.getElementById('lbl-read').textContent    = fmtGB(read);
+    document.getElementById('lbl-small').textContent   = Math.round(small * 100) + '%';
+    document.getElementById('lbl-write').textContent   = fmtGB(write);
+
+    // S3 cost: storage only (reads/writes are negligible API fees)
+    const s3Cost = storage * R.s3;
+
+    // EFS cost: full storage at file rates
+    const efsCost = storage * R.efs;
+
+    // S3 Files cost breakdown
+    const baseStorage = storage * R.s3;
+    const cacheCost   = (storage * hot) * R.cache;
+    const writeCost   = write * R.nfsWrite;
+    const readCost    = (read * small) * R.nfsSmall;
+    // large reads (1-small fraction) are free — standard S3 GET negligible
+    const s3FilesCost = baseStorage + cacheCost + writeCost + readCost;
+
+    // Display
+    document.getElementById('cost-s3').textContent      = fmt(s3Cost);
+    document.getElementById('cost-efs').textContent     = fmt(efsCost);
+    document.getElementById('cost-s3files').textContent = fmt(s3FilesCost);
+
+    document.getElementById('brk-s3').textContent =
+      `Storage: ${fmt(baseStorage)}`;
+
+    document.getElementById('brk-efs').textContent =
+      `Storage: ${fmt(efsCost)}`;
+
+    document.getElementById('brk-s3files').textContent =
+      `Base ${fmt(baseStorage)} + Cache ${fmt(cacheCost)} + Writes ${fmt(writeCost)} + Reads ${fmt(readCost)}`;
+
+    // Winner highlight
+    ['card-s3','card-efs','card-s3files'].forEach(id => {
+      document.getElementById(id).classList.remove('winner');
+    });
+
+    const min = Math.min(s3Cost, efsCost, s3FilesCost);
+    let winnerKey, winnerName, rec;
+
+    if (min === s3Cost && s3Cost <= s3FilesCost && s3Cost <= efsCost) {
+      winnerKey = 'card-s3'; winnerName = 'Amazon S3 (Native)';
+      rec = `<strong>Native S3</strong> is cheapest here. Your workload likely has low-frequency file-like access — API clients are a better fit than NFS mounts. S3 Files adds cost without benefit at this read/write volume.`;
+    } else if (min === efsCost) {
+      winnerKey = 'card-efs'; winnerName = 'Amazon EFS';
+      rec = `<strong>Amazon EFS</strong> is cheapest — unusual, and typically means your hot-data percentage is very high while write/read volumes are low. Double-check your cache percentage estimate.`;
+    } else {
+      winnerKey = 'card-s3files'; winnerName = 'Amazon S3 Files';
+      if (write > 1000) {
+        rec = `<strong>S3 Files</strong> wins overall, but watch your write costs (${fmtGB(write)}/mo × $0.06 = ${fmt(write * R.nfsWrite)}). If these are ephemeral scratch writes, consider local NVMe or EFS to reduce the write overhead.`;
+      } else if (small < 0.15) {
+        rec = `<strong>S3 Files</strong> is the clear winner for this workload. Your data is predominantly large files, so the free large-read path keeps NFS access costs near zero. This is the optimal ML training profile.`;
+      } else {
+        rec = `<strong>S3 Files</strong> is most cost-effective. You benefit from the unified object+file layer without paying excessive small-file read fees. Good candidate for a hybrid app + ML workload.`;
+      }
+    }
+
+    document.getElementById(winnerKey).classList.add('winner');
+    document.getElementById('rec-text').innerHTML = rec;
+  }
+
+  // Wire up sliders
+  ['sl-storage','sl-hot','sl-read','sl-small','sl-write'].forEach(id => {
+    document.getElementById(id).addEventListener('input', calculate);
+  });
+
+  // Initial render
+  calculate();
+</script>
+
+</body>
+</html>
