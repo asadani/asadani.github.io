@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gemini Flex &amp; Priority Inference — Service Tier Benchmarks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #F5F1EB;
+    --bg-alt:       #EDEAE3;
+    --surface:      #FFFFFF;
+    --surface-tint: #FAF8F5;
+    --border:       #DDD9D0;
+    --border-light: #EAE7E0;
+    --text:         #1A1714;
+    --text-body:    #3D3A35;
+    --text-muted:   #6B6760;
+    --text-subtle:  #9B9892;
+    --accent:       #C85C2D;
+    --accent-light: #E8895D;
+    --accent-bg:    #FDF1EB;
+    --accent-border:#F0C4A8;
+    --green:        #2A7A4B;
+    --green-bg:     #EAF5EF;
+    --green-border: #A8D9BC;
+    --blue:         #2563A8;
+    --blue-bg:      #EAF1FA;
+    --blue-border:  #A8C5E8;
+    --amber:        #B8720A;
+    --amber-bg:     #FDF5EA;
+    --amber-border: #F0C070;
+    --red:          #B83535;
+    --red-bg:       #FAEBEB;
+    --serif:        'Newsreader', Georgia, serif;
+    --sans:         'Inter', system-ui, sans-serif;
+    --mono:         'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-body);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  /* ─── NAV ──────────────────────────────────────────────── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .nav-tag {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+  }
+  .nav-tag.preview {
+    background: var(--amber);
+  }
+
+  /* ─── LAYOUT ──────────────────────────────────────────── */
+  .page-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(32px, 5vw, 50px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-deck {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 640px;
+    font-weight: 300;
+    margin-bottom: 24px;
+  }
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-family: var(--mono);
+  }
+  .hero-meta-sep { color: var(--border); }
+
+  /* Hero stats */
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 32px;
+  }
+  @media (max-width: 560px) { .hero-stats { grid-template-columns: repeat(2, 1fr); } }
+  .hstat {
+    background: var(--surface);
+    padding: 18px 20px;
+  }
+  .hstat-value {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .hstat-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* ─── BODY TEXT ───────────────────────────────────────── */
+  .prose p {
+    color: var(--text-body);
+    margin-bottom: 20px;
+    font-size: 17px;
+    line-height: 1.78;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); font-weight: 600; }
+  em { font-style: italic; }
+
+  /* ─── SECTION HEADING ─────────────────────────────────── */
+  .section { margin-top: 56px; }
+  .section-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 32px 0 14px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── BANNER ──────────────────────────────────────────── */
+  .banner {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .banner-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .banner p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .banner a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ─── TIER CARDS ──────────────────────────────────────── */
+  .tier-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 24px 0;
+  }
+  @media (max-width: 600px) { .tier-grid { grid-template-columns: 1fr; } }
+  .tier-card {
+    background: var(--surface);
+    padding: 24px;
+  }
+  .tier-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 3px;
+    margin-bottom: 14px;
+    letter-spacing: 0.04em;
+  }
+  .tier-badge.flex-badge    { background: var(--amber-bg);  color: var(--amber);  border: 1px solid var(--amber-border); }
+  .tier-badge.std-badge     { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-border); }
+  .tier-badge.prio-badge    { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
+  .tier-card h4 {
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .tier-card p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin: 0 0 14px;
+  }
+  .tier-code {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: var(--bg-alt);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    padding: 8px 12px;
+    color: var(--text-muted);
+    display: block;
+  }
+  .tier-code .kw  { color: var(--blue); }
+  .tier-code .val-flex { color: var(--amber); }
+  .tier-code .val-prio { color: var(--green); }
+
+  .tier-attrs {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .tier-attr {
+    font-size: 12px;
+    color: var(--text-subtle);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .tier-attr .dot {
+    width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+  }
+  .dot-amber { background: var(--amber); }
+  .dot-blue  { background: var(--blue); }
+  .dot-green { background: var(--green); }
+
+  /* ─── CALLOUT ─────────────────────────────────────────── */
+  .callout {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+  .callout .callout-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout p { font-size: 15px; color: var(--text-muted); margin: 0; line-height: 1.7; }
+  .callout a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+  .callout-warning {
+    background: var(--amber-bg);
+    border-color: var(--amber-border);
+    border-left-color: var(--amber);
+  }
+  .callout-warning .callout-lbl { color: var(--amber); }
+
+  .callout-info {
+    background: var(--blue-bg);
+    border-color: var(--blue-border);
+    border-left-color: var(--blue);
+  }
+  .callout-info .callout-lbl { color: var(--blue); }
+
+  /* ─── BENCHMARK CHART ─────────────────────────────────── */
+  .bench-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 24px 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+  .bench-head {
+    background: var(--text);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .bench-head h3 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+    letter-spacing: 0.01em;
+  }
+  .bench-legend {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .bl-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+  }
+  .bl-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .bl-dot.flex-dot { background: #D4890A; }
+  .bl-dot.std-dot  { background: #4A90D9; }
+  .bl-dot.prio-dot { background: #3DB06A; }
+
+  .bench-filter {
+    display: flex;
+    gap: 6px;
+    padding: 16px 24px 8px;
+    border-bottom: 1px solid var(--border-light);
+    background: var(--surface-tint);
+  }
+  .filter-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 13px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.03em;
+  }
+  .filter-btn:hover { border-color: var(--accent-border); color: var(--accent); }
+  .filter-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
+  .filter-btn.active.flex-active { background: var(--amber); border-color: var(--amber); }
+  .filter-btn.active.std-active  { background: var(--blue);  border-color: var(--blue); }
+  .filter-btn.active.prio-active { background: var(--green); border-color: var(--green); }
+
+  .bench-chart { padding: 20px 24px 24px; }
+  .run-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    transition: opacity 0.2s;
+  }
+  .run-bar.hidden { display: none; }
+  .run-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-subtle);
+    width: 80px;
+    flex-shrink: 0;
+    text-align: right;
+  }
+  .bar-track {
+    flex: 1;
+    height: 20px;
+    background: var(--bg-alt);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+  .bar-fill.flex-bar { background: linear-gradient(90deg, #D4890A, #F0A830); }
+  .bar-fill.std-bar  { background: linear-gradient(90deg, #2563A8, #4A90D9); }
+  .bar-fill.prio-bar { background: linear-gradient(90deg, #2A7A4B, #3DB06A); }
+  .bar-value {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    width: 48px;
+    flex-shrink: 0;
+    text-align: left;
+  }
+  .avg-line {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-light);
+  }
+  .avg-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .avg-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    width: 80px;
+    flex-shrink: 0;
+    text-align: right;
+  }
+  .avg-label.flex-avg { color: var(--amber); }
+  .avg-label.std-avg  { color: var(--blue); }
+  .avg-label.prio-avg { color: var(--green); }
+  .avg-bar-track {
+    flex: 1;
+    height: 6px;
+    background: var(--bg-alt);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .avg-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+  }
+  .avg-bar-fill.flex-bar { background: var(--amber); }
+  .avg-bar-fill.std-bar  { background: var(--blue); }
+  .avg-bar-fill.prio-bar { background: var(--green); }
+  .avg-value {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    width: 48px;
+    flex-shrink: 0;
+  }
+  .avg-value.flex-avg { color: var(--amber); }
+  .avg-value.std-avg  { color: var(--blue); }
+  .avg-value.prio-avg { color: var(--green); }
+
+  /* ─── SUMMARY TABLE ───────────────────────────────────── */
+  .cmp-table {
+    overflow-x: auto;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .cmp-table table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .cmp-table thead th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .cmp-table thead th.flex-col { color: var(--amber); }
+  .cmp-table thead th.std-col  { color: var(--blue); }
+  .cmp-table thead th.prio-col { color: var(--green); }
+  .cmp-table tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-body);
+    vertical-align: top;
+    line-height: 1.5;
+    font-size: 13px;
+  }
+  .cmp-table tbody td:first-child { font-weight: 500; color: var(--text); font-size: 12px; }
+  .cmp-table tbody tr:last-child td { border-bottom: none; }
+  .cmp-table tbody tr:hover td { background: var(--surface-tint); }
+  .td-win { font-weight: 600; }
+  .td-win.flex { color: var(--amber); }
+  .td-win.std  { color: var(--blue); }
+  .td-win.prio { color: var(--green); }
+
+  /* ─── RUNS TABLE ──────────────────────────────────────── */
+  .runs-table {
+    overflow-x: auto;
+    margin: 20px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .runs-table table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .runs-table thead th {
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: var(--mono);
+    white-space: nowrap;
+  }
+  .runs-table tbody td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-body);
+    font-family: var(--mono);
+    font-size: 12px;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+  .runs-table tbody tr:last-child td { border-bottom: none; }
+  .runs-table tbody tr:hover td { background: var(--surface-tint); }
+  .tier-pill {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .tier-pill.flex { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+  .tier-pill.std  { background: var(--blue-bg);  color: var(--blue);  border: 1px solid var(--blue-border); }
+  .tier-pill.prio { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+  .ok-badge { color: var(--green); font-weight: 600; }
+  .fail-badge { color: var(--red); font-weight: 600; }
+
+  .runs-filter {
+    display: flex;
+    gap: 6px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-light);
+    background: var(--surface-tint);
+    border-radius: 8px 8px 0 0;
+  }
+
+  /* ─── CODE BLOCK ──────────────────────────────────────── */
+  .code-block {
+    background: var(--text);
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin: 20px 0;
+    overflow-x: auto;
+  }
+  .code-block-lbl {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: #666;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: block;
+  }
+  .code-block pre {
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.7;
+    color: #e8e6e1;
+    white-space: pre;
+  }
+  .code-block .cm  { color: #666; }
+  .code-block .kw  { color: #8ba7d4; }
+  .code-block .st  { color: #9ecb8c; }
+  .code-block .fn  { color: #e8b96b; }
+  .code-block .kv  { color: #cf9fd4; }
+  .code-block .nu  { color: #e8d4a8; }
+  .code-block .hi  { color: #f0a830; font-weight: 500; }
+
+  .install-block {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-body);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .install-block .prompt { color: var(--accent); user-select: none; }
+  .install-block .cmd { color: var(--text); }
+
+  /* ─── DECISION HELPER ─────────────────────────────────── */
+  .decision-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 24px 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+  .decision-head {
+    background: var(--bg-alt);
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .decision-head h4 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+  }
+  .decision-head p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 4px 0 0;
+  }
+  .decision-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+  }
+  @media (max-width: 600px) { .decision-options { grid-template-columns: 1fr; } }
+  .decision-opt {
+    background: var(--surface);
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 2px solid transparent;
+  }
+  .decision-opt:hover { background: var(--surface-tint); }
+  .decision-opt.selected { border-color: currentColor; }
+  .decision-opt.selected.flex-opt { border-color: var(--amber); background: var(--amber-bg); }
+  .decision-opt.selected.std-opt  { border-color: var(--blue);  background: var(--blue-bg); }
+  .decision-opt.selected.prio-opt { border-color: var(--green); background: var(--green-bg); }
+  .dopt-icon { font-size: 22px; margin-bottom: 10px; }
+  .dopt-title {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .dopt-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+  .decision-result {
+    padding: 20px 24px;
+    border-top: 1px solid var(--border);
+    display: none;
+  }
+  .decision-result.visible { display: block; }
+  .dr-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .dr-rec {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .dr-snippet {
+    background: var(--text);
+    border-radius: 6px;
+    padding: 14px 18px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: #e8e6e1;
+    line-height: 1.6;
+  }
+  .dr-snippet .kw { color: #8ba7d4; }
+  .dr-snippet .st { color: #9ecb8c; }
+  .dr-snippet .kv { color: #cf9fd4; }
+  .dr-snippet .hi { color: #f0a830; font-weight: 500; }
+  .dr-snippet .hi-blue { color: #8ba7d4; font-weight: 500; }
+  .dr-snippet .hi-green { color: #7ecb9c; font-weight: 500; }
+
+  /* ─── TAKEAWAYS GRID ──────────────────────────────────── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 24px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    border-color: var(--accent-border);
+    box-shadow: 0 2px 8px rgba(200,92,45,0.08);
+  }
+  .card-icon { font-size: 20px; margin-bottom: 10px; }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+  .card p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ─── CONCLUSION ──────────────────────────────────────── */
+  .conclusion {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--text);
+    border-radius: 0 0 8px 8px;
+    padding: 32px;
+    margin: 48px 0;
+  }
+  .conclusion h2 {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 18px;
+  }
+  .conclusion p {
+    font-size: 16px;
+    color: var(--text-body);
+    line-height: 1.78;
+    margin-bottom: 16px;
+  }
+  .conclusion p:last-child { margin-bottom: 0; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+  /* ─── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 40px 0 32px; }
+    .page-wrap { padding: 0 16px 60px; }
+    footer { padding: 16px 20px; flex-direction: column; align-items: flex-start; }
+    .code-block { padding: 18px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">asadani.github.io</a>
+  <div class="nav-right">
+    <span>Gemini API</span>
+    <span class="nav-tag preview">PREVIEW &middot; APR 2026</span>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">Gemini API &mdash; Service Tier Inference</div>
+    <h1>Flex &amp; Priority:<br>One Line of Code</h1>
+    <p class="hero-deck">
+      Optimize cost, reliability, and latency for production workloads by simply choosing a
+      <code style="font-family:var(--mono);font-size:0.9em;background:var(--accent-bg);border:1px solid var(--accent-border);padding:1px 7px;border-radius:3px;color:var(--accent);">service_tier</code>.
+      No batch file management, no architectural changes.
+    </p>
+    <div class="hero-meta">
+      <span>April 8, 2026</span>
+      <span class="hero-meta-sep">/</span>
+      <span>gemini-2.5-flash-preview</span>
+      <span class="hero-meta-sep">/</span>
+      <span>GenerateContent &amp; Interactions API</span>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat">
+        <div class="hstat-value">50%</div>
+        <div class="hstat-label">Flex cost saving</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-value">3</div>
+        <div class="hstat-label">Service tiers</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-value">2.2s</div>
+        <div class="hstat-label">Priority avg latency</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-value">1</div>
+        <div class="hstat-label">Line of code change</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ANNOUNCEMENT -->
+  <div class="banner">
+    <span class="banner-badge">OFFICIAL</span>
+    <p>
+      Available now for <strong>GenerateContent</strong> and <strong>Interactions API</strong>.
+      <a href="https://ai.google.dev/gemini-api/docs/flex-inference" target="_blank" rel="noopener">Flex inference docs →</a>
+      &nbsp;|&nbsp;
+      <a href="https://ai.google.dev/gemini-api/docs/priority-inference" target="_blank" rel="noopener">Priority inference docs →</a>
+      &nbsp;&nbsp;Requires <code style="font-family:var(--mono);font-size:0.9em;">genai &ge; 2.1.0</code>.
+    </p>
+  </div>
+
+  <!-- ─── SECTION 01: WHAT ARE TIERS ─────────────────────── -->
+  <div class="section">
+    <div class="section-label">01 &mdash; Overview</div>
+    <h2>Three Tiers, One API</h2>
+    <div class="prose">
+      <p>
+        Google's Gemini API now offers <strong>three inference service tiers</strong> that let you trade off cost,
+        latency, and availability guarantees &mdash; all within the same <code style="font-family:var(--mono);font-size:0.9em;">generate_content()</code> call.
+        No separate endpoints, no batch file management.
+      </p>
+    </div>
+
+    <div class="tier-grid">
+      <!-- FLEX -->
+      <div class="tier-card">
+        <span class="tier-badge flex-badge">FLEX</span>
+        <h4>Flex Inference</h4>
+        <p>50% cheaper for latency-tolerant workloads. May queue or return 503 during peak demand. Best for background processing.</p>
+        <code class="tier-code"><span class="kw">config</span> = {<br>&nbsp;&nbsp;<span class="st">"service_tier"</span>: <span class="val-flex">"flex"</span><br>}</code>
+        <div class="tier-attrs">
+          <div class="tier-attr"><span class="dot dot-amber"></span>50% cost reduction</div>
+          <div class="tier-attr"><span class="dot dot-amber"></span>Higher latency variance</div>
+          <div class="tier-attr"><span class="dot dot-amber"></span>May 503 at peak demand</div>
+        </div>
+      </div>
+      <!-- STANDARD -->
+      <div class="tier-card">
+        <span class="tier-badge std-badge">STANDARD</span>
+        <h4>Standard Inference</h4>
+        <p>The default tier &mdash; no parameter required. Balanced cost and latency. Use this when you have no specific requirements.</p>
+        <code class="tier-code"><span class="cm"># no service_tier param</span><br><span class="kw">config</span> = {<br>&nbsp;&nbsp;<span class="st">"http_options"</span>: ...<br>}</code>
+        <div class="tier-attrs">
+          <div class="tier-attr"><span class="dot dot-blue"></span>Default behavior</div>
+          <div class="tier-attr"><span class="dot dot-blue"></span>Consistent latency</div>
+          <div class="tier-attr"><span class="dot dot-blue"></span>No extra config</div>
+        </div>
+      </div>
+      <!-- PRIORITY -->
+      <div class="tier-card">
+        <span class="tier-badge prio-badge">PRIORITY</span>
+        <h4>Priority Inference</h4>
+        <p>For critical, user-facing apps. Lowest latency with automatic fallback to Standard if capacity is constrained.</p>
+        <code class="tier-code"><span class="kw">config</span> = {<br>&nbsp;&nbsp;<span class="st">"service_tier"</span>: <span class="val-prio">"priority"</span><br>}</code>
+        <div class="tier-attrs">
+          <div class="tier-attr"><span class="dot dot-green"></span>Lowest latency</div>
+          <div class="tier-attr"><span class="dot dot-green"></span>Auto-fallback to standard</div>
+          <div class="tier-attr"><span class="dot dot-green"></span>Best for real-time UX</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-warning">
+      <div class="callout-lbl">Important &mdash; Package Version</div>
+      <p>
+        <code style="font-family:var(--mono);font-size:0.9em;">service_tier</code> requires <strong>genai&nbsp;&ge;&nbsp;2.1.0</strong>.
+        Older versions throw a Pydantic validation error: <em>"Extra inputs are not permitted"</em>.
+        Upgrade with: <code style="font-family:var(--mono);font-size:0.9em;">pip install -U 'genai'</code>
+      </p>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 02: BENCHMARK CHART ─────────────────────── -->
+  <div class="section">
+    <div class="section-label">02 &mdash; Latency Benchmark</div>
+    <h2>Interactive Benchmark &mdash; 5 Runs per Tier</h2>
+    <div class="prose">
+      <p>
+        All 15 runs using <strong>gemini-2.5-flash-preview</strong>, same prompt, sequential execution.
+        The <em>Served</em> tier is confirmed from the <code style="font-family:var(--mono);font-size:0.9em;">x-gemini-service-tier</code> response header.
+      </p>
+    </div>
+
+    <div class="bench-wrap">
+      <div class="bench-head">
+        <h3>Latency per Run (seconds)</h3>
+        <div class="bench-legend">
+          <div class="bl-item"><span class="bl-dot flex-dot"></span>Flex</div>
+          <div class="bl-item"><span class="bl-dot std-dot"></span>Standard</div>
+          <div class="bl-item"><span class="bl-dot prio-dot"></span>Priority</div>
+        </div>
+      </div>
+      <div class="bench-filter">
+        <button class="filter-btn active" data-tier="all">All Tiers</button>
+        <button class="filter-btn flex-active" data-tier="flex">Flex</button>
+        <button class="filter-btn std-active" data-tier="std">Standard</button>
+        <button class="filter-btn prio-active" data-tier="prio">Priority</button>
+      </div>
+      <div class="bench-chart">
+        <!-- FLEX -->
+        <div class="run-bar" data-tier="flex"><span class="run-label">flex / run 1</span><div class="bar-track"><div class="bar-fill flex-bar" style="width:60.3%"></div></div><span class="bar-value">3.010s</span></div>
+        <div class="run-bar" data-tier="flex"><span class="run-label">flex / run 2</span><div class="bar-track"><div class="bar-fill flex-bar" style="width:45.9%"></div></div><span class="bar-value">2.293s</span></div>
+        <div class="run-bar" data-tier="flex"><span class="run-label">flex / run 3</span><div class="bar-track"><div class="bar-fill flex-bar" style="width:99.3%"></div></div><span class="bar-value">4.964s</span></div>
+        <div class="run-bar" data-tier="flex"><span class="run-label">flex / run 4</span><div class="bar-track"><div class="bar-fill flex-bar" style="width:60.2%"></div></div><span class="bar-value">3.009s</span></div>
+        <div class="run-bar" data-tier="flex"><span class="run-label">flex / run 5</span><div class="bar-track"><div class="bar-fill flex-bar" style="width:49.7%"></div></div><span class="bar-value">2.485s</span></div>
+        <!-- STANDARD -->
+        <div class="run-bar" data-tier="std"><span class="run-label">std / run 1</span><div class="bar-track"><div class="bar-fill std-bar" style="width:44.5%"></div></div><span class="bar-value">2.225s</span></div>
+        <div class="run-bar" data-tier="std"><span class="run-label">std / run 2</span><div class="bar-track"><div class="bar-fill std-bar" style="width:54.9%"></div></div><span class="bar-value">2.747s</span></div>
+        <div class="run-bar" data-tier="std"><span class="run-label">std / run 3</span><div class="bar-track"><div class="bar-fill std-bar" style="width:41.5%"></div></div><span class="bar-value">2.075s</span></div>
+        <div class="run-bar" data-tier="std"><span class="run-label">std / run 4</span><div class="bar-track"><div class="bar-fill std-bar" style="width:71.5%"></div></div><span class="bar-value">3.574s</span></div>
+        <div class="run-bar" data-tier="std"><span class="run-label">std / run 5</span><div class="bar-track"><div class="bar-fill std-bar" style="width:45.9%"></div></div><span class="bar-value">2.294s</span></div>
+        <!-- PRIORITY -->
+        <div class="run-bar" data-tier="prio"><span class="run-label">prio / run 1</span><div class="bar-track"><div class="bar-fill prio-bar" style="width:40.2%"></div></div><span class="bar-value">2.008s</span></div>
+        <div class="run-bar" data-tier="prio"><span class="run-label">prio / run 2</span><div class="bar-track"><div class="bar-fill prio-bar" style="width:47.4%"></div></div><span class="bar-value">2.368s</span></div>
+        <div class="run-bar" data-tier="prio"><span class="run-label">prio / run 3</span><div class="bar-track"><div class="bar-fill prio-bar" style="width:45.4%"></div></div><span class="bar-value">2.268s</span></div>
+        <div class="run-bar" data-tier="prio"><span class="run-label">prio / run 4</span><div class="bar-track"><div class="bar-fill prio-bar" style="width:48.6%"></div></div><span class="bar-value">2.429s</span></div>
+        <div class="run-bar" data-tier="prio"><span class="run-label">prio / run 5</span><div class="bar-track"><div class="bar-fill prio-bar" style="width:41.1%"></div></div><span class="bar-value">2.056s</span></div>
+
+        <!-- AVERAGES -->
+        <div class="avg-line">
+          <div class="avg-row avg-flex-row" data-tier="flex">
+            <span class="avg-label flex-avg">flex avg</span>
+            <div class="avg-bar-track"><div class="avg-bar-fill flex-bar" style="width:63.0%"></div></div>
+            <span class="avg-value flex-avg">3.152s</span>
+          </div>
+          <div class="avg-row avg-std-row" data-tier="std">
+            <span class="avg-label std-avg">std avg</span>
+            <div class="avg-bar-track"><div class="avg-bar-fill std-bar" style="width:51.7%"></div></div>
+            <span class="avg-value std-avg">2.583s</span>
+          </div>
+          <div class="avg-row avg-prio-row" data-tier="prio">
+            <span class="avg-label prio-avg">prio avg</span>
+            <div class="avg-bar-track"><div class="avg-bar-fill prio-bar" style="width:44.5%"></div></div>
+            <span class="avg-value prio-avg">2.226s</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-warning">
+      <div class="callout-lbl">Reliability Note</div>
+      <p>
+        In a separate test run, <strong>flex returned a 503 UNAVAILABLE</strong> error due to high demand on the preview endpoint.
+        Standard and priority completed successfully. Design flex workloads to handle retries or graceful degradation.
+      </p>
+    </div>
+
+    <!-- SUMMARY TABLE -->
+    <h3>Summary Statistics</h3>
+    <div class="cmp-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th class="flex-col">Flex</th>
+            <th class="std-col">Standard</th>
+            <th class="prio-col">Priority</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Successful runs</td>
+            <td>5 / 5</td>
+            <td>5 / 5</td>
+            <td>5 / 5</td>
+          </tr>
+          <tr>
+            <td>Avg latency</td>
+            <td>3.152s</td>
+            <td>2.583s</td>
+            <td class="td-win prio">2.226s ✓</td>
+          </tr>
+          <tr>
+            <td>Min latency</td>
+            <td>2.293s</td>
+            <td>2.075s</td>
+            <td class="td-win prio">2.008s ✓</td>
+          </tr>
+          <tr>
+            <td>Max latency</td>
+            <td>4.964s</td>
+            <td>3.574s</td>
+            <td class="td-win prio">2.429s ✓</td>
+          </tr>
+          <tr>
+            <td>Latency spread</td>
+            <td>2.671s range</td>
+            <td>1.499s range</td>
+            <td class="td-win prio">0.421s range ✓</td>
+          </tr>
+          <tr>
+            <td>Avg output tokens</td>
+            <td>26.6</td>
+            <td>29.4</td>
+            <td>26.6</td>
+          </tr>
+          <tr>
+            <td>Cost vs standard</td>
+            <td class="td-win flex">~50% cheaper ✓</td>
+            <td>baseline</td>
+            <td>~same</td>
+          </tr>
+          <tr>
+            <td>Failover</td>
+            <td>no (503 on overflow)</td>
+            <td>no</td>
+            <td class="td-win prio">auto → standard ✓</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 03: INDIVIDUAL RUNS TABLE ──────────────── -->
+  <div class="section">
+    <div class="section-label">03 &mdash; Raw Data</div>
+    <h2>All 15 Runs</h2>
+    <p class="prose" style="margin-bottom:0;">
+      Full per-run breakdown including token counts. The <em>Served</em> column reflects the actual tier confirmed
+      via the <code style="font-family:var(--mono);font-size:0.9em;">x-gemini-service-tier</code> response header.
+    </p>
+
+    <div class="runs-table">
+      <div class="runs-filter">
+        <button class="filter-btn active" data-runs-tier="all">All</button>
+        <button class="filter-btn flex-active" data-runs-tier="flex">Flex</button>
+        <button class="filter-btn std-active" data-runs-tier="std">Standard</button>
+        <button class="filter-btn prio-active" data-runs-tier="prio">Priority</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Tier</th>
+            <th>Run</th>
+            <th>OK</th>
+            <th>Latency</th>
+            <th>Served</th>
+            <th>In toks</th>
+            <th>Out toks</th>
+            <th>Thoughts</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-runs-tier="flex"><td><span class="tier-pill flex">flex</span></td><td>1</td><td><span class="ok-badge">yes</span></td><td>3.010s</td><td><span class="tier-pill flex">flex</span></td><td>14</td><td>26</td><td>168</td><td>208</td></tr>
+          <tr data-runs-tier="flex"><td><span class="tier-pill flex">flex</span></td><td>2</td><td><span class="ok-badge">yes</span></td><td>2.293s</td><td><span class="tier-pill flex">flex</span></td><td>14</td><td>32</td><td>125</td><td>171</td></tr>
+          <tr data-runs-tier="flex"><td><span class="tier-pill flex">flex</span></td><td>3</td><td><span class="ok-badge">yes</span></td><td>4.964s</td><td><span class="tier-pill flex">flex</span></td><td>14</td><td>24</td><td>174</td><td>212</td></tr>
+          <tr data-runs-tier="flex"><td><span class="tier-pill flex">flex</span></td><td>4</td><td><span class="ok-badge">yes</span></td><td>3.009s</td><td><span class="tier-pill flex">flex</span></td><td>14</td><td>27</td><td>187</td><td>228</td></tr>
+          <tr data-runs-tier="flex"><td><span class="tier-pill flex">flex</span></td><td>5</td><td><span class="ok-badge">yes</span></td><td>2.485s</td><td><span class="tier-pill flex">flex</span></td><td>14</td><td>24</td><td>179</td><td>217</td></tr>
+          <tr data-runs-tier="std"><td><span class="tier-pill std">standard</span></td><td>1</td><td><span class="ok-badge">yes</span></td><td>2.225s</td><td><span class="tier-pill std">standard</span></td><td>14</td><td>29</td><td>204</td><td>247</td></tr>
+          <tr data-runs-tier="std"><td><span class="tier-pill std">standard</span></td><td>2</td><td><span class="ok-badge">yes</span></td><td>2.747s</td><td><span class="tier-pill std">standard</span></td><td>14</td><td>32</td><td>221</td><td>267</td></tr>
+          <tr data-runs-tier="std"><td><span class="tier-pill std">standard</span></td><td>3</td><td><span class="ok-badge">yes</span></td><td>2.075s</td><td><span class="tier-pill std">standard</span></td><td>14</td><td>25</td><td>191</td><td>230</td></tr>
+          <tr data-runs-tier="std"><td><span class="tier-pill std">standard</span></td><td>4</td><td><span class="ok-badge">yes</span></td><td>3.574s</td><td><span class="tier-pill std">standard</span></td><td>14</td><td>29</td><td>178</td><td>221</td></tr>
+          <tr data-runs-tier="std"><td><span class="tier-pill std">standard</span></td><td>5</td><td><span class="ok-badge">yes</span></td><td>2.294s</td><td><span class="tier-pill std">standard</span></td><td>14</td><td>32</td><td>236</td><td>282</td></tr>
+          <tr data-runs-tier="prio"><td><span class="tier-pill prio">priority</span></td><td>1</td><td><span class="ok-badge">yes</span></td><td>2.008s</td><td><span class="tier-pill prio">priority</span></td><td>14</td><td>23</td><td>161</td><td>198</td></tr>
+          <tr data-runs-tier="prio"><td><span class="tier-pill prio">priority</span></td><td>2</td><td><span class="ok-badge">yes</span></td><td>2.368s</td><td><span class="tier-pill prio">priority</span></td><td>14</td><td>28</td><td>231</td><td>273</td></tr>
+          <tr data-runs-tier="prio"><td><span class="tier-pill prio">priority</span></td><td>3</td><td><span class="ok-badge">yes</span></td><td>2.268s</td><td><span class="tier-pill prio">priority</span></td><td>14</td><td>25</td><td>207</td><td>246</td></tr>
+          <tr data-runs-tier="prio"><td><span class="tier-pill prio">priority</span></td><td>4</td><td><span class="ok-badge">yes</span></td><td>2.429s</td><td><span class="tier-pill prio">priority</span></td><td>14</td><td>26</td><td>174</td><td>214</td></tr>
+          <tr data-runs-tier="prio"><td><span class="tier-pill prio">priority</span></td><td>5</td><td><span class="ok-badge">yes</span></td><td>2.056s</td><td><span class="tier-pill prio">priority</span></td><td>14</td><td>31</td><td>240</td><td>285</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 04: DECISION HELPER ─────────────────────── -->
+  <div class="section">
+    <div class="section-label">04 &mdash; Decision Helper</div>
+    <h2>Which Tier Is Right for Your Workload?</h2>
+
+    <div class="decision-wrap">
+      <div class="decision-head">
+        <h4>My workload is&hellip;</h4>
+        <p>Select the option that best matches your use case.</p>
+      </div>
+      <div class="decision-options">
+        <div class="decision-opt flex-opt" data-opt="flex">
+          <div class="dopt-icon">📦</div>
+          <div class="dopt-title">Cost-sensitive &amp; asynchronous</div>
+          <div class="dopt-desc">Background jobs, batch enrichment, nightly reports, embeddings pipelines. Latency tolerance &gt; 5s is fine.</div>
+        </div>
+        <div class="decision-opt std-opt" data-opt="std">
+          <div class="dopt-icon">⚖️</div>
+          <div class="dopt-title">Balanced &mdash; general API usage</div>
+          <div class="dopt-desc">Internal tools, prototypes, or anything where you have no strong preference. Good defaults, no extra config.</div>
+        </div>
+        <div class="decision-opt prio-opt" data-opt="prio">
+          <div class="dopt-icon">⚡</div>
+          <div class="dopt-title">Real-time, user-facing</div>
+          <div class="dopt-desc">Chat interfaces, copilots, live code completion, customer-facing AI features. Every millisecond counts.</div>
+        </div>
+      </div>
+      <div class="decision-result" id="decision-result">
+        <div class="dr-header">
+          <span id="dr-badge" class="tier-pill">—</span>
+          <span class="dr-rec" id="dr-rec">—</span>
+        </div>
+        <div class="dr-snippet" id="dr-snippet">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 05: THE SCRIPT ───────────────────────────── -->
+  <div class="section">
+    <div class="section-label">05 &mdash; Implementation</div>
+    <h2>The Script</h2>
+    <div class="prose">
+      <p>
+        All benchmarks were run with <a href="../flex-genai.py" style="color:var(--accent);text-underline-offset:2px;text-decoration:underline;"><code style="font-family:var(--mono);font-size:0.9em;">flex-genai.py</code></a>,
+        a self-contained script that cycles through all three tiers, captures per-run latency and token usage,
+        and reads the confirmed tier from response headers.
+      </p>
+    </div>
+
+    <div class="install-block">
+      <span class="prompt">$</span>
+      <span class="cmd">pip install -U 'genai'&nbsp;&nbsp;<span style="color:var(--text-subtle)"># requires genai &ge; 2.1.0 for service_tier support</span></span>
+    </div>
+
+    <div class="code-block">
+      <span class="code-block-lbl">flex-genai.py &mdash; core snippet</span>
+      <pre><span class="cm"># ── set up per-tier config ──────────────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">run_once</span>(tier: str) -> dict:
+    config = {<span class="st">"http_options"</span>: {<span class="st">"timeout"</span>: <span class="nu">900_000</span>}}  <span class="cm"># flex can queue; 900s timeout</span>
+    <span class="kw">if</span> tier != <span class="st">"standard"</span>:
+        config[<span class="st">"service_tier"</span>] = tier  <span class="cm"># "flex" or "priority"</span>
+
+    response = client.models.generate_content(
+        model=<span class="st">"gemini-2.5-flash-preview"</span>,
+        contents=prompt,
+        config=config,
+    )
+    ...
+
+<span class="cm"># ── verify the tier actually served ──────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">effective_tier</span>(response):
+    <span class="st">"""Read confirmed tier from x-gemini-service-tier response header."""</span>
+    r = <span class="fn">getattr</span>(response, <span class="st">"sdk_http_response"</span>, <span class="kv">None</span>)
+    <span class="kw">if</span> r <span class="kw">is</span> <span class="kv">None</span>:
+        <span class="kw">return</span> <span class="kv">None</span>
+    h = <span class="fn">getattr</span>(r, <span class="st">"headers"</span>, <span class="kv">None</span>) <span class="kw">or</span> {}
+    <span class="kw">return</span> h.<span class="fn">get</span>(<span class="st">"x-gemini-service-tier"</span>) <span class="kw">or</span> h.<span class="fn">get</span>(<span class="st">"X-Gemini-Service-Tier"</span>)</pre>
+    </div>
+
+    <div class="callout callout-info">
+      <div class="callout-lbl">Why check the header?</div>
+      <p>
+        Priority inference automatically falls back to Standard when capacity is constrained.
+        The <code style="font-family:var(--mono);font-size:0.9em;">x-gemini-service-tier</code> header tells you
+        <em>which tier actually served your request</em>, not which one you asked for.
+      </p>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 06: TAKEAWAYS ─────────────────────────────── -->
+  <div class="section">
+    <div class="section-label">06 &mdash; Key Takeaways</div>
+    <h2>Production Guidance</h2>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon">📉</div>
+        <h4>Cut costs with Flex</h4>
+        <p>Use <code style="font-family:var(--mono);font-size:0.85em;">service_tier="flex"</code> for background pipelines, batch enrichment, or any job that can tolerate variable latency and occasional retries.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚡</div>
+        <h4>Guarantee UX with Priority</h4>
+        <p>Use <code style="font-family:var(--mono);font-size:0.85em;">service_tier="priority"</code> for real-time user interactions. Automatic failover to Standard means no hard failures.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔁</div>
+        <h4>Handle Flex 503s gracefully</h4>
+        <p>Flex may return <code style="font-family:var(--mono);font-size:0.85em;">503 UNAVAILABLE</code> during peak demand (preview behavior). Implement exponential backoff or queue retries.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <h4>Verify the served tier</h4>
+        <p>Always check <code style="font-family:var(--mono);font-size:0.85em;">x-gemini-service-tier</code> in the response headers to confirm which tier actually handled your request.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔒</div>
+        <h4>Latency consistency</h4>
+        <p>Priority delivered a 0.42s spread across 5 runs. Standard spread was 1.5s. Flex spread was 2.67s. Use Priority when p99 latency matters.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📦</div>
+        <h4>No batch file overhead</h4>
+        <p>Unlike the Batch API, Flex uses the same <code style="font-family:var(--mono);font-size:0.85em;">generate_content()</code> call. No file upload, no polling, no async job management.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCLUSION -->
+  <div class="conclusion">
+    <h2>Bottom Line</h2>
+    <p>
+      Service tiers are a <strong>zero-architecture-change</strong> optimization. If you're already calling <code style="font-family:var(--mono);font-size:0.9em;">generate_content()</code>,
+      you're one parameter away from either cutting your inference costs in half or guaranteeing your users the fastest possible response.
+    </p>
+    <p>
+      The benchmarks show priority is the fastest and most consistent tier (~2.2s avg, 0.4s spread), standard is the reliable default (~2.6s avg),
+      and flex trades latency variance for cost (~3.2s avg, but 50% cheaper and still sub-5s on successful runs).
+      During high demand, flex may 503 &mdash; plan accordingly.
+    </p>
+    <p>
+      Both features are in preview. Flex inference is documented at
+      <a href="https://ai.google.dev/gemini-api/docs/flex-inference" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">ai.google.dev/gemini-api/docs/flex-inference</a>
+      and priority inference at
+      <a href="https://ai.google.dev/gemini-api/docs/priority-inference" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">ai.google.dev/gemini-api/docs/priority-inference</a>.
+    </p>
+  </div>
+
+</div><!-- end page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <span>asadani.github.io &mdash; April 2026</span>
+  <span>
+    <a href="https://ai.google.dev/gemini-api/docs/flex-inference" target="_blank" rel="noopener">Flex Docs</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://ai.google.dev/gemini-api/docs/priority-inference" target="_blank" rel="noopener">Priority Docs</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/">Home</a>
+  </span>
+</footer>
+
+<script>
+/* ── Benchmark chart tier filter ───────────────────────────── */
+document.querySelectorAll('.bench-filter .filter-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const tier = this.dataset.tier;
+
+    // Update active button
+    document.querySelectorAll('.bench-filter .filter-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+
+    // Show/hide run bars
+    document.querySelectorAll('.run-bar').forEach(bar => {
+      bar.classList.toggle('hidden', tier !== 'all' && bar.dataset.tier !== tier);
+    });
+
+    // Show/hide avg rows
+    document.querySelectorAll('.avg-row').forEach(row => {
+      row.style.display = (tier === 'all' || row.dataset.tier === tier) ? 'flex' : 'none';
+    });
+  });
+});
+
+/* ── Individual runs table filter ──────────────────────────── */
+document.querySelectorAll('.runs-filter .filter-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const tier = this.dataset.runsTier;
+
+    document.querySelectorAll('.runs-filter .filter-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+
+    document.querySelectorAll('.runs-table tbody tr').forEach(row => {
+      row.style.display = (tier === 'all' || row.dataset.runsTier === tier) ? '' : 'none';
+    });
+  });
+});
+
+/* ── Decision helper ───────────────────────────────────────── */
+const snippets = {
+  flex: {
+    badge: 'flex',
+    pillClass: 'flex',
+    rec: 'Use Flex &mdash; 50% cheaper, designed for latency-tolerant async workloads.',
+    code: `<span class="kw">config</span> = {
+    <span class="st">"http_options"</span>: {<span class="st">"timeout"</span>: <span class="nu">900_000</span>},  <span style="color:#666"># long timeout for flex queuing</span>
+    <span class="st">"service_tier"</span>: <span class="hi">"flex"</span>,
+}
+<span style="color:#666"># add retry logic for 503 UNAVAILABLE</span>`,
+  },
+  std: {
+    badge: 'standard',
+    pillClass: 'std',
+    rec: 'Use Standard &mdash; reliable default, no extra configuration required.',
+    code: `<span class="kw">config</span> = {
+    <span class="st">"http_options"</span>: {<span class="st">"timeout"</span>: <span class="nu">30_000</span>},
+    <span style="color:#666"># no service_tier &rarr; defaults to standard</span>
+}`,
+  },
+  prio: {
+    badge: 'priority',
+    pillClass: 'prio',
+    rec: 'Use Priority &mdash; lowest latency with automatic fallback to Standard.',
+    code: `<span class="kw">config</span> = {
+    <span class="st">"http_options"</span>: {<span class="st">"timeout"</span>: <span class="nu">30_000</span>},
+    <span class="st">"service_tier"</span>: <span class="hi-green">"priority"</span>,
+}
+<span style="color:#666"># check x-gemini-service-tier header to confirm actual tier served</span>`,
+  },
+};
+
+document.querySelectorAll('.decision-opt').forEach(opt => {
+  opt.addEventListener('click', function() {
+    document.querySelectorAll('.decision-opt').forEach(o => o.classList.remove('selected'));
+    this.classList.add('selected');
+
+    const key = this.dataset.opt;
+    const s = snippets[key];
+    const result = document.getElementById('decision-result');
+    const badge = document.getElementById('dr-badge');
+    const rec = document.getElementById('dr-rec');
+    const snippet = document.getElementById('dr-snippet');
+
+    badge.textContent = s.badge;
+    badge.className = `tier-pill ${s.pillClass}`;
+    rec.innerHTML = s.rec;
+    snippet.innerHTML = s.code;
+    result.classList.add('visible');
+  });
+});
+</script>
+</body>
+</html>
