@@ -1185,7 +1185,9 @@
     <h2>The Script</h2>
     <div class="prose">
       <p>
-        All benchmarks were run with <a href="../flex-genai.py" style="color:var(--accent);text-underline-offset:2px;text-decoration:underline;"><code style="font-family:var(--mono);font-size:0.9em;">flex-genai.py</code></a>,
+        All benchmarks were run with
+        <a href="https://gist.github.com/asadani/12818e787ef47e3126cad1d0dc793cf5" target="_blank" rel="noopener" style="color:var(--accent);text-underline-offset:2px;text-decoration:underline;"><code style="font-family:var(--mono);font-size:0.9em;">flex-genai.py</code></a>
+        (full source on GitHub Gist),
         a self-contained script that cycles through all three tiers, captures per-run latency and token usage,
         and reads the confirmed tier from response headers.
       </p>
@@ -1270,23 +1272,142 @@
     </div>
   </div>
 
+  <!-- ─── SECTION 07: RATE LIMITS & TRADE-OFFS ─────────────── -->
+  <div class="section">
+    <div class="section-label">07 &mdash; Rate Limits &amp; Trade-offs</div>
+    <h2>The Real Cost of Simplicity</h2>
+    <div class="prose">
+      <p>
+        There's a meaningful caveat worth understanding: <strong>Flex inference traffic counts towards your
+        general rate limits.</strong> It doesn't offer the extended rate limits that the Batch API provides.
+        On its face, that sounds like a downgrade. It isn't.
+      </p>
+    </div>
+
+    <div class="callout callout-warning">
+      <div class="callout-lbl">Rate Limit Behaviour</div>
+      <p>
+        Flex shares your standard per-minute and per-day quotas. During sustained high volume, you'll hit
+        the same ceiling you would with standard inference. The Batch API has separate, higher quotas
+        specifically to handle large offline workloads.
+      </p>
+    </div>
+
+    <div class="prose">
+      <p>
+        But this is a <strong>deliberate architectural trade-off</strong>, not an oversight.
+        By keeping Flex within the standard request path, Google avoids introducing a second quota system,
+        a separate endpoint, or any new client-side complexity. The whole point is that
+        <em>you don't change anything except one config key.</em>
+      </p>
+    </div>
+
+    <!-- SPOT INSTANCE ANALOGY -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--text);border-radius:0 8px 8px 0;padding:24px 28px;margin:24px 0;">
+      <div style="font-family:var(--sans);font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;">Analogy</div>
+      <p style="font-family:var(--serif);font-size:19px;font-weight:600;color:var(--text);line-height:1.45;font-style:italic;margin:0;">
+        Flex is the Spot Instance of LLM inference &mdash; you accept sheddability during
+        peak surges in exchange for a 50% cost reduction, with none of the operational overhead
+        of managing batch files or TTL logic for context caching.
+      </p>
+    </div>
+
+    <!-- BATCH API VS FLEX COMPARISON -->
+    <h3>Flex vs Batch API &mdash; The Real Difference</h3>
+    <p class="prose" style="margin-bottom:16px;">
+      The 50% cost saving is the headline, but the <strong>actual win is engineering hours</strong>.
+      Compare what it takes to run the same workload through each approach:
+    </p>
+
+    <div class="cmp-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Dimension</th>
+            <th style="color:var(--text-muted);">Batch API</th>
+            <th style="color:var(--amber);">Flex Inference</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Setup</td>
+            <td>Upload input file to Cloud Storage or Files API</td>
+            <td class="td-win flex">Add one config key &mdash; done</td>
+          </tr>
+          <tr>
+            <td>Call style</td>
+            <td>Create job, poll for completion, fetch output file</td>
+            <td class="td-win flex">Standard <code style="font-family:var(--mono);font-size:0.85em;">await generate_content()</code></td>
+          </tr>
+          <tr>
+            <td>Pipeline rewrite</td>
+            <td>Yes &mdash; async job orchestration required</td>
+            <td class="td-win flex">No &mdash; existing code works unchanged</td>
+          </tr>
+          <tr>
+            <td>Rate limits</td>
+            <td>Extended separate quota</td>
+            <td>General rate limits (shared with standard)</td>
+          </tr>
+          <tr>
+            <td>Failure mode</td>
+            <td>Job can fail; output may be partial</td>
+            <td>503 on surge &mdash; retry and continue</td>
+          </tr>
+          <tr>
+            <td>Cost vs standard</td>
+            <td class="td-win flex">~50% cheaper</td>
+            <td class="td-win flex">~50% cheaper</td>
+          </tr>
+          <tr>
+            <td>Time to production</td>
+            <td>Hours to days (pipeline changes)</td>
+            <td class="td-win flex">Minutes (one config change)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>
+        The rate limit cost is essentially the <strong>price of not rewriting your entire data pipeline</strong>
+        to support asynchronous batch processing. For most teams running enrichment pipelines or background
+        classification jobs, that trade-off is obvious &mdash; you get the same 50% savings without touching
+        your architecture.
+      </p>
+      <p>
+        Where the Batch API wins is sustained, high-volume offline workloads that genuinely need extended
+        quotas &mdash; millions of documents, overnight runs. Flex is for everything in between: workloads
+        that don't need real-time latency but also don't justify a full async pipeline rebuild.
+      </p>
+    </div>
+  </div>
+
   <!-- CONCLUSION -->
   <div class="conclusion">
     <h2>Bottom Line</h2>
     <p>
-      Service tiers are a <strong>zero-architecture-change</strong> optimization. If you're already calling <code style="font-family:var(--mono);font-size:0.9em;">generate_content()</code>,
-      you're one parameter away from either cutting your inference costs in half or guaranteeing your users the fastest possible response.
+      Service tiers are a <strong>zero-architecture-change</strong> optimization. If you're already calling
+      <code style="font-family:var(--mono);font-size:0.9em;">generate_content()</code>, you're one config key away from
+      cutting your inference costs in half or guaranteeing your users the fastest possible response.
     </p>
     <p>
-      The benchmarks show priority is the fastest and most consistent tier (~2.2s avg, 0.4s spread), standard is the reliable default (~2.6s avg),
-      and flex trades latency variance for cost (~3.2s avg, but 50% cheaper and still sub-5s on successful runs).
-      During high demand, flex may 503 &mdash; plan accordingly.
+      The benchmarks show priority is the fastest and most consistent tier (~2.2s avg, 0.4s spread), standard is the
+      reliable default (~2.6s avg), and flex trades latency variance for cost (~3.2s avg, 50% cheaper).
+      During high demand, flex may 503 &mdash; design for retries.
+    </p>
+    <p>
+      And on rate limits: yes, Flex shares your general quota. But the real value isn't just the 50% cost reduction &mdash;
+      it's the <strong>engineering hours you don't spend</strong> building async batch pipelines, managing output files,
+      and rewriting your request flow. Sometimes the best infrastructure decision is the one that lets your team
+      ship something else instead.
     </p>
     <p>
       Both features are in preview. Flex inference is documented at
       <a href="https://ai.google.dev/gemini-api/docs/flex-inference" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">ai.google.dev/gemini-api/docs/flex-inference</a>
       and priority inference at
       <a href="https://ai.google.dev/gemini-api/docs/priority-inference" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">ai.google.dev/gemini-api/docs/priority-inference</a>.
+      Full benchmark source: <a href="https://gist.github.com/asadani/12818e787ef47e3126cad1d0dc793cf5" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">flex-genai.py on GitHub Gist</a>.
     </p>
   </div>
 
@@ -1296,6 +1417,8 @@
 <footer>
   <span>asadani.github.io &mdash; April 2026</span>
   <span>
+    <a href="https://gist.github.com/asadani/12818e787ef47e3126cad1d0dc793cf5" target="_blank" rel="noopener">Gist (Source)</a>
+    &nbsp;&middot;&nbsp;
     <a href="https://ai.google.dev/gemini-api/docs/flex-inference" target="_blank" rel="noopener">Flex Docs</a>
     &nbsp;&middot;&nbsp;
     <a href="https://ai.google.dev/gemini-api/docs/priority-inference" target="_blank" rel="noopener">Priority Docs</a>
