@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Writes the Code. You Own Everything. — Linux Kernel AI Policy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #F5F1EB;
+    --bg-alt:       #EDEAE3;
+    --surface:      #FFFFFF;
+    --surface-tint: #FAF8F5;
+    --border:       #DDD9D0;
+    --border-light: #EAE7E0;
+    --text:         #1A1714;
+    --text-body:    #3D3A35;
+    --text-muted:   #6B6760;
+    --text-subtle:  #9B9892;
+    --accent:       #C85C2D;
+    --accent-light: #E8895D;
+    --accent-bg:    #FDF1EB;
+    --accent-border:#F0C4A8;
+    --green:        #2A7A4B;
+    --green-bg:     #EAF5EF;
+    --green-border: #A8D9BC;
+    --blue:         #2563A8;
+    --blue-bg:      #EAF1FA;
+    --blue-border:  #A8C5E8;
+    --red:          #B83535;
+    --red-bg:       #FAEBEB;
+    --red-border:   #E8AAAA;
+    --serif:        'Newsreader', Georgia, serif;
+    --sans:         'Inter', system-ui, sans-serif;
+    --mono:         'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-body);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .nav-tag {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── LAYOUT ──────────────────────────────────────────── */
+  .page-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-deck {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 640px;
+    font-weight: 300;
+  }
+  .hero-meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-family: var(--mono);
+  }
+  .hero-meta-sep { color: var(--border); }
+
+  /* ─── BODY TEXT ───────────────────────────────────────── */
+  .prose p {
+    color: var(--text-body);
+    margin-bottom: 20px;
+    font-size: 17px;
+    line-height: 1.78;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); font-weight: 600; }
+  em { font-style: italic; color: var(--text-body); }
+
+  /* ─── SECTION HEADING ─────────────────────────────────── */
+  .section { margin-top: 56px; }
+  .section-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 32px 0 14px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── BANNER ──────────────────────────────────────────── */
+  .banner {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .banner-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .banner p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .banner a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ─── PLAIN ENGLISH ───────────────────────────────────── */
+  .plain-english {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 8px 8px;
+    padding: 28px 32px;
+    margin: 0 0 56px;
+  }
+  .plain-english .pe-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .pe-list { list-style: none; padding: 0; }
+  .pe-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 16px;
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+  .pe-list li:last-child { border-bottom: none; }
+  .pe-num {
+    width: 26px;
+    height: 26px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-family: var(--mono);
+  }
+
+  /* ─── CARDS GRID ──────────────────────────────────────── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 24px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    border-color: var(--accent-border);
+    box-shadow: 0 2px 8px rgba(200,92,45,0.08);
+  }
+  .card-icon { font-size: 20px; margin-bottom: 10px; }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+  .card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .card.card-red { border-color: var(--red-border); }
+  .card.card-red:hover { border-color: var(--red); box-shadow: 0 2px 8px rgba(184,53,53,0.08); }
+  .card.card-red .card-icon-badge {
+    display: inline-block;
+    background: var(--red-bg);
+    color: var(--red);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-green { border-color: var(--green-border); }
+  .card.card-green:hover { border-color: var(--green); box-shadow: 0 2px 8px rgba(42,122,75,0.08); }
+  .card.card-green .card-icon-badge {
+    display: inline-block;
+    background: var(--green-bg);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-blue { border-color: var(--blue-border); }
+  .card.card-blue:hover { border-color: var(--blue); box-shadow: 0 2px 8px rgba(37,99,168,0.08); }
+  .card.card-blue .card-icon-badge {
+    display: inline-block;
+    background: var(--blue-bg);
+    color: var(--blue);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  /* ─── CODE BLOCK ──────────────────────────────────────── */
+  .code-block {
+    background: var(--text);
+    border-radius: 7px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .code-block .cb-label {
+    padding: 9px 16px;
+    background: rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .code-block pre {
+    padding: 20px 20px;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #e8e8e8;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-block .tok-key  { color: #fdba74; }
+  .code-block .tok-val  { color: #86efac; }
+  .code-block .tok-cmt  { color: #6b7280; font-style: italic; }
+  .code-block .tok-str  { color: #93c5fd; }
+  .code-block .tok-acc  { color: #fde047; }
+
+  /* ─── CALLOUT ─────────────────────────────────────────── */
+  .callout {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+  .callout .callout-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout p { font-size: 15px; color: var(--text-muted); margin: 0; line-height: 1.7; }
+
+  /* ─── DETAIL LIST ─────────────────────────────────────── */
+  ul.dl {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  ul.dl li {
+    padding: 13px 18px 13px 14px;
+    font-size: 15px;
+    color: var(--text-body);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.65;
+  }
+  ul.dl li:last-child { border-bottom: none; }
+  ul.dl li::before {
+    content: '→';
+    color: var(--accent);
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ─── TABLE ───────────────────────────────────────────── */
+  .data-table {
+    overflow-x: auto;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .data-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .data-table thead th {
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .data-table tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-body);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:hover td { background: var(--surface-tint); }
+  .td-yes { color: var(--green); font-weight: 600; }
+  .td-no  { color: var(--red);   font-weight: 600; }
+  .td-mono { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+
+  /* ─── RESPONSIBILITY CHAIN ────────────────────────────── */
+  .chain-wrap {
+    position: relative;
+    padding-left: 0;
+    margin: 24px 0;
+  }
+  .chain-step {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    margin-bottom: 4px;
+    position: relative;
+  }
+  .chain-step-inner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    flex: 1;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin-bottom: 4px;
+  }
+  .chain-step:hover .chain-step-inner {
+    border-color: var(--accent-border);
+    box-shadow: 0 2px 8px rgba(200,92,45,0.07);
+  }
+  .chain-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 16px;
+    width: 36px;
+    flex-shrink: 0;
+  }
+  .chain-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .chain-num.ai-step  { background: var(--blue); }
+  .chain-num.human-step { background: var(--green); }
+  .chain-num.submit-step { background: var(--accent); }
+  .chain-line {
+    width: 2px;
+    flex: 1;
+    min-height: 16px;
+    background: linear-gradient(to bottom, var(--border), var(--border-light));
+    margin-top: 4px;
+    margin-bottom: 0;
+  }
+  .chain-step:last-child .chain-line { display: none; }
+  .chain-step-inner h4 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 5px;
+  }
+  .chain-step-inner p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .chain-owner {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-bottom: 7px;
+  }
+  .chain-owner.ai  { background: var(--blue-bg); color: var(--blue); }
+  .chain-owner.human { background: var(--green-bg); color: var(--green); }
+  .chain-owner.submit { background: var(--accent-bg); color: var(--accent); }
+
+  /* ─── INTERACTIVE: TAG BUILDER ────────────────────────── */
+  .builder {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 28px 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+  .builder-head {
+    background: var(--text);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .builder-head h3 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+    letter-spacing: 0.01em;
+  }
+  .live-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #9effc0;
+  }
+  .live-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #4ade80;
+    animation: blink 1.8s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  .builder-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (max-width: 640px) { .builder-body { grid-template-columns: 1fr; } }
+
+  .builder-inputs {
+    padding: 24px;
+    border-right: 1px solid var(--border);
+  }
+  @media (max-width: 640px) {
+    .builder-inputs { border-right: none; border-bottom: 1px solid var(--border); }
+  }
+  .builder-output { padding: 24px; background: var(--surface-tint); }
+
+  .form-group { margin-bottom: 18px; }
+  .form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+  }
+  .form-select, .form-input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .form-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236B6760' d='M6 8L0 0h12z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+  .form-select:focus, .form-input:focus { border-color: var(--accent); }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .tool-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    user-select: none;
+  }
+  .tool-check:hover { border-color: var(--accent-border); background: var(--accent-bg); }
+  .tool-check input[type="checkbox"] {
+    width: 14px; height: 14px;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+  .tool-check span { font-family: var(--mono); font-size: 12px; color: var(--text-body); }
+
+  .output-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-subtle);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .output-code {
+    background: var(--text);
+    border-radius: 6px;
+    padding: 14px 16px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: #86efac;
+    line-height: 1.6;
+    word-break: break-all;
+    min-height: 58px;
+    position: relative;
+  }
+  .output-code .key { color: #fdba74; }
+
+  .copy-btn {
+    margin-top: 12px;
+    width: 100%;
+    padding: 9px 16px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    letter-spacing: 0.01em;
+  }
+  .copy-btn:hover { background: var(--accent-light); }
+  .copy-btn:active { transform: scale(0.98); }
+  .copy-btn.copied { background: var(--green); }
+
+  .output-note {
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--text-subtle);
+    line-height: 1.6;
+  }
+
+  /* ─── QUIZ ────────────────────────────────────────────── */
+  .quiz {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 28px 0;
+  }
+  .quiz-head {
+    background: var(--bg-alt);
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .quiz-head h3 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+  }
+  .quiz-head p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 4px 0 0;
+    line-height: 1.5;
+  }
+  .quiz-body { padding: 24px; }
+  .quiz-q {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .quiz-q:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .quiz-q-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .quiz-opts {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .quiz-opt {
+    padding: 7px 18px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    background: var(--surface);
+    user-select: none;
+  }
+  .quiz-opt:hover { border-color: var(--accent-border); color: var(--accent); background: var(--accent-bg); }
+  .quiz-opt.selected { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); font-weight: 600; }
+
+  .quiz-result {
+    margin-top: 24px;
+    background: var(--surface-tint);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    display: none;
+  }
+  .quiz-result.visible { display: block; }
+  .quiz-result-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 14px;
+    color: var(--text-body);
+    line-height: 1.55;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .cl-icon { flex-shrink: 0; margin-top: 2px; font-size: 14px; }
+
+  /* ─── COMMIT EXAMPLE ──────────────────────────────────── */
+  .commit-example {
+    background: var(--text);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 24px 0;
+  }
+  .commit-example .ce-head {
+    background: rgba(255,255,255,0.05);
+    padding: 10px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #666;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .commit-example pre {
+    padding: 20px 20px;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.8;
+    color: #e8e8e8;
+    overflow-x: auto;
+  }
+  .ce-subject { color: #fde047; }
+  .ce-blank { color: transparent; user-select: none; }
+  .ce-body { color: #d1d5db; }
+  .ce-key   { color: #fdba74; }
+  .ce-val   { color: #86efac; }
+  .ce-tag   { color: #93c5fd; }
+
+  /* ─── TRADE-OFFS ──────────────────────────────────────── */
+  .to-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+  }
+  @media (max-width: 560px) { .to-grid { grid-template-columns: 1fr; } }
+  .to-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+  .to-card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .to-card.impact h4 { color: var(--accent); }
+  .to-card.watch h4  { color: var(--blue); }
+  .to-card ul { list-style: none; padding: 0; }
+  .to-card ul li {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 7px 0 7px 18px;
+    position: relative;
+    border-bottom: 1px solid var(--border-light);
+    line-height: 1.55;
+  }
+  .to-card ul li:last-child { border-bottom: none; }
+  .to-card.impact ul li::before { content: '›'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+  .to-card.watch  ul li::before { content: '›'; position: absolute; left: 0; color: var(--blue); font-weight: 700; }
+
+  /* ─── CONCLUSION ──────────────────────────────────────── */
+  .conclusion {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--text);
+    border-radius: 0 0 8px 8px;
+    padding: 32px;
+    margin: 48px 0;
+  }
+  .conclusion h2 {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 18px;
+    letter-spacing: -0.01em;
+  }
+  .conclusion p {
+    font-size: 16px;
+    color: var(--text-body);
+    line-height: 1.78;
+    margin-bottom: 16px;
+  }
+  .conclusion p:last-child { margin-bottom: 0; }
+
+  /* ─── DIVIDER ─────────────────────────────────────────── */
+  hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+  /* ─── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-refs { font-size: 12px; color: var(--text-subtle); }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 40px 0 36px; }
+    .page-wrap { padding: 0 16px 60px; }
+    footer { padding: 16px 20px; }
+    .plain-english { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">asadani.dev</a>
+  <div class="nav-right">
+    <span>Linux Kernel · AI Policy</span>
+    <span class="nav-tag">APR 2026</span>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">Linux Kernel Policy &mdash; Official</div>
+    <h1>AI Writes the Code.<br>You Own Everything.</h1>
+    <p class="hero-deck">
+      The Linux kernel has merged its first official rules for AI-assisted code contributions —
+      redefining the line between tool and author in ways every developer using AI agents needs to understand.
+    </p>
+    <div class="hero-meta">
+      <span>April 2026</span>
+      <span class="hero-meta-sep">/</span>
+      <span>Documentation/process/coding-assistants.rst</span>
+      <span class="hero-meta-sep">/</span>
+      <span>DCO &middot; Signed-off-by &middot; Assisted-by</span>
+    </div>
+  </header>
+
+  <!-- ANNOUNCEMENT BANNER -->
+  <div class="banner">
+    <span class="banner-badge">MERGED</span>
+    <p>
+      Now in <strong>torvalds/linux</strong> at
+      <code style="font-family:var(--mono);font-size:12px;">Documentation/process/coding-assistants.rst</code>.
+      Read the official document at
+      <a href="https://docs.kernel.org/process/coding-assistants.html" target="_blank" rel="noopener">docs.kernel.org &rarr;</a>
+    </p>
+  </div>
+
+  <!-- IN PLAIN ENGLISH -->
+  <div class="plain-english">
+    <div class="pe-label">In Plain English — The Three Rules</div>
+    <ul class="pe-list">
+      <li>
+        <span class="pe-num">1</span>
+        <div>
+          <strong>AI tools can help, but only you can sign.</strong>
+          AI agents are explicitly prohibited from adding a <code style="font-family:var(--mono);font-size:13px;">Signed-off-by</code> tag.
+          The Developer Certificate of Origin is a legal statement — and only a human can make it.
+        </div>
+      </li>
+      <li>
+        <span class="pe-num">2</span>
+        <div>
+          <strong>Disclose the tools you used.</strong>
+          Every AI-assisted contribution should include an
+          <code style="font-family:var(--mono);font-size:13px;">Assisted-by</code> tag naming the AI agent,
+          the model version, and any specialized analysis tools like <code style="font-family:var(--mono);font-size:13px;">coccinelle</code> or <code style="font-family:var(--mono);font-size:13px;">sparse</code>.
+        </div>
+      </li>
+      <li>
+        <span class="pe-num">3</span>
+        <div>
+          <strong>You reviewed it, you own it.</strong>
+          The submitting human must review every line, verify license compliance, and take full responsibility
+          for the contribution — bugs, regressions, and all.
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- WHAT ACTUALLY MERGED -->
+  <div class="section">
+    <div class="section-label">The Official Rules</div>
+    <h2>What Actually Merged Into the Kernel</h2>
+    <div class="prose">
+      <p>
+        <code style="font-family:var(--mono);font-size:13px;">coding-assistants.rst</code> is the kernel's first
+        explicit policy document on AI tooling. It went through the normal RFC and review process —
+        proposals by <strong>Dave Hansen</strong> and <strong>Sasha Levin</strong> preceded the final merge —
+        and is now part of <code style="font-family:var(--mono);font-size:13px;">torvalds/linux</code> main.
+        It governs every AI-assisted patch submitted to the Linux kernel going forward.
+      </p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card card-red">
+        <div class="card-icon-badge">Prohibited</div>
+        <h4>AI Cannot Sign Off</h4>
+        <p>
+          "AI agents <strong>MUST NOT</strong> add Signed-off-by tags. Only humans can legally certify the Developer Certificate of Origin."
+        </p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Required</div>
+        <h4>Human Takes Full Ownership</h4>
+        <p>
+          The human submitter reviews all AI-generated code, ensures license compliance, and adds their own
+          <code style="font-family:var(--mono);font-size:12px;">Signed-off-by</code> to certify the DCO.
+        </p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Should Include</div>
+        <h4>Disclose with Assisted-by</h4>
+        <p>
+          Contributions <em>should</em> include an <code style="font-family:var(--mono);font-size:12px;">Assisted-by</code> tag
+          listing the agent name, model version, and specialized tools used.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAG FORMAT SECTION -->
+  <div class="section">
+    <div class="section-label">Technical Specification</div>
+    <h2>The Assisted-by Tag — Deep Dive</h2>
+    <div class="prose">
+      <p>
+        The kernel doc defines a new commit trailer tag. Its format is precise and follows the same
+        <code style="font-family:var(--mono);font-size:13px;">Key: Value</code> convention as other
+        kernel commit trailers like <code style="font-family:var(--mono);font-size:13px;">Reviewed-by</code>
+        and <code style="font-family:var(--mono);font-size:13px;">Tested-by</code>.
+      </p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">
+        <span>Assisted-by Format</span>
+        <span style="color:#555;">Documentation/process/coding-assistants.rst</span>
+      </div>
+      <pre><span class="tok-key">Assisted-by:</span> <span class="tok-val">AGENT_NAME</span><span class="tok-acc">:</span><span class="tok-val">MODEL_VERSION</span> <span class="tok-str">[TOOL1]</span> <span class="tok-str">[TOOL2]</span>
+
+<span class="tok-cmt"># Real examples from the documentation:</span>
+<span class="tok-key">Assisted-by:</span> <span class="tok-val">Claude:claude-3-opus</span> <span class="tok-str">coccinelle</span> <span class="tok-str">sparse</span>
+<span class="tok-key">Assisted-by:</span> <span class="tok-val">Copilot:gpt-4o</span> <span class="tok-str">clang-tidy</span>
+<span class="tok-key">Assisted-by:</span> <span class="tok-val">Cursor:claude-sonnet-4-6</span> <span class="tok-str">smatch</span> <span class="tok-str">sparse</span></pre>
+    </div>
+
+    <h3>What Gets Listed vs. What Doesn't</h3>
+    <div class="prose">
+      <p>
+        The document draws a clear line between specialized analysis tools that meaningfully contribute
+        to code correctness — and the normal development environment every developer uses anyway.
+      </p>
+    </div>
+
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Tool</th>
+            <th>List in Assisted-by?</th>
+            <th>Why</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code style="font-family:var(--mono);font-size:13px;">coccinelle</code></td>
+            <td class="td-yes">Yes</td>
+            <td>Semantic patch transformation — specialized static analysis</td>
+          </tr>
+          <tr>
+            <td><code style="font-family:var(--mono);font-size:13px;">sparse</code></td>
+            <td class="td-yes">Yes</td>
+            <td>Kernel-specific static analysis and type checking</td>
+          </tr>
+          <tr>
+            <td><code style="font-family:var(--mono);font-size:13px;">smatch</code></td>
+            <td class="td-yes">Yes</td>
+            <td>Source code pattern matching for bugs</td>
+          </tr>
+          <tr>
+            <td><code style="font-family:var(--mono);font-size:13px;">clang-tidy</code></td>
+            <td class="td-yes">Yes</td>
+            <td>Clang-based linting with kernel-relevant checks</td>
+          </tr>
+          <tr>
+            <td><code style="font-family:var(--mono);font-size:13px;">git</code></td>
+            <td class="td-no">No</td>
+            <td>Standard version control — baseline dev tooling</td>
+          </tr>
+          <tr>
+            <td><code style="font-family:var(--mono);font-size:13px;">gcc / make</code></td>
+            <td class="td-no">No</td>
+            <td>Compiler and build system — implicit in any kernel work</td>
+          </tr>
+          <tr>
+            <td>Text editors (vim, emacs, VSCode)</td>
+            <td class="td-no">No</td>
+            <td>Normal editing environment, not analysis tools</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE: TAG BUILDER -->
+  <div class="section">
+    <div class="section-label">Interactive Tool</div>
+    <h2>Assisted-by Tag Builder</h2>
+    <p class="prose" style="margin-bottom:0;">
+      Configure your AI agent and tools below. Your correctly formatted <code style="font-family:var(--mono);font-size:13px;">Assisted-by</code> tag is generated in real time.
+    </p>
+
+    <div class="builder">
+      <div class="builder-head">
+        <h3>Tag Builder</h3>
+        <div class="live-pill"><span class="live-dot"></span> Live Output</div>
+      </div>
+      <div class="builder-body">
+        <div class="builder-inputs">
+
+          <div class="form-group">
+            <label class="form-label" for="agent-select">AI Agent</label>
+            <select class="form-select" id="agent-select">
+              <option value="Claude">Claude (Anthropic)</option>
+              <option value="Copilot">GitHub Copilot</option>
+              <option value="Cursor">Cursor</option>
+              <option value="Gemini">Gemini (Google)</option>
+              <option value="GPT">ChatGPT / GPT-4o</option>
+              <option value="Other">Other…</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="custom-agent-group" style="display:none;">
+            <label class="form-label" for="agent-custom">Custom Agent Name</label>
+            <input class="form-input" id="agent-custom" type="text" placeholder="e.g. Codeium" value="">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="model-input">Model Version</label>
+            <input class="form-input" id="model-input" type="text" placeholder="e.g. claude-sonnet-4-6" value="claude-sonnet-4-6">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Specialized Analysis Tools</label>
+            <div class="tools-grid">
+              <label class="tool-check">
+                <input type="checkbox" class="tool-cb" value="coccinelle"> <span>coccinelle</span>
+              </label>
+              <label class="tool-check">
+                <input type="checkbox" class="tool-cb" value="sparse"> <span>sparse</span>
+              </label>
+              <label class="tool-check">
+                <input type="checkbox" class="tool-cb" value="smatch"> <span>smatch</span>
+              </label>
+              <label class="tool-check">
+                <input type="checkbox" class="tool-cb" value="clang-tidy"> <span>clang-tidy</span>
+              </label>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="builder-output">
+          <div class="output-label">Generated Tag</div>
+          <div class="output-code" id="tag-output">
+            <span class="key">Assisted-by:</span> Claude:claude-sonnet-4-6
+          </div>
+          <button class="copy-btn" id="copy-tag-btn" onclick="copyTag()">Copy Tag</button>
+
+          <div class="output-note">
+            Paste this into your commit message's trailer section — after the blank line following the patch description, alongside your own
+            <code style="font-family:var(--mono);font-size:11px;">Signed-off-by</code>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DCO + AI AGENTS -->
+  <div class="section">
+    <div class="section-label">Why It Matters</div>
+    <h2>The DCO and Why AI Can't Sign It</h2>
+    <div class="prose">
+      <p>
+        The <strong>Developer Certificate of Origin</strong> is a lightweight legal mechanism used by the Linux kernel
+        and hundreds of other open-source projects. When you add <code style="font-family:var(--mono);font-size:13px;">Signed-off-by: Your Name &lt;email&gt;</code>
+        to a commit, you are certifying — under your own identity — one of the following:
+      </p>
+    </div>
+
+    <ul class="dl">
+      <li>You wrote the code yourself, or have the right to submit it under the open-source license</li>
+      <li>You based it on prior work with a compatible license, and can identify that work</li>
+      <li>The contribution was provided to you by someone else who certified one of the above</li>
+      <li>You understand and agree the contribution is public and may be redistributed under the project's license</li>
+    </ul>
+
+    <div class="callout">
+      <div class="callout-lbl">The Core Problem</div>
+      <p>
+        An AI model cannot make any of these certifications. It has no legal identity, cannot own IP, cannot represent
+        that it has the right to license its output, and cannot be held accountable for license violations.
+        <strong>The entire DCO framework depends on a traceable, responsible human being at the end of the chain.</strong>
+      </p>
+    </div>
+
+    <div class="prose">
+      <p>
+        This is not a philosophical choice by the kernel community — it is a legal necessity. The moment an AI
+        agent adds a <code style="font-family:var(--mono);font-size:13px;">Signed-off-by</code>, the certification chain
+        breaks. No one with legal standing has vouched for the code. The patch is, in a strict reading of the DCO,
+        uncertified regardless of the AI agent's claimed confidence.
+      </p>
+    </div>
+  </div>
+
+  <!-- RESPONSIBILITY CHAIN -->
+  <div class="section">
+    <div class="section-label">The Workflow</div>
+    <h2>The Responsibility Chain</h2>
+    <div class="prose">
+      <p>
+        The kernel doc establishes a clear sequence that must occur before any AI-assisted contribution can be submitted.
+        The AI is a tool — the human is the author, reviewer, certifier, and owner.
+      </p>
+    </div>
+
+    <div class="chain-wrap">
+      <div class="chain-step">
+        <div class="chain-left">
+          <div class="chain-num ai-step">1</div>
+          <div class="chain-line"></div>
+        </div>
+        <div class="chain-step-inner">
+          <span class="chain-owner ai">AI Agent</span>
+          <h4>Code Generation</h4>
+          <p>The AI tool generates, suggests, or significantly modifies code. At this point, the work has no legal status — it is raw output from a tool, not a certifiable contribution.</p>
+        </div>
+      </div>
+
+      <div class="chain-step">
+        <div class="chain-left">
+          <div class="chain-num human-step">2</div>
+          <div class="chain-line"></div>
+        </div>
+        <div class="chain-step-inner">
+          <span class="chain-owner human">Human</span>
+          <h4>Review Every Line</h4>
+          <p>The human developer reviews <em>all</em> AI-generated code. Not a spot-check — a thorough review. Correctness, style, security, kernel-subsystem conventions. The reviewer is now accountable for what they read and accepted.</p>
+        </div>
+      </div>
+
+      <div class="chain-step">
+        <div class="chain-left">
+          <div class="chain-num human-step">3</div>
+          <div class="chain-line"></div>
+        </div>
+        <div class="chain-step-inner">
+          <span class="chain-owner human">Human</span>
+          <h4>Verify License Compatibility</h4>
+          <p>Ensure the AI-generated code is GPL-2.0-only compatible (for the kernel). No permissive-license fragments, no copyleft traps, correct SPDX identifiers. AI tools are trained on vast corpora — provenance is not guaranteed.</p>
+        </div>
+      </div>
+
+      <div class="chain-step">
+        <div class="chain-left">
+          <div class="chain-num human-step">4</div>
+          <div class="chain-line"></div>
+        </div>
+        <div class="chain-step-inner">
+          <span class="chain-owner human">Human</span>
+          <h4>Add the Assisted-by Tag</h4>
+          <p>Document which AI agent and model version were used, and which specialized analysis tools were involved. This creates a transparent audit trail of AI involvement without obscuring human authorship.</p>
+        </div>
+      </div>
+
+      <div class="chain-step">
+        <div class="chain-left">
+          <div class="chain-num submit-step">5</div>
+          <div class="chain-line"></div>
+        </div>
+        <div class="chain-step-inner">
+          <span class="chain-owner submit">Human (Legal)</span>
+          <h4>Add Your Signed-off-by</h4>
+          <p>Only after review and verification does the human add their <code style="font-family:var(--mono);font-size:12px;">Signed-off-by</code>. This is the legal certification — your name, your responsibility, your email address on the record forever.</p>
+        </div>
+      </div>
+
+      <div class="chain-step">
+        <div class="chain-left">
+          <div class="chain-num submit-step">6</div>
+        </div>
+        <div class="chain-step-inner">
+          <span class="chain-owner submit">Human (Owner)</span>
+          <h4>Submit — and Own All Consequences</h4>
+          <p>The contribution is submitted. From this point forward, the human is the legally responsible author. Bugs, regressions, security issues, license violations — they are yours. AI is not a defense.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AGENT AI WORLD IMPLICATIONS -->
+  <div class="section">
+    <div class="section-label">Broader Implications</div>
+    <h2>What This Means for the Agent AI World</h2>
+    <div class="prose">
+      <p>
+        The Linux kernel's policy is not just a rule for kernel contributors. It is the world's most important
+        open-source project formally codifying a position on AI agency — and it draws a sharp, non-negotiable line:
+        <strong>autonomous agents cannot certify contributions to projects that use DCO.</strong>
+      </p>
+      <p>
+        This matters because the current trajectory of AI tooling is toward greater autonomy — agents that
+        open pull requests, submit patches, create commits, and iterate without human intervention per-step.
+        The kernel policy says: that autonomy stops at the DCO boundary. A human must be in the loop before
+        any legally binding act of contribution.
+      </p>
+    </div>
+
+    <div class="to-grid">
+      <div class="to-card impact">
+        <h4>Immediate Impact</h4>
+        <ul>
+          <li>Fully autonomous patch agents cannot submit to the kernel without human certification</li>
+          <li>Every AI-assisted commit requires a human review pass, not just a merge approval</li>
+          <li>AI coding tools need an explicit <code style="font-family:var(--mono);font-size:11px;">Assisted-by</code> disclosure workflow</li>
+          <li>Existing AI-generated commits without disclosure are technically non-compliant</li>
+        </ul>
+      </div>
+      <div class="to-card watch">
+        <h4>Watch This Space</h4>
+        <ul>
+          <li>Will npm, PyPI, and crates.io adopt analogous AI disclosure policies?</li>
+          <li>Can SBOM (Software Bill of Materials) standards evolve to track AI involvement?</li>
+          <li>How do MCP-based autonomous agents fit when they open PRs on behalf of humans?</li>
+          <li>Will DCO itself evolve to accommodate verified human-in-the-loop AI workflows?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">The Authorship Gap</div>
+      <p>
+        There is a fundamental mismatch between what AI agents <em>can do</em> (generate correct, compilable,
+        well-structured code) and what they <em>cannot be</em> (a legally responsible author).
+        The kernel policy formalizes this gap. As agents become more capable, the gap does not close — it widens,
+        because the stakes of autonomous contribution rise. This is the new architectural constraint for agent AI
+        systems operating in open-source ecosystems.
+      </p>
+    </div>
+
+    <div class="prose">
+      <p>
+        This also sets a precedent for how open-source governance bodies will respond to AI contributions.
+        Rather than banning AI tooling — which would be unenforceable — the kernel community has chosen
+        <strong>disclosure and human accountability</strong> as its governing framework. That is almost certainly
+        the model other major projects will follow. Expect similar language in CNCF projects, Apache Foundation
+        guidelines, and major package registry policies within the next 12–18 months.
+      </p>
+    </div>
+  </div>
+
+  <!-- COMPLIANCE QUIZ -->
+  <div class="section">
+    <div class="section-label">Interactive Tool</div>
+    <h2>Is My Contribution Compliant?</h2>
+    <p class="prose" style="margin-bottom: 0;">
+      Answer four questions to generate a compliance checklist tailored to your specific situation.
+    </p>
+
+    <div class="quiz">
+      <div class="quiz-head">
+        <h3>Compliance Checker</h3>
+        <p>Select an answer for each question. Your checklist updates automatically.</p>
+      </div>
+      <div class="quiz-body">
+
+        <div class="quiz-q" data-q="1">
+          <div class="quiz-q-text">1. Does the target project use DCO (Developer Certificate of Origin)?</div>
+          <div class="quiz-opts">
+            <span class="quiz-opt" data-q="1" data-v="yes" onclick="selectOpt(this)">Yes</span>
+            <span class="quiz-opt" data-q="1" data-v="no" onclick="selectOpt(this)">No</span>
+            <span class="quiz-opt" data-q="1" data-v="unsure" onclick="selectOpt(this)">Not sure</span>
+          </div>
+        </div>
+
+        <div class="quiz-q" data-q="2">
+          <div class="quiz-q-text">2. Did an AI tool generate or significantly modify any part of this contribution?</div>
+          <div class="quiz-opts">
+            <span class="quiz-opt" data-q="2" data-v="yes" onclick="selectOpt(this)">Yes</span>
+            <span class="quiz-opt" data-q="2" data-v="no" onclick="selectOpt(this)">No</span>
+          </div>
+        </div>
+
+        <div class="quiz-q" data-q="3">
+          <div class="quiz-q-text">3. Have you personally reviewed every line of code that will be submitted?</div>
+          <div class="quiz-opts">
+            <span class="quiz-opt" data-q="3" data-v="yes" onclick="selectOpt(this)">Yes, fully reviewed</span>
+            <span class="quiz-opt" data-q="3" data-v="partial" onclick="selectOpt(this)">Partially</span>
+            <span class="quiz-opt" data-q="3" data-v="no" onclick="selectOpt(this)">Not yet</span>
+          </div>
+        </div>
+
+        <div class="quiz-q" data-q="4">
+          <div class="quiz-q-text">4. Is this a contribution to the Linux kernel specifically?</div>
+          <div class="quiz-opts">
+            <span class="quiz-opt" data-q="4" data-v="yes" onclick="selectOpt(this)">Yes</span>
+            <span class="quiz-opt" data-q="4" data-v="no" onclick="selectOpt(this)">No</span>
+          </div>
+        </div>
+
+        <div class="quiz-result" id="quiz-result">
+          <div class="quiz-result-title">Your Compliance Checklist</div>
+          <ul class="checklist" id="checklist-items"></ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW TO STAY COMPLIANT -->
+  <div class="section">
+    <div class="section-label">Practical Guide</div>
+    <h2>How to Stay Compliant</h2>
+    <div class="prose">
+      <p>
+        The mechanics are simple. The discipline is not. Here is what a fully compliant AI-assisted kernel commit looks like:
+      </p>
+    </div>
+
+    <div class="commit-example">
+      <div class="ce-head">
+        <span>Complete Compliant Commit Message</span>
+        <button onclick="copyCommit(this)" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#ccc;font-family:var(--mono);font-size:11px;padding:3px 10px;border-radius:3px;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.18)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">Copy</button>
+      </div>
+      <pre id="commit-text"><span class="ce-subject">mm/vmalloc: fix off-by-one in vmap_area boundary check</span>
+<span class="ce-blank">.</span>
+<span class="ce-body">When calculating the end boundary for a vmap area, the check used
+a strict less-than comparison where less-than-or-equal was required.
+This could cause the last page of the vmalloc range to be incorrectly
+considered unavailable under high-memory-pressure conditions.</span>
+<span class="ce-blank">.</span>
+<span class="ce-body">Identified with sparse and reviewed manually against the allocator
+invariants in include/linux/vmalloc.h.</span>
+<span class="ce-blank">.</span>
+<span class="ce-key">Assisted-by:</span> <span class="ce-tag">Claude:claude-sonnet-4-6</span> <span class="ce-val">sparse</span>
+<span class="ce-key">Signed-off-by:</span> <span class="ce-tag">Your Name &lt;your.email@example.com&gt;</span></pre>
+    </div>
+
+    <h3>Common Mistakes to Avoid</h3>
+    <ul class="dl">
+      <li><strong>Skipping the review</strong> — approving AI output without reading it line by line. You signed it; you're responsible for it.</li>
+      <li><strong>Wrong tag order</strong> — <code style="font-family:var(--mono);font-size:13px;">Assisted-by</code> comes before your <code style="font-family:var(--mono);font-size:13px;">Signed-off-by</code> in the trailer block.</li>
+      <li><strong>Listing basic tools</strong> — do not list <code style="font-family:var(--mono);font-size:13px;">git</code>, <code style="font-family:var(--mono);font-size:13px;">gcc</code>, or your editor. Only specialized analysis tools belong in <code style="font-family:var(--mono);font-size:13px;">Assisted-by</code>.</li>
+      <li><strong>Wrong model version</strong> — use the specific model identifier, not a marketing name. <code style="font-family:var(--mono);font-size:13px;">claude-sonnet-4-6</code>, not "Claude Sonnet".</li>
+      <li><strong>Assuming AI output is license-clean</strong> — AI models are trained on vast corpora. Always verify that the generated code doesn't inadvertently reproduce incompatibly-licensed snippets.</li>
+      <li><strong>Omitting Assisted-by entirely</strong> — the doc says "should include" (not "must"), but disclosure is the intent. Omitting it is technically allowed for now, but signals poor practice.</li>
+    </ul>
+  </div>
+
+  <hr>
+
+  <!-- CONCLUSION -->
+  <div class="conclusion">
+    <h2>The Human Is Not Optional</h2>
+    <p>
+      The Linux kernel's AI policy is deceptively simple: use whatever tools help you write better code, but stand behind
+      what you submit. The <code style="font-family:var(--mono);font-size:14px;">Signed-off-by</code> is not a formality —
+      it is the legal foundation of open-source contribution, and it requires a human being who can be held accountable.
+    </p>
+    <p>
+      For the agent AI world, this is a clarifying constraint. The question was never whether AI could write
+      good kernel code — clearly it can help. The question was always who owns the output. The kernel community
+      has answered: you do. Every time. Fully. The AI is a power tool, not a coauthor.
+    </p>
+    <p>
+      As AI agents become more autonomous and capable, this human-accountability requirement becomes <em>more</em>
+      important, not less. The more an AI can do unsupervised, the more critical it is that a human with full understanding
+      reviews and certifies the result. That is not a limitation of AI — it is the correct architecture for trusted,
+      legally sound open-source development.
+    </p>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<footer>
+  <div>
+    <a href="/">asadani.dev</a> &nbsp;&middot;&nbsp; April 2026
+  </div>
+  <div class="footer-refs">
+    <a href="https://docs.kernel.org/process/coding-assistants.html" target="_blank" rel="noopener">docs.kernel.org</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://github.com/torvalds/linux/blob/master/Documentation/process/coding-assistants.rst" target="_blank" rel="noopener">torvalds/linux</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://linux.slashdot.org/story/25/11/17/0444234/how-should-the-linux-kernel-handle-ai-generated-contributions" target="_blank" rel="noopener">Discussion</a>
+  </div>
+</footer>
+
+<script>
+// ─── TAG BUILDER ──────────────────────────────────────────
+function getAgentName() {
+  const sel = document.getElementById('agent-select').value;
+  if (sel === 'Other') {
+    const custom = document.getElementById('agent-custom').value.trim();
+    return custom || 'Agent';
+  }
+  return sel;
+}
+
+function updateTag() {
+  const agent = getAgentName();
+  const model = document.getElementById('model-input').value.trim() || 'model-version';
+  const tools = [...document.querySelectorAll('.tool-cb:checked')].map(cb => cb.value);
+  const toolStr = tools.length ? ' ' + tools.join(' ') : '';
+  const tag = `Assisted-by: ${agent}:${model}${toolStr}`;
+
+  const out = document.getElementById('tag-output');
+  out.innerHTML = `<span class="key">Assisted-by:</span> ${escHtml(agent)}:${escHtml(model)}${escHtml(toolStr)}`;
+  out.dataset.raw = tag;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+document.getElementById('agent-select').addEventListener('change', function() {
+  const isOther = this.value === 'Other';
+  document.getElementById('custom-agent-group').style.display = isOther ? 'block' : 'none';
+  // set sensible model defaults
+  const defaults = {
+    'Claude': 'claude-sonnet-4-6',
+    'Copilot': 'gpt-4o',
+    'Cursor': 'claude-sonnet-4-6',
+    'Gemini': 'gemini-2.5-pro',
+    'GPT': 'gpt-4o',
+    'Other': ''
+  };
+  if (!isOther) document.getElementById('model-input').value = defaults[this.value] || '';
+  updateTag();
+});
+
+document.getElementById('agent-custom').addEventListener('input', updateTag);
+document.getElementById('model-input').addEventListener('input', updateTag);
+document.querySelectorAll('.tool-cb').forEach(cb => cb.addEventListener('change', updateTag));
+
+function copyTag() {
+  const raw = document.getElementById('tag-output').dataset.raw ||
+              document.getElementById('tag-output').textContent;
+  navigator.clipboard.writeText(raw).then(() => {
+    const btn = document.getElementById('copy-tag-btn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy Tag'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ─── COMMIT COPY ──────────────────────────────────────────
+function copyCommit(btn) {
+  const text = document.getElementById('commit-text').textContent.replace(/\./g, '').replace(/^\n/, '');
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+}
+
+// ─── COMPLIANCE QUIZ ──────────────────────────────────────
+const answers = {};
+
+function selectOpt(el) {
+  const q = el.dataset.q;
+  const v = el.dataset.v;
+  document.querySelectorAll(`.quiz-opt[data-q="${q}"]`).forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  answers[q] = v;
+  updateChecklist();
+}
+
+function updateChecklist() {
+  if (Object.keys(answers).length < 4) return;
+  const result = document.getElementById('quiz-result');
+  const list = document.getElementById('checklist-items');
+  result.classList.add('visible');
+
+  const items = [];
+  const a = answers;
+
+  // Q1: DCO?
+  if (a['1'] === 'unsure') {
+    items.push({ icon: '🔍', text: 'Check if the project uses DCO — look for a <code style="font-family:var(--mono);font-size:12px;">DCO</code> file in the repo root or <code style="font-family:var(--mono);font-size:12px;">Signed-off-by</code> in recent commits.' });
+  }
+
+  // Q2: AI used?
+  if (a['2'] === 'yes') {
+    if (a['1'] === 'yes' || a['1'] === 'unsure') {
+      items.push({ icon: '✅', text: 'Add an <code style="font-family:var(--mono);font-size:12px;">Assisted-by: AGENT:MODEL [tools]</code> tag to your commit message trailer.' });
+      items.push({ icon: '⚠️', text: 'Verify that no AI agent added or will add a <code style="font-family:var(--mono);font-size:12px;">Signed-off-by</code> tag — that is a DCO violation.' });
+    }
+    items.push({ icon: '🔍', text: 'Audit AI-generated code for license-incompatible snippets — AI training data provenance is not guaranteed.' });
+  }
+
+  // Q3: Review?
+  if (a['3'] === 'no') {
+    items.push({ icon: '🚫', text: '<strong>Do not submit yet.</strong> You must review every line of AI-generated code before your <code style="font-family:var(--mono);font-size:12px;">Signed-off-by</code> is legally meaningful.' });
+  } else if (a['3'] === 'partial') {
+    items.push({ icon: '⚠️', text: 'Complete your code review before submitting. Partial review leaves you liable for code you have not validated.' });
+  } else {
+    items.push({ icon: '✅', text: 'Review complete — you can proceed to sign off.' });
+  }
+
+  // Q4: Linux kernel?
+  if (a['4'] === 'yes') {
+    items.push({ icon: '✅', text: 'Ensure all code uses GPL-2.0-only compatible licensing with correct SPDX identifiers.' });
+    items.push({ icon: '✅', text: 'Run <code style="font-family:var(--mono);font-size:12px;">sparse</code> and/or <code style="font-family:var(--mono);font-size:12px;">coccinelle</code> if used — add them to your <code style="font-family:var(--mono);font-size:12px;">Assisted-by</code> tag.' });
+    items.push({ icon: '📋', text: 'Follow kernel subsystem conventions — check with the relevant maintainer if submitting to a new subsystem.' });
+  }
+
+  // Final sign-off reminder
+  if (a['1'] === 'yes') {
+    items.push({ icon: '✅', text: 'Add <strong>your own</strong> <code style="font-family:var(--mono);font-size:12px;">Signed-off-by: Name &lt;email&gt;</code> — after <code style="font-family:var(--mono);font-size:12px;">Assisted-by</code> in the trailer block.' });
+  }
+
+  if (a['2'] === 'no' && a['1'] !== 'yes') {
+    items.push({ icon: '✅', text: 'No AI involvement and no DCO requirement — standard contribution workflow applies.' });
+  }
+
+  list.innerHTML = items.map(i =>
+    `<li><span class="cl-icon">${i.icon}</span><span>${i.text}</span></li>`
+  ).join('');
+}
+</script>
+</body>
+</html>
