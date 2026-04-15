@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}} — {{SUBTITLE}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #F5F1EB;
+    --bg-alt:       #EDEAE3;
+    --surface:      #FFFFFF;
+    --surface-tint: #FAF8F5;
+    --border:       #DDD9D0;
+    --border-light: #EAE7E0;
+    --text:         #1A1714;
+    --text-body:    #3D3A35;
+    --text-muted:   #6B6760;
+    --text-subtle:  #9B9892;
+    --accent:       #C85C2D;
+    --accent-light: #E8895D;
+    --accent-bg:    #FDF1EB;
+    --accent-border:#F0C4A8;
+    --green:        #2A7A4B;
+    --green-bg:     #EAF5EF;
+    --green-border: #A8D9BC;
+    --blue:         #2563A8;
+    --blue-bg:      #EAF1FA;
+    --blue-border:  #A8C5E8;
+    --red:          #B83535;
+    --red-bg:       #FAEBEB;
+    --red-border:   #E8AAAA;
+    --serif:        'Newsreader', Georgia, serif;
+    --sans:         'Inter', system-ui, sans-serif;
+    --mono:         'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-body);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .nav-tag {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── LAYOUT ──────────────────────────────────────────── */
+  .page-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-deck {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 640px;
+    font-weight: 300;
+  }
+  .hero-meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-family: var(--mono);
+  }
+  .hero-meta-sep { color: var(--border); }
+
+  /* ─── BODY TEXT ───────────────────────────────────────── */
+  .prose p {
+    color: var(--text-body);
+    margin-bottom: 20px;
+    font-size: 17px;
+    line-height: 1.78;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); font-weight: 600; }
+  em { font-style: italic; color: var(--text-body); }
+
+  /* ─── SECTION HEADING ─────────────────────────────────── */
+  .section { margin-top: 56px; }
+  .section-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 32px 0 14px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── BANNER ──────────────────────────────────────────── */
+  .banner {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .banner-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .banner p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .banner a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ─── PLAIN ENGLISH ───────────────────────────────────── */
+  .plain-english {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 8px 8px;
+    padding: 28px 32px;
+    margin: 0 0 56px;
+  }
+  .plain-english .pe-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .pe-list { list-style: none; padding: 0; }
+  .pe-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 16px;
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+  .pe-list li:last-child { border-bottom: none; }
+  .pe-num {
+    width: 26px;
+    height: 26px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-family: var(--mono);
+  }
+
+  /* ─── CARDS GRID ──────────────────────────────────────── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 24px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    border-color: var(--accent-border);
+    box-shadow: 0 2px 8px rgba(200,92,45,0.08);
+  }
+  .card-icon { font-size: 20px; margin-bottom: 10px; }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+  .card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .card.card-red { border-color: var(--red-border); }
+  .card.card-red:hover { border-color: var(--red); box-shadow: 0 2px 8px rgba(184,53,53,0.08); }
+  .card.card-red .card-icon-badge {
+    display: inline-block;
+    background: var(--red-bg);
+    color: var(--red);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-green { border-color: var(--green-border); }
+  .card.card-green:hover { border-color: var(--green); box-shadow: 0 2px 8px rgba(42,122,75,0.08); }
+  .card.card-green .card-icon-badge {
+    display: inline-block;
+    background: var(--green-bg);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-blue { border-color: var(--blue-border); }
+  .card.card-blue:hover { border-color: var(--blue); box-shadow: 0 2px 8px rgba(37,99,168,0.08); }
+  .card.card-blue .card-icon-badge {
+    display: inline-block;
+    background: var(--blue-bg);
+    color: var(--blue);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  /* ─── CODE BLOCK ──────────────────────────────────────── */
+  .code-block {
+    background: var(--text);
+    border-radius: 7px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .code-block .cb-label {
+    padding: 9px 16px;
+    background: rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .code-block pre {
+    padding: 20px;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #e8e8e8;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-block .tok-key  { color: #fdba74; }
+  .code-block .tok-val  { color: #86efac; }
+  .code-block .tok-cmt  { color: #6b7280; font-style: italic; }
+  .code-block .tok-str  { color: #93c5fd; }
+  .code-block .tok-acc  { color: #fde047; }
+
+  /* ─── CALLOUT ─────────────────────────────────────────── */
+  .callout {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+  .callout .callout-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout p { font-size: 15px; color: var(--text-muted); margin: 0; line-height: 1.7; }
+
+  /* ─── DETAIL LIST ─────────────────────────────────────── */
+  ul.dl {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  ul.dl li {
+    padding: 13px 18px 13px 14px;
+    font-size: 15px;
+    color: var(--text-body);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.65;
+  }
+  ul.dl li:last-child { border-bottom: none; }
+  ul.dl li::before {
+    content: '→';
+    color: var(--accent);
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ─── TABLE ───────────────────────────────────────────── */
+  .data-table {
+    overflow-x: auto;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .data-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .data-table thead th {
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .data-table tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-body);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:hover td { background: var(--surface-tint); }
+  .td-yes { color: var(--green); font-weight: 600; }
+  .td-no  { color: var(--red);   font-weight: 600; }
+  .td-mono { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+
+  /* ─── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-refs { font-size: 12px; color: var(--text-subtle); }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 40px 0 36px; }
+    .page-wrap { padding: 0 16px 60px; }
+    footer { padding: 16px 20px; }
+    .plain-english { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">asadani.dev</a>
+  <div class="nav-right">
+    <span>{{NAV_TOPIC}}</span>
+    <span class="nav-tag">{{NAV_DATE}}</span><!-- e.g. APR 2026 -->
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">{{EYEBROW}}</div><!-- e.g. "Linux Kernel Policy — Official" -->
+    <h1>{{TITLE}}</h1>
+    <p class="hero-deck">{{DECK}}</p><!-- 1–2 sentence summary, 18px muted -->
+    <div class="hero-meta">
+      <span>{{DATE}}</span><!-- e.g. April 2026 -->
+      <span class="hero-meta-sep">/</span>
+      <span>{{META_DETAIL}}</span><!-- e.g. source doc name or category -->
+    </div>
+  </header>
+
+  <!-- OPTIONAL: ANNOUNCEMENT BANNER -->
+  <div class="banner">
+    <span class="banner-badge">{{BADGE_LABEL}}</span><!-- e.g. NEW / MERGED / UPDATE -->
+    <p>{{BANNER_TEXT}}</p>
+  </div>
+
+  <!-- OPTIONAL: PLAIN ENGLISH SUMMARY -->
+  <div class="plain-english">
+    <div class="pe-label">{{PE_HEADING}}</div><!-- e.g. "In Plain English — The Three Rules" -->
+    <ul class="pe-list">
+      <li>
+        <span class="pe-num">1</span>
+        <div><strong>{{POINT_1_TITLE}}</strong> {{POINT_1_BODY}}</div>
+      </li>
+      <li>
+        <span class="pe-num">2</span>
+        <div><strong>{{POINT_2_TITLE}}</strong> {{POINT_2_BODY}}</div>
+      </li>
+      <li>
+        <span class="pe-num">3</span>
+        <div><strong>{{POINT_3_TITLE}}</strong> {{POINT_3_BODY}}</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- SECTION EXAMPLE -->
+  <div class="section">
+    <div class="section-label">{{SECTION_LABEL}}</div>
+    <h2>{{SECTION_HEADING}}</h2>
+    <div class="prose">
+      <p>{{PARAGRAPH}}</p>
+    </div>
+
+    <!-- OPTIONAL: CARDS GRID -->
+    <div class="cards-grid">
+      <div class="card card-red">
+        <div class="card-icon-badge">{{CARD_LABEL}}</div><!-- e.g. Prohibited -->
+        <h4>{{CARD_TITLE}}</h4>
+        <p>{{CARD_BODY}}</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">{{CARD_LABEL}}</div><!-- e.g. Required -->
+        <h4>{{CARD_TITLE}}</h4>
+        <p>{{CARD_BODY}}</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">{{CARD_LABEL}}</div><!-- e.g. Recommended -->
+        <h4>{{CARD_TITLE}}</h4>
+        <p>{{CARD_BODY}}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPTIONAL: CALLOUT -->
+  <div class="callout">
+    <div class="callout-lbl">{{CALLOUT_LABEL}}</div>
+    <p>{{CALLOUT_BODY}}</p>
+  </div>
+
+  <!-- OPTIONAL: DETAIL LIST -->
+  <ul class="dl">
+    <li>{{ITEM}}</li>
+    <li>{{ITEM}}</li>
+    <li>{{ITEM}}</li>
+  </ul>
+
+  <!-- OPTIONAL: DATA TABLE -->
+  <div class="data-table">
+    <table>
+      <thead>
+        <tr>
+          <th>{{COL_1}}</th>
+          <th>{{COL_2}}</th>
+          <th>{{COL_3}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{VAL}}</td>
+          <td class="td-yes">Yes</td>
+          <td class="td-no">No</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- OPTIONAL: CODE BLOCK -->
+  <div class="code-block">
+    <div class="cb-label">{{CODE_LABEL}}</div>
+    <pre>{{CODE}}</pre>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <span>{{FOOTER_LEFT}}</span><!-- e.g. site name or published date -->
+  <div class="footer-refs">
+    <a href="{{URL}}">{{LINK_TEXT}}</a>
+  </div>
+</footer>
+
+</body>
+</html>
