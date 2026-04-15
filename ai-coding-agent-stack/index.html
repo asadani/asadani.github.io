@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 2026 AI Coding Agent Stack — Five Layers That Actually Matter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #F5F1EB;
+    --bg-alt:       #EDEAE3;
+    --surface:      #FFFFFF;
+    --surface-tint: #FAF8F5;
+    --border:       #DDD9D0;
+    --border-light: #EAE7E0;
+    --text:         #1A1714;
+    --text-body:    #3D3A35;
+    --text-muted:   #6B6760;
+    --text-subtle:  #9B9892;
+    --accent:       #C85C2D;
+    --accent-light: #E8895D;
+    --accent-bg:    #FDF1EB;
+    --accent-border:#F0C4A8;
+    --green:        #2A7A4B;
+    --green-bg:     #EAF5EF;
+    --green-border: #A8D9BC;
+    --blue:         #2563A8;
+    --blue-bg:      #EAF1FA;
+    --blue-border:  #A8C5E8;
+    --red:          #B83535;
+    --red-bg:       #FAEBEB;
+    --red-border:   #E8AAAA;
+    --serif:        'Newsreader', Georgia, serif;
+    --sans:         'Inter', system-ui, sans-serif;
+    --mono:         'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-body);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .nav-tag {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── LAYOUT ──────────────────────────────────────────── */
+  .page-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-deck {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 640px;
+    font-weight: 300;
+  }
+  .hero-meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-family: var(--mono);
+  }
+  .hero-meta-sep { color: var(--border); }
+
+  /* ─── BODY TEXT ───────────────────────────────────────── */
+  .prose p {
+    color: var(--text-body);
+    margin-bottom: 20px;
+    font-size: 17px;
+    line-height: 1.78;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); font-weight: 600; }
+  em { font-style: italic; color: var(--text-body); }
+
+  /* ─── SECTION HEADING ─────────────────────────────────── */
+  .section { margin-top: 56px; }
+  .section-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 32px 0 14px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── BANNER ──────────────────────────────────────────── */
+  .banner {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .banner-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .banner p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .banner a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ─── PLAIN ENGLISH ───────────────────────────────────── */
+  .plain-english {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 8px 8px;
+    padding: 28px 32px;
+    margin: 0 0 56px;
+  }
+  .plain-english .pe-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .pe-list { list-style: none; padding: 0; }
+  .pe-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 16px;
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+  .pe-list li:last-child { border-bottom: none; }
+  .pe-num {
+    width: 26px;
+    height: 26px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-family: var(--mono);
+  }
+
+  /* ─── CARDS GRID ──────────────────────────────────────── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 24px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    border-color: var(--accent-border);
+    box-shadow: 0 2px 8px rgba(200,92,45,0.08);
+  }
+  .card-icon { font-size: 20px; margin-bottom: 10px; }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+  .card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .card.card-red { border-color: var(--red-border); }
+  .card.card-red:hover { border-color: var(--red); box-shadow: 0 2px 8px rgba(184,53,53,0.08); }
+  .card.card-red .card-icon-badge {
+    display: inline-block;
+    background: var(--red-bg);
+    color: var(--red);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-green { border-color: var(--green-border); }
+  .card.card-green:hover { border-color: var(--green); box-shadow: 0 2px 8px rgba(42,122,75,0.08); }
+  .card.card-green .card-icon-badge {
+    display: inline-block;
+    background: var(--green-bg);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-blue { border-color: var(--blue-border); }
+  .card.card-blue:hover { border-color: var(--blue); box-shadow: 0 2px 8px rgba(37,99,168,0.08); }
+  .card.card-blue .card-icon-badge {
+    display: inline-block;
+    background: var(--blue-bg);
+    color: var(--blue);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  /* ─── CODE BLOCK ──────────────────────────────────────── */
+  .code-block {
+    background: var(--text);
+    border-radius: 7px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .code-block .cb-label {
+    padding: 9px 16px;
+    background: rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .code-block pre {
+    padding: 20px;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #e8e8e8;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-block .tok-key  { color: #fdba74; }
+  .code-block .tok-val  { color: #86efac; }
+  .code-block .tok-cmt  { color: #6b7280; font-style: italic; }
+  .code-block .tok-str  { color: #93c5fd; }
+  .code-block .tok-acc  { color: #fde047; }
+
+  /* ─── CALLOUT ─────────────────────────────────────────── */
+  .callout {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+  .callout .callout-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout p { font-size: 15px; color: var(--text-muted); margin: 0; line-height: 1.7; }
+
+  .callout-blue {
+    background: var(--blue-bg);
+    border: 1px solid var(--blue-border);
+    border-left: 3px solid var(--blue);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+  .callout-blue .callout-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--blue);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout-blue p { font-size: 15px; color: var(--text-muted); margin: 0; line-height: 1.7; }
+
+  .callout-green {
+    background: var(--green-bg);
+    border: 1px solid var(--green-border);
+    border-left: 3px solid var(--green);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+  .callout-green .callout-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout-green p { font-size: 15px; color: var(--text-muted); margin: 0; line-height: 1.7; }
+
+  /* ─── DETAIL LIST ─────────────────────────────────────── */
+  ul.dl {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  ul.dl li {
+    padding: 13px 18px 13px 14px;
+    font-size: 15px;
+    color: var(--text-body);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.65;
+  }
+  ul.dl li:last-child { border-bottom: none; }
+  ul.dl li::before {
+    content: '→';
+    color: var(--accent);
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ─── TABLE ───────────────────────────────────────────── */
+  .data-table {
+    overflow-x: auto;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .data-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .data-table thead th {
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .data-table tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-body);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:hover td { background: var(--surface-tint); }
+  .td-yes { color: var(--green); font-weight: 600; }
+  .td-no  { color: var(--red);   font-weight: 600; }
+  .td-mono { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+  .td-num { font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--text); }
+
+  /* ─── LAYER STACK VISUAL ──────────────────────────────── */
+  .layer-stack {
+    margin: 28px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .layer {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: border-color 0.2s;
+  }
+  .layer:hover { border-color: var(--accent-border); }
+  .layer-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-subtle);
+    flex-shrink: 0;
+    width: 20px;
+  }
+  .layer-name {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    flex: 1;
+  }
+  .layer-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    flex: 2;
+    line-height: 1.5;
+  }
+  .layer-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .tag-infra { background: var(--blue-bg); color: var(--blue); }
+  .tag-process { background: var(--accent-bg); color: var(--accent); }
+  .tag-memory { background: var(--green-bg); color: var(--green); }
+  .tag-review { background: var(--red-bg); color: var(--red); }
+  .tag-orchestration { background: var(--bg-alt); color: var(--text-muted); }
+
+  /* ─── REPO CARD ───────────────────────────────────────── */
+  .repo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .repo-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .repo-card .repo-name {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .repo-card .repo-stars {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-subtle);
+    margin-bottom: 8px;
+  }
+  .repo-card .repo-desc {
+    font-size: 13px;
+    color: var(--text-body);
+    line-height: 1.55;
+  }
+  .repo-card .repo-verdict {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-style: italic;
+    border-top: 1px solid var(--border-light);
+    padding-top: 8px;
+  }
+
+  /* ─── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-refs { font-size: 12px; color: var(--text-subtle); }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 40px 0 36px; }
+    .page-wrap { padding: 0 16px 60px; }
+    footer { padding: 16px 20px; }
+    .plain-english { padding: 20px; }
+    .layer { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .layer-desc { flex: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">asadani.dev</a>
+  <div class="nav-right">
+    <span>AI Coding Agents</span>
+    <span class="nav-tag">APR 2026</span>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">Open-Source Landscape — 2026 Edition</div>
+    <h1>The Five Layers of the Modern AI Coding Agent Stack</h1>
+    <p class="hero-deck">The AI coding agent ecosystem has matured past prompt engineering. This is the architectural map — five layers that determine whether your agent is a productivity multiplier or an expensive autocomplete.</p>
+    <div class="hero-meta">
+      <span>April 2026</span>
+      <span class="hero-meta-sep">/</span>
+      <span>Opinionated synthesis · 25+ OSS repos analyzed</span>
+    </div>
+  </header>
+
+  <!-- TL;DR BANNER -->
+  <div class="banner">
+    <span class="banner-badge">TL;DR</span>
+    <p>Code graphs cut token costs 10–70×. Skills encode methodology so agents don't hallucinate process. Memory layers prevent session amnesia. These three primitives are now table stakes — orchestration and review automation build on top. Install <strong>code-review-graph</strong> + <strong>Superpowers</strong> + <strong>Mem0</strong> and you have a serious stack.</p>
+  </div>
+
+  <!-- PLAIN ENGLISH SUMMARY -->
+  <div class="plain-english">
+    <div class="pe-label">The Three Things Worth Knowing</div>
+    <ul class="pe-list">
+      <li>
+        <span class="pe-num">1</span>
+        <div><strong>Naive agents are expensive and unreliable by default.</strong> Without structural context, an agent re-reads 27,000 files to review a 3-line change. Without methodology, it skips planning and writes code that passes tests but breaks architecture. These are solved problems — the tooling exists, most teams just haven't installed it yet.</div>
+      </li>
+      <li>
+        <span class="pe-num">2</span>
+        <div><strong>Skills are more impactful than MCP for daily workflows.</strong> MCP gives agents tools; skills give agents discipline. The difference between a coding agent that completes features and one that drifts is usually a well-structured <code>SKILL.md</code> — not a faster model. Simon Willison called this "maybe a bigger deal than MCP," and the adoption numbers support it.</div>
+      </li>
+      <li>
+        <span class="pe-num">3</span>
+        <div><strong>The ecosystem has five distinct layers, not one monolithic tool.</strong> Context → Skills → Memory → Review → Orchestration. Each layer is independently installable. Start at layer one and work up based on your actual pain points — don't buy into the full orchestration story until the basics are working.</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- SECTION: WHY AGENTS FAIL -->
+  <div class="section">
+    <div class="section-label">Root Causes</div>
+    <h2>Why Unaugmented Agents Underperform</h2>
+    <div class="prose">
+      <p>The failure modes of a stock Claude Code or Copilot session are well-documented by now. Give an agent access to a large repository and it will either <strong>stream every file into its context window</strong> — burning tokens and introducing noise — or hallucinate structure it hasn't seen. Give it a complex multi-step task and it will start writing code before it fully understands the requirements, then discover halfway through that it has painted itself into an architectural corner.</p>
+      <p>These aren't model limitations. They're tooling gaps. The open-source community has spent the last year building targeted solutions to each failure mode, and the results are measurable: 10–70× token reductions, 94% reduction in low-quality code that makes it to review, and agent sessions that compound knowledge across sessions instead of starting cold every time.</p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card card-red">
+        <div class="card-icon-badge">Context Bloat</div>
+        <h4>No structural awareness</h4>
+        <p>Agents re-read entire repos for every task. A Next.js monorepo with 27k files costs millions of tokens daily.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Process Drift</div>
+        <h4>No enforced methodology</h4>
+        <p>Agents skip planning, hallucinate specs, and generate functionally correct code that violates architectural conventions.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Session Amnesia</div>
+        <h4>No persistent memory</h4>
+        <p>Every session starts cold. Agents repeat the same mistakes, re-discover the same APIs, and lose prior debugging context.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: THE STACK MAP -->
+  <div class="section">
+    <div class="section-label">Architecture</div>
+    <h2>The Five-Layer Stack</h2>
+    <div class="prose">
+      <p>The 2026 ecosystem maps cleanly onto five independent layers. Each can be adopted without the others, but they compound. A team with all five running is operating categorically differently from one using raw agent APIs.</p>
+    </div>
+
+    <div class="layer-stack">
+      <div class="layer">
+        <div class="layer-num">L1</div>
+        <div class="layer-name">Context Graphs</div>
+        <div class="layer-desc">Compress codebases into navigable knowledge graphs. Agents read the blast radius of a change, not the whole repo.</div>
+        <span class="layer-tag tag-infra">Infrastructure</span>
+      </div>
+      <div class="layer">
+        <div class="layer-num">L2</div>
+        <div class="layer-name">Skills &amp; Methodology</div>
+        <div class="layer-desc">Portable SKILL.md files that enforce planning, TDD, subagent delegation, and engineering culture compliance.</div>
+        <span class="layer-tag tag-process">Process</span>
+      </div>
+      <div class="layer">
+        <div class="layer-num">L3</div>
+        <div class="layer-name">Memory &amp; State</div>
+        <div class="layer-desc">Persistent cross-session memory: vector + graph + KV. Agents accumulate knowledge instead of starting cold.</div>
+        <span class="layer-tag tag-memory">Persistence</span>
+      </div>
+      <div class="layer">
+        <div class="layer-num">L4</div>
+        <div class="layer-name">Review &amp; CI/CD</div>
+        <div class="layer-desc">Automated PR review, blast-radius analysis, and security scanning — in the pipeline, not just the editor.</div>
+        <span class="layer-tag tag-review">Quality</span>
+      </div>
+      <div class="layer">
+        <div class="layer-num">L5</div>
+        <div class="layer-name">Orchestration</div>
+        <div class="layer-desc">Multi-agent coordination for long-horizon tasks: issue → spec → parallel subagents → merge.</div>
+        <span class="layer-tag tag-orchestration">Scale</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: LAYER 1 — CONTEXT GRAPHS -->
+  <div class="section">
+    <div class="section-label">Layer 1</div>
+    <h2>Context Graphs: The Infrastructure Primitive</h2>
+    <div class="prose">
+      <p>The core insight driving this category: a repository is a knowledge graph, not a directory of text files. Functions call other functions. Classes inherit from each other. Tests cover specific methods. When an agent needs to review a change to <code>auth.ts</code>, it doesn't need 27,000 files — it needs the 12 files that directly depend on or are depended on by <code>auth.ts</code>. A structural graph delivers exactly that.</p>
+      <p>Two implementation approaches have emerged. <strong>AST-based tools</strong> (code-review-graph, Graphify, Codebase-Memory MCP) parse source files into syntax trees using Tree-sitter, extract entities and relationships, and store them in queryable databases. <strong>LSP-based tools</strong> (Serena) wrap Language Server Protocol backends to give agents the same symbol-level navigation a developer gets in an IDE — more precise, but requires a running LSP server per language.</p>
+    </div>
+
+    <h3>Token reduction data: code-review-graph benchmarks</h3>
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Repository</th>
+            <th>Changed Files</th>
+            <th>Naive Tokens</th>
+            <th>Graph Tokens</th>
+            <th>Reduction</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>fastapi</td>
+            <td class="td-mono">1</td>
+            <td class="td-num">6,044</td>
+            <td class="td-num">612</td>
+            <td class="td-yes">9.9×</td>
+          </tr>
+          <tr>
+            <td>flask</td>
+            <td class="td-mono">10</td>
+            <td class="td-num">75,757</td>
+            <td class="td-num">6,143</td>
+            <td class="td-yes">12.3×</td>
+          </tr>
+          <tr>
+            <td>gin</td>
+            <td class="td-mono">5</td>
+            <td class="td-num">45,453</td>
+            <td class="td-num">1,862</td>
+            <td class="td-yes">24.4×</td>
+          </tr>
+          <tr>
+            <td>httpx</td>
+            <td class="td-mono">3</td>
+            <td class="td-num">16,841</td>
+            <td class="td-num">1,796</td>
+            <td class="td-yes">9.4×</td>
+          </tr>
+          <tr>
+            <td>nextjs</td>
+            <td class="td-mono">3</td>
+            <td class="td-num">11,254</td>
+            <td class="td-num">1,486</td>
+            <td class="td-yes">7.6×</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>The tradeoff in the AST approach is conservative over-prediction. To guarantee 100% recall (never missing a dependency), the blast-radius algorithm over-estimates impact radius slightly. This is the correct engineering tradeoff: a missed dependency that causes a production failure is far more costly than feeding the agent a few extra files.</p>
+    </div>
+
+    <div class="callout-blue">
+      <div class="callout-lbl">Performance Outlier</div>
+      <p><strong>Codebase-Memory MCP</strong> is written as a single C binary with 66 vendored Tree-sitter grammars. It indexes the Linux kernel (28M lines, 75k files) in 3 minutes and achieves 83% answer quality at 10× fewer tokens versus file-by-file approaches. For teams at scale, this is the high-watermark of what graph-based context can deliver.</p>
+    </div>
+
+    <h3>Choosing a context graph tool</h3>
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Tool</th>
+            <th>Approach</th>
+            <th>Languages</th>
+            <th>Storage</th>
+            <th>Best For</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>code-review-graph</strong></td>
+            <td>AST / Tree-sitter</td>
+            <td class="td-mono">19–20</td>
+            <td>Local SQLite</td>
+            <td>PR review blast-radius analysis</td>
+          </tr>
+          <tr>
+            <td><strong>Serena</strong></td>
+            <td>LSP</td>
+            <td class="td-mono">40+</td>
+            <td>In-process</td>
+            <td>Symbol-level navigation, semantic editing</td>
+          </tr>
+          <tr>
+            <td><strong>Graphify</strong></td>
+            <td>AST + multimodal</td>
+            <td class="td-mono">All + media</td>
+            <td>Graph DB</td>
+            <td>Mixed repos (code + docs + PDFs + video)</td>
+          </tr>
+          <tr>
+            <td><strong>CodeGraphContext</strong></td>
+            <td>AST + graph DB</td>
+            <td class="td-mono">Major langs</td>
+            <td>KùzuDB / Neo4j</td>
+            <td>Enterprise teams sharing pre-indexed snapshots</td>
+          </tr>
+          <tr>
+            <td><strong>Codebase-Memory MCP</strong></td>
+            <td>AST / C binary</td>
+            <td class="td-mono">66</td>
+            <td>Embedded</td>
+            <td>Monorepos, performance-critical workflows</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION: LAYER 2 — SKILLS -->
+  <div class="section">
+    <div class="section-label">Layer 2</div>
+    <h2>Skills and Methodology: The Process Layer</h2>
+    <div class="prose">
+      <p>The shift from prompt engineering to agent skills represents the most significant change in how developers work with coding agents in 2026. Rather than writing elaborate system prompts that models probabilistically follow, skills encode process as portable markdown — structured instruction files that agents load dynamically, enforce consistently, and compose together.</p>
+      <p>The distinction matters: a system prompt says "write tests." A skill enforces the full RED-GREEN-REFACTOR cycle, blocks commits that skip the red phase, and uses subagents for parallel test execution. Same underlying instruction; categorically different enforcement.</p>
+    </div>
+
+    <h3>The methodology spectrum</h3>
+
+    <div class="repo-grid">
+      <div class="repo-card">
+        <div class="repo-name">obra/superpowers</div>
+        <div class="repo-stars">~146k stars · v5+</div>
+        <div class="repo-desc">Complete agentic development methodology: brainstorm → spec → plan → subagent execution → TDD → review → merge. Ships with a skill-creation meta-skill so teams can encode their own practices.</div>
+        <div class="repo-verdict">Gold standard for process. 94% PR rejection rate — the agent redoes work until it meets quality standards.</div>
+      </div>
+      <div class="repo-card">
+        <div class="repo-name">anthropics/skills</div>
+        <div class="repo-stars">~112k stars · Official</div>
+        <div class="repo-desc">Defines the SKILL.md standard and ships reference skills. Progressive disclosure model lets agents load only relevant skills without exhausting context windows.</div>
+        <div class="repo-verdict">The canonical template. Install the official skills before exploring community packs.</div>
+      </div>
+      <div class="repo-card">
+        <div class="repo-name">JuliusBrussee/caveman</div>
+        <div class="repo-stars">~14k stars · viral April 2026</div>
+        <div class="repo-desc">Enforces ultra-terse responses via semantic compression. Multiple intensity levels (Lite/Full/Ultra), a caveman-compress mode for CLAUDE.md files, and a Conventional Commits mode.</div>
+        <div class="repo-verdict">~75% output token reduction. Research suggests brevity constraints can improve accuracy, not just reduce cost.</div>
+      </div>
+      <div class="repo-card">
+        <div class="repo-name">garrytan/gstack</div>
+        <div class="repo-stars">~66k stars · Apr 2026</div>
+        <div class="repo-desc">23 specialized role-skills (CEO, Designer, Eng Manager, Release Manager) that turn a single agent into a virtual engineering team. Co-developed with Opus 4.6.</div>
+        <div class="repo-verdict">Highly opinionated — adapts Garry Tan's workflow. Excellent if it matches your style; needs adaptation if it doesn't.</div>
+      </div>
+      <div class="repo-card">
+        <div class="repo-name">dadbodgeoff/drift</div>
+        <div class="repo-stars">Growing · MCP server</div>
+        <div class="repo-desc">Maps 150+ architectural patterns in your codebase and actively serves them into agent context to prevent architecture drift — agents generating correct code that violates team conventions.</div>
+        <div class="repo-verdict">Solves a real problem uniquely. V2 rewrite in Rust/TS has memory bugs; watch stability before production deployment.</div>
+      </div>
+      <div class="repo-card">
+        <div class="repo-name">andrewyng/context-hub</div>
+        <div class="repo-stars">~12.8k stars · Mar 2026</div>
+        <div class="repo-desc">CLI + repo of versioned API docs (OpenAI, Stripe, etc.) with local annotation persistence. Agents fetch accurate docs instead of hallucinating outdated parameters.</div>
+        <div class="repo-verdict">Best immediate fix for API hallucination. Annotations persist across sessions and compound over time.</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">The Token Budget Tradeoff</div>
+      <p>Structured skills add upfront reasoning overhead. <strong>Superpowers</strong> enforces a 7-phase pipeline — meaningful for a feature build, wasteful for a one-liner fix. The practical pattern: apply full methodology to complex tasks (new features, refactors, architecture changes) and bypass for trivial edits. Both Superpowers and the Karpathy-inspired skill packs advise this explicitly.</p>
+    </div>
+  </div>
+
+  <!-- SECTION: LAYER 3 — MEMORY -->
+  <div class="section">
+    <div class="section-label">Layer 3</div>
+    <h2>Memory Layers: Solving Session Amnesia</h2>
+    <div class="prose">
+      <p>Context loss across sessions is the most under-discussed pain point in agent workflows. The first session you debug a tricky async race condition, discover the right Stripe webhook signature validation pattern, or figure out that your team's monorepo requires a specific import path convention — all of that evaporates when the session ends. The next session starts cold and re-discovers everything from scratch.</p>
+      <p>Memory layers solve this at different levels of sophistication, from simple key-value stores to full temporal knowledge graphs with bi-temporal invalidation.</p>
+    </div>
+
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Tool</th>
+            <th>Architecture</th>
+            <th>Stars</th>
+            <th>Integration</th>
+            <th>Tradeoff</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Mem0</strong></td>
+            <td>Vector + Graph + KV (hybrid)</td>
+            <td class="td-num">~50k</td>
+            <td>MCP, LangChain, CrewAI</td>
+            <td>+26% accuracy vs OpenAI Memory; needs Neo4j for graph tier</td>
+          </tr>
+          <tr>
+            <td><strong>Graphiti (getzep)</strong></td>
+            <td>Bi-temporal knowledge graph</td>
+            <td class="td-num">Growing</td>
+            <td>LLM-agnostic</td>
+            <td>Best for changing facts over time; heavy infrastructure (Neo4j)</td>
+          </tr>
+          <tr>
+            <td><strong>agentmemory</strong></td>
+            <td>BM25 + vector, PostToolUse hooks</td>
+            <td class="td-num">~290</td>
+            <td>Claude Code native</td>
+            <td>Silent capture of every agent action; small footprint, coding-agent-specific</td>
+          </tr>
+          <tr>
+            <td><strong>Engram</strong></td>
+            <td>SQLite + FTS5, single Go binary</td>
+            <td class="td-num">Growing</td>
+            <td>Any MCP client</td>
+            <td>Zero dependencies, Git-based sync; no temporal model</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p><strong>Mem0</strong> is the category benchmark. Its "AUDN" cycle — Add/Update/Delete/No-op — uses an LLM to automatically extract, deduplicate, and consolidate memories from conversations. It scored +26% on the LOCOMO benchmark versus OpenAI's memory implementation. For a senior engineer, Mem0's hybrid architecture (Pinecone/Qdrant for vectors, Neo4j for relationships, scoped retrieval by user/session/agent) is the reference design for how memory systems should work.</p>
+      <p><strong>agentmemory</strong> is the sleeper pick for Claude Code specifically. It hooks into the <code>PostToolUse</code> lifecycle to silently capture every action the agent takes, compresses observations into structured facts with quality scoring, and injects relevant context at the start of each session. The hybrid BM25 + vector search with session-diversified Reciprocal Rank Fusion is architecturally elegant for a ~290-star project.</p>
+    </div>
+
+    <div class="callout-green">
+      <div class="callout-lbl">Install Order Recommendation</div>
+      <p>Start with <strong>Engram</strong> for immediate zero-friction persistent memory (single binary, no Docker). Upgrade to <strong>Mem0</strong> once your team is doing serious production agent work and needs scoped retrieval across agents and sessions. Only add <strong>Graphiti</strong> if you have changing facts or need audit trails of what the agent believed at specific points in time.</p>
+    </div>
+  </div>
+
+  <!-- SECTION: LAYER 4 — REVIEW -->
+  <div class="section">
+    <div class="section-label">Layer 4</div>
+    <h2>Code Review and CI/CD: The Quality Layer</h2>
+    <div class="prose">
+      <p>Automated code review has split into two distinct tiers in 2026. The first tier — mature PR-level tools — handles the bulk of review work at the syntax and logic level. The second tier — agentic security pipelines — goes deeper, using structured task decomposition to find vulnerabilities that pattern matching misses.</p>
+    </div>
+
+    <h3>PR-level review</h3>
+    <div class="prose">
+      <p><strong>PR-Agent</strong> (qodo-ai) remains the ecosystem's workhorse at 10.7k stars and ~200 contributors. Its proprietary PR Compression strategy handles arbitrarily large diffs in a single LLM call — about 30 seconds per review. The <code>/review</code>, <code>/improve</code>, <code>/describe</code>, and <code>/ask</code> command set covers 90% of what most teams need. It integrates with GitHub, GitLab, Bitbucket, and Azure DevOps. Known caveat: self-hosted Ollama integration has configuration bugs.</p>
+      <p><strong>LLM Code Reviewer</strong> runs as a standard GitHub Action triggered on PR open/update. Multi-model support (Claude, Gemini, OpenAI), file exclusion patterns, and language selection. For teams that want review in the pipeline without deploying a separate service, this is the lower-friction option.</p>
+    </div>
+
+    <h3>Security-focused agents</h3>
+    <div class="prose">
+      <p><strong>GitHub SecLab Taskflow Agent</strong> represents a qualitatively different paradigm. Structured YAML "taskflows" decompose security auditing into checkpointed steps with intermediate verification. It has found 80+ real vulnerabilities in open-source projects — auth bypasses, IDOR issues, token leaks. This is the strongest production evidence that agentic review delivers value on security that pattern-matching cannot.</p>
+      <p><strong>Semgrep</strong> bridges traditional SAST and the agent world. Its 2,000+ community rules provide deterministic pattern matching across 30+ languages. Its new Claude Code plugin and MCP prompts — including <code>write_custom_semgrep_rule</code> — let agents compose and apply security rules dynamically. Used in production at GitLab, Dropbox, Shopify, and HashiCorp. The safest upgrade path: add Semgrep to CI before adding any agentic review tools.</p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">Layering Recommendation</div>
+      <p>Semgrep in CI catches deterministic security patterns. PR-Agent adds LLM-powered logic review to every PR. SecLab Taskflow is for periodic deep security audits or pre-release reviews. These serve different time horizons — use all three, not just one.</p>
+    </div>
+  </div>
+
+  <!-- SECTION: LAYER 5 — ORCHESTRATION -->
+  <div class="section">
+    <div class="section-label">Layer 5</div>
+    <h2>Orchestration: Multi-Agent Coordination at Scale</h2>
+    <div class="prose">
+      <p>Multi-agent orchestration is the most architecturally interesting layer and the one most teams should adopt last. The promise — parallel subagents executing independent tasks simultaneously — is real, but the prerequisites are demanding. Teams that move to orchestration before nailing context management, skills, and memory typically experience context pollution, subagent hallucination, and coordination overhead that offsets the parallelism gains.</p>
+    </div>
+
+    <h3>The major frameworks</h3>
+    <div class="prose">
+      <p><strong>OpenHands</strong> (formerly OpenDevin) is the category leader at ~70k stars and $18.8M raised. It autonomously plans, codes, debugs, runs tests, and can deploy applications — given a high-level task, it orchestrates multi-step workflows with real tool execution in a sandboxed environment. It integrates with GitHub, GitLab, Slack, and Jira, and supports any LLM backend. The practical tradeoff: full autonomy means full responsibility for sandboxing. Running OpenHands without container isolation is a significant security risk.</p>
+      <p><strong>SWE-agent / mini-swe-agent</strong> is the benchmark standard. The minimal agent variant is ~100 lines of code but achieves 65–74% on SWE-bench Verified, making it the reference for evaluating whether your own orchestration approach is actually improving agent output. Widely adopted by Meta, NVIDIA, IBM, and academic labs for exactly this reason.</p>
+      <p><strong>ByteDance's deer-flow</strong> handles long-horizon tasks (minutes to hours) via a 12-stage middleware chain: summarization layers reduce context as token limits approach, and a virtual path system isolates agent operations from host directories. The tradeoff: dangerously high privileges without strict Docker sandboxing, and aggressive context compression strips intermediate reasoning that subagents need for deep coordination.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">ASCII: The coordination pattern in multi-agent orchestration</div>
+      <pre><span class="tok-cmt">  Human input: "Ship the OAuth redesign"
+</span>
+  <span class="tok-key">Orchestrator Agent</span>
+         │
+         ├──<span class="tok-str">► Spec Agent</span>    ──reads AGENTS.md, outputs spec.md
+         ├──<span class="tok-str">► Planner Agent</span>  ──breaks spec into parallel tasks
+         │
+         ├──<span class="tok-val">► Worker A</span>  ──implements auth middleware
+         ├──<span class="tok-val">► Worker B</span>  ──writes unit tests
+         └──<span class="tok-val">► Worker C</span>  ──updates OpenAPI schema
+
+         <span class="tok-cmt">↓ (all workers complete) </span>
+  <span class="tok-key">Review Agent</span>  ──blast-radius check via L1 graph
+         │
+  <span class="tok-acc">PR created, CI passes, merge</span></pre>
+    </div>
+
+    <div class="callout-blue">
+      <div class="callout-lbl">When to adopt orchestration</div>
+      <p>Multi-agent orchestration pays off when tasks genuinely decompose into independent parallel work streams — typically features spanning multiple services or large refactors. For single-service feature work, a well-configured single agent with a strong skill methodology (Superpowers-style) outperforms orchestration due to lower coordination overhead. Run the comparison on your own workload before committing to the infrastructure.</p>
+    </div>
+  </div>
+
+  <!-- SECTION: WHAT TO ACTUALLY INSTALL -->
+  <div class="section">
+    <div class="section-label">Practical Guide</div>
+    <h2>What to Actually Install</h2>
+    <div class="prose">
+      <p>The ecosystem has 25+ high-traction tools. This is the prioritized installation sequence for a professional team — ordered by impact-per-effort, not by category.</p>
+    </div>
+
+    <ul class="dl">
+      <li><strong>Week 1 — code-review-graph (L1).</strong> Install the MCP server, point it at your repo, and watch token costs on code reviews drop immediately. Sub-2 second incremental reindexing means it stays current without manual effort. This is the highest-ROI first install.</li>
+      <li><strong>Week 1 — Semgrep (L4).</strong> Add to CI before you trust agents to write security-relevant code. Static analysis catches a class of issues LLM review misses — they're complementary, not competitive.</li>
+      <li><strong>Week 2 — Anthropic official skills + Superpowers (L2).</strong> Install the official skills standard first. Add Superpowers for any feature work involving more than two files. Skip the full pipeline for bug fixes and one-liners — the overhead isn't worth it at that scale.</li>
+      <li><strong>Week 2 — Caveman (L2).</strong> Install alongside Superpowers. Use in review and commit modes by default. The 75% token reduction on output means faster responses, lower cost, and — counterintuitively — often better answers due to forced concision.</li>
+      <li><strong>Week 3 — Engram or agentmemory (L3).</strong> Start with Engram for zero-friction persistent memory (single binary). Migrate to Mem0 once your team has more than two agents and needs scoped retrieval. Don't skip this layer — session amnesia is a silent productivity drain that compounds over time.</li>
+      <li><strong>Month 2 — PR-Agent (L4).</strong> Add automated PR review once your context graph and skills are stable. Review quality correlates strongly with context quality — get L1 and L2 right first, then automate the review layer.</li>
+      <li><strong>Later — OpenHands or LangGraph (L5).</strong> Orchestration is the multiplier, but it only multiplies what you've built on the layers below it. Teams that skip to orchestration without solid context, skills, and memory usually end up spending more time debugging agent coordination than they save in parallelism.</li>
+    </ul>
+  </div>
+
+  <!-- SECTION: SYNTHESIS -->
+  <div class="section">
+    <div class="section-label">Synthesis</div>
+    <h2>What the Ecosystem Tells Us About Where AI-Assisted Engineering Is Going</h2>
+    <div class="prose">
+      <p>The recurring tension across every category in 2026 is <strong>safety versus throughput</strong>. Systems like code-review-graph deliberately accept conservative over-prediction to guarantee 100% recall. Deer-flow and spring-ai-agent-utils expose the acute tradeoff between execution speed and security — running agent-generated shell scripts on bare metal is faster but catastrophic when a hallucination slips through.</p>
+      <p>The emergence of Spec-Driven Development frameworks (spec-kit, Superpowers) and autonomous review platforms like Macroscope signals that the role of the software engineer is genuinely shifting. Engineers are moving away from manual syntax generation toward high-level system specification and architectural oversight. The code repository is becoming a multi-agent workspace where structural context, temporal memory, and executable specifications drive generation — not prompts.</p>
+      <p>This matters for how you should invest your time: the skills worth developing now are not "writing better prompts" but <strong>building better specs, designing better context structures, and instrumenting better quality gates</strong>. The tools in this stack are the infrastructure that lets you do that work at scale.</p>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <span>asadani.dev · April 2026</span>
+  <div class="footer-refs">
+    <a href="https://github.com/tirth8205/code-review-graph">code-review-graph</a> ·
+    <a href="https://github.com/obra/superpowers">superpowers</a> ·
+    <a href="https://github.com/mem0ai/mem0">mem0</a>
+  </div>
+</footer>
+
+</body>
+</html>
