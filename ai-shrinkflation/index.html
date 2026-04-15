@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Shrinkflation — The Silent Regression Your Team Won't See Coming</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #F5F1EB;
+    --bg-alt:       #EDEAE3;
+    --surface:      #FFFFFF;
+    --surface-tint: #FAF8F5;
+    --border:       #DDD9D0;
+    --border-light: #EAE7E0;
+    --text:         #1A1714;
+    --text-body:    #3D3A35;
+    --text-muted:   #6B6760;
+    --text-subtle:  #9B9892;
+    --accent:       #C85C2D;
+    --accent-light: #E8895D;
+    --accent-bg:    #FDF1EB;
+    --accent-border:#F0C4A8;
+    --green:        #2A7A4B;
+    --green-bg:     #EAF5EF;
+    --green-border: #A8D9BC;
+    --blue:         #2563A8;
+    --blue-bg:      #EAF1FA;
+    --blue-border:  #A8C5E8;
+    --red:          #B83535;
+    --red-bg:       #FAEBEB;
+    --red-border:   #E8AAAA;
+    --serif:        'Newsreader', Georgia, serif;
+    --sans:         'Inter', system-ui, sans-serif;
+    --mono:         'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-body);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .nav-tag {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── LAYOUT ──────────────────────────────────────────── */
+  .page-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-deck {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 640px;
+    font-weight: 300;
+  }
+  .hero-meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-family: var(--mono);
+  }
+  .hero-meta-sep { color: var(--border); }
+
+  /* ─── BODY TEXT ───────────────────────────────────────── */
+  .prose p {
+    color: var(--text-body);
+    margin-bottom: 20px;
+    font-size: 17px;
+    line-height: 1.78;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); font-weight: 600; }
+  em { font-style: italic; color: var(--text-body); }
+
+  /* ─── SECTION HEADING ─────────────────────────────────── */
+  .section { margin-top: 56px; }
+  .section-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 36px 0 14px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── BANNER ──────────────────────────────────────────── */
+  .banner {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .banner-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .banner p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .banner a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ─── PLAIN ENGLISH ───────────────────────────────────── */
+  .plain-english {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 8px 8px;
+    padding: 28px 32px;
+    margin: 0 0 56px;
+  }
+  .plain-english .pe-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .pe-list { list-style: none; padding: 0; }
+  .pe-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 16px;
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+  .pe-list li:last-child { border-bottom: none; }
+  .pe-num {
+    width: 26px;
+    height: 26px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-family: var(--mono);
+  }
+
+  /* ─── STAT ROW ────────────────────────────────────────── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 28px 0;
+  }
+  .stat-cell {
+    background: var(--surface);
+    padding: 20px 22px;
+  }
+  .stat-value {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+
+  /* ─── CARDS GRID ──────────────────────────────────────── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 24px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    border-color: var(--accent-border);
+    box-shadow: 0 2px 8px rgba(200,92,45,0.08);
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+  .card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .card.card-red { border-color: var(--red-border); }
+  .card.card-red:hover { border-color: var(--red); box-shadow: 0 2px 8px rgba(184,53,53,0.08); }
+  .card.card-red .card-icon-badge {
+    display: inline-block;
+    background: var(--red-bg);
+    color: var(--red);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-green { border-color: var(--green-border); }
+  .card.card-green:hover { border-color: var(--green); box-shadow: 0 2px 8px rgba(42,122,75,0.08); }
+  .card.card-green .card-icon-badge {
+    display: inline-block;
+    background: var(--green-bg);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-blue { border-color: var(--blue-border); }
+  .card.card-blue:hover { border-color: var(--blue); box-shadow: 0 2px 8px rgba(37,99,168,0.08); }
+  .card.card-blue .card-icon-badge {
+    display: inline-block;
+    background: var(--blue-bg);
+    color: var(--blue);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  /* ─── CODE BLOCK ──────────────────────────────────────── */
+  .code-block {
+    background: var(--text);
+    border-radius: 7px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .code-block .cb-label {
+    padding: 9px 16px;
+    background: rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .code-block pre {
+    padding: 20px;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #e8e8e8;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-block .tok-key  { color: #fdba74; }
+  .code-block .tok-val  { color: #86efac; }
+  .code-block .tok-cmt  { color: #6b7280; font-style: italic; }
+  .code-block .tok-str  { color: #93c5fd; }
+
+  /* ─── CALLOUT ─────────────────────────────────────────── */
+  .callout {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+  .callout.callout-blue {
+    background: var(--blue-bg);
+    border-color: var(--blue-border);
+    border-left-color: var(--blue);
+  }
+  .callout.callout-green {
+    background: var(--green-bg);
+    border-color: var(--green-border);
+    border-left-color: var(--green);
+  }
+  .callout.callout-red {
+    background: var(--red-bg);
+    border-color: var(--red-border);
+    border-left-color: var(--red);
+  }
+  .callout .callout-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout.callout-blue .callout-lbl { color: var(--blue); }
+  .callout.callout-green .callout-lbl { color: var(--green); }
+  .callout.callout-red .callout-lbl { color: var(--red); }
+  .callout p { font-size: 15px; color: var(--text-muted); margin: 0; line-height: 1.7; }
+
+  /* ─── DETAIL LIST ─────────────────────────────────────── */
+  ul.dl {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  ul.dl li {
+    padding: 13px 18px 13px 14px;
+    font-size: 15px;
+    color: var(--text-body);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.65;
+  }
+  ul.dl li:last-child { border-bottom: none; }
+  ul.dl li::before {
+    content: '→';
+    color: var(--accent);
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ─── DATA TABLE ──────────────────────────────────────── */
+  .data-table {
+    overflow-x: auto;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .data-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .data-table thead th {
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .data-table tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-body);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:hover td { background: var(--surface-tint); }
+  .td-bad  { color: var(--red);   font-weight: 600; }
+  .td-good { color: var(--green); font-weight: 600; }
+  .td-mono { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+
+  /* ─── CHAIN ───────────────────────────────────────────── */
+  .chain-wrap { margin: 24px 0; }
+  .chain-step {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    margin-bottom: 4px;
+  }
+  .chain-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 16px;
+    width: 36px;
+    flex-shrink: 0;
+  }
+  .chain-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .chain-num.blue-step  { background: var(--blue); }
+  .chain-num.green-step { background: var(--green); }
+  .chain-line {
+    width: 2px;
+    flex: 1;
+    min-height: 16px;
+    background: linear-gradient(to bottom, var(--border), var(--border-light));
+    margin-top: 4px;
+  }
+  .chain-step:last-child .chain-line { display: none; }
+  .chain-step-inner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    flex: 1;
+    margin-bottom: 4px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .chain-step:hover .chain-step-inner {
+    border-color: var(--accent-border);
+    box-shadow: 0 2px 8px rgba(200,92,45,0.07);
+  }
+  .chain-step-inner h4 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 5px;
+  }
+  .chain-step-inner p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ─── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-refs { font-size: 12px; color: var(--text-subtle); }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 40px 0 36px; }
+    .page-wrap { padding: 0 16px 60px; }
+    footer { padding: 16px 20px; }
+    .plain-english { padding: 20px; }
+    .stat-row { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">asadani.dev</a>
+  <div class="nav-right">
+    <span>AI Engineering · Production LLMs</span>
+    <span class="nav-tag">APR 2026</span>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">AI Engineering — Production Reality</div>
+    <h1>AI Shrinkflation:<br>The Silent Regression Your Team Won't See Coming</h1>
+    <p class="hero-deck">
+      The model you deployed last quarter is not the model running today. Quality can degrade
+      silently — no announcement, no version bump, no alert. Here is what every engineering team
+      building on LLMs needs to know, and how to architect for it.
+    </p>
+    <div class="hero-meta">
+      <span>April 2026</span>
+      <span class="hero-meta-sep">/</span>
+      <span>Based on 6,852 sessions · 234,760 tool calls</span>
+      <span class="hero-meta-sep">/</span>
+      <span>Production Engineering · Architecture</span>
+    </div>
+  </header>
+
+  <!-- BANNER -->
+  <div class="banner">
+    <span class="banner-badge">CASE STUDY</span>
+    <p>
+      AMD Senior Director of AI <strong>Stella Laurenzo</strong> filed
+      <a href="https://github.com/anthropics/claude-code/issues/42796" target="_blank" rel="noopener">GitHub issue #42796</a>
+      documenting a sharp regression in Claude Code across 6,852 sessions.
+      It is the most rigorous, data-backed public evidence of AI shrinkflation to date.
+    </p>
+  </div>
+
+  <!-- IN PLAIN ENGLISH -->
+  <div class="plain-english">
+    <div class="pe-label">The Three Things You Need to Know</div>
+    <ul class="pe-list">
+      <li>
+        <span class="pe-num">1</span>
+        <div>
+          <strong>LLM quality is not static.</strong>
+          Model behavior can change — silently — through provider-side configuration shifts, routing changes,
+          adaptive reasoning defaults, and safety updates. No announcement. No version bump. No warning email.
+        </div>
+      </li>
+      <li>
+        <span class="pe-num">2</span>
+        <div>
+          <strong>You will not know until the damage is done.</strong>
+          Regressions don't throw exceptions. They look like slower agents, worse edits, more retries,
+          and engineers muttering that "it feels worse lately." By the time you have proof, you've already
+          shipped degraded work or burned significant compute cost.
+        </div>
+      </li>
+      <li>
+        <span class="pe-num">3</span>
+        <div>
+          <strong>The fix is architectural, not prompting.</strong>
+          Better prompts won't save you from a vendor silently changing reasoning depth or routing cheaper
+          models to your workload. The right answer is to design systems that observe, test, and can swap
+          dependencies — just like any other critical external service.
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- SECTION 1: WHAT IS AI SHRINKFLATION -->
+  <div class="section">
+    <div class="section-label">The Concept</div>
+    <h2>What Is AI Shrinkflation?</h2>
+    <div class="prose">
+      <p>
+        Shrinkflation is a term borrowed from consumer goods: the practice of reducing product quantity or
+        quality while holding the price constant. The cereal box looks the same; there are fewer flakes inside.
+        Applied to AI, it describes the pattern where a model subscription or API stays the same price,
+        but the effective capability delivered to demanding workloads decreases over time.
+      </p>
+      <p>
+        The causes are not always malicious. Providers continuously update models, adjust safety layers,
+        tune reasoning budgets, and route requests across pools of stronger and cheaper variants to manage
+        GPU cost and latency. Each change may look like an improvement on average benchmarks while degrading
+        specific professional workflows. The result from the user's perspective is the same: less value,
+        same invoice.
+      </p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card card-red">
+        <div class="card-icon-badge">Configuration</div>
+        <h4>Reasoning Depth Changes</h4>
+        <p>
+          Adaptive thinking and effort controls let providers dial down how deeply a model thinks per request —
+          saving compute without changing the model's name or version.
+        </p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Routing</div>
+        <h4>Silent Model Swaps</h4>
+        <p>
+          "GPT-4" and "Claude Opus" are labels over dynamic pools. Routers shift traffic toward cheaper
+          variants under load. You may never know which model actually served your request.
+        </p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Training</div>
+        <h4>Safety &amp; RLHF Drift</h4>
+        <p>
+          Successive fine-tuning rounds optimize for safety and likeability. Over time, models become
+          more cautious, more evasive, and less willing to do difficult, precise work.
+        </p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">The Core Problem</div>
+      <p>
+        Unlike a database or an API that throws a 500 when it degrades, an LLM that regresses
+        keeps returning 200 OK. The outputs are still coherent. The failure is in quality, depth,
+        and reliability — dimensions that require systematic measurement to detect.
+      </p>
+    </div>
+  </div>
+
+  <!-- SECTION 2: THE HARD NUMBERS -->
+  <div class="section">
+    <div class="section-label">Case Study — Claude Code, Feb–Apr 2026</div>
+    <h2>What Quantified Regression Actually Looks Like</h2>
+    <div class="prose">
+      <p>
+        AMD's Stella Laurenzo didn't file a complaint based on vibes. She used Claude Opus 4.6 itself to
+        mine 6,852 JSONL session logs — 234,760 tool calls across four systems-programming projects (C, MLIR,
+        GPU drivers) — computing metrics that shifted sharply around February–March 2026, while the codebase
+        and prompts stayed essentially constant.
+      </p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-cell">
+        <span class="stat-value">67%</span>
+        <span class="stat-label">Drop in thinking depth</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-value">70%</span>
+        <span class="stat-label">Fewer reads before edits</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-value">173×</span>
+        <span class="stat-label">Stop-hook violations (vs zero)</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-value">122×</span>
+        <span class="stat-label">Estimated API cost increase</span>
+      </div>
+    </div>
+
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Jan 30–Feb 12 (Baseline)</th>
+            <th>Mar 8–23 (Degraded)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Median thinking length</td>
+            <td class="td-good">~2,200 chars</td>
+            <td class="td-bad">~560 chars (−75%)</td>
+          </tr>
+          <tr>
+            <td>File reads per edit</td>
+            <td class="td-good">6.6</td>
+            <td class="td-bad">2.0 (−70%)</td>
+          </tr>
+          <tr>
+            <td>Edits without prior reads</td>
+            <td class="td-good">6.2%</td>
+            <td class="td-bad">33.7%</td>
+          </tr>
+          <tr>
+            <td>Full-file rewrites</td>
+            <td class="td-good">baseline</td>
+            <td class="td-bad">~2× increase</td>
+          </tr>
+          <tr>
+            <td>Stop-hook violations</td>
+            <td class="td-good">0 (all time)</td>
+            <td class="td-bad">173 in 17 days</td>
+          </tr>
+          <tr>
+            <td>User interrupts / 1k calls</td>
+            <td class="td-good">baseline</td>
+            <td class="td-bad">~12× increase</td>
+          </tr>
+          <tr>
+            <td>Estimated API cost</td>
+            <td class="td-good">baseline</td>
+            <td class="td-bad">~122× (thrash &amp; retries)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>
+        The 122× cost multiplier is the number that should alarm engineering leaders.
+        The agent wasn't failing loudly — it was spinning. Incomplete reads, premature stops,
+        corrective cycles, and supervisor interrupts all burn tokens with nothing to show.
+        The team eventually concluded Claude Code "cannot be trusted for complex engineering"
+        and migrated to a competing tool.
+      </p>
+      <p>
+        Anthropic's explanation — that thinking was "redacted" for UI purposes and adaptive thinking
+        was introduced — is plausible and not deliberately deceptive. But from an engineering
+        standpoint, it changes nothing: the effective behavior delivered to this workload regressed
+        sharply, without notice, and wasn't recoverable through prompting.
+      </p>
+    </div>
+
+    <div class="callout callout-blue">
+      <div class="callout-lbl">Also Documented</div>
+      <p>
+        Time-of-day analysis shows thinking depth became load-sensitive after the change: worst at
+        5pm and 7pm PST, recovering overnight. The <em>same model</em>, at the <em>same effort setting</em>,
+        can behave materially differently based on backend GPU load. Stateless request assumptions
+        don't hold.
+      </p>
+    </div>
+  </div>
+
+  <!-- SECTION 3: WHY IT'S SILENT -->
+  <div class="section">
+    <div class="section-label">The Detection Problem</div>
+    <h2>Why Quality Degrades Before Anyone Notices</h2>
+    <div class="prose">
+      <p>
+        AI shrinkflation is uniquely difficult to detect because the failure modes don't map to
+        anything in your existing observability stack. HTTP status codes stay green. Latency
+        may actually improve — less thinking means faster responses. Test suites pass because
+        regressions are probabilistic and often task-specific.
+      </p>
+    </div>
+
+    <h3>The signals are buried in behavior, not infrastructure</h3>
+    <div class="prose">
+      <p>
+        The AMD report found the regression through behavioral instrumentation — read-to-edit ratios,
+        stop-phrase hooks, user interrupt rates, word-frequency shifts across 500,000 words of prompts.
+        None of those signals appear in a standard APM dashboard. You have to build them deliberately,
+        and you have to know what "normal" looks like to recognize deviation.
+      </p>
+    </div>
+
+    <ul class="dl">
+      <li>No exception is thrown when the model stops reasoning deeply. Outputs remain fluent and confident.</li>
+      <li>Logging changes (like Anthropic's thinking redaction) can hide the signals you'd use to diagnose it.</li>
+      <li>Benchmark scores may improve even as your specific workload gets worse — they measure different things.</li>
+      <li>The regression may be load-sensitive or time-of-day-sensitive, making it hard to reproduce on demand.</li>
+      <li>Model names and API versions stay the same. There is no artifact pinning analogous to a package lock file.</li>
+    </ul>
+
+    <h3>The organizational compounding effect</h3>
+    <div class="prose">
+      <p>
+        When an LLM used in a coding or analysis workflow degrades, the first response from engineers
+        is to work around it: more prompting, more supervision, more manual correction. This increases
+        cognitive load across the team gradually. No single moment triggers an incident review.
+        By the time someone builds the case that the model is the problem — not the prompts, not the
+        codebase, not the team — weeks of degraded productivity have already accumulated.
+      </p>
+      <p>
+        This is the shrinkflation trap: the cost is real, diffuse, and nearly impossible to attribute
+        without deliberate instrumentation built in advance.
+      </p>
+    </div>
+
+    <div class="callout callout-red">
+      <div class="callout-lbl">The Hardest Case</div>
+      <p>
+        Regressions in long-running agentic workflows are the worst category. The agent runs for minutes or
+        hours. Failure manifests as a bad output at the end, not a crash mid-run. Root-causing requires
+        replaying the full session log — which most teams don't have, because they didn't know to capture it.
+      </p>
+    </div>
+  </div>
+
+  <!-- SECTION 4: WHAT IT MEANS FOR AI ENGINEERS -->
+  <div class="section">
+    <div class="section-label">For AI Engineers &amp; Developers</div>
+    <h2>What This Changes About Your Job</h2>
+    <div class="prose">
+      <p>
+        If you're building production systems on LLMs, AI shrinkflation reframes the problem.
+        The model is not a static dependency you configure once. It is a mutable, externally-managed
+        service with behavior that can change silently on a provider's timeline.
+        That makes it more like a cloud database with unpublished schema migrations than like a library
+        you pin in a lockfile.
+      </p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card card-blue">
+        <div class="card-icon-badge">Observability</div>
+        <h4>Behavioral Telemetry Is Now Your Job</h4>
+        <p>
+          You need to instrument not just latency and errors, but task-level behavioral signals:
+          did the agent read before editing? Did it stop early? Did it claim to run a test it didn't?
+          These are your regression indicators.
+        </p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Testing</div>
+        <h4>Golden Evals Are Non-Negotiable</h4>
+        <p>
+          A suite of representative prompts with expected behavior profiles must run continuously
+          against your production model. Not just at deploy time — daily. Drift shows up in the
+          trend, not in a single run.
+        </p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Cost</div>
+        <h4>Thrash Is a Regression Signal</h4>
+        <p>
+          Unexplained cost increases — the same workload consuming 5× the tokens — are often
+          the first measurable signal of a reasoning regression. Monitor cost-per-task alongside
+          latency and error rate.
+        </p>
+      </div>
+    </div>
+
+    <h3>Strong engineers are more important, not less</h3>
+    <div class="prose">
+      <p>
+        The AMD case illustrates something counterintuitive: the engineer who caught and documented
+        the regression didn't do it with a smarter prompt. She did it with forensics — log analysis,
+        metric design, statistical correlation, and causation reasoning. Those are senior engineering
+        skills that no amount of model improvement eliminates.
+      </p>
+      <p>
+        As LLMs become more capable, the engineering skill required to <em>deploy them safely</em>
+        increases. Drift detection, harness design, cost/quality routing, correctness invariants for
+        high-stakes outputs, and change management when a vendor flips a default — these are systems
+        engineering problems, not prompt engineering problems.
+      </p>
+    </div>
+
+    <div class="callout callout-green">
+      <div class="callout-lbl">The Right Mental Model</div>
+      <p>
+        Treat LLMs like running a trading system: real-time data feeds, latency-sensitive
+        execution, and external dependencies that can change without notice. Your edge is in the
+        harness, the monitoring, and the ability to adapt — not in trusting any single data feed.
+      </p>
+    </div>
+  </div>
+
+  <!-- SECTION 5: ARCHITECTURE GUIDELINES -->
+  <div class="section">
+    <div class="section-label">Engineering Guidelines</div>
+    <h2>How to Architect for Model Drift</h2>
+    <div class="prose">
+      <p>
+        The goal is not to eliminate LLM dependency — it is to make it a <em>swappable</em> dependency.
+        Your competitive moat should be your data, your workflows, your evaluations, and your orchestration
+        layer. Not your current best model. The following patterns make that concrete.
+      </p>
+    </div>
+
+    <h3>1. Hard separation: business logic vs. LLM calls</h3>
+    <div class="prose">
+      <p>
+        Keep all domain logic, state management, and workflow control in your own code. Talk to models
+        through a thin, typed interface — <code style="font-family:var(--mono);font-size:13px;">LLMClient.generate(task, effort)</code> —
+        not scattered direct SDK calls throughout the codebase. When a provider changes defaults or
+        you need to swap vendors, the blast radius is one adapter, not every file that has an
+        <code style="font-family:var(--mono);font-size:13px;">anthropic.messages.create()</code> call.
+      </p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">Pattern — Abstraction layer</div>
+      <pre><span class="tok-cmt"># Bad: direct SDK calls scattered across business logic</span>
+<span class="tok-key">response</span> = anthropic.messages.create(model=<span class="tok-str">"claude-opus-4-6"</span>, ...)
+
+<span class="tok-cmt"># Good: typed interface, provider-agnostic</span>
+<span class="tok-key">result</span> = llm_client.generate(
+    task=<span class="tok-str">GenerateTask</span>(prompt=prompt, task_type=<span class="tok-str">"reasoning_deep"</span>),
+    effort=<span class="tok-str">Effort.HIGH</span>,
+    timeout=<span class="tok-val">120</span>,
+)</pre>
+    </div>
+
+    <h3>2. Own your routing — the WRP pattern</h3>
+    <div class="prose">
+      <p>
+        Vendors already use Workload–Router–Pool architectures internally. Build the same thing on your side.
+        Define a task taxonomy (reasoning-heavy, draft-fast, retrieval, etc.), implement a router
+        with your own policies, and plug in a pool of providers. Your orchestrator decides routing based
+        on your own eval data — not vendor marketing.
+      </p>
+    </div>
+
+    <div class="chain-wrap">
+      <div class="chain-step">
+        <div class="chain-left">
+          <div class="chain-num">W</div>
+          <div class="chain-line"></div>
+        </div>
+        <div class="chain-step-inner">
+          <h4>Workload — Your task taxonomy</h4>
+          <p>Classify each task: <em>complex reasoning</em>, <em>fast draft</em>, <em>retrieval synthesis</em>,
+          <em>code generation</em>. Keep this in config, not hardcoded. Your app asks for a capability,
+          not a specific model.</p>
+        </div>
+      </div>
+      <div class="chain-step">
+        <div class="chain-left">
+          <div class="chain-num blue-step">R</div>
+          <div class="chain-line"></div>
+        </div>
+        <div class="chain-step-inner">
+          <h4>Router — Your policy, your eval data</h4>
+          <p>Route based on your own continuous evaluation scores, not vendor defaults. When provider A
+          regresses on your golden evals, the router shifts traffic to provider B. Humans review
+          the dashboard; the switch is automatic.</p>
+        </div>
+      </div>
+      <div class="chain-step">
+        <div class="chain-left">
+          <div class="chain-num green-step">P</div>
+        </div>
+        <div class="chain-step-inner">
+          <h4>Pool — Pluggable, diverse providers</h4>
+          <p>Maintain live connections to at least two strong providers (Anthropic, OpenAI, Google, or
+          strong open-source on your own infra). Switching vendors is config + mapping work,
+          not a refactor.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>3. Build agent harnesses that detect silent failures</h3>
+    <div class="prose">
+      <p>
+        The AMD stop-phrase hook — a bash guard that fires when the agent says "I'll stop here" or
+        "should I continue?" — caught 173 violations in 17 days that would otherwise have silently
+        produced incomplete work. Build equivalents into your harnesses:
+      </p>
+    </div>
+
+    <ul class="dl">
+      <li>Stop-phrase detection: catch premature stopping and responsibility-dodging language, then force continuation or escalate.</li>
+      <li>Read-before-edit enforcement: verify that the model has read a file before it is allowed to modify it.</li>
+      <li>Action verification: cross-check claimed actions (test runs, builds, API calls) against actual tool logs.</li>
+      <li>Loop detection: detect repeated edits to the same file without measurable progress.</li>
+      <li>Cost-per-task alerts: flag sessions where token cost exceeds 3× the rolling average for that task type.</li>
+    </ul>
+
+    <h3>4. Maintain golden evaluation suites — run them continuously</h3>
+    <div class="prose">
+      <p>
+        For each critical workflow, maintain a set of representative prompts with expected behavior
+        profiles. Track task success rate, tool-call counts, error types, and behavioral flags over time.
+        Run on a schedule — daily at minimum — and publish trend dashboards your team can watch.
+        Regressions show up in the trend before users file complaints.
+      </p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">Key Insight</div>
+      <p>
+        Unit tests verify code correctness. Golden evals verify model behavior on <em>your</em> workloads.
+        They are not interchangeable. Passing CI says nothing about whether the model reasoning depth
+        changed overnight.
+      </p>
+    </div>
+
+    <h3>5. Control effort and reasoning configuration explicitly</h3>
+    <div class="prose">
+      <p>
+        Never rely on provider defaults for critical workflows. Adaptive thinking and effort controls
+        exist to let providers reduce compute cost on average workloads. For long-running engineering
+        sessions, explicitly set effort to high or max, and consider disabling adaptive thinking
+        to enforce a fixed reasoning budget per turn. Treat these as part of your deployment configuration,
+        reviewed and versioned like any other service config.
+      </p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">Anthropic — Explicit effort configuration</div>
+      <pre><span class="tok-cmt"># Don't rely on defaults — set explicitly for critical workflows</span>
+response = anthropic.messages.create(
+    model=<span class="tok-str">"claude-opus-4-6"</span>,
+    thinking={
+        <span class="tok-str">"type"</span>: <span class="tok-str">"enabled"</span>,         <span class="tok-cmt"># disable adaptive</span>
+        <span class="tok-str">"budget_tokens"</span>: <span class="tok-val">16000</span>,  <span class="tok-cmt"># fixed deep budget</span>
+    },
+    <span class="tok-cmt"># or via betas: effort="high"</span>
+)</pre>
+    </div>
+
+    <h3>6. Data and vectors: own your layer</h3>
+    <div class="prose">
+      <p>
+        Don't couple your entire RAG stack to a proprietary embedding format. Store raw text and
+        metadata in your own systems. Use open embedding models or provider-agnostic formats where possible.
+        Your retrieval corpus is a long-lived asset; the embedding model serving it should be swappable
+        independently of your generation model.
+      </p>
+    </div>
+  </div>
+
+  <!-- SECTION 6: FUTURE ENGINEERING TEAM GUIDELINES -->
+  <div class="section">
+    <div class="section-label">Guidelines for Future Teams</div>
+    <h2>The Production LLM Engineering Checklist</h2>
+    <div class="prose">
+      <p>
+        This is the minimum bar for any team running LLMs in a production system where quality matters.
+        It should be part of your AI service design review, not retrofitted after the first regression incident.
+      </p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card card-green">
+        <div class="card-icon-badge">Observability</div>
+        <h4>Behavioral Telemetry</h4>
+        <p>Log tool call sequences, reasoning block presence, task completion rates, user interrupt rates, and cost per task. Not just latency and HTTP status.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Testing</div>
+        <h4>Daily Golden Evals</h4>
+        <p>A scheduled eval suite running against production models. Trend dashboards with alerts on deviation. Reviewed in weekly engineering sync.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Architecture</div>
+        <h4>Provider Abstraction</h4>
+        <p>Single LLM gateway layer. No direct SDK calls in business logic. Switching providers is config + mapping, not a migration project.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Resilience</div>
+        <h4>Multi-Vendor Pool</h4>
+        <p>Live connections to at least two providers. Automated failover when eval scores degrade. Never single-vendor-dependent on the critical path.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Agent Design</div>
+        <h4>Harness-Level Guards</h4>
+        <p>Stop-phrase detection, action verification, loop detection, and cost guards built into the agent harness. Not optional add-ons.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Configuration</div>
+        <h4>Explicit Effort Settings</h4>
+        <p>Reasoning budget, effort level, and sampling parameters specified explicitly for each workflow tier. No reliance on provider defaults.</p>
+      </div>
+    </div>
+
+    <h3>What to ask of your vendors</h3>
+    <div class="prose">
+      <p>
+        Enterprise contracts should include more than an SLA on uptime. Push for:
+      </p>
+    </div>
+
+    <ul class="dl">
+      <li>Per-request reasoning token counts exposed in response metadata — not hidden by redaction.</li>
+      <li>Explicit model version identifiers on every response, including which pool variant served the request.</li>
+      <li>Change notifications when safety layers, routing policies, or effort defaults are adjusted.</li>
+      <li>Pinned model versions with contractual migration windows — analogous to API deprecation schedules.</li>
+      <li>Access to internal effort and configuration settings available to the vendor's own engineers.</li>
+    </ul>
+
+    <div class="callout callout-blue">
+      <div class="callout-lbl">The Leaked Flag Problem</div>
+      <p>
+        Analysis of the March 2026 Claude Code source leak found that Anthropic's own engineers run with
+        an instruction set that includes "verify work actually works before claiming done" — a check
+        not present in the default configuration for paying customers.
+        If your vendor's engineers get a higher-quality harness than you do, that is a quality tier gap
+        worth negotiating into your contract.
+      </p>
+    </div>
+  </div>
+
+  <!-- SECTION 7: TAKEAWAY -->
+  <div class="section">
+    <div class="section-label">Bottom Line</div>
+    <h2>The Model Is a Dependency. Treat It Like One.</h2>
+    <div class="prose">
+      <p>
+        "AI shrinkflation" is not a meme or a conspiracy theory. It is a structural consequence of how
+        LLMs are deployed commercially: mutable, opaque, cost-optimized over time, and not subject to
+        the deprecation discipline we expect from other software dependencies.
+        The AMD case is the clearest public evidence yet — quantified, rigorous, hard to dismiss.
+      </p>
+      <p>
+        The engineering response is not to distrust AI or to avoid using LLMs in production. It is to
+        build the same discipline around LLM dependencies that you would build around any external
+        service: observability, regression testing, failover, and abstraction layers that localize the
+        blast radius when behavior changes.
+      </p>
+      <p>
+        Your moat is not access to the current best model. Every team has that. Your moat is the
+        evaluation harness, the orchestration layer, the behavioral telemetry, and the engineering
+        discipline to catch regressions before users do — and to swap providers before the situation
+        becomes a postmortem.
+      </p>
+    </div>
+
+    <div class="callout callout-green">
+      <div class="callout-lbl">The Practical Upside</div>
+      <p>
+        Teams that invest in this infrastructure now will be comparatively better positioned as the
+        model market matures. When you can A/B a new model against your own golden evals and cut
+        over gradually, you benefit from every improvement — without being held hostage by any
+        single regression.
+      </p>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <span>asadani.dev &mdash; April 2026</span>
+  <div class="footer-refs">
+    <a href="https://github.com/anthropics/claude-code/issues/42796" target="_blank" rel="noopener">GitHub #42796</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://hdsr.mitpress.mit.edu/pub/y95zitmz" target="_blank" rel="noopener">Chen et al., HDSR</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://fortune.com/2025/08/12/openai-gpt-5-model-router-backlash-ai-future/" target="_blank" rel="noopener">Fortune: GPT-5 Router</a>
+  </div>
+</footer>
+
+</body>
+</html>
