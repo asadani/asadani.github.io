@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Coding Agent Stack — Interactive Mind Map 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #F7F5F2; font-family: 'Inter', sans-serif; overflow: hidden; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    height: 48px; background: #fff; border-bottom: 1px solid #E0DDD6;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px;
+  }
+  .nl { display: flex; align-items: center; gap: 14px; }
+  .nb { font-weight: 700; font-size: 13px; color: #1A1714; text-decoration: none; }
+  .na { color: #C85C2D; text-decoration: none; font-size: 12px; }
+  .na:hover { text-decoration: underline; }
+  .nt { font-size: 12px; color: #9B9892; }
+  .nr { display: flex; align-items: center; gap: 8px; }
+  .btn { background: #F5F1EB; border: 1px solid #DDD9D0; border-radius: 5px; padding: 4px 10px; font-size: 11px; font-family: inherit; color: #3D3A35; cursor: pointer; }
+  .btn:hover { background: #EDE9E1; }
+  .ntag { background: #C85C2D; color: #fff; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 3px; letter-spacing: 0.06em; }
+
+  #map-wrap { position: fixed; top: 48px; left: 0; right: 0; bottom: 0; }
+  #mindmap { width: 100%; height: 100%; display: block; cursor: grab; user-select: none; }
+  #mindmap:active { cursor: grabbing; }
+
+  /* ── TOOLTIP ── */
+  #tip {
+    position: fixed; z-index: 300; display: none;
+    background: #fff; border: 1px solid #DDD9D0; border-radius: 10px;
+    padding: 13px 15px; max-width: 260px; font-size: 12px;
+    box-shadow: 0 4px 22px rgba(0,0,0,0.13); pointer-events: auto;
+    line-height: 1.55;
+  }
+  .tip-name { font-weight: 700; font-size: 13px; color: #1A1714; margin-bottom: 4px; }
+  .tip-cluster { font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 8px; }
+  .tip-desc { color: #3D3A35; font-size: 12px; margin-bottom: 10px; }
+  .tip-link {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500;
+    padding: 4px 10px; border-radius: 4px; text-decoration: none;
+    border: 1px solid; transition: opacity 0.15s;
+  }
+  .tip-link:hover { opacity: 0.75; }
+
+  /* ── LEGEND ── */
+  #legend {
+    position: fixed; bottom: 18px; left: 16px; z-index: 150;
+    background: rgba(255,255,255,0.96); border: 1px solid #DDD9D0;
+    border-radius: 10px; padding: 11px 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+  }
+  .lg-title { font-size: 9px; text-transform: uppercase; letter-spacing: 0.09em; color: #9B9892; margin-bottom: 7px; font-weight: 600; }
+  .lg-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; font-size: 11px; color: #3D3A35; }
+  .lg-row:last-child { margin-bottom: 0; }
+  .lg-dot { width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; }
+
+  #hint {
+    position: fixed; bottom: 18px; right: 16px; z-index: 150;
+    font-size: 10px; color: #B0ADA8; font-family: 'JetBrains Mono', monospace;
+    background: rgba(255,255,255,0.9); border: 1px solid #E8E5DF;
+    border-radius: 6px; padding: 6px 10px;
+  }
+
+  /* dimming on cluster filter */
+  .dimmed { opacity: 0.18 !important; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nl">
+    <a class="nb" href="/">asadani.dev</a>
+    <a class="na" href="/ai-coding-agent-stack/">← Article</a>
+    <span class="nt">AI Coding Agent Stack · Mind Map</span>
+  </div>
+  <div class="nr">
+    <button class="btn" onclick="resetView()">Reset view</button>
+    <span class="ntag">2026</span>
+  </div>
+</nav>
+
+<div id="map-wrap">
+  <svg id="mindmap" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+
+<div id="tip"></div>
+
+<div id="legend">
+  <div class="lg-title">Click a cluster to filter</div>
+  <div class="lg-row"><div class="lg-dot" style="background:#2563A8"></div>Codebase Context</div>
+  <div class="lg-row"><div class="lg-dot" style="background:#C85C2D"></div>Agent Methodology</div>
+  <div class="lg-row"><div class="lg-dot" style="background:#2A7A4B"></div>Persistent Memory</div>
+  <div class="lg-row"><div class="lg-dot" style="background:#B83535"></div>Code Review</div>
+  <div class="lg-row"><div class="lg-dot" style="background:#6B3FA0"></div>Multi-Agent</div>
+  <div class="lg-row"><div class="lg-dot" style="background:#5A5650"></div>MCP Integrations</div>
+</div>
+
+<div id="hint">scroll · drag · hover</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════════════════════════
+
+const CLUSTERS = [
+  {
+    id: "context",
+    label: "Codebase Context",
+    question: "Which tool understands\nyour repo structure?",
+    color: "#2563A8", bg: "#EAF1FA", border: "#A8C5E8",
+    tools: [
+      {
+        name: "code-review-graph",
+        lines: ["code-review-","graph"],
+        desc: "Builds a local AST graph via Tree-sitter. Computes blast-radius of any change — agents read only the 10–15 relevant files, not the whole repo. 10–24× token reduction on reviews.",
+        link: "https://github.com/tirth8205/code-review-graph"
+      },
+      {
+        name: "Codebase-Memory MCP",
+        lines: ["Codebase-Mem","MCP"],
+        desc: "Single C binary with 66 bundled Tree-sitter grammars. Indexes the Linux kernel (28M lines) in 3 minutes. 83% answer quality at 10× fewer tokens versus file-by-file reads.",
+        link: "https://github.com/marc-hb/codebase-memory-mcp"
+      },
+      {
+        name: "Graphify",
+        lines: ["Graphify"],
+        desc: "Turns any folder of code, docs, PDFs, images, or YouTube links into a queryable knowledge graph. Ask 'where is this concept implemented?' without brute-force file streaming.",
+        link: "https://github.com/safishamsi/graphify"
+      },
+      {
+        name: "Serena",
+        lines: ["Serena"],
+        desc: "LSP-backed semantic coding agent toolkit. Gives agents the same symbol-level navigation a developer gets in an IDE — go-to-definition, find-references, hover docs. 40+ languages.",
+        link: "https://github.com/oraios/serena"
+      },
+      {
+        name: "CodeGraphContext",
+        lines: ["CodeGraph","Context"],
+        desc: "AST parsing stored in KùzuDB or Neo4j. Designed for enterprise teams that pre-index a monorepo once and share the snapshot across all agents without re-indexing per session.",
+        link: "https://github.com/codebase-ai/CodeGraphContext"
+      },
+      {
+        name: "RepoGraph",
+        lines: ["RepoGraph"],
+        desc: "Research-grade framework for repo-level code graphs. Achieves state-of-the-art on SWE-bench and CrossCodeEval. Best used as a benchmark reference for evaluating your own context approach.",
+        link: "https://github.com/ozyyshr/RepoGraph"
+      }
+    ]
+  },
+  {
+    id: "method",
+    label: "Agent Methodology",
+    question: "Which tool structures\nhow the agent works?",
+    color: "#C85C2D", bg: "#FDF1EB", border: "#F0C4A8",
+    tools: [
+      {
+        name: "Superpowers",
+        lines: ["Superpowers"],
+        desc: "Complete agentic methodology: brainstorm → spec → plan → subagent execution → strict TDD → code review → merge. 94% PR rejection rate — agent redoes work until it meets quality bars.",
+        link: "https://github.com/obra/superpowers"
+      },
+      {
+        name: "anthropics/skills",
+        lines: ["anthropics/","skills"],
+        desc: "Defines the official SKILL.md standard with progressive disclosure — agents load only relevant skills, preserving context budget. Install this before any community skill packs.",
+        link: "https://github.com/anthropics/anthropic-tools"
+      },
+      {
+        name: "Caveman",
+        lines: ["Caveman"],
+        desc: "Enforces ultra-terse telegraphic responses. ~75% output token reduction while preserving accuracy. Multiple intensity levels including Classical Chinese 文言文 mode for maximum compression.",
+        link: "https://github.com/JuliusBrussee/caveman"
+      },
+      {
+        name: "gstack",
+        lines: ["gstack"],
+        desc: "23 specialized role-skills (CEO, Designer, Eng Manager, Release Manager, Doc Engineer) that turn a single agent into a virtual engineering team. Co-developed with Opus 4.6.",
+        link: "https://github.com/garrytan/gstack"
+      },
+      {
+        name: "context-hub",
+        lines: ["context-hub"],
+        desc: "CLI + repo of versioned Markdown API docs (OpenAI, Stripe, etc.). Agents fetch accurate docs instead of hallucinating outdated parameters. Annotations persist across sessions.",
+        link: "https://github.com/andrewyng/context-hub"
+      },
+      {
+        name: "drift",
+        lines: ["drift"],
+        desc: "Maps 150+ architectural patterns in your codebase and actively serves them into agent context. Prevents agents from generating correct code that violates your team's conventions.",
+        link: "https://github.com/dadbodgeoff/drift"
+      },
+      {
+        name: "karpathy-skills",
+        lines: ["karpathy-","skills"],
+        desc: "Four principles: Think Before Coding, Simplicity First, Surgical Changes, Goal-Driven Execution. Low overhead — pairs well with heavier frameworks like Superpowers.",
+        link: "https://github.com/forrestchang/andrej-karpathy-skills"
+      },
+      {
+        name: "get-shit-done",
+        lines: ["get-shit-","done"],
+        desc: "Spec-first lightweight workflow. Enforces clear specifications before any code is written. Fast for practical tasks; less overhead than full Superpowers pipeline.",
+        link: "https://github.com/glittercowboy/get-shit-done"
+      }
+    ]
+  },
+  {
+    id: "memory",
+    label: "Persistent Memory",
+    question: "Which tool survives\nsession restarts?",
+    color: "#2A7A4B", bg: "#EAF5EF", border: "#A8D9BC",
+    tools: [
+      {
+        name: "Mem0",
+        lines: ["Mem0"],
+        desc: "Hybrid vector + graph + KV memory. AUDN cycle (Add/Update/Delete/No-op) auto-deduplicates memories. +26% accuracy on LOCOMO benchmark vs OpenAI Memory. Scoped by user/session/agent.",
+        link: "https://github.com/mem0ai/mem0"
+      },
+      {
+        name: "Graphiti",
+        lines: ["Graphiti"],
+        desc: "Bi-temporal knowledge graph — every fact has a validity window. When new data contradicts old, the system invalidates the old edge with a timestamp instead of deleting it. Requires Neo4j.",
+        link: "https://github.com/getzep/graphiti"
+      },
+      {
+        name: "agentmemory",
+        lines: ["agentmemory"],
+        desc: "Hooks into Claude Code PostToolUse lifecycle to silently capture every agent action. BM25 + vector hybrid search with session-diversified RRF. Small footprint, coding-agent specific.",
+        link: "https://github.com/anthropics/agentmemory"
+      },
+      {
+        name: "Engram",
+        lines: ["Engram"],
+        desc: "Single Go binary, no dependencies. SQLite + FTS5 for keyword and semantic search. Git-based sync across machines. Start here before moving to Mem0 — zero setup friction.",
+        link: "https://github.com/tleyden/engram"
+      },
+      {
+        name: "MemPalace",
+        lines: ["MemPalace"],
+        desc: "Structured recall using the memory palace (method of loci) technique. Organizes agent knowledge spatially so recall is context-anchored rather than flat vector lookup.",
+        link: "https://github.com/MemPalace/mempalace",
+        official: "https://mempalaceofficial.com/guide/getting-started.html"
+      }
+    ]
+  },
+  {
+    id: "review",
+    label: "Code Review",
+    question: "Which tool catches issues\nbefore they ship?",
+    color: "#B83535", bg: "#FAEBEB", border: "#E8AAAA",
+    tools: [
+      {
+        name: "Semgrep",
+        lines: ["Semgrep"],
+        desc: "2000+ community rules for deterministic SAST across 30+ languages. New Claude Code plugin and write_custom_semgrep_rule MCP prompt. Add to CI before trusting agents to write security code.",
+        link: "https://github.com/semgrep/semgrep"
+      },
+      {
+        name: "PR-Agent",
+        lines: ["PR-Agent"],
+        desc: "Proprietary PR Compression handles arbitrarily large diffs in one LLM call (~30s/review). Commands: /review /improve /describe /ask. GitHub, GitLab, Bitbucket, Azure DevOps.",
+        link: "https://github.com/qodo-ai/pr-agent"
+      },
+      {
+        name: "SecLab Taskflow",
+        lines: ["SecLab","Taskflow"],
+        desc: "Structured YAML taskflows decompose security auditing into checkpointed steps. Has found 80+ real vulnerabilities (auth bypasses, IDOR, token leaks) in open-source projects.",
+        link: "https://github.com/github/seclab-taskflow-agent"
+      },
+      {
+        name: "CodeRabbit",
+        lines: ["CodeRabbit"],
+        desc: "Inline PR suggestions with real-time vulnerability detection. Multi-model support. Auto-resolves nitpicks. Advanced analytics behind enterprise tier. Broad platform support.",
+        link: "https://coderabbit.ai"
+      },
+      {
+        name: "greptile-mcp",
+        lines: ["greptile-mcp"],
+        desc: "Natural language codebase query via MCP. Enables cross-repository pattern comparison. Confidence scores on all findings. Breadth-first approach — surfaces every anomaly, agent filters.",
+        link: "https://github.com/sosacrazy126/greptile-mcp"
+      },
+      {
+        name: "Snyk Code",
+        lines: ["Snyk Code"],
+        desc: "Real-time exploit pattern detection in AI-generated commits. Scans for OWASP Top 10 and language-specific vulnerability classes. Production use at GitLab, Dropbox, Shopify.",
+        link: "https://github.com/snyk/snyk"
+      }
+    ]
+  },
+  {
+    id: "orchestration",
+    label: "Multi-Agent",
+    question: "Which tool coordinates\nparallel agents?",
+    color: "#6B3FA0", bg: "#F0EAFA", border: "#C9AEED",
+    tools: [
+      {
+        name: "OpenHands",
+        lines: ["OpenHands"],
+        desc: "Category leader (~70k stars, $18.8M raised). Autonomously plans, codes, debugs, runs tests, and deploys. Full tool execution in a sandboxed environment. GitHub/GitLab/Slack/Jira integrations.",
+        link: "https://github.com/All-Hands-AI/OpenHands"
+      },
+      {
+        name: "SWE-agent",
+        lines: ["SWE-agent"],
+        desc: "Benchmark standard. Minimal agent variant (~100 LOC) achieves 65–74% on SWE-bench Verified. Widely adopted by Meta, NVIDIA, IBM for evaluating whether orchestration improves output.",
+        link: "https://github.com/princeton-nlp/SWE-agent"
+      },
+      {
+        name: "deer-flow",
+        lines: ["deer-flow"],
+        desc: "ByteDance's long-horizon task harness. 12-stage middleware: summarization, sandboxing, virtual path isolation. Handles tasks from minutes to hours. Requires Docker — host access is risky.",
+        link: "https://github.com/bytedance/deer-flow"
+      },
+      {
+        name: "LangGraph",
+        lines: ["LangGraph"],
+        desc: "Stateful cyclic graph engine for complex agent logic. Solves linear execution failures in multi-step reasoning. Foundation layer many orchestrators (OpenHands, deer-flow) build on.",
+        link: "https://github.com/langchain-ai/langgraph"
+      },
+      {
+        name: "spec-kit",
+        lines: ["spec-kit"],
+        desc: "GitHub's Spec-Driven Development toolkit. Bootstraps projects with a constitutional document that governs all code generation. Breaks broad requirements into discrete verifiable tasks.",
+        link: "https://github.com/github/spec-kit"
+      },
+      {
+        name: "multica",
+        lines: ["multica"],
+        desc: "Treats agents as persistent team members with project board identities. Real-time WebSocket streams of agent progress. Agents open their own PRs and report blockers directly on boards.",
+        link: "https://github.com/multica-ai/multica"
+      },
+      {
+        name: "open-swe",
+        lines: ["open-swe"],
+        desc: "LangChain's asynchronous coding agent framework. Runs multiple independent code tasks in parallel — different components coded and tested simultaneously — then assembles results.",
+        link: "https://github.com/langchain-ai/open-swe"
+      }
+    ]
+  },
+  {
+    id: "mcp",
+    label: "MCP Integrations",
+    question: "Which protocol connects\ntools to your agent?",
+    color: "#5A5650", bg: "#F0EDE8", border: "#C8C3BC",
+    tools: [
+      {
+        name: "GitHub MCP",
+        lines: ["GitHub MCP"],
+        desc: "Agents browse code, create issues, trigger CI, and run secret scanning via GitHub Actions. Full write access allows autonomous merging — scope permissions carefully, use read-only first.",
+        link: "https://github.com/github/github-mcp-server"
+      },
+      {
+        name: "Exa MCP",
+        lines: ["Exa MCP"],
+        desc: "Neural semantic web search. Prevents agents from getting stuck in keyword search loops when looking up APIs, papers, or Stack Overflow answers. Requires paid API key.",
+        link: "https://github.com/exa-labs/exa-mcp-server"
+      },
+      {
+        name: "Taskade MCP",
+        lines: ["Taskade MCP"],
+        desc: "Unified workspace: project tasks + agent memory + automation behind a single OAuth scope. Solves fragmentation between agent code output and project tracking boards.",
+        link: "https://github.com/taskade/taskade-mcp"
+      },
+      {
+        name: "AWS MCP",
+        lines: ["AWS MCP"],
+        desc: "Real-time cloud infra provisioning and troubleshooting via natural language. Covers Lambda, S3, EC2, IAM, and more. Currently in preview — unified interface may obscure granular errors.",
+        link: "https://github.com/awslabs/mcp"
+      },
+      {
+        name: "Sentry MCP",
+        lines: ["Sentry MCP"],
+        desc: "Pulls full production error context into agent sessions. Agents correlate code changes with live bugs without context-switching to the Sentry dashboard. Requires active Sentry deployment.",
+        link: "https://github.com/getsentry/sentry-mcp"
+      }
+    ]
+  }
+];
+
+// ═══════════════════════════════════════════════════════════════════
+//  LAYOUT
+// ═══════════════════════════════════════════════════════════════════
+
+const W = 1200, H = 1150;
+const CX = W / 2, CY = H / 2 + 20;
+const R_CLUSTER = 200;
+const R_TOOL    = 510;
+
+// Flatten all tools in cluster order, assign global angular positions
+const allTools = [];
+CLUSTERS.forEach(c => c.tools.forEach(t => allTools.push({ t, c })));
+const N = allTools.length; // 37 tools
+
+allTools.forEach(({ t, c }, i) => {
+  t.angle = (i / N) * 2 * Math.PI - Math.PI / 2; // start from top
+  t.x = CX + R_TOOL    * Math.cos(t.angle);
+  t.y = CY + R_TOOL    * Math.sin(t.angle);
+  t.cluster = c;
+});
+
+// Cluster position = mean angle of its tools
+CLUSTERS.forEach(c => {
+  const myAngles = c.tools.map(t => t.angle);
+  // Handle angle wrap-around at -PI/2 boundary
+  let mean = myAngles.reduce((s, a) => s + a, 0) / myAngles.length;
+  c.angle = mean;
+  c.x = CX + R_CLUSTER * Math.cos(mean);
+  c.y = CY + R_CLUSTER * Math.sin(mean);
+});
+
+// ═══════════════════════════════════════════════════════════════════
+//  NODE SIZING
+// ═══════════════════════════════════════════════════════════════════
+
+const MONO_W = 5.55; // JetBrains Mono 9px — px per char
+const MONO_PAD = 14;
+
+function nodeW(lines) {
+  const maxLen = Math.max(...lines.map(l => l.length));
+  return Math.max(62, maxLen * MONO_W + MONO_PAD);
+}
+function nodeH(lines) { return lines.length === 1 ? 26 : 36; }
+
+function clusterW(label) { return Math.max(120, label.length * 6.8 + 36); }
+
+// ═══════════════════════════════════════════════════════════════════
+//  BUILD SVG
+// ═══════════════════════════════════════════════════════════════════
+
+const svg  = document.getElementById('mindmap');
+const NS   = 'http://www.w3.org/2000/svg';
+const mainG = el('g', { id: 'g' }, svg);
+
+function el(tag, attrs = {}, parent = null) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function tx(text, x, y, attrs = {}, parent) {
+  const e = el('text', { x, y, ...attrs }, parent);
+  e.textContent = text;
+  return e;
+}
+
+// ── 1. Root → cluster links ──────────────────────────────────────
+CLUSTERS.forEach(c => {
+  el('path', {
+    d: bezier(CX, CY, c.x, c.y),
+    stroke: c.color, 'stroke-width': '2.6', fill: 'none', 'stroke-opacity': '0.35'
+  }, mainG);
+});
+
+// ── 2. Cluster → tool links ──────────────────────────────────────
+CLUSTERS.forEach(c => {
+  c.tools.forEach(t => {
+    el('path', {
+      d: bezier(c.x, c.y, t.x, t.y),
+      stroke: c.color, 'stroke-width': '1.4', fill: 'none', 'stroke-opacity': '0.28'
+    }, mainG);
+  });
+});
+
+// ── 3. Tool nodes ────────────────────────────────────────────────
+CLUSTERS.forEach(c => {
+  c.tools.forEach(t => {
+    const w = nodeW(t.lines), h = nodeH(t.lines);
+    const grp = el('g', { class: 'tool-node', 'data-cid': c.id }, mainG);
+    grp.style.cursor = 'pointer';
+
+    el('rect', {
+      x: t.x - w/2, y: t.y - h/2, width: w, height: h, rx: 13,
+      fill: c.bg, stroke: c.border, 'stroke-width': '1.5'
+    }, grp);
+
+    if (t.lines.length === 1) {
+      tx(t.lines[0], t.x, t.y + 3.5, {
+        'text-anchor': 'middle', fill: c.color,
+        'font-family': "'JetBrains Mono',monospace", 'font-size': '9', 'font-weight': '500'
+      }, grp);
+    } else {
+      tx(t.lines[0], t.x, t.y - 4, {
+        'text-anchor': 'middle', fill: c.color,
+        'font-family': "'JetBrains Mono',monospace", 'font-size': '9', 'font-weight': '500'
+      }, grp);
+      tx(t.lines[1], t.x, t.y + 7, {
+        'text-anchor': 'middle', fill: c.color,
+        'font-family': "'JetBrains Mono',monospace", 'font-size': '9', 'font-weight': '500'
+      }, grp);
+    }
+
+    grp.addEventListener('mouseenter', e => showTip(e, t, c));
+    grp.addEventListener('mousemove',  e => posTip(e));
+    grp.addEventListener('mouseleave', () => scheduleTipHide());
+  });
+});
+
+// ── 4. Cluster nodes ─────────────────────────────────────────────
+CLUSTERS.forEach(c => {
+  const cw = clusterW(c.label);
+  const ch = 44;
+  const grp = el('g', { class: 'cluster-node', 'data-cid': c.id }, mainG);
+  grp.style.cursor = 'pointer';
+
+  el('rect', {
+    x: c.x - cw/2, y: c.y - ch/2, width: cw, height: ch, rx: 22,
+    fill: c.bg, stroke: c.color, 'stroke-width': '2.2'
+  }, grp);
+
+  tx(c.label, c.x, c.y - 4, {
+    'text-anchor': 'middle', fill: c.color,
+    'font-family': "'Inter',sans-serif", 'font-size': '12', 'font-weight': '700'
+  }, grp);
+
+  // Multi-line question (split on \n)
+  const qlines = c.question.split('\n');
+  tx(qlines[0], c.x, c.y + 9, {
+    'text-anchor': 'middle', fill: c.color, opacity: '0.65',
+    'font-family': "'Inter',sans-serif", 'font-size': '9', 'font-weight': '400'
+  }, grp);
+
+  grp.addEventListener('click', () => filterByCluster(c.id));
+});
+
+// ── 5. Root node ─────────────────────────────────────────────────
+{
+  const rw = 152, rh = 52;
+  const grp = el('g', {}, mainG);
+
+  el('rect', {
+    x: CX - rw/2, y: CY - rh/2, width: rw, height: rh, rx: 14,
+    fill: '#1A1714'
+  }, grp);
+
+  tx('AI Coding', CX, CY - 7, {
+    'text-anchor': 'middle', fill: '#fff',
+    'font-family': "'Inter',sans-serif", 'font-size': '14', 'font-weight': '700'
+  }, grp);
+  tx('Agent Stack', CX, CY + 11, {
+    'text-anchor': 'middle', fill: '#fff',
+    'font-family': "'Inter',sans-serif", 'font-size': '14', 'font-weight': '700'
+  }, grp);
+  tx('2026 · 6 clusters · 37 tools', CX, CY + 28, {
+    'text-anchor': 'middle', fill: 'rgba(255,255,255,0.38)',
+    'font-family': "'JetBrains Mono',monospace", 'font-size': '8.5'
+  }, grp);
+
+  grp.style.cursor = 'pointer';
+  grp.addEventListener('click', () => filterByCluster(null));
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════════════════
+
+function bezier(x1, y1, x2, y2) {
+  // Cubic bezier — control points midway and slightly pulled toward center for organic feel
+  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+  // Vector from center to midpoint
+  const dx = mx - CX, dy = my - CY;
+  const len = Math.sqrt(dx*dx + dy*dy) || 1;
+  const pull = 0.08; // pull toward center
+  const cpx = mx - dx * pull, cpy = my - dy * pull;
+  return `M ${x1} ${y1} Q ${cpx} ${cpy} ${x2} ${y2}`;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  TOOLTIP
+// ═══════════════════════════════════════════════════════════════════
+
+const tip = document.getElementById('tip');
+let tipHideTimer = null;
+let tipVisible = false;
+
+function showTip(e, t, c) {
+  clearTimeout(tipHideTimer);
+  tipVisible = true;
+
+  const linkUrl = t.link;
+  const officialUrl = t.official || null;
+  const isGitHub = linkUrl && linkUrl.includes('github.com');
+  const linkLabel = isGitHub ? 'GitHub →' : 'Official site →';
+
+  let linksHtml = '';
+  if (linkUrl) {
+    linksHtml += `<a class="tip-link" href="${linkUrl}" target="_blank" rel="noopener"
+      style="background:${c.bg};color:${c.color};border-color:${c.border}">${linkLabel}</a> `;
+  }
+  if (officialUrl) {
+    linksHtml += `<a class="tip-link" href="${officialUrl}" target="_blank" rel="noopener"
+      style="background:${c.bg};color:${c.color};border-color:${c.border};margin-left:6px">Docs →</a>`;
+  }
+
+  tip.innerHTML = `
+    <div class="tip-name">${t.name}</div>
+    <div class="tip-cluster" style="color:${c.color}">${c.label}</div>
+    <div class="tip-desc">${t.desc}</div>
+    ${linksHtml}
+  `;
+  tip.style.display = 'block';
+  posTip(e);
+}
+
+function posTip(e) {
+  const tw = tip.offsetWidth + 6, th = tip.offsetHeight + 6;
+  let lx = e.clientX + 18, ly = e.clientY - 14;
+  if (lx + tw > window.innerWidth)  lx = e.clientX - tw + 6;
+  if (ly + th > window.innerHeight) ly = e.clientY - th + 4;
+  if (ly < 52) ly = 52;
+  tip.style.left = lx + 'px';
+  tip.style.top  = ly + 'px';
+}
+
+function scheduleTipHide() {
+  tipHideTimer = setTimeout(() => { if (!tipVisible) tip.style.display = 'none'; }, 160);
+  tipVisible = false;
+}
+
+tip.addEventListener('mouseenter', () => { clearTimeout(tipHideTimer); tipVisible = true; });
+tip.addEventListener('mouseleave', () => { tipVisible = false; tip.style.display = 'none'; });
+
+// ═══════════════════════════════════════════════════════════════════
+//  CLUSTER FILTER
+// ═══════════════════════════════════════════════════════════════════
+
+let activeCluster = null;
+
+function filterByCluster(cid) {
+  activeCluster = cid === activeCluster ? null : cid;
+  const toolNodes    = document.querySelectorAll('.tool-node');
+  const clusterNodes = document.querySelectorAll('.cluster-node');
+  const links        = mainG.querySelectorAll('path');
+
+  if (!activeCluster) {
+    [...toolNodes, ...clusterNodes, ...links].forEach(n => n.classList.remove('dimmed'));
+    return;
+  }
+
+  toolNodes.forEach(n => {
+    n.classList.toggle('dimmed', n.dataset.cid !== activeCluster);
+  });
+  clusterNodes.forEach(n => {
+    n.classList.toggle('dimmed', n.dataset.cid !== activeCluster);
+  });
+  // dim all links (keep it simple — cluster isolation is enough)
+  links.forEach(n => n.classList.add('dimmed'));
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  PAN / ZOOM
+// ═══════════════════════════════════════════════════════════════════
+
+let pX = 0, pY = 0, sc = 1;
+let drag = false, dX0 = 0, dY0 = 0, pX0 = 0, pY0 = 0;
+let pinch = false, lastD = 0;
+
+function applyT() {
+  mainG.setAttribute('transform', `translate(${pX},${pY}) scale(${sc})`);
+}
+
+function fitView() {
+  const r = svg.getBoundingClientRect();
+  const s = Math.min(r.width / W, r.height / H) * 0.92;
+  sc = s;
+  pX = (r.width  - W * s) / 2;
+  pY = (r.height - H * s) / 2;
+  applyT();
+}
+
+window.addEventListener('resize', fitView);
+
+svg.addEventListener('wheel', e => {
+  e.preventDefault();
+  const r  = svg.getBoundingClientRect();
+  const mx = e.clientX - r.left, my = e.clientY - r.top;
+  const f  = e.deltaY < 0 ? 1.12 : 0.89;
+  const ns = Math.max(0.22, Math.min(4.5, sc * f));
+  pX = mx - (mx - pX) * (ns / sc);
+  pY = my - (my - pY) * (ns / sc);
+  sc = ns;
+  applyT();
+}, { passive: false });
+
+svg.addEventListener('mousedown', e => {
+  if (e.target.closest('.tool-node, .cluster-node')) return;
+  drag = true; dX0 = e.clientX; dY0 = e.clientY; pX0 = pX; pY0 = pY;
+});
+window.addEventListener('mousemove', e => {
+  if (!drag) return;
+  pX = pX0 + (e.clientX - dX0);
+  pY = pY0 + (e.clientY - dY0);
+  applyT();
+});
+window.addEventListener('mouseup', () => { drag = false; });
+
+svg.addEventListener('touchstart', e => {
+  if (e.touches.length === 2) {
+    pinch = true;
+    lastD = Math.hypot(e.touches[0].clientX - e.touches[1].clientX,
+                       e.touches[0].clientY - e.touches[1].clientY);
+  } else if (e.touches.length === 1) {
+    drag = true; dX0 = e.touches[0].clientX; dY0 = e.touches[0].clientY; pX0 = pX; pY0 = pY;
+  }
+}, { passive: true });
+
+svg.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (pinch && e.touches.length === 2) {
+    const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX,
+                         e.touches[0].clientY - e.touches[1].clientY);
+    sc = Math.max(0.22, Math.min(4.5, sc * d / lastD));
+    lastD = d;
+    applyT();
+  } else if (drag && e.touches.length === 1) {
+    pX = pX0 + (e.touches[0].clientX - dX0);
+    pY = pY0 + (e.touches[0].clientY - dY0);
+    applyT();
+  }
+}, { passive: false });
+
+svg.addEventListener('touchend', () => { drag = false; pinch = false; });
+
+function resetView() { fitView(); }
+
+requestAnimationFrame(fitView);
+</script>
+</body>
+</html>
