@@ -682,6 +682,12 @@
     </div>
 
     <div class="layer-stack">
+      <div class="layer" style="background:var(--accent-bg);border-color:var(--accent-border);border-left:3px solid var(--accent);">
+        <div class="layer-num" style="color:var(--accent);">→</div>
+        <div class="layer-name" style="color:var(--accent);">Full stack map with all 25+ tools</div>
+        <div class="layer-desc"><a href="/ai-agent-stack-map/" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">Open the interactive mind map →</a> All 37 tools placed by use case — click any cluster to filter, hover for GitHub links.</div>
+        <span class="layer-tag tag-process" style="background:var(--accent);color:#fff;">MAP</span>
+      </div>
       <div class="layer">
         <div class="layer-num">L1</div>
         <div class="layer-name">Context Graphs</div>
@@ -943,6 +949,13 @@
             <td>Any MCP client</td>
             <td>Zero dependencies, Git-based sync; no temporal model</td>
           </tr>
+          <tr>
+            <td><strong><a href="https://github.com/MemPalace/mempalace" style="color:var(--accent);">MemPalace</a></strong></td>
+            <td>Spatial memory palace structure</td>
+            <td class="td-num">New · 2026</td>
+            <td>MCP, Claude Code</td>
+            <td>Context-anchored structured recall; newer project — watch adoption. <a href="https://mempalaceofficial.com/guide/getting-started.html" style="color:var(--accent);">Official docs →</a></td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -950,11 +963,12 @@
     <div class="prose">
       <p><strong>Mem0</strong> is the category benchmark. Its "AUDN" cycle — Add/Update/Delete/No-op — uses an LLM to automatically extract, deduplicate, and consolidate memories from conversations. It scored +26% on the LOCOMO benchmark versus OpenAI's memory implementation. For a senior engineer, Mem0's hybrid architecture (Pinecone/Qdrant for vectors, Neo4j for relationships, scoped retrieval by user/session/agent) is the reference design for how memory systems should work.</p>
       <p><strong>agentmemory</strong> is the sleeper pick for Claude Code specifically. It hooks into the <code>PostToolUse</code> lifecycle to silently capture every action the agent takes, compresses observations into structured facts with quality scoring, and injects relevant context at the start of each session. The hybrid BM25 + vector search with session-diversified Reciprocal Rank Fusion is architecturally elegant for a ~290-star project.</p>
+      <p><strong>MemPalace</strong> applies the classical method of loci to agent memory — knowledge is stored in spatially-organized "rooms" rather than a flat vector index. This means retrieval is context-anchored: the agent recalls facts in relation to where and when they were stored, not just semantic similarity. Newer project, but the conceptual model is well-suited to agents that traverse the same codebase regions repeatedly. See <a href="https://mempalaceofficial.com/guide/getting-started.html" style="color:var(--accent);">official getting-started guide</a> and <a href="https://github.com/MemPalace/mempalace" style="color:var(--accent);">GitHub repo</a>.</p>
     </div>
 
     <div class="callout-green">
       <div class="callout-lbl">Install Order Recommendation</div>
-      <p>Start with <strong>Engram</strong> for immediate zero-friction persistent memory (single binary, no Docker). Upgrade to <strong>Mem0</strong> once your team is doing serious production agent work and needs scoped retrieval across agents and sessions. Only add <strong>Graphiti</strong> if you have changing facts or need audit trails of what the agent believed at specific points in time.</p>
+      <p>Start with <strong>Engram</strong> for immediate zero-friction persistent memory (single binary, no Docker). Upgrade to <strong>Mem0</strong> once your team is doing serious production agent work and needs scoped retrieval across agents and sessions. Add <strong>MemPalace</strong> if your agents repeatedly navigate the same code paths and would benefit from spatial, context-anchored recall. Only add <strong>Graphiti</strong> if you have changing facts or need audit trails of what the agent believed at specific points in time.</p>
     </div>
   </div>
 
@@ -1062,7 +1076,8 @@
   <div class="footer-refs">
     <a href="https://github.com/tirth8205/code-review-graph">code-review-graph</a> ·
     <a href="https://github.com/obra/superpowers">superpowers</a> ·
-    <a href="https://github.com/mem0ai/mem0">mem0</a>
+    <a href="https://github.com/mem0ai/mem0">mem0</a> ·
+    <a href="https://asadani.github.io/ai-agent-stack-map/">Stack Mind Map →</a>
   </div>
 </footer>
 
