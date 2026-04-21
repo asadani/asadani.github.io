@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Data Product Manifesto — Seven Pillars of Modern Data Architecture</title>
+<meta name="description" content="An opinionated synthesis of modern data product architecture: seven pillars for treating data as a sovereign, governed, SLA-backed product rather than pipeline exhaust.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #F5F1EB;
+    --bg-alt:       #EDEAE3;
+    --surface:      #FFFFFF;
+    --surface-tint: #FAF8F5;
+    --border:       #DDD9D0;
+    --border-light: #EAE7E0;
+    --text:         #1A1714;
+    --text-body:    #3D3A35;
+    --text-muted:   #6B6760;
+    --text-subtle:  #9B9892;
+    --accent:       #C85C2D;
+    --accent-light: #E8895D;
+    --accent-bg:    #FDF1EB;
+    --accent-border:#F0C4A8;
+    --green:        #2A7A4B;
+    --green-bg:     #EAF5EF;
+    --green-border: #A8D9BC;
+    --blue:         #2563A8;
+    --blue-bg:      #EAF1FA;
+    --blue-border:  #A8C5E8;
+    --red:          #B83535;
+    --red-bg:       #FAEBEB;
+    --red-border:   #E8AAAA;
+    --serif:        'Newsreader', Georgia, serif;
+    --sans:         'Inter', system-ui, sans-serif;
+    --mono:         'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-body);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .nav-tag {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── LAYOUT ──────────────────────────────────────────── */
+  .page-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-deck {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 640px;
+    font-weight: 300;
+  }
+  .hero-meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-family: var(--mono);
+  }
+  .hero-meta-sep { color: var(--border); }
+
+  /* ─── BODY TEXT ───────────────────────────────────────── */
+  .prose p {
+    color: var(--text-body);
+    margin-bottom: 20px;
+    font-size: 17px;
+    line-height: 1.78;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); font-weight: 600; }
+  em { font-style: italic; color: var(--text-body); }
+
+  /* ─── SECTION HEADING ─────────────────────────────────── */
+  .section { margin-top: 56px; }
+  .section-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 32px 0 14px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── BANNER ──────────────────────────────────────────── */
+  .banner {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .banner-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .banner p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .banner a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ─── PLAIN ENGLISH ───────────────────────────────────── */
+  .plain-english {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 8px 8px;
+    padding: 28px 32px;
+    margin: 0 0 56px;
+  }
+  .plain-english .pe-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .pe-list { list-style: none; padding: 0; }
+  .pe-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 16px;
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+  .pe-list li:last-child { border-bottom: none; }
+  .pe-num {
+    width: 26px;
+    height: 26px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-family: var(--mono);
+  }
+
+  /* ─── CARDS GRID ──────────────────────────────────────── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 24px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    border-color: var(--accent-border);
+    box-shadow: 0 2px 8px rgba(200,92,45,0.08);
+  }
+  .card-icon { font-size: 20px; margin-bottom: 10px; }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+  .card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .card.card-red { border-color: var(--red-border); }
+  .card.card-red:hover { border-color: var(--red); box-shadow: 0 2px 8px rgba(184,53,53,0.08); }
+  .card.card-red .card-icon-badge {
+    display: inline-block;
+    background: var(--red-bg);
+    color: var(--red);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-green { border-color: var(--green-border); }
+  .card.card-green:hover { border-color: var(--green); box-shadow: 0 2px 8px rgba(42,122,75,0.08); }
+  .card.card-green .card-icon-badge {
+    display: inline-block;
+    background: var(--green-bg);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-blue { border-color: var(--blue-border); }
+  .card.card-blue:hover { border-color: var(--blue); box-shadow: 0 2px 8px rgba(37,99,168,0.08); }
+  .card.card-blue .card-icon-badge {
+    display: inline-block;
+    background: var(--blue-bg);
+    color: var(--blue);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  /* ─── PILLAR CARD (numbered, full-width rows) ─────────── */
+  .pillar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 22px 24px;
+    margin: 14px 0;
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 18px;
+    align-items: flex-start;
+  }
+  .pillar-num {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-radius: 4px;
+    padding: 6px 0;
+    text-align: center;
+    letter-spacing: 0.04em;
+  }
+  .pillar h3 {
+    margin: 0 0 8px;
+    font-family: var(--serif);
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .pillar p {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin: 0 0 10px;
+  }
+  .pillar ul {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0;
+  }
+  .pillar ul li {
+    font-size: 14px;
+    color: var(--text-body);
+    line-height: 1.6;
+    padding: 4px 0 4px 18px;
+    position: relative;
+  }
+  .pillar ul li::before {
+    content: '·';
+    color: var(--accent);
+    position: absolute;
+    left: 4px;
+    font-weight: 700;
+  }
+
+  /* ─── CODE BLOCK ──────────────────────────────────────── */
+  .code-block {
+    background: var(--text);
+    border-radius: 7px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .code-block .cb-label {
+    padding: 9px 16px;
+    background: rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .code-block pre {
+    padding: 20px;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #e8e8e8;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-block .tok-key  { color: #fdba74; }
+  .code-block .tok-val  { color: #86efac; }
+  .code-block .tok-cmt  { color: #6b7280; font-style: italic; }
+  .code-block .tok-str  { color: #93c5fd; }
+  .code-block .tok-acc  { color: #fde047; }
+
+  /* ─── CALLOUT ─────────────────────────────────────────── */
+  .callout {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+  .callout .callout-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout p { font-size: 15px; color: var(--text-muted); margin: 0; line-height: 1.7; }
+
+  /* ─── DETAIL LIST ─────────────────────────────────────── */
+  ul.dl {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  ul.dl li {
+    padding: 13px 18px 13px 14px;
+    font-size: 15px;
+    color: var(--text-body);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.65;
+  }
+  ul.dl li:last-child { border-bottom: none; }
+  ul.dl li::before {
+    content: '→';
+    color: var(--accent);
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ─── TABLE ───────────────────────────────────────────── */
+  .data-table {
+    overflow-x: auto;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .data-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .data-table thead th {
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .data-table tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-body);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:hover td { background: var(--surface-tint); }
+  .td-yes { color: var(--green); font-weight: 600; }
+  .td-no  { color: var(--red);   font-weight: 600; }
+  .td-mono { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+
+  /* ─── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-refs { font-size: 12px; color: var(--text-subtle); }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 40px 0 36px; }
+    .page-wrap { padding: 0 16px 60px; }
+    footer { padding: 16px 20px; flex-direction: column; align-items: flex-start; }
+    .plain-english { padding: 20px; }
+    .pillar { grid-template-columns: 1fr; gap: 10px; padding: 20px; }
+    .pillar-num { width: 56px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">asadani.github.io</a>
+  <div class="nav-right">
+    <span>Data Architecture</span>
+    <span class="nav-tag">APR 2026</span>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">Data Architecture &mdash; Manifesto</div>
+    <h1>The Data Product<br>Manifesto</h1>
+    <p class="hero-deck">
+      Data is no longer a byproduct of our systems &mdash; it is the product itself. Seven pillars for
+      building sovereign, governed, and trustworthy data products that scale beyond the era of fragile
+      pipelines and disconnected silos.
+    </p>
+    <div class="hero-meta">
+      <span>April 2026</span>
+      <span class="hero-meta-sep">/</span>
+      <span>Opinionated synthesis</span>
+      <span class="hero-meta-sep">/</span>
+      <span>~10 min read</span>
+    </div>
+  </header>
+
+  <!-- BANNER -->
+  <div class="banner">
+    <span class="banner-badge">THESIS</span>
+    <p>
+      A <strong>data product</strong> is a self-contained, domain-owned asset &mdash; data plus the
+      contracts, SLAs, and access surfaces that make it consumable without a Slack message to the
+      producing team. This piece lays out the architectural commitments that make that real.
+    </p>
+  </div>
+
+  <!-- PLAIN ENGLISH / TL;DR -->
+  <div class="plain-english">
+    <div class="pe-label">The Seven Pillars — At a Glance</div>
+    <ul class="pe-list">
+      <li>
+        <span class="pe-num">1</span>
+        <div><strong>Data is sovereign.</strong> Versioned, traceable, and tagged with explicit domain ownership &mdash; never orphaned.</div>
+      </li>
+      <li>
+        <span class="pe-num">2</span>
+        <div><strong>Ingestion is a gate.</strong> Right pattern for the job (batch, streaming, CDC) &mdash; schema-validated at entry.</div>
+      </li>
+      <li>
+        <span class="pe-num">3</span>
+        <div><strong>Storage is tiered.</strong> Immutable raw landing, open-table processed zone, low-latency serving edge.</div>
+      </li>
+      <li>
+        <span class="pe-num">4</span>
+        <div><strong>Logic is deterministic.</strong> Transformations are version-controlled code, not tribal knowledge.</div>
+      </li>
+      <li>
+        <span class="pe-num">5</span>
+        <div><strong>Quality is enforced.</strong> Automated contracts, freshness monitors, and drift detection &mdash; trust is earned, not declared.</div>
+      </li>
+      <li>
+        <span class="pe-num">6</span>
+        <div><strong>Output ports are plural.</strong> SQL, API, stream, or file &mdash; serve consumers where they are.</div>
+      </li>
+      <li>
+        <span class="pe-num">7</span>
+        <div><strong>Governance is a substrate.</strong> DSAs, SLAs, PII tagging, and lineage &mdash; the framework that <em>enables</em> rapid scaling, not bureaucracy that blocks it.</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- SECTION: WHY IT MATTERS -->
+  <div class="section">
+    <div class="section-label">Why it matters</div>
+    <h2>The pipeline era is over</h2>
+    <div class="prose">
+      <p>
+        For two decades, data teams optimized for one thing: moving bytes from A to B. The resulting
+        systems are familiar &mdash; centralized warehouses fed by hundreds of brittle pipelines, owned
+        by a lone platform team, consumed by analysts who file tickets and wait. It worked, until it
+        didn't. The failure mode is always the same: nobody knows where a number came from, nobody
+        will commit to its freshness, and nobody is accountable when it's wrong.
+      </p>
+      <p>
+        <strong>Product thinking flips the model.</strong> A data product is built like a service:
+        it has an owner, an SLA, a version, a contract, and a consumer experience. The team that
+        understands the data best &mdash; the domain team &mdash; owns it end-to-end. The platform
+        team builds the substrate (storage, compute, governance) that makes this feasible without
+        every domain reinventing the wheel. This is the core bet of the <strong>Data Mesh</strong>
+        paradigm, and it's the architectural frame this manifesto operationalizes.
+      </p>
+      <p>
+        What follows is a concrete commitment to seven pillars. None of them are optional. A data
+        "product" that skips governance is just a pipeline with a better name.
+      </p>
+    </div>
+  </div>
+
+  <!-- SECTION: THE SEVEN PILLARS -->
+  <div class="section">
+    <div class="section-label">The architecture</div>
+    <h2>Seven pillars, in detail</h2>
+
+    <div class="pillar">
+      <div class="pillar-num">01</div>
+      <div>
+        <h3>The Core Asset — Data is Sovereign</h3>
+        <p>
+          Data is a first-class citizen, not residue. Every dataset is deliberately curated for a
+          consumer, not harvested and hoped over.
+        </p>
+        <ul>
+          <li><strong>Curation over collection.</strong> Raw, processed, and curated layers are distinct and intentional.</li>
+          <li><strong>Traceability.</strong> Every dataset has a unique identifier and strict version control.</li>
+          <li><strong>Accountability.</strong> Data is tagged with explicit, high-ownership domain routing &mdash; no orphan tables.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-num">02</div>
+      <div>
+        <h3>The Gates — Input &amp; Ingestion</h3>
+        <p>
+          Ingestion is not a dump; it is a strictly controlled port of entry. The wrong pattern
+          here &mdash; nightly batch when the consumer needs sub-minute, or a stream when a file
+          would do &mdash; poisons every downstream decision.
+        </p>
+        <ul>
+          <li><strong>Versatile connectivity.</strong> APIs, streams, files, databases &mdash; whatever the upstream speaks.</li>
+          <li><strong>Adaptive mechanisms.</strong> Batch, streaming, or CDC &mdash; chosen by latency and volume, not habit.</li>
+          <li><strong>Gatekeeping.</strong> Schema validation at entry prevents downstream contamination.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-num">03</div>
+      <div>
+        <h3>The Engine — Storage &amp; Processing</h3>
+        <p>
+          Storage is tiered and purpose-built. Each layer answers a different question: what
+          actually happened, what does it mean, and how do we serve it fast?
+        </p>
+        <ul>
+          <li><strong>Landing zone (Raw).</strong> Immutable object storage &mdash; S3, GCS, ADLS &mdash; capturing ground truth.</li>
+          <li><strong>Engine room (Processed).</strong> Open table formats &mdash; Delta Lake, Iceberg, BigQuery &mdash; for reliable, ACID processing.</li>
+          <li><strong>The edge (Serving).</strong> Materialized views, feature stores, caching layers for low-latency retrieval.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-num">04</div>
+      <div>
+        <h3>The Value Multiplier — Business Logic</h3>
+        <p>
+          Transformations are not dark magic maintained by one senior engineer's memory. They are
+          transparent, version-controlled code, reviewed like any other.
+        </p>
+        <ul>
+          <li><strong>Deterministic rules.</strong> Repeatable pipelines in dbt, Spark, or Flink.</li>
+          <li><strong>Contextual enrichment.</strong> Joins, lookups, and reference data integration that elevate raw events into business facts.</li>
+          <li><strong>Actionable metrics.</strong> Clear aggregations and derived metrics &mdash; the output is decisions, not rows.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-num">05</div>
+      <div>
+        <h3>The Ironclad Contract — Quality Assurance</h3>
+        <p>
+          Trust is earned through automated, relentless verification. We do not <em>hope</em>
+          for data quality; we <em>enforce</em> it, and we fail loudly when it breaks.
+        </p>
+        <ul>
+          <li><strong>Strict contracts.</strong> Expected fields, types, nullability &mdash; declared and monitored.</li>
+          <li><strong>Automated enforcement.</strong> Continuous checks via Great Expectations, Soda, or dbt tests.</li>
+          <li><strong>Operational readiness.</strong> Freshness SLOs and volume-pattern monitoring.</li>
+          <li><strong>Proactive defense.</strong> Anomaly and drift detection catch silent failures before consumers do.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-num">06</div>
+      <div>
+        <h3>The Interface — Output &amp; Delivery</h3>
+        <p>
+          A product is only as good as its usability. Different consumers want different surfaces
+          &mdash; serve them where they are, not where the platform team finds it convenient.
+        </p>
+        <ul>
+          <li><strong>Analytical access.</strong> SQL endpoints and tables optimized for BI.</li>
+          <li><strong>Application access.</strong> REST and GraphQL APIs for software integration.</li>
+          <li><strong>Real-time access.</strong> Kafka, Pub/Sub, or equivalent for event-driven consumers.</li>
+          <li><strong>Bulk access.</strong> Parquet, CSV, or file exports for batch workloads.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-num">07</div>
+      <div>
+        <h3>The Trust Layer — Governance</h3>
+        <p>
+          Governance is not bureaucracy. Done right, it is the framework that lets a domain team
+          ship a new data product next Thursday without a cross-org security review each time.
+        </p>
+        <ul>
+          <li><strong>Explicit terms.</strong> Consumption governed by Data Sharing Agreements (DSAs).</li>
+          <li><strong>Guaranteed performance.</strong> SLAs for uptime, latency, and freshness &mdash; published and measured.</li>
+          <li><strong>Secure by design.</strong> Granular access control and automatic PII tagging.</li>
+          <li><strong>Total transparency.</strong> End-to-end lineage and comprehensive audit logs.</li>
+          <li><strong>Discoverability.</strong> Every product registered in a central catalog, findable via the enterprise marketplace.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: ANATOMY DIAGRAM -->
+  <div class="section">
+    <div class="section-label">How it fits together</div>
+    <h2>Anatomy of a single data product</h2>
+    <div class="prose">
+      <p>
+        Viewed from the outside, a data product is a black box with declared input ports, output
+        ports, and a published contract. Viewed from the inside, every pillar shows up as a
+        concrete architectural layer. The boundary between inside and outside is the contract
+        &mdash; and that contract is what consumers actually depend on.
+      </p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">Data product &mdash; structural view</div>
+<pre>          ┌──────────────────────────────────────────────┐
+          │          DATA PRODUCT (domain-owned)         │
+          │                                              │
+  upstream│   ┌───────────┐   ┌────────────┐   ┌──────┐  │  downstream
+  ───────►│──►│  INGEST   │──►│ PROCESS &amp;  │──►│SERVE │──│──►  consumers
+  sources │   │ (ports)   │   │ ORCHESTRATE│   │(ports│  │  (BI, apps,
+          │   └───────────┘   └────────────┘   └──────┘  │   streams,
+          │         ▲                ▲             ▲     │   ML, humans)
+          │         │                │             │     │
+          │   ┌─────┴────────────────┴─────────────┴──┐  │
+          │   │  CONTRACTS · QUALITY · OBSERVABILITY  │  │
+          │   └───────────────────────────────────────┘  │
+          │   ┌───────────────────────────────────────┐  │
+          │   │  GOVERNANCE · LINEAGE · ACCESS · PII  │  │
+          │   └───────────────────────────────────────┘  │
+          │   ┌───────────────────────────────────────┐  │
+          │   │  METADATA · CATALOG · OWNER · SLA     │  │
+          │   └───────────────────────────────────────┘  │
+          └──────────────────────────────────────────────┘
+</pre>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">Key distinction</div>
+      <p>
+        A <em>pipeline</em> ends at a table. A <em>data product</em> ends at a contract. The
+        contract is the thing consumers depend on &mdash; schema, semantics, freshness, owner,
+        SLA &mdash; and it is versioned independently of the pipeline implementation underneath.
+      </p>
+    </div>
+  </div>
+
+  <!-- SECTION: ARCHITECTURAL PATTERNS / TRADE-OFFS -->
+  <div class="section">
+    <div class="section-label">Trade-offs</div>
+    <h2>Centralized, mesh, or fabric?</h2>
+    <div class="prose">
+      <p>
+        The seven pillars are pattern-agnostic &mdash; you can build a data product inside a
+        monolithic warehouse or across a federated mesh. What changes is <em>where ownership
+        lives</em> and <em>who carries the operational load</em>. These three patterns cover most
+        real-world deployments and none of them is universally correct.
+      </p>
+    </div>
+
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Pattern</th>
+            <th>Ownership</th>
+            <th>Best for</th>
+            <th>Fails when</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Centralized</strong><br><span class="td-mono">Warehouse / Lakehouse</span></td>
+            <td>Single platform team owns everything.</td>
+            <td>Small orgs, consistent semantics, tight compliance scope.</td>
+            <td>The central team becomes a bottleneck and domain knowledge erodes.</td>
+          </tr>
+          <tr>
+            <td><strong>Data Mesh</strong><br><span class="td-mono">Federated</span></td>
+            <td>Domains own their products; platform team owns the substrate.</td>
+            <td>Large orgs with strong domain boundaries and mature engineering culture.</td>
+            <td>Domains lack engineering capacity or governance is under-invested &mdash; you get chaos with a better name.</td>
+          </tr>
+          <tr>
+            <td><strong>Data Fabric</strong><br><span class="td-mono">Integration layer</span></td>
+            <td>Ownership stays where it is; a metadata/AI layer unifies access.</td>
+            <td>Heterogeneous legacy landscapes where re-platforming is infeasible.</td>
+            <td>The fabric becomes a leaky abstraction over inconsistent sources &mdash; quality issues surface at query time.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>
+        Most large organizations end up with a <strong>hybrid</strong>: mesh-style domain ownership
+        for new products, a central warehouse for cross-domain reporting, and fabric-style
+        integration for the legacy systems nobody is going to rewrite. That's fine. The manifesto
+        holds regardless &mdash; every data product, wherever it lives, commits to the seven pillars.
+      </p>
+    </div>
+  </div>
+
+  <!-- SECTION: CONTRACT EXAMPLE -->
+  <div class="section">
+    <div class="section-label">Making it concrete</div>
+    <h2>What a data product contract looks like</h2>
+    <div class="prose">
+      <p>
+        The abstractions get real when you write them down. Below is a minimal but complete
+        product descriptor &mdash; the kind of file that lives next to the dbt models, gets
+        reviewed in PRs, and is consumed by the catalog, the quality runner, and the access
+        layer alike. Everything a consumer needs to decide whether to depend on this product is
+        in this one file.
+      </p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">data_product.yaml</div>
+<pre><span class="tok-key">id</span>:           <span class="tok-val">payments.settled_transactions</span>
+<span class="tok-key">version</span>:      <span class="tok-val">2.3.0</span>
+<span class="tok-key">domain</span>:       <span class="tok-val">payments</span>
+<span class="tok-key">owner</span>:        <span class="tok-val">payments-platform@example.com</span>
+<span class="tok-key">description</span>:  <span class="tok-str">"Settled payment transactions enriched with FX and merchant metadata."</span>
+
+<span class="tok-cmt"># ── input ports ────────────────────────────────────────</span>
+<span class="tok-key">inputs</span>:
+  - <span class="tok-key">name</span>:    <span class="tok-val">raw_payment_events</span>
+    <span class="tok-key">type</span>:    <span class="tok-val">kafka</span>
+    <span class="tok-key">topic</span>:   <span class="tok-val">prod.payments.events.v4</span>
+  - <span class="tok-key">name</span>:    <span class="tok-val">fx_rates</span>
+    <span class="tok-key">type</span>:    <span class="tok-val">table</span>
+    <span class="tok-key">ref</span>:     <span class="tok-val">finance.reference.fx_rates@^1</span>
+
+<span class="tok-cmt"># ── output ports ───────────────────────────────────────</span>
+<span class="tok-key">outputs</span>:
+  - <span class="tok-key">name</span>:    <span class="tok-val">settled_transactions</span>
+    <span class="tok-key">type</span>:    <span class="tok-val">iceberg_table</span>
+    <span class="tok-key">location</span>: <span class="tok-val">warehouse.payments.settled_transactions</span>
+  - <span class="tok-key">name</span>:    <span class="tok-val">settled_events</span>
+    <span class="tok-key">type</span>:    <span class="tok-val">kafka</span>
+    <span class="tok-key">topic</span>:   <span class="tok-val">prod.payments.settled.v2</span>
+  - <span class="tok-key">name</span>:    <span class="tok-val">settlement_api</span>
+    <span class="tok-key">type</span>:    <span class="tok-val">rest</span>
+    <span class="tok-key">path</span>:    <span class="tok-val">/v2/transactions/{id}</span>
+
+<span class="tok-cmt"># ── contract ───────────────────────────────────────────</span>
+<span class="tok-key">schema</span>:
+  - { <span class="tok-key">name</span>: <span class="tok-val">txn_id</span>,        <span class="tok-key">type</span>: <span class="tok-val">string</span>,  <span class="tok-key">nullable</span>: <span class="tok-val">false</span>, <span class="tok-key">pii</span>: <span class="tok-val">false</span> }
+  - { <span class="tok-key">name</span>: <span class="tok-val">customer_id</span>,   <span class="tok-key">type</span>: <span class="tok-val">string</span>,  <span class="tok-key">nullable</span>: <span class="tok-val">false</span>, <span class="tok-key">pii</span>: <span class="tok-acc">true</span>  }
+  - { <span class="tok-key">name</span>: <span class="tok-val">amount_usd</span>,    <span class="tok-key">type</span>: <span class="tok-val">decimal(18,4)</span>, <span class="tok-key">nullable</span>: <span class="tok-val">false</span> }
+  - { <span class="tok-key">name</span>: <span class="tok-val">settled_at</span>,    <span class="tok-key">type</span>: <span class="tok-val">timestamp</span>,  <span class="tok-key">nullable</span>: <span class="tok-val">false</span> }
+
+<span class="tok-cmt"># ── quality ────────────────────────────────────────────</span>
+<span class="tok-key">quality</span>:
+  <span class="tok-key">tests</span>:
+    - <span class="tok-val">unique(txn_id)</span>
+    - <span class="tok-val">not_null(customer_id, amount_usd, settled_at)</span>
+    - <span class="tok-val">range(amount_usd, min: 0, max: 10_000_000)</span>
+  <span class="tok-key">freshness</span>: <span class="tok-val">&lt;= 5m p99</span>
+  <span class="tok-key">volume</span>:    <span class="tok-val">anomaly_detect(window: 7d, sigma: 3)</span>
+
+<span class="tok-cmt"># ── SLA ────────────────────────────────────────────────</span>
+<span class="tok-key">sla</span>:
+  <span class="tok-key">availability</span>: <span class="tok-val">99.9</span>
+  <span class="tok-key">freshness_p99</span>: <span class="tok-val">5m</span>
+  <span class="tok-key">support</span>:      <span class="tok-val">business-hours</span>
+
+<span class="tok-cmt"># ── governance ─────────────────────────────────────────</span>
+<span class="tok-key">access</span>:
+  <span class="tok-key">classification</span>: <span class="tok-val">confidential</span>
+  <span class="tok-key">default</span>:        <span class="tok-val">deny</span>
+  <span class="tok-key">grants</span>:
+    - { <span class="tok-key">group</span>: <span class="tok-val">risk-analytics</span>,  <span class="tok-key">dsa</span>: <span class="tok-val">DSA-2026-014</span> }
+    - { <span class="tok-key">group</span>: <span class="tok-val">finance-reporting</span>, <span class="tok-key">dsa</span>: <span class="tok-val">DSA-2026-017</span> }
+</pre>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">The test</div>
+      <p>
+        If a new consumer can read this one file and decide &mdash; without asking anyone &mdash;
+        whether the product meets their needs, you have a data product. If they have to ping the
+        owning team on Slack to find out the freshness, you have a pipeline.
+      </p>
+    </div>
+  </div>
+
+  <!-- SECTION: BEST PRACTICES -->
+  <div class="section">
+    <div class="section-label">Properties of good</div>
+    <h2>What separates good from nominal</h2>
+    <div class="prose">
+      <p>
+        A data product that technically ticks every pillar can still fail in practice if it
+        violates these six properties. Treat them as an acceptance test, not a wishlist.
+      </p>
+    </div>
+    <div class="cards-grid">
+      <div class="card card-green">
+        <div class="card-icon-badge">Required</div>
+        <h4>Addressable</h4>
+        <p>Has a stable, unique identifier and endpoint. No consumer should ever hardcode a table path.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Required</div>
+        <h4>Trustworthy</h4>
+        <p>SLAs, quality scores, and lineage are visible without asking. Freshness is a published number, not a promise.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Required</div>
+        <h4>Self-describing</h4>
+        <p>Schema, semantics, and examples live with the product. A new analyst is productive in a day.</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Recommended</div>
+        <h4>Interoperable</h4>
+        <p>Standard formats and contracts &mdash; Iceberg, Parquet, Avro &mdash; so products compose.</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Recommended</div>
+        <h4>Secure</h4>
+        <p>Access is controlled by policy, not convention. Every read is logged and auditable.</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Recommended</div>
+        <h4>Independently deployable</h4>
+        <p>Version and deploy without breaking consumers. Contracts evolve via additive changes and deprecation windows, not flag days.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: PITFALLS -->
+  <div class="section">
+    <div class="section-label">Pitfalls</div>
+    <h2>Ways this goes wrong</h2>
+    <div class="prose">
+      <p>
+        Most "data product" initiatives that stall do so for predictable reasons. None of them are
+        technical. Watch for these and push back early.
+      </p>
+    </div>
+    <ul class="dl">
+      <li><strong>Cosmetic relabeling.</strong> Renaming existing tables to "products" without contracts, SLAs, or owners &mdash; all of the overhead, none of the benefit.</li>
+      <li><strong>Mesh without platform.</strong> Handing ownership to domains before the platform team has built the self-serve substrate &mdash; every domain reinvents observability badly.</li>
+      <li><strong>Governance as gate.</strong> Routing every new product through a central review committee. The point of governance is to scale <em>without</em> that committee.</li>
+      <li><strong>Contract rot.</strong> Contracts that live in wiki pages instead of code diverge from reality in weeks. If it isn't reviewed in a PR, it isn't a contract.</li>
+      <li><strong>Output port sprawl.</strong> Exposing every product via every possible port "just in case." Ports are a commitment &mdash; each one is a long-term SLA.</li>
+      <li><strong>Silent quality.</strong> Quality checks that log but don't block or page. A failing check nobody sees is worse than no check at all.</li>
+    </ul>
+  </div>
+
+  <!-- SECTION: CONCLUSION -->
+  <div class="section">
+    <div class="section-label">Closing</div>
+    <h2>The commitment</h2>
+    <div class="prose">
+      <p>
+        Treating data as a product is not an architectural style choice. It is an operational
+        commitment: to owners, to contracts, to SLAs, and to the consumers who depend on the
+        output. The seven pillars are what that commitment looks like in concrete terms.
+      </p>
+      <p>
+        Pick a single high-value dataset in your organization. Give it an owner. Give it a
+        contract file. Give it a published SLA. Wire up automated quality. Register it in the
+        catalog. That one product, done rigorously, will do more for your data culture than a
+        three-year platform strategy deck. Start there.
+      </p>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <span>asadani.github.io &mdash; April 2026</span>
+  <span>
+    <a href="https://martinfowler.com/articles/data-mesh-principles.html" target="_blank" rel="noopener">Data Mesh Principles</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/">Home</a>
+  </span>
+</footer>
+
+</body>
+</html>
