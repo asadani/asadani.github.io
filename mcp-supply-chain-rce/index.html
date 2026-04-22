@@ -306,6 +306,10 @@
     gap: 14px;
     margin: 24px 0;
   }
+  .cards-grid-2 { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 560px) {
+    .cards-grid-2 { grid-template-columns: 1fr; }
+  }
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -464,22 +468,31 @@
     background: var(--surface);
   }
   ul.dl li {
-    padding: 13px 18px 13px 14px;
+    padding: 14px 20px 14px 18px;
     font-size: 15px;
     color: var(--text-body);
     border-bottom: 1px solid var(--border-light);
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-    line-height: 1.65;
+    line-height: 1.7;
+    position: relative;
+    padding-left: 38px;
   }
   ul.dl li:last-child { border-bottom: none; }
   ul.dl li::before {
     content: '→';
     color: var(--accent);
-    font-size: 14px;
-    flex-shrink: 0;
-    margin-top: 1px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.7;
+    position: absolute;
+    left: 18px;
+    top: 14px;
+  }
+  ul.dl code.inline {
+    padding: 0 5px;
+    border-color: transparent;
+    background: var(--bg-alt);
+    font-size: 0.85em;
+    vertical-align: baseline;
   }
 
   /* ─── TABLE ───────────────────────────────────────────── */
@@ -685,9 +698,9 @@
 
   .tl-grid {
     display: grid;
-    grid-template-columns: 110px repeat(6, minmax(120px, 1fr));
+    grid-template-columns: 78px repeat(6, minmax(85px, 1fr));
     gap: 0;
-    min-width: 820px;
+    min-width: 588px;
     position: relative;
   }
   .tl-month-header {
@@ -703,10 +716,11 @@
   }
   .tl-row-label {
     font-family: var(--serif);
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 600;
-    padding: 24px 10px 24px 0;
+    padding: 24px 8px 24px 0;
     align-self: center;
+    line-height: 1.15;
   }
   .tl-row-label.root      { color: var(--accent); }
   .tl-row-label.transport { color: var(--yellow); }
@@ -996,7 +1010,7 @@ params = <span class="tok-val">StdioServerParameters</span>(
       <p>The same underlying pattern manifests in four distinct exploitation classes, each targeting a different layer of the stack. What makes this a <em>supply chain</em> event rather than a single CVE is that none of these vendors wrote the bug — they inherited the default.</p>
     </div>
 
-    <div class="cards-grid">
+    <div class="cards-grid cards-grid-2">
       <div class="card card-red">
         <div class="card-icon-badge">Family 01</div>
         <h4>Unauthenticated UI Injection</h4>
