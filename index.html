@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anuj Sadani — AI Engineering, Infrastructure &amp; Security</title>
+<meta name="description" content="Engineering leader who builds AI systems and the teams that build them. Writing on AI engineering, infrastructure, and security.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:            #F5F1EB;
+    --bg-alt:        #EDEAE3;
+    --surface:       #FFFFFF;
+    --border:        #DDD9D0;
+    --border-light:  #EAE7E0;
+    --text:          #1A1714;
+    --text-body:     #3D3A35;
+    --text-muted:    #6B6760;
+    --text-subtle:   #9B9892;
+    --accent:        #C85C2D;
+    --accent-bg:     #FDF1EB;
+    --accent-border: #F0C4A8;
+    --green:         #2A7A4B;
+    --green-bg:      #EAF5EF;
+    --green-border:  #A8D9BC;
+    --blue:          #2563A8;
+    --blue-bg:       #EAF1FA;
+    --blue-border:   #A8C5E8;
+    --red:           #B83535;
+    --red-bg:        #FAEBEB;
+    --red-border:    #E8AAAA;
+    --serif:  'Newsreader', Georgia, serif;
+    --sans:   'Inter', system-ui, sans-serif;
+    --mono:   'JetBrains Mono', 'Courier New', monospace;
+    /* timeline brand colors */
+    --nvidia:  #76B900;
+    --dh:      #E00024;
+    --infrrd:  #00A651;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text-body); font-family: var(--sans); font-size: 17px; line-height: 1.75; }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  nav {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 0 48px; height: 52px; display: flex; align-items: center;
+    justify-content: space-between; position: sticky; top: 0; z-index: 100;
+  }
+  .nav-brand { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--text); letter-spacing: 0.01em; text-decoration: none; }
+  .nav-tag   { background: var(--accent); color: #fff; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 3px; letter-spacing: 0.04em; }
+
+  /* ─── LAYOUT ──────────────────────────────────────────── */
+  .page-wrap { max-width: 980px; margin: 0 auto; padding: 0 32px 80px; }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  .hero { padding: 72px 0 64px; border-bottom: 1px solid var(--border); margin-bottom: 64px; }
+  .hero-layout { display: flex; align-items: center; gap: 56px; }
+  .hero-text { flex: 1; min-width: 0; }
+  .hero-tagline { font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--accent); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 16px; }
+  .hero h1 { font-family: var(--serif); font-size: clamp(42px, 5.5vw, 60px); font-weight: 600; line-height: 1.04; letter-spacing: -0.025em; color: var(--text); margin-bottom: 8px; }
+  .hero-bio { font-family: var(--serif); font-size: 18px; font-style: italic; font-weight: 500; line-height: 1.75; color: var(--text-muted); margin-bottom: 36px; }
+
+  .hero-ctas { display: flex; gap: 10px; flex-wrap: wrap; }
+  .cta-link { display: inline-flex; align-items: center; gap: 7px; font-family: var(--sans); font-size: 13px; font-weight: 600; text-decoration: none; padding: 9px 16px; border-radius: 6px; letter-spacing: 0.01em; transition: opacity 0.15s; }
+  .cta-link:hover { opacity: 0.82; }
+  .cta-link svg  { width: 15px; height: 15px; flex-shrink: 0; }
+  .cta-primary   { background: var(--text); color: #fff; }
+  .cta-linkedin  { background: #0A66C2; color: #fff; }
+  .cta-medium    { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+
+  .hero-pic-wrap { flex-shrink: 0; padding-top: 6px; }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33%       { transform: translateY(-7px) rotate(0.4deg); }
+    66%       { transform: translateY(-3px) rotate(-0.3deg); }
+  }
+  @keyframes shimmer-border {
+    0%, 100% { box-shadow: 0 8px 32px rgba(200,92,45,0.10); }
+    50%       { box-shadow: 0 14px 40px rgba(200,92,45,0.22), 0 0 0 4px rgba(200,92,45,0.06); }
+  }
+  .hero-pic {
+    width: 160px; height: 160px; border-radius: 18px;
+    object-fit: cover; object-position: top center; display: block;
+    border: 2px solid var(--border);
+    animation: float 5s ease-in-out infinite, shimmer-border 4s ease-in-out infinite;
+    transition: border-color 0.3s;
+  }
+  .hero-pic:hover { border-color: var(--accent); animation-play-state: paused; }
+
+  /* ─── SECTION CHROME ──────────────────────────────────── */
+  .section-wrap { margin-bottom: 64px; padding-bottom: 64px; border-bottom: 1px solid var(--border); }
+  .section-label { font-family: var(--sans); font-size: 11px; font-weight: 600; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+  .section-heading { font-family: var(--serif); font-size: 26px; font-weight: 600; letter-spacing: -0.01em; color: var(--text); margin-bottom: 32px; }
+
+  /* ════════════════════════════════════════════════════════
+     HORIZONTAL TIMELINE — year-by-year 2009–2026
+  ════════════════════════════════════════════════════════ */
+  .tl-scroll-wrap { padding-bottom: 8px; }
+
+  .tl-track {
+    display: flex;
+    width: 100%;
+  }
+
+  /* ── each year column ── */
+  .tl-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 0;
+  }
+
+  /* year label */
+  .tl-yr {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-subtle);
+    letter-spacing: 0.03em;
+    padding-bottom: 6px;
+    text-align: center;
+    white-space: nowrap;
+    line-height: 1;
+  }
+
+  /* coloured line bar */
+  .tl-bar {
+    width: 100%;
+    height: 6px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tl-col.nvidia .tl-bar  { background: var(--nvidia); }
+  .tl-col.dh .tl-bar      { background: var(--dh); }
+  .tl-col.infrrd .tl-bar  { background: var(--infrrd); }
+
+  /* tick mark on each bar */
+  .tl-bar::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 12px;
+    background: rgba(255,255,255,0.55);
+    position: absolute;
+  }
+
+  /* icon slot below the bar — fixed height so columns align */
+  .tl-icon-slot {
+    margin-top: 10px;
+    height: 48px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  /* company logo button */
+  .tl-logo-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    background: var(--surface);
+    overflow: hidden;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .tl-logo-btn img { width: 100%; height: 100%; object-fit: contain; }
+  .tl-logo-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 16px rgba(0,0,0,0.14); }
+  .tl-logo-btn.active { border-color: var(--accent); box-shadow: 0 4px 18px rgba(200,92,45,0.22); transform: translateY(-2px); }
+
+  /* company label below icon — clipped to column width */
+  .tl-icon-name {
+    font-family: var(--sans);
+    font-size: 8px;
+    font-weight: 500;
+    color: var(--text-subtle);
+    margin-top: 4px;
+    text-align: center;
+    letter-spacing: 0.02em;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  /* ── detail panel ── */
+  .tl-detail-wrap { margin-top: 28px; }
+  .tl-detail {
+    display: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 32px;
+  }
+  .tl-detail.open { display: block; animation: fadeSlide 0.22s ease; }
+  @keyframes fadeSlide { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .tl-detail-header { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-light); }
+  .tl-detail-logo   { width: 44px; height: 44px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; padding: 4px; }
+  .tl-detail-logo img { width: 100%; height: 100%; object-fit: contain; }
+  .tl-detail-company { font-family: var(--serif); font-size: 20px; font-weight: 600; color: var(--text); }
+  .tl-detail-total   { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+  .tl-roles { display: flex; flex-direction: column; }
+  .tl-role  { display: grid; grid-template-columns: 1fr auto; gap: 4px 24px; padding: 14px 0; border-bottom: 1px solid var(--border-light); align-items: start; }
+  .tl-role:last-child { border-bottom: none; padding-bottom: 0; }
+  .tl-role-title { font-size: 14px; font-weight: 500; color: var(--text); }
+  .tl-role-desc  { font-size: 13px; color: var(--text-muted); grid-column: 1; margin-top: 3px; line-height: 1.55; }
+  .tl-role-dates { font-family: var(--mono); font-size: 11px; color: var(--text-subtle); white-space: nowrap; padding-top: 2px; }
+
+  /* ════════════════════════════════════════════════════════
+     ARTICLE LIST  (one per row, rectangular)
+  ════════════════════════════════════════════════════════ */
+  .filter-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .filter-pill { font-family: var(--sans); font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
+  .filter-pill:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-pill.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .articles-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .art-row {
+    display: flex;
+    align-items: stretch;
+    text-decoration: none;
+    color: inherit;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    overflow: hidden;
+    transition: box-shadow 0.15s, transform 0.15s;
+  }
+  .art-row:hover { box-shadow: 0 3px 16px rgba(0,0,0,0.08); transform: translateX(2px); }
+  .art-row.hidden { display: none; }
+
+  /* Left accent strip */
+  .art-strip { width: 4px; flex-shrink: 0; }
+  .art-ai    .art-strip { background: var(--blue); }
+  .art-sec   .art-strip { background: var(--red); }
+  .art-infra .art-strip { background: var(--green); }
+  .art-policy .art-strip { background: var(--accent); }
+  .art-data  .art-strip { background: var(--blue); }
+  .art-interactive .art-strip { background: var(--green); }
+
+  /* Body */
+  .art-body { flex: 1; padding: 14px 20px; min-width: 0; }
+  .art-top  { display: flex; align-items: baseline; gap: 10px; margin-bottom: 3px; flex-wrap: wrap; }
+
+  .art-badge { display: inline-block; font-family: var(--mono); font-size: 9px; font-weight: 500; padding: 2px 7px; border-radius: 3px; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
+  .badge-ai          { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-border); }
+  .badge-sec         { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-border); }
+  .badge-infra       { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
+  .badge-policy      { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border); }
+  .badge-data        { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-border); }
+  .badge-interactive { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
+
+  .art-title { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--text); line-height: 1.3; }
+  .art-quote { font-size: 12px; font-style: italic; color: var(--text-subtle); margin-top: 3px; line-height: 1.5; }
+  .art-quote code { font-style: normal; font-family: var(--mono); font-size: 0.9em; }
+  .art-desc  { font-size: 13px; color: var(--text-muted); margin-top: 4px; line-height: 1.55; }
+  .art-desc code { font-family: var(--mono); font-size: 0.85em; background: var(--accent-bg); border: 1px solid var(--accent-border); padding: 1px 4px; border-radius: 3px; color: var(--accent); }
+
+  /* Meta (right side) */
+  .art-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 6px;
+    padding: 14px 18px;
+    flex-shrink: 0;
+    border-left: 1px solid var(--border-light);
+    min-width: 130px;
+  }
+  .art-date { font-family: var(--mono); font-size: 10px; color: var(--text-subtle); white-space: nowrap; }
+  .art-actions { display: flex; align-items: center; gap: 8px; }
+  .art-link { font-size: 13px; font-weight: 600; color: var(--accent); white-space: nowrap; }
+
+  /* share button (reused) */
+  .share-btn { background: none; border: 1px solid var(--border); border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-subtle); transition: all 0.15s; padding: 0; }
+  .share-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .share-btn.copied { border-color: var(--green); color: var(--green); }
+  .share-btn svg { width: 12px; height: 12px; }
+
+  /* ─── FOOTER ──────────────────────────────────────────── */
+  footer { background: var(--surface); border-top: 1px solid var(--border); padding: 24px 48px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--text-muted); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { color: var(--text-muted); text-decoration: none; font-weight: 500; transition: color 0.15s; }
+  .footer-links a:hover { color: var(--accent); }
+
+  /* ─── RESPONSIVE ──────────────────────────────────────── */
+  @media (max-width: 700px) {
+    nav { padding: 0 20px; }
+    footer { padding: 20px; flex-direction: column; gap: 14px; text-align: center; }
+    .page-wrap  { padding: 0 20px 60px; }
+    .hero       { padding: 48px 0 40px; }
+    .hero-layout { flex-direction: column-reverse; gap: 28px; }
+    .hero-pic   { width: 100px; height: 100px; border-radius: 14px; }
+    .art-meta   { min-width: 110px; padding: 12px; }
+    .tl-role    { grid-template-columns: 1fr; }
+    .tl-role-dates { margin-top: 2px; }
+    .tl-detail  { padding: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="/">asadani</a>
+  <span class="nav-tag">Engineering Leader</span>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- ── HERO ──────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-layout">
+      <div class="hero-text">
+        <div class="hero-tagline">People &middot; Business &middot; Technology</div>
+        <h1>Anuj Sadani</h1>
+        <p class="hero-bio">I build AI systems and the teams that build them. 16+ years across engineering leadership, microservice systems, and enterprise AI — currently Principal SDE at Infrrd. I'm known for mentoring engineers to their best, translating customer problems into honest technical bets, and steering AI adoption toward outcomes that actually hold up in production. People, business, and technology — in that order when it matters.</p>
+        <div class="hero-ctas">
+          <a class="cta-link cta-primary" href="https://github.com/asadani" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub
+          </a>
+          <a class="cta-link cta-linkedin" href="https://linkedin.com/in/anujsadani" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            LinkedIn
+          </a>
+          <a class="cta-link cta-medium" href="https://medium.com/@anuj.sadani" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
+            Medium
+          </a>
+        </div>
+      </div>
+      <div class="hero-pic-wrap">
+        <img class="hero-pic" src="/assets/profile-pic.png" alt="Anuj Sadani">
+      </div>
+    </div>
+  </section>
+
+  <!-- ── JOURNEY ────────────────────────────────────────────── -->
+  <div class="section-wrap">
+    <div class="section-label">Career</div>
+    <div class="section-heading">Journey</div>
+
+    <div class="tl-scroll-wrap">
+      <div class="tl-track">
+
+        <!-- 2009 — NVIDIA starts -->
+        <div class="tl-col nvidia">
+          <div class="tl-yr">2009</div>
+          <div class="tl-bar"></div>
+          <div class="tl-icon-slot">
+            <div>
+              <button class="tl-logo-btn" data-company="nvidia" aria-label="NVIDIA">
+                <img src="/assets/nvidia_logo.jpeg" alt="NVIDIA">
+              </button>
+              <div class="tl-icon-name">NVIDIA</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2010–2019: NVIDIA, no logo -->
+        <div class="tl-col nvidia"><div class="tl-yr">2010</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col nvidia"><div class="tl-yr">2011</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col nvidia"><div class="tl-yr">2012</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col nvidia"><div class="tl-yr">2013</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col nvidia"><div class="tl-yr">2014</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col nvidia"><div class="tl-yr">2015</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col nvidia"><div class="tl-yr">2016</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col nvidia"><div class="tl-yr">2017</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col nvidia"><div class="tl-yr">2018</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col nvidia"><div class="tl-yr">2019</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+
+        <!-- 2020 — Delivery Hero -->
+        <div class="tl-col dh">
+          <div class="tl-yr">2020</div>
+          <div class="tl-bar"></div>
+          <div class="tl-icon-slot">
+            <div>
+              <button class="tl-logo-btn" data-company="dh" aria-label="Delivery Hero">
+                <img src="/assets/delivery_hero_se_logo.jpeg" alt="Delivery Hero">
+              </button>
+              <div class="tl-icon-name">Delivery Hero</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2021 — Infrrd starts -->
+        <div class="tl-col infrrd">
+          <div class="tl-yr">2021</div>
+          <div class="tl-bar"></div>
+          <div class="tl-icon-slot">
+            <div>
+              <button class="tl-logo-btn" data-company="infrrd" aria-label="Infrrd">
+                <img src="/assets/infrrd_logo.jpeg" alt="Infrrd">
+              </button>
+              <div class="tl-icon-name">Infrrd</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2022–2026: Infrrd, no logo -->
+        <div class="tl-col infrrd"><div class="tl-yr">2022</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col infrrd"><div class="tl-yr">2023</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col infrrd"><div class="tl-yr">2024</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col infrrd"><div class="tl-yr">2025</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col infrrd"><div class="tl-yr">2026</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+
+      </div>
+    </div>
+
+    <!-- Detail panels — all hidden by default -->
+    <div class="tl-detail-wrap">
+
+      <div class="tl-detail" id="detail-nvidia">
+        <div class="tl-detail-header">
+          <div class="tl-detail-logo"><img src="/assets/nvidia_logo.jpeg" alt="NVIDIA"></div>
+          <div>
+            <div class="tl-detail-company">NVIDIA</div>
+            <div class="tl-detail-total">Pune / Pimpri-Chinchwad &nbsp;·&nbsp; Full-time &nbsp;·&nbsp; 10 yrs 6 mos</div>
+          </div>
+        </div>
+        <div class="tl-roles">
+          <div class="tl-role">
+            <div class="tl-role-title">Senior Tools Development Engineer</div>
+            <div class="tl-role-dates">Oct 2014 – Jan 2020</div>
+            <div class="tl-role-desc">Led a team of 8+ engineers delivering embedded automation frameworks and internal tooling across multiple product lines. Drove full SDLC ownership and advocated automation-first practices across QA, release, and platform teams.</div>
+          </div>
+          <div class="tl-role">
+            <div class="tl-role-title">Tools Development Engineer</div>
+            <div class="tl-role-dates">Aug 2010 – Sep 2014</div>
+            <div class="tl-role-desc">Designed and maintained scalable data management solutions for production systems. Collaborated cross-functionally to improve deployment stability and system performance.</div>
+          </div>
+          <div class="tl-role">
+            <div class="tl-role-title">Software Quality Assurance Engineer</div>
+            <div class="tl-role-dates">Aug 2009 – Jul 2010</div>
+            <div class="tl-role-desc">Root cause and corrective action analysis for complex production issues — improving defect triage accuracy and reducing recurring failures.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-detail" id="detail-dh">
+        <div class="tl-detail-header">
+          <div class="tl-detail-logo"><img src="/assets/delivery_hero_se_logo.jpeg" alt="Delivery Hero"></div>
+          <div>
+            <div class="tl-detail-company">Delivery Hero</div>
+            <div class="tl-detail-total">Berlin, Germany &nbsp;·&nbsp; Full-time &nbsp;·&nbsp; 11 mos</div>
+          </div>
+        </div>
+        <div class="tl-roles">
+          <div class="tl-role">
+            <div class="tl-role-title">Software Engineer</div>
+            <div class="tl-role-dates">Feb 2020 – Dec 2020</div>
+            <div class="tl-role-desc">Built and scaled Python microservices (Flask) for a high-traffic logistics platform, ensuring reliable real-time order processing across distributed systems. Integrated analytical workflows with Data Science and BI teams to drive data-driven operations.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-detail" id="detail-infrrd">
+        <div class="tl-detail-header">
+          <div class="tl-detail-logo"><img src="/assets/infrrd_logo.jpeg" alt="Infrrd"></div>
+          <div>
+            <div class="tl-detail-company">Infrrd</div>
+            <div class="tl-detail-total">Pune, India &nbsp;·&nbsp; Full-time &nbsp;·&nbsp; 5 yrs 4 mos &nbsp;·&nbsp; <span style="color:var(--green);font-weight:500">Current</span></div>
+          </div>
+        </div>
+        <div class="tl-roles">
+          <div class="tl-role">
+            <div class="tl-role-title">Principal Software Development Engineer</div>
+            <div class="tl-role-dates">May 2025 – Present</div>
+            <div class="tl-role-desc">Architecting GenAI platforms and hybrid ML+AI systems that helped put Infrrd in the Gartner Magic Quadrant. Leading cross-departmental AI strategy and engineering excellence.</div>
+          </div>
+          <div class="tl-role">
+            <div class="tl-role-title">ML Engineering Technical Architect</div>
+            <div class="tl-role-dates">Nov 2021 – Apr 2025</div>
+            <div class="tl-role-desc">Designed hybrid ML+AI cost architecture achieving 30–40% reduction vs LLM-only. Built agentic workflows with CrewAI, owned the enterprise Python stack, co-authored two technical patents, and received "Innovator of the Year" recognition.</div>
+          </div>
+          <div class="tl-role">
+            <div class="tl-role-title">Technical Specialist</div>
+            <div class="tl-role-dates">Jan 2021 – Oct 2021</div>
+            <div class="tl-role-desc">Established foundational AI/ML engineering standards, secure SDLC practices, and Python architecture patterns across the engineering organisation.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── ARTICLES ───────────────────────────────────────────── -->
+  <section>
+    <div class="section-label">Writing</div>
+    <div class="section-heading">Articles</div>
+
+    <div class="filter-bar">
+      <button class="filter-pill active" data-filter="all">All</button>
+      <button class="filter-pill" data-filter="ai-engineering">AI Engineering</button>
+      <button class="filter-pill" data-filter="security">Security</button>
+      <button class="filter-pill" data-filter="infrastructure">Infrastructure</button>
+      <button class="filter-pill" data-filter="policy">Policy</button>
+      <button class="filter-pill" data-filter="data">Data</button>
+      <button class="filter-pill" data-filter="interactive">Interactive</button>
+    </div>
+
+    <div class="articles-list">
+
+      <a class="art-row art-sec" href="/mcp-supply-chain-rce/" data-tags="security">
+        <div class="art-strip"></div>
+        <div class="art-body">
+          <div class="art-top"><span class="art-badge badge-sec">Security</span><span class="art-title">The Mother of All AI Supply Chains: MCP's By-Design RCE</span></div>
+          <div class="art-quote">"The most dangerous vulnerabilities aren't bugs — they're features."</div>
+          <div class="art-desc">A configuration string is a shell command. Anthropic called it expected. OX Security called it an RCE.</div>
+        </div>
+        <div class="art-meta">
+          <span class="art-date">Apr 21, 2026</span>
+          <div class="art-actions">
+            <button class="share-btn" aria-label="Share" data-url="https://asadani.github.io/mcp-supply-chain-rce/" data-title="The Mother of All AI Supply Chains: MCP's By-Design RCE">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            </button>
+            <span class="art-link">Read →</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="art-row art-data" href="/data-product-manifesto/" data-tags="data">
+        <div class="art-strip"></div>
+        <div class="art-body">
+          <div class="art-top"><span class="art-badge badge-data">Data</span><span class="art-title">The Data Product Manifesto</span></div>
+          <div class="art-quote">"Data is the new oil. Valuable, messy, and everyone's hands are dirty."</div>
+          <div class="art-desc">Seven pillars for treating data as a first-class product, not a departmental afterthought.</div>
+        </div>
+        <div class="art-meta">
+          <span class="art-date">Apr 2026</span>
+          <div class="art-actions">
+            <button class="share-btn" aria-label="Share" data-url="https://asadani.github.io/data-product-manifesto/" data-title="The Data Product Manifesto">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            </button>
+            <span class="art-link">Read →</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="art-row art-ai" href="/ai-coding-agent-stack/" data-tags="ai-engineering">
+        <div class="art-strip"></div>
+        <div class="art-body">
+          <div class="art-top"><span class="art-badge badge-ai">AI Engineering</span><span class="art-title">The Five Layers of the Modern AI Coding Agent Stack</span></div>
+          <div class="art-quote">"Any sufficiently advanced autocomplete is indistinguishable from AGI — until it rewrites your prod config."</div>
+          <div class="art-desc">Five architectural layers that separate a genuine productivity multiplier from expensive autocomplete.</div>
+        </div>
+        <div class="art-meta">
+          <span class="art-date">Apr 2026</span>
+          <div class="art-actions">
+            <button class="share-btn" aria-label="Share" data-url="https://asadani.github.io/ai-coding-agent-stack/" data-title="The Five Layers of the Modern AI Coding Agent Stack">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            </button>
+            <span class="art-link">Read →</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="art-row art-interactive" href="/ai-agent-stack-map/" data-tags="interactive ai-engineering">
+        <div class="art-strip"></div>
+        <div class="art-body">
+          <div class="art-top"><span class="art-badge badge-interactive">Interactive</span><span class="art-title">AI Coding Agent Stack — Interactive Mind Map</span></div>
+          <div class="art-quote">"A map is not the territory. But sometimes the territory is so confusing you really need the map."</div>
+          <div class="art-desc">37 tools, 6 clusters, one SVG — a pannable, filterable map of the 2026 AI coding ecosystem.</div>
+        </div>
+        <div class="art-meta">
+          <span class="art-date">Apr 2026</span>
+          <div class="art-actions">
+            <button class="share-btn" aria-label="Share" data-url="https://asadani.github.io/ai-agent-stack-map/" data-title="AI Coding Agent Stack — Interactive Mind Map">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            </button>
+            <span class="art-link">Explore →</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="art-row art-ai" href="/ai-shrinkflation/" data-tags="ai-engineering">
+        <div class="art-strip"></div>
+        <div class="art-body">
+          <div class="art-top"><span class="art-badge badge-ai">AI Engineering</span><span class="art-title">AI Shrinkflation: The Silent Regression Your Team Won't See Coming</span></div>
+          <div class="art-quote">"Same logo. Same price. Different soul."</div>
+          <div class="art-desc">The model you shipped last quarter may not be the model running today — and your tests won't tell you.</div>
+        </div>
+        <div class="art-meta">
+          <span class="art-date">Apr 2026</span>
+          <div class="art-actions">
+            <button class="share-btn" aria-label="Share" data-url="https://asadani.github.io/ai-shrinkflation/" data-title="AI Shrinkflation: The Silent Regression Your Team Won't See Coming">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            </button>
+            <span class="art-link">Read →</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="art-row art-ai" href="/gemini-flex-inference/" data-tags="ai-engineering">
+        <div class="art-strip"></div>
+        <div class="art-body">
+          <div class="art-top"><span class="art-badge badge-ai">AI Engineering</span><span class="art-title">Flex &amp; Priority: One Line of Code</span></div>
+          <div class="art-quote">"The best infrastructure decision is the one that costs 40% less and ships today."</div>
+          <div class="art-desc">One parameter — <code>service_tier</code> — trades latency for cost in Gemini production workloads.</div>
+        </div>
+        <div class="art-meta">
+          <span class="art-date">Apr 2026</span>
+          <div class="art-actions">
+            <button class="share-btn" aria-label="Share" data-url="https://asadani.github.io/gemini-flex-inference/" data-title="Flex &amp; Priority: One Line of Code">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            </button>
+            <span class="art-link">Read →</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="art-row art-policy" href="/linux-ai-ownership/" data-tags="policy">
+        <div class="art-strip"></div>
+        <div class="art-body">
+          <div class="art-top"><span class="art-badge badge-policy">Policy</span><span class="art-title">AI Writes the Code. You Own Everything.</span></div>
+          <div class="art-quote">"The machine wrote the code. The human signed the DCO. The lawyers are still figuring out the rest."</div>
+          <div class="art-desc">The Linux kernel's first official AI policy redefines authorship — and puts the legal weight squarely on you.</div>
+        </div>
+        <div class="art-meta">
+          <span class="art-date">Apr 2026</span>
+          <div class="art-actions">
+            <button class="share-btn" aria-label="Share" data-url="https://asadani.github.io/linux-ai-ownership/" data-title="AI Writes the Code. You Own Everything.">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            </button>
+            <span class="art-link">Read →</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="art-row art-infra" href="/amazon-s3-files/" data-tags="infrastructure">
+        <div class="art-strip"></div>
+        <div class="art-body">
+          <div class="art-top"><span class="art-badge badge-infra">Infrastructure</span><span class="art-title">Breaking the Object-File Barrier</span></div>
+          <div class="art-quote">"For ten years, object storage and file systems refused to share a table. AWS finally sat them down."</div>
+          <div class="art-desc">Native NFS v4.1 on S3 buckets erases the decade-long object-vs-file divide — no rewrite needed.</div>
+        </div>
+        <div class="art-meta">
+          <span class="art-date">Apr 7, 2026</span>
+          <div class="art-actions">
+            <button class="share-btn" aria-label="Share" data-url="https://asadani.github.io/amazon-s3-files/" data-title="Breaking the Object-File Barrier">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            </button>
+            <span class="art-link">Read →</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="art-row art-sec" href="/litellm-supply-chain-attack/" data-tags="security">
+        <div class="art-strip"></div>
+        <div class="art-body">
+          <div class="art-top"><span class="art-badge badge-sec">Security</span><span class="art-title">The LiteLLM PyPI Attack: A Supply Chain Postmortem</span></div>
+          <div class="art-quote">"In open source we trust — and sometimes that trust ships as a <code>.pth</code> file that phones home."</div>
+          <div class="art-desc">A hijacked PyPI account, 13 minutes, and 95M installs at risk — a blueprint for targeting AI developers.</div>
+        </div>
+        <div class="art-meta">
+          <span class="art-date">Mar 24, 2026</span>
+          <div class="art-actions">
+            <button class="share-btn" aria-label="Share" data-url="https://asadani.github.io/litellm-supply-chain-attack/" data-title="The LiteLLM PyPI Attack: A Supply Chain Postmortem">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            </button>
+            <span class="art-link">Read →</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <span>&copy; 2026 Anuj Sadani</span>
+  <div class="footer-links">
+    <a href="https://github.com/asadani"         target="_blank" rel="noopener">GitHub</a>
+    <a href="https://linkedin.com/in/anujsadani" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://medium.com/@anuj.sadani"    target="_blank" rel="noopener">Medium</a>
+  </div>
+</footer>
+
+<script>
+  /* ── Timeline: click logo to toggle detail, click again to close ── */
+  document.querySelectorAll('.tl-logo-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const company  = btn.dataset.company;
+      const panel    = document.getElementById('detail-' + company);
+      const wasOpen  = btn.classList.contains('active');
+
+      /* close all */
+      document.querySelectorAll('.tl-logo-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tl-detail').forEach(d => d.classList.remove('open'));
+
+      /* if it wasn't already open, open it */
+      if (!wasOpen) {
+        btn.classList.add('active');
+        panel.classList.add('open');
+        setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+      }
+    });
+  });
+
+  /* ── Article filter ── */
+  const pills = document.querySelectorAll('.filter-pill');
+  const rows  = document.querySelectorAll('.articles-list .art-row');
+
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      pills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const filter = pill.dataset.filter;
+      rows.forEach(row => {
+        const tags = (row.dataset.tags || '').split(' ');
+        row.classList.toggle('hidden', filter !== 'all' && !tags.includes(filter));
+      });
+    });
+  });
+
+  /* ── Share buttons ── */
+  document.querySelectorAll('.share-btn').forEach(btn => {
+    btn.addEventListener('click', async e => {
+      e.preventDefault();
+      e.stopPropagation();
+      const url   = btn.dataset.url;
+      const title = btn.dataset.title;
+      if (navigator.share) {
+        try { await navigator.share({ title, url }); } catch (_) {}
+      } else {
+        try {
+          await navigator.clipboard.writeText(url);
+          const orig = btn.innerHTML;
+          btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 1600);
+        } catch (_) {}
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
