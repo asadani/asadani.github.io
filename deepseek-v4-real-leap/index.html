@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeepSeek V4: The Complaints Are Valid. The Leap Is Real.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #F5F1EB;
+    --bg-alt:       #EDEAE3;
+    --surface:      #FFFFFF;
+    --surface-tint: #FAF8F5;
+    --border:       #DDD9D0;
+    --border-light: #EAE7E0;
+    --text:         #1A1714;
+    --text-body:    #3D3A35;
+    --text-muted:   #6B6760;
+    --text-subtle:  #9B9892;
+    --accent:       #C85C2D;
+    --accent-light: #E8895D;
+    --accent-bg:    #FDF1EB;
+    --accent-border:#F0C4A8;
+    --green:        #2A7A4B;
+    --green-bg:     #EAF5EF;
+    --green-border: #A8D9BC;
+    --blue:         #2563A8;
+    --blue-bg:      #EAF1FA;
+    --blue-border:  #A8C5E8;
+    --red:          #B83535;
+    --red-bg:       #FAEBEB;
+    --red-border:   #E8AAAA;
+    --serif:        'Newsreader', Georgia, serif;
+    --sans:         'Inter', system-ui, sans-serif;
+    --mono:         'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-body);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .nav-tag {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── LAYOUT ──────────────────────────────────────────── */
+  .page-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-deck {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 640px;
+    font-weight: 300;
+  }
+  .hero-meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-family: var(--mono);
+  }
+  .hero-meta-sep { color: var(--border); }
+
+  /* ─── BODY TEXT ───────────────────────────────────────── */
+  .prose p {
+    color: var(--text-body);
+    margin-bottom: 20px;
+    font-size: 17px;
+    line-height: 1.78;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); font-weight: 600; }
+  em { font-style: italic; color: var(--text-body); }
+
+  /* ─── SECTION HEADING ─────────────────────────────────── */
+  .section { margin-top: 56px; }
+  .section-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 32px 0 14px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── BANNER ──────────────────────────────────────────── */
+  .banner {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .banner-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .banner p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .banner a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ─── PLAIN ENGLISH ───────────────────────────────────── */
+  .plain-english {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 8px 8px;
+    padding: 28px 32px;
+    margin: 0 0 56px;
+  }
+  .plain-english .pe-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .pe-list { list-style: none; padding: 0; }
+  .pe-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 16px;
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+  .pe-list li:last-child { border-bottom: none; }
+  .pe-num {
+    width: 26px;
+    height: 26px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-family: var(--mono);
+  }
+
+  /* ─── CARDS GRID ──────────────────────────────────────── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 24px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    border-color: var(--accent-border);
+    box-shadow: 0 2px 8px rgba(200,92,45,0.08);
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+  .card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .card.card-red { border-color: var(--red-border); }
+  .card.card-red:hover { border-color: var(--red); box-shadow: 0 2px 8px rgba(184,53,53,0.08); }
+  .card.card-red .card-icon-badge {
+    display: inline-block;
+    background: var(--red-bg);
+    color: var(--red);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-green { border-color: var(--green-border); }
+  .card.card-green:hover { border-color: var(--green); box-shadow: 0 2px 8px rgba(42,122,75,0.08); }
+  .card.card-green .card-icon-badge {
+    display: inline-block;
+    background: var(--green-bg);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-blue { border-color: var(--blue-border); }
+  .card.card-blue:hover { border-color: var(--blue); box-shadow: 0 2px 8px rgba(37,99,168,0.08); }
+  .card.card-blue .card-icon-badge {
+    display: inline-block;
+    background: var(--blue-bg);
+    color: var(--blue);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  /* ─── CODE BLOCK ──────────────────────────────────────── */
+  .code-block {
+    background: var(--text);
+    border-radius: 7px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .code-block .cb-label {
+    padding: 9px 16px;
+    background: rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .code-block pre {
+    padding: 20px;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #e8e8e8;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-block .tok-key  { color: #fdba74; }
+  .code-block .tok-val  { color: #86efac; }
+  .code-block .tok-cmt  { color: #6b7280; font-style: italic; }
+  .code-block .tok-str  { color: #93c5fd; }
+  .code-block .tok-acc  { color: #fde047; }
+
+  /* ─── CALLOUT ─────────────────────────────────────────── */
+  .callout {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+  .callout .callout-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout p { font-size: 15px; color: var(--text-muted); margin: 0; line-height: 1.7; }
+
+  /* ─── DETAIL LIST ─────────────────────────────────────── */
+  ul.dl {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  ul.dl li {
+    padding: 13px 18px 13px 14px;
+    font-size: 15px;
+    color: var(--text-body);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.65;
+  }
+  ul.dl li:last-child { border-bottom: none; }
+  ul.dl li::before {
+    content: '→';
+    color: var(--accent);
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ─── TABLE ───────────────────────────────────────────── */
+  .data-table {
+    overflow-x: auto;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .data-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .data-table thead th {
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .data-table tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-body);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:hover td { background: var(--surface-tint); }
+  .td-yes  { color: var(--green); font-weight: 600; }
+  .td-no   { color: var(--red);   font-weight: 600; }
+  .td-mono { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+  .td-best { color: var(--green); font-weight: 700; font-family: var(--mono); font-size: 12px; }
+  .td-mid  { color: var(--text-body); font-family: var(--mono); font-size: 12px; }
+  .td-low  { color: var(--text-subtle); font-family: var(--mono); font-size: 12px; }
+
+  /* ─── ARCH DIAGRAM ────────────────────────────────────── */
+  .arch-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin: 24px 0;
+    overflow-x: auto;
+  }
+  .arch-diagram pre {
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-body);
+    white-space: pre;
+  }
+  .arch-diagram .diag-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-subtle);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  /* ─── STAT ROW ────────────────────────────────────────── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin: 24px 0;
+  }
+  .stat-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    text-align: center;
+  }
+  .stat-box .stat-val {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--accent);
+    line-height: 1.1;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .stat-box .stat-lbl {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  /* ─── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-refs { font-size: 12px; color: var(--text-subtle); }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 40px 0 36px; }
+    .page-wrap { padding: 0 16px 60px; }
+    footer { padding: 16px 20px; }
+    .plain-english { padding: 20px; }
+    .arch-diagram { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">asadani.dev</a>
+  <div class="nav-right">
+    <span>Model Analysis</span>
+    <span class="nav-tag">APR 2026</span>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">DeepSeek V4 — Opinionated Synthesis</div>
+    <h1>The Complaints Are Valid. The Leap Is Real.</h1>
+    <p class="hero-deck">In April 2026, DeepSeek released V4 — over fifteen months after R1 shocked global markets and reset what anyone thought an open-source lab could pull off. Anticipation had been building the whole time. At launch, benchmarks looked solid. Then practitioners ran their own evaluations, held the numbers against what fifteen months of waiting had implied, and disappointment arrived quickly. But dig past the surface-level letdown and there are a few genuine wins buried in this release — architectural shifts and a cost story that most of the discourse missed entirely.</p>
+    <div class="hero-meta">
+      <span>April 2026</span>
+      <span class="hero-meta-sep">/</span>
+      <span>DeepSeek-V4-Pro · 1.6T params · MIT License</span>
+    </div>
+  </header>
+
+  <!-- TL;DR BANNER -->
+  <div class="banner">
+    <span class="banner-badge">TL;DR</span>
+    <p>V4 skips multimodality and consumer-scale models — two valid omissions. Its top benchmarks are cherry-picked from a saturated leaderboard. But its hybrid attention architecture genuinely reduces KV cache to <strong>10% of V3.2's cost at 1M tokens</strong>, enabling ~10× more concurrent users on the same hardware. For coding and agentic workloads, it's the best open model alive.</p>
+  </div>
+
+  <!-- THREE THINGS TO KNOW -->
+  <div class="plain-english">
+    <div class="pe-label">Three Things To Know</div>
+    <ul class="pe-list">
+      <li>
+        <span class="pe-num">1</span>
+        <div><strong>The disappointment is real, not cope.</strong> No native multimodality when Qwen and Kimi have it, no lite model when consumers can actually run Qwen 3 35B A3B — these are genuine gaps, not nitpicks. Calling it "V3.4" is harsh but not wrong from a user-facing feature standpoint.</div>
+      </li>
+      <li>
+        <span class="pe-num">2</span>
+        <div><strong>The benchmark comparison is noisy by design.</strong> HumanEval has been saturated for months — everyone clusters at 90%. The headline wins are real on harder evals (LiveCodeBench, Codeforces, Terminal-Bench), but comparisons are curated and independent verification is thin. Treat the table with appropriate caution.</div>
+      </li>
+      <li>
+        <span class="pe-num">3</span>
+        <div><strong>The architectural story is where the actual leap is.</strong> Compressed Sparse Attention + FP4 experts gives you 1M context at 10% of the previous KV cache cost — meaning roughly 10× more concurrent users on identical hardware. That's not a benchmark; it's a serving economics revolution.</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- SECTION 1: THE DISAPPOINTMENT -->
+  <div class="section">
+    <div class="section-label">Honest Assessment</div>
+    <h2>What the Critics Got Right</h2>
+    <div class="prose">
+      <p>The criticism isn't just deflated hype. Several gaps are specific and well-founded — the kind that don't get better with more benchmark slides.</p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card card-red">
+        <div class="card-icon-badge">Missing</div>
+        <h4>No Native Multimodality</h4>
+        <p>Every Chinese flagship released in 2025–2026 has native vision. Qwen has it. Kimi has it. Not having it in a "V4" release in 2026 is a genuine regression in the roadmap narrative.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Missing</div>
+        <h4>No Consumer-Scale Model</h4>
+        <p>The promised Engram architecture — designed to stream MoE experts from SSD — never shipped. Flash (284B / 13B active) is still far out of reach for most local setups. Google's 26B A4B and Qwen 3 35B A3B run on laptops. V4 doesn't.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Weak</div>
+        <h4>General Knowledge Gaps</h4>
+        <p>MMLU-Pro: 87.5 vs Gemini's 91.0. SimpleQA: 57.9 vs Gemini's 75.6. V4 trails meaningfully on factual recall and broad knowledge benchmarks — the marketing slides don't feature these numbers.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">The "V3.4" critique</div>
+      <p>One community member's framing: <em>"In my opinion, this is DeepSeek V3.4, not V4. You still lack native multimodality every other Chinese flagship model has now."</em> That's sharp, but it reflects a real gap between versioning expectations and feature delivery. DeepSeek should have either waited or shipped with a vision tower.</p>
+    </div>
+  </div>
+
+  <!-- SECTION: THE ENGRAM MYSTERY -->
+  <div class="section">
+    <div class="section-label">The Missing Paper</div>
+    <h2>Engram: The Research That Didn't Make It In</h2>
+    <div class="prose">
+      <p>In January 2026 — three months before V4's release — DeepSeek and Peking University published <em>Conditional Memory via Scalable Lookup: A New Axis of Sparsity for Large Language Models</em>, introducing a module called <strong>Engram</strong>. The community immediately read it as V4's secret sauce. The V4 technical report makes no mention of Engram whatsoever.</p>
+      <p>That absence is worth unpacking.</p>
+    </div>
+
+    <h3>What Engram Actually Proposed</h3>
+    <div class="prose">
+      <p>Standard Transformers — including MoE variants — have no native primitive for knowledge lookup. Every "memory" is simulated through computation: attention attends over all positions, experts activate dynamically, but there's no deterministic retrieval path. Engram proposed a third axis of sparsity alongside MoE: a conditional memory bank that routes known n-gram patterns directly to their embeddings, bypassing attention entirely.</p>
+      <p>The implementation stores n-gram sequences (up to order 4) as compressed suffix representations hashed into a vocabulary of 2.26 billion slots. When a known sequence appears in context, Engram retrieves its embedding in O(1) time and modulates it through a lightweight context-aware gate against the current hidden state — a scalar operation, not multi-head attention. The memory bank is too large for GPU VRAM, but the paper showed that offloading to host DRAM costs only a <strong>2.8% throughput penalty</strong>, because n-gram access follows Zipfian distribution and can be prefetched during the preceding layer's compute.</p>
+      <p>The paper also discovered a <strong>Sparsity Allocation Law</strong>: dedicate ~20–25% of your sparse parameter budget to the Engram memory module and keep the rest for computation, and you outperform pure MoE at the same total parameter count. The optimum was stable across both compute regimes tested.</p>
+    </div>
+
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Benchmark</th>
+            <th>MoE-27B (baseline)</th>
+            <th>Engram-27B</th>
+            <th>Δ gain</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>MMLU</td>
+            <td class="td-mid">baseline</td>
+            <td class="td-best">+3.0</td>
+            <td class="td-mono">+3.0</td>
+            <td style="font-size:12px;color:var(--text-subtle)">Iso-param, iso-FLOPs</td>
+          </tr>
+          <tr>
+            <td>CMMLU</td>
+            <td class="td-mid">baseline</td>
+            <td class="td-best">+4.0</td>
+            <td class="td-mono">+4.0</td>
+            <td style="font-size:12px;color:var(--text-subtle)">Chinese knowledge</td>
+          </tr>
+          <tr>
+            <td>BBH (reasoning)</td>
+            <td class="td-mid">baseline</td>
+            <td class="td-best">+5.0</td>
+            <td class="td-mono">+5.0</td>
+            <td style="font-size:12px;color:var(--text-subtle)">Chain-of-thought tasks</td>
+          </tr>
+          <tr>
+            <td>HumanEval</td>
+            <td class="td-mid">baseline</td>
+            <td class="td-best">+3.0</td>
+            <td class="td-mono">+3.0</td>
+            <td style="font-size:12px;color:var(--text-subtle)">Code generation</td>
+          </tr>
+          <tr>
+            <td>MATH</td>
+            <td class="td-mid">baseline</td>
+            <td class="td-best">+2.4</td>
+            <td class="td-mono">+2.4</td>
+            <td style="font-size:12px;color:var(--text-subtle)">Math reasoning</td>
+          </tr>
+          <tr>
+            <td>Multi-Query NIAH 1M</td>
+            <td class="td-mid">84.2%</td>
+            <td class="td-best">97.0%</td>
+            <td class="td-mono">+12.8</td>
+            <td style="font-size:12px;color:var(--text-subtle)">Long-context needle retrieval</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>These are not free gains from extra parameters or compute. Engram replaces wasted attention on static patterns with direct lookup — same budget, better output. The long-context NIAH jump from 84.2% to 97.0% at 1M tokens is especially striking given that V4's own reported MRCR-1M score is 83.5%. Engram, at the 27B scale, already outperforms V4-Pro on this dimension.</p>
+    </div>
+
+    <h3>Why It Didn't Ship — Two Theories</h3>
+    <div class="prose">
+      <p>DeepSeek offered no public explanation. The paper itself provides a signal: the tiered cache hierarchy — hot n-grams in DRAM, rare patterns on NVMe SSD — is described as a promising direction rather than a demonstrated result. At 1.6T parameter scale, the Engram bank would be substantially larger than the 27B prototype. A 2.8% throughput hit at 27B may not hold at 10× the scale while serving tens of thousands of concurrent requests.</p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card card-red">
+        <div class="card-icon-badge">Theory A</div>
+        <h4>Engineering slip</h4>
+        <p>The DRAM-offload and prefetch pipeline wasn't production-hardened at 1.6T scale in time for this release. DeepSeek chose to ship the attention architecture without it rather than delay further.</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Theory B</div>
+        <h4>It's in there, unnamed</h4>
+        <p>V4's CSA + HCA hybrid attention achieves some of Engram's long-context gains through a different mechanism. Engram-style lookup may be incorporated but not disclosed — DeepSeek's technical reports routinely under-document architectural choices.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">Why this matters beyond V4</div>
+      <p>Engram's MMLU gains (+3.0) point directly at V4's current weakness against Gemini. If the module ships in V4.5 or V5 at production scale, the knowledge and factual-recall gap closes without any new training data — just better parameter allocation. The paper is an explicit roadmap, and it's already published.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 2: BENCHMARK SKEPTICISM -->
+  <div class="section">
+    <div class="section-label">Benchmark Hygiene</div>
+    <h2>Why the Numbers Deserve Skepticism</h2>
+    <div class="prose">
+      <p>The AI benchmark ecosystem has a saturation problem. HumanEval — the de facto coding eval for years — now clusters every frontier model between 88–92%. At that level, the differences are within noise, and the comparisons become marketing rather than measurement.</p>
+      <p>DeepSeek's benchmark comparisons are curated. They foreground wins (coding, agentic, long context) and omit losses (SimpleQA, MMLU-Pro, factual recall). That's not deception — every lab does this — but reading the headline numbers without the full table gives you a distorted picture.</p>
+      <p>The more reliable signal comes from task-grounded evals: <strong>SWE-bench Verified</strong> tests real GitHub issues, not synthetic problems. <strong>LiveCodeBench</strong> uses competitive programming with time-controlled data cutoffs. <strong>Codeforces Rating</strong> is a live arena that's extremely hard to overfit. On all three, V4 performs. The skepticism should be applied to the cherry-picked leaderboard presentation, not the underlying results on harder evals.</p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">The saturation problem</div>
+      <p>Multiple frontier models now score 90%+ on HumanEval — a benchmark of synthetic, single-function Python problems. This tells you nothing about which model will succeed on a 200-file TypeScript refactor. The field needs SWE-bench primacy, not HumanEval dominance.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 3: THE REAL LEAP -->
+  <div class="section">
+    <div class="section-label">Architecture — The Actual Story</div>
+    <h2>Why the KV Cache Numbers Change Everything</h2>
+    <div class="prose">
+      <p>V4's genuine breakthrough isn't in a benchmark cell. It's in how the model computes attention at long contexts — and what that does to the cost of serving it.</p>
+      <p>Traditional transformer attention scales quadratically with context length. At 1M tokens, the KV cache becomes the bottleneck: it grows so large that you either run one user at a time or you can't serve the context at all. This is why "1M context" in most models is a theoretical claim, not a practical one.</p>
+      <p>V4 ships a <strong>hybrid attention architecture</strong> that combines two mechanisms: Compressed Sparse Attention (CSA) for routine positions, and Heavily Compressed Attention (HCA) for cross-window aggregation. Together they reduce KV cache to <strong>10% of V3.2's footprint</strong> at 1M tokens, while retaining 27% of the single-token inference FLOPs.</p>
+    </div>
+
+    <div class="arch-diagram">
+      <div class="diag-label">KV Cache Growth: V3.2 vs V4 at scale</div>
+      <pre>
+Context Length    V3.2 KV Cache    V4 KV Cache    Concurrent Users (same VRAM)
+──────────────────────────────────────────────────────────────────────────────
+128K              baseline         ~10% baseline   ~10×
+512K              ████████████     █               growing gap
+1M                ████████████████ ██              ~10× more users
+──────────────────────────────────────────────────────────────────────────────
+Real-world impact: V3.2 → 4 concurrent requests
+                   V4   → ~40 concurrent requests (same hardware)
+      </pre>
+    </div>
+
+    <div class="prose">
+      <p>This matters enormously for deployment economics. If you're serving a coding agent that uses 200K tokens of context per session, V3.2 lets you handle maybe four simultaneous users before GPU memory is exhausted. V4, with the same budget, handles roughly forty. That's not a 10% improvement — it's a different product category.</p>
+      <p>Pair this with <strong>FP4 quantization for MoE expert weights</strong> (a first for a model this size) and you compound the memory savings further. The 49B active-parameter profile means a 1.6T-parameter model runs inference at the cost of a ~50B dense model — which is already well within reach of a single 8×H100 node.</p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <span class="stat-val">10%</span>
+        <span class="stat-lbl">of V3.2's KV cache at 1M tokens</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-val">27%</span>
+        <span class="stat-lbl">of V3.2's single-token inference FLOPs</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-val">~10×</span>
+        <span class="stat-lbl">more concurrent users on same hardware</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-val">49B</span>
+        <span class="stat-lbl">active params out of 1.6T total (MoE)</span>
+      </div>
+    </div>
+
+    <h3>The Other Architectural Pieces</h3>
+    <div class="prose">
+      <p><strong>Manifold-Constrained Hyper-Connections (mHC)</strong> replace standard residual connections. This sounds esoteric but has a practical effect: it improves gradient flow through the very deep MoE stack, which directly enables the 32T+ token pre-training run without instability. You don't get to train on 32 trillion tokens without solving the propagation problem first.</p>
+      <p>The <strong>Muon optimizer</strong> — a second-order momentum method that approximates gradient whitening — is the other training-side novelty. It converges faster and more stably than AdamW at large batch sizes, which is what you need when training a 1.6T model across thousands of GPUs. These are infrastructure choices, not headline features, but they're what makes the training compute efficiency claims credible.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 4: WHERE V4 ACTUALLY WINS -->
+  <div class="section">
+    <div class="section-label">Performance — The Honest Picture</div>
+    <h2>Where V4 Leads, Where It Doesn't</h2>
+    <div class="prose">
+      <p>With the benchmark hygiene caveat applied, here's the honest performance picture. V4 dominates on coding and agentic evals — the categories where the evals are hardest to game. It trails on general knowledge and factual recall, where Gemini is the clear leader.</p>
+    </div>
+
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Benchmark</th>
+            <th>V4-Pro</th>
+            <th>Claude Opus 4.x</th>
+            <th>Gemini / GPT-5.4</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>LiveCodeBench</td>
+            <td class="td-best">93.5 ★</td>
+            <td class="td-mid">88.8</td>
+            <td class="td-mid">—</td>
+            <td style="font-size:12px;color:var(--text-subtle)">Competitive programming, data-cutoff controlled</td>
+          </tr>
+          <tr>
+            <td>Codeforces Rating</td>
+            <td class="td-best">3206 ★</td>
+            <td class="td-mid">—</td>
+            <td class="td-mid">3168 (GPT-5.4)</td>
+            <td style="font-size:12px;color:var(--text-subtle)">Live arena, very hard to overfit</td>
+          </tr>
+          <tr>
+            <td>Terminal-Bench 2.0</td>
+            <td class="td-best">67.9 ★</td>
+            <td class="td-mid">65.4</td>
+            <td class="td-mid">—</td>
+            <td style="font-size:12px;color:var(--text-subtle)">Real shell tasks, agentic</td>
+          </tr>
+          <tr>
+            <td>SWE-Verified</td>
+            <td class="td-mid">80.6</td>
+            <td class="td-mid">80.8</td>
+            <td class="td-mid">—</td>
+            <td style="font-size:12px;color:var(--text-subtle)">Effectively tied; real GitHub issues</td>
+          </tr>
+          <tr>
+            <td>MRCR 1M (long ctx)</td>
+            <td class="td-best">83.5 ★</td>
+            <td class="td-mid">—</td>
+            <td class="td-mid">76.3 (Gemini)</td>
+            <td style="font-size:12px;color:var(--text-subtle)">Multi-doc retrieval at 1M tokens</td>
+          </tr>
+          <tr>
+            <td>CorpusQA 1M</td>
+            <td class="td-best">62.0 ★</td>
+            <td class="td-mid">—</td>
+            <td class="td-mid">53.8 (Gemini)</td>
+            <td style="font-size:12px;color:var(--text-subtle)">Long-context QA</td>
+          </tr>
+          <tr>
+            <td>MMLU-Pro</td>
+            <td class="td-mid">87.5</td>
+            <td class="td-mid">89.1</td>
+            <td class="td-best">91.0 (Gemini) ★</td>
+            <td style="font-size:12px;color:var(--text-subtle)">General knowledge — V4 trails</td>
+          </tr>
+          <tr>
+            <td>SimpleQA</td>
+            <td class="td-low">57.9</td>
+            <td class="td-mid">—</td>
+            <td class="td-best">75.6 (Gemini) ★</td>
+            <td style="font-size:12px;color:var(--text-subtle)">Factual recall — significant gap</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">Reading the table right</div>
+      <p>V4 wins where tasks are grounded, structured, and tool-use-adjacent. It loses where factual recall and broad world knowledge dominate. For coding agents and long-context document work, it's the best open model. For a general-purpose knowledge assistant, Gemini still leads.</p>
+    </div>
+  </div>
+
+  <!-- SECTION: COST REALITY CHECK -->
+  <div class="section">
+    <div class="section-label">Cost Reality Check</div>
+    <h2>How the Economics Stack Up</h2>
+    <div class="prose">
+      <p>At $1.74 per million input tokens, V4-Pro costs roughly 35% of Claude Opus 4.6's standard rate and less than half of Gemini 2.5 Pro's output cost. For output tokens — where most of the billing accrues in agentic workloads — the gap is even starker: Opus charges $25 per million output tokens versus V4's $3.48, a 7× difference.</p>
+    </div>
+
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Input / 1M</th>
+            <th>Output / 1M</th>
+            <th>Input &gt;200K</th>
+            <th>Context</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>DeepSeek V4-Pro</strong></td>
+            <td class="td-best">$1.74 ★</td>
+            <td class="td-best">$3.48 ★</td>
+            <td class="td-mono">$1.74</td>
+            <td class="td-mono">1M (default)</td>
+          </tr>
+          <tr>
+            <td><strong>DeepSeek V4-Flash</strong></td>
+            <td class="td-best">~$0.30</td>
+            <td class="td-best">~$0.60</td>
+            <td class="td-mono">~$0.30</td>
+            <td class="td-mono">1M (default)</td>
+          </tr>
+          <tr>
+            <td>Gemini 2.5 Pro</td>
+            <td class="td-mid">$1.25</td>
+            <td class="td-mid">$10.00</td>
+            <td class="td-mono">$2.50</td>
+            <td class="td-mono">1M</td>
+          </tr>
+          <tr>
+            <td>Claude Opus 4.6</td>
+            <td class="td-low">$5.00</td>
+            <td class="td-low">$25.00</td>
+            <td class="td-low">$10.00</td>
+            <td class="td-mono">200K std / 1M ext</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>The cross-200K pricing structure is where V4's architectural advantage translates most directly into cost advantage. Anthropic and Google both apply premium rates once you exceed 200K input tokens. V4 has no such cliff — its architecture was designed for 1M context from the start, so the pricing doesn't penalize you for using it. A coding agent session consuming 500K tokens costs the same per-token rate as one consuming 50K.</p>
+      <p>For a typical agentic coding workload — say $500/month on Opus 4.6 at standard context — the equivalent V4-Pro spend is roughly $70/month. That's not a rounding error; it's a budget category shift. For companies running thousands of agent sessions daily, V4's economics make production deployments that were previously cost-prohibitive suddenly viable.</p>
+      <p>Prices above reflect third-party API (OpenRouter). Direct DeepSeek API pricing in CNY is marginally lower at current exchange rates; either way, the order-of-magnitude gap versus Anthropic's frontier pricing is structural, not promotional.</p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">Flash is the sleeper pick</div>
+      <p>V4-Flash at ~$0.30/$0.60 per million tokens nearly matches Pro on structured agentic tasks. For multi-step pipelines where most calls are routing, planning, or summarizing rather than deep reasoning, Flash cuts your API bill by ~80% vs Pro with minimal accuracy loss on those task types. The Flash-to-Pro handoff pattern — cheap model for orchestration, expensive model only for the hard step — is now economically compelling.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 5: AGENT-FIRST DESIGN -->
+  <div class="section">
+    <div class="section-label">Strategic Positioning</div>
+    <h2>The Agent-First Design Is a Real Bet</h2>
+    <div class="prose">
+      <p>V4 is the first open model that was explicitly designed for agentic workflows from the architecture level up — not retrofitted with an agent wrapper afterward. The 1M context default, the hybrid attention that makes that context cheap to serve, the native integration with Claude Code and OpenClaw, the built-in thinking modes: these are coherent choices, not a feature checklist.</p>
+      <p>The <strong>Think / Think-High / Think-Max</strong> triad gives developers explicit control over reasoning depth at inference time. Non-Think mode returns fast results for routine tasks; Think-Max enables extended chain-of-thought for problems at the model's reasoning boundary (requiring at least a 384K token context window). That's a practical API design, not a marketing tier.</p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card card-blue">
+        <div class="card-icon-badge">Architecture</div>
+        <h4>1M Context by Default</h4>
+        <p>Not a premium add-on. Not a paid tier. The standard context length — at 10% of V3.2's KV cache cost. Entire codebases fit in a single prompt.</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">API</div>
+        <h4>Thinking Modes</h4>
+        <p>Three depths: Non-Think for speed, Think-High for complex reasoning, Think-Max for boundary exploration. Callers control the compute budget explicitly.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Open Source</div>
+        <h4>MIT License · FP4 Experts</h4>
+        <p>The most capable open-weight model ever released, with a permissive license and novel FP4 MoE quantization that makes self-hosting economically viable for teams with H100 access.</p>
+      </div>
+    </div>
+
+    <h3>The Flash Model Is Underrated</h3>
+    <div class="prose">
+      <p>DeepSeek-V4-Flash (284B total / 13B active) is the quiet story in the V4 release. At 13B active parameters, it's comparable in inference cost to a mid-sized dense model — but it nearly matches the Pro variant on simple agentic tasks. For pipelines that chain dozens of agent steps, the economics of Flash are compelling: you're paying for a 13B model and getting something that routes, plans, and executes at near-Pro quality on structured tasks.</p>
+      <p>Yes, it's still too large for a consumer GPU. But for teams serving these models in the cloud, Flash closes the gap between "bleeding edge" and "affordable at scale."</p>
+    </div>
+  </div>
+
+  <!-- SECTION 6: OPEN SOURCE HARDWARE IMPLICATIONS -->
+  <div class="section">
+    <div class="section-label">Broader Implications</div>
+    <h2>Open Weight + Hardware Sovereignty</h2>
+    <div class="prose">
+      <p>The geopolitical subtext of V4 is impossible to ignore. Huawei confirmed its Ascend AI processors can run V4 natively — and Beijing has been actively pushing Chinese companies toward domestic chips to reduce Nvidia dependence. A model this capable, running on domestically-produced hardware, changes the calculus around AI sovereignty.</p>
+      <p>For the global open-source ecosystem, the implications are different but also significant. V4 with an MIT license means it can be fine-tuned, distilled, and deployed without restriction. The gap between "open" and "closed" keeps narrowing: V4 beats Opus on LiveCodeBench, matches it on SWE-Verified, and does so with a weight file anyone can download.</p>
+    </div>
+
+    <ul class="dl">
+      <li><strong>Chip diversity:</strong> Native Huawei Ascend support isn't a footnote — it validates China's domestic AI stack and reduces the single-vendor dependency on Nvidia for frontier inference.</li>
+      <li><strong>Distillation surface:</strong> A 1.6T / 49B active MoE with MIT license is the most powerful distillation teacher ever released openly. Expect a wave of smaller, specialized models trained against V4 over the next six months.</li>
+      <li><strong>API migration deadline:</strong> deepseek-chat and deepseek-reasoner retire July 24, 2026. If you're running integrations against those endpoints, update now — the new model IDs are already live.</li>
+      <li><strong>Cost pressure on closed models:</strong> V4's inference cost is substantially below GPT-5.4 and Gemini at equivalent context lengths. For teams that price-optimize their model routing, V4 reshapes the frontier tier economics.</li>
+    </ul>
+  </div>
+
+  <!-- CLOSING -->
+  <div class="section">
+    <div class="section-label">Bottom Line</div>
+    <h2>Who Should Care and Why</h2>
+    <div class="prose">
+      <p>If you were building a multimodal application or hoping to run a local LLM on a gaming rig, V4 is not your answer — and your disappointment is legitimate. DeepSeek made a choice to go deep on coding and agentic efficiency rather than broad on modalities and accessibility. That's a valid strategy, but they should have communicated it instead of letting expectations run ahead.</p>
+      <p>If you're deploying coding agents or long-context document pipelines at scale, V4 is the most interesting infrastructure development in months. Not because of benchmark numbers, but because the KV cache math changes what's economically feasible. Going from 4 to 40 concurrent users on the same hardware isn't a talking point — it's the difference between a pilot and a production deployment.</p>
+      <p>The leap is real. It's just not the leap people expected.</p>
+    </div>
+  </div>
+
+  <!-- MIGRATION CODE -->
+  <div class="section">
+    <div class="section-label">Practical</div>
+    <h2>Migrating to V4</h2>
+    <div class="prose">
+      <p>The API is a model-name swap with one new parameter for thinking mode control. If you're using the OpenAI-compatible endpoint, the change is minimal.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">Python — DeepSeek V4 API (OpenAI-compatible)</div>
+      <pre><span class="tok-cmt"># Before (retiring July 24 2026):</span>
+<span class="tok-cmt"># model="deepseek-chat" or model="deepseek-reasoner"</span>
+
+<span class="tok-key">from</span> openai <span class="tok-key">import</span> OpenAI
+
+client = OpenAI(
+    api_key=<span class="tok-str">"&lt;DEEPSEEK_API_KEY&gt;"</span>,
+    base_url=<span class="tok-str">"https://api.deepseek.com/v1"</span>,
+)
+
+response = client.chat.completions.create(
+    <span class="tok-key">model</span>=<span class="tok-str">"deepseek-v4-pro"</span>,          <span class="tok-cmt"># New model name</span>
+    <span class="tok-key">messages</span>=[
+        {<span class="tok-str">"role"</span>: <span class="tok-str">"user"</span>, <span class="tok-str">"content"</span>: <span class="tok-str">"Refactor this repo to use async/await"</span>},
+    ],
+    <span class="tok-key">extra_body</span>={
+        <span class="tok-str">"thinking_mode"</span>: <span class="tok-str">"think_high"</span>    <span class="tok-cmt"># non_think | think_high | think_max</span>
+    },
+    <span class="tok-key">max_tokens</span>=<span class="tok-val">8192</span>,
+)
+
+<span class="tok-key">print</span>(response.choices[<span class="tok-val">0</span>].message.content)</pre>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">Think Max requires headroom</div>
+      <p>If you use <code>think_max</code>, ensure your context window is at least 384K tokens — the extended chain-of-thought can consume tens of thousands of tokens before reaching the final answer. Budget accordingly, or the reasoning will be truncated mid-chain.</p>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <span>asadani.dev — April 2026</span>
+  <div class="footer-refs">
+    <a href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro">DeepSeek-V4-Pro on HuggingFace</a>
+  </div>
+</footer>
+
+</body>
+</html>
