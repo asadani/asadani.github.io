@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Coding Agent Stack — Mind Map 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #FAFAF8; font-family: 'Inter', sans-serif; overflow: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    height: 48px; background: #fff; border-bottom: 1px solid #E0DDD6;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; font-size: 13px;
+  }
+  .nav-left { display: flex; align-items: center; gap: 16px; }
+  .nav-brand { font-weight: 700; color: #1A1714; text-decoration: none; }
+  .nav-back { color: #C85C2D; text-decoration: none; font-size: 13px; }
+  .nav-back:hover { text-decoration: underline; }
+  .nav-title { color: #6B6760; }
+  .nav-right { display: flex; align-items: center; gap: 8px; }
+  .nav-tag { background: #C85C2D; color: #fff; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 3px; letter-spacing: 0.06em; }
+  .btn { background: #F5F1EB; border: 1px solid #DDD9D0; border-radius: 6px; padding: 5px 12px; font-size: 12px; font-family: inherit; color: #3D3A35; cursor: pointer; }
+  .btn:hover { background: #EDE9E1; }
+
+  /* MAP */
+  #map-wrap { position: fixed; top: 48px; left: 0; right: 0; bottom: 0; overflow: hidden; }
+  #mindmap { width: 100%; height: 100%; cursor: grab; display: block; }
+  #mindmap:active { cursor: grabbing; }
+
+  /* SVG NODES */
+  .node-root > rect { transition: filter 0.15s; }
+  .node-cluster > rect { transition: filter 0.15s; }
+  .node-cluster:hover > rect, .node-root:hover > rect { filter: brightness(0.93); }
+  .node-tool > rect { transition: all 0.15s; cursor: pointer; }
+  .node-tool:hover > rect { filter: brightness(0.9); stroke-width: 2; }
+  .node-tool text { pointer-events: none; }
+
+  /* TOOLTIP */
+  #tooltip {
+    position: fixed; z-index: 300; pointer-events: none;
+    background: #fff; border: 1px solid #DDD9D0; border-radius: 10px;
+    padding: 14px 16px; max-width: 270px; font-size: 13px; line-height: 1.55;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12); display: none;
+  }
+  .tt-name { font-weight: 700; color: #1A1714; margin-bottom: 5px; font-size: 13px; }
+  .tt-layer { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
+  .tt-solves { color: #3D3A35; font-size: 12px; margin-bottom: 10px; line-height: 1.6; }
+  .tt-when { font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 3px 9px; border-radius: 3px; display: inline-block; }
+
+  /* LEGEND */
+  #legend {
+    position: fixed; bottom: 20px; left: 20px; z-index: 150;
+    background: rgba(255,255,255,0.95); border: 1px solid #DDD9D0;
+    border-radius: 10px; padding: 12px 14px; font-size: 11px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  #legend h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: #9B9892; margin-bottom: 8px; }
+  .legend-row { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; color: #3D3A35; }
+  .legend-row:last-child { margin-bottom: 0; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+  /* HINT */
+  #hint {
+    position: fixed; bottom: 20px; right: 20px; z-index: 150;
+    background: rgba(255,255,255,0.9); border: 1px solid #DDD9D0;
+    border-radius: 8px; padding: 8px 12px; font-size: 11px; color: #9B9892;
+    font-family: 'JetBrains Mono', monospace;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <a class="nav-brand" href="/">asadani.tech</a>
+    <a class="nav-back" href="/ai-coding-agent-stack/">← Article</a>
+    <span class="nav-title">AI Coding Agent Stack · Mind Map</span>
+  </div>
+  <div class="nav-right">
+    <button class="btn" onclick="resetView()">Reset View</button>
+    <span class="nav-tag">APR 2026</span>
+  </div>
+</nav>
+
+<div id="map-wrap">
+  <svg id="mindmap"></svg>
+</div>
+
+<div id="tooltip"></div>
+
+<div id="legend">
+  <h4>Layers</h4>
+  <div class="legend-row"><div class="legend-dot" style="background:#2563A8"></div>L1 · Context Graphs</div>
+  <div class="legend-row"><div class="legend-dot" style="background:#C85C2D"></div>L2 · Skills &amp; Methodology</div>
+  <div class="legend-row"><div class="legend-dot" style="background:#2A7A4B"></div>L3 · Memory &amp; State</div>
+  <div class="legend-row"><div class="legend-dot" style="background:#B83535"></div>L4 · Review &amp; CI/CD</div>
+  <div class="legend-row"><div class="legend-dot" style="background:#6B3FA0"></div>L5 · Orchestration</div>
+  <div class="legend-row"><div class="legend-dot" style="background:#5A5650"></div>MCP · Cross-cutting</div>
+</div>
+
+<div id="hint">scroll to zoom · drag to pan · hover nodes</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════
+
+const CLUSTERS = [
+  {
+    id: "l1", angle: 0,
+    name: "L1 · Context Graphs", sub: "Repo Understanding",
+    color: "#2563A8", bg: "#EAF1FA", border: "#A8C5E8",
+    tools: [
+      { name: "code-review-graph",    solves: "Context bloat on PR review. 10–24× token reduction via AST blast-radius.", when: "Week 1" },
+      { name: "Codebase-Memory MCP",  solves: "Monorepo scale. Indexes Linux kernel (28M lines) in 3 min. 66 language grammars.", when: "Week 1 (large repos)" },
+      { name: "Graphify",             solves: "Mixed repos: code + docs + PDFs + YouTube links in one queryable graph.", when: "Week 2" },
+      { name: "Serena",               solves: "IDE-grade symbol navigation via LSP. 40+ languages. More precise than AST.", when: "Week 2" },
+      { name: "CodeGraphContext",     solves: "Enterprise teams sharing pre-indexed snapshots via KùzuDB or Neo4j.", when: "Month 2" },
+      { name: "RepoGraph",            solves: "Research-grade context for SWE-bench and CrossCodeEval benchmarking.", when: "Evaluation" }
+    ]
+  },
+  {
+    id: "l2", angle: 62,
+    name: "L2 · Skills & Method", sub: "Engineering Discipline",
+    color: "#C85C2D", bg: "#FDF1EB", border: "#F0C4A8",
+    tools: [
+      { name: "Superpowers",          solves: "Process drift. Enforces 7-phase pipeline: brainstorm→spec→plan→TDD→review→merge. 94% PR rejection rate.", when: "Week 2" },
+      { name: "anthropics/skills",    solves: "No standard. Defines the official SKILL.md format. Install before any community skills.", when: "Week 1" },
+      { name: "Caveman",              solves: "Token cost and latency. ~75% output reduction via telegraphic compression.", when: "Week 2" },
+      { name: "gstack",               solves: "Single-agent limitations. 23 role-skills: CEO, Designer, Eng Mgr, Release Mgr.", when: "Week 3" },
+      { name: "context-hub",          solves: "API hallucination. Versioned Markdown docs for OpenAI, Stripe, etc.", when: "Week 2" },
+      { name: "drift",                solves: "Architecture drift. Maps 150+ patterns, serves them into agent context.", when: "Watch (V2 unstable)" },
+      { name: "karpathy-skills",      solves: "Silent wrong assumptions and over-engineering. 4 Karpathy principles.", when: "Week 1 (low overhead)" },
+      { name: "get-shit-done",        solves: "Spec-less coding and context loss. Spec-first lightweight workflow.", when: "Week 1" }
+    ]
+  },
+  {
+    id: "l3", angle: 118,
+    name: "L3 · Memory & State", sub: "Persistence",
+    color: "#2A7A4B", bg: "#EAF5EF", border: "#A8D9BC",
+    tools: [
+      { name: "Mem0",         solves: "Session amnesia at scale. +26% vs OpenAI Memory. Hybrid vector + graph + KV.", when: "Month 2" },
+      { name: "Graphiti",     solves: "Changing facts over time. Bi-temporal graph preserves full historical audit trail.", when: "Month 2+ (Neo4j)" },
+      { name: "agentmemory",  solves: "Claude Code PostToolUse hooks. Silently captures every action into structured facts.", when: "Week 3" },
+      { name: "Engram",       solves: "Zero-dependency session memory. Single Go binary, SQLite+FTS5, git-based sync.", when: "Week 3 — start here" }
+    ]
+  },
+  {
+    id: "l4", angle: 180,
+    name: "L4 · Review & CI/CD", sub: "Quality Gates",
+    color: "#B83535", bg: "#FAEBEB", border: "#E8AAAA",
+    tools: [
+      { name: "Semgrep",          solves: "Deterministic security gaps. 2000+ rules, 30+ languages. Add to CI before trusting agents.", when: "Week 1 (CI)" },
+      { name: "PR-Agent",         solves: "Manual PR review overhead. LLM-powered review in ~30s. GitHub/GitLab/Bitbucket.", when: "Month 2" },
+      { name: "SecLab Taskflow",  solves: "Security issues pattern-matching misses. YAML taskflows found 80+ real vulns in OSS.", when: "Periodic / pre-release" },
+      { name: "CodeRabbit",       solves: "Inline suggestion gaps. Real-time vulnerability detection on PR open.", when: "Month 2" },
+      { name: "greptile-mcp",     solves: "Semantic isolation between repos. Cross-repo pattern comparison via MCP.", when: "Month 2" },
+      { name: "Snyk Code",        solves: "Exploit patterns in AI-generated commits. Scans for common vulnerability classes.", when: "Month 2" }
+    ]
+  },
+  {
+    id: "l5", angle: 242,
+    name: "L5 · Orchestration", sub: "Multi-agent Coordination",
+    color: "#6B3FA0", bg: "#F0EAFA", border: "#C9AEED",
+    tools: [
+      { name: "OpenHands",   solves: "Single-agent context limits. Autonomous plan→code→test→deploy. 70k stars, $18.8M raised.", when: "Month 2+ (sandbox req)" },
+      { name: "SWE-agent",   solves: "Benchmark reference. 65–74% on SWE-bench Verified. ~100 LOC minimal variant.", when: "Evaluation baseline" },
+      { name: "deer-flow",   solves: "Context degradation on long tasks. 12-stage middleware, parallel sub-agents.", when: "Month 3 (Docker req)" },
+      { name: "LangGraph",   solves: "Linear execution failures. Stateful cyclic graph engine for complex reasoning.", when: "Month 2 (custom builds)" },
+      { name: "spec-kit",    solves: "Vibe-coding unreliability. Spec-Driven Development: constitutional docs drive generation.", when: "Month 2" },
+      { name: "multica",     solves: "Agent opacity. Agents as persistent team members with project board identity.", when: "Month 3" },
+      { name: "open-swe",    solves: "Sequential bottlenecks. LangChain async multi-task coding agent framework.", when: "Month 2" }
+    ]
+  },
+  {
+    id: "mcp", angle: 298,
+    name: "MCP · Protocol", sub: "Cross-Cutting Integrations",
+    color: "#5A5650", bg: "#F0EDE8", border: "#C8C3BC",
+    tools: [
+      { name: "GitHub MCP",   solves: "Agent isolation from VCS. Read/write PRs, trigger CI, run secret scanning. Use read-only first.", when: "Month 2" },
+      { name: "Exa MCP",      solves: "Keyword search loop failures. Neural semantic web retrieval. Requires paid API key.", when: "Month 2" },
+      { name: "Taskade MCP",  solves: "Fragmented task tracking. Unified workspace: tasks + agent memory + automation.", when: "Month 2" },
+      { name: "AWS MCP",      solves: "Cloud state complexity. Infra provisioning and troubleshooting via natural language.", when: "Month 3 (preview)" },
+      { name: "Sentry MCP",   solves: "No production context. Full error context for real-time bugs in agent sessions.", when: "Month 2 (Sentry users)" }
+    ]
+  }
+];
+
+// ═══════════════════════════════════════════════════════
+// LAYOUT
+// ═══════════════════════════════════════════════════════
+
+const W = 1380, H = 940;
+const CX = W / 2, CY = H / 2;
+const R_CLUSTER = 248;
+const R_TOOL = 182;
+
+function deg2rad(d) { return d * Math.PI / 180; }
+
+CLUSTERS.forEach(c => {
+  const theta = deg2rad(c.angle);
+  c.x = CX + R_CLUSTER * Math.cos(theta);
+  c.y = CY + R_CLUSTER * Math.sin(theta);
+
+  const n = c.tools.length;
+  const spread = Math.min(0.92, n * 0.13);
+
+  c.tools.forEach((t, i) => {
+    const offset = n > 1 ? spread * (i / (n - 1) - 0.5) : 0;
+    const ta = theta + offset;
+    t.x = c.x + R_TOOL * Math.cos(ta);
+    t.y = c.y + R_TOOL * Math.sin(ta);
+    t.cluster = c;
+  });
+});
+
+// ═══════════════════════════════════════════════════════
+// TEXT SIZING
+// ═══════════════════════════════════════════════════════
+
+function clusterNodeSize(text) {
+  const w = Math.max(136, text.length * 7.2 + 40);
+  return { w, h: 42 };
+}
+
+function toolNodeSize(text) {
+  const w = Math.max(88, text.length * 6.8 + 26);
+  return { w, h: 28 };
+}
+
+// ═══════════════════════════════════════════════════════
+// PATH HELPERS
+// ═══════════════════════════════════════════════════════
+
+function curvedPath(x1, y1, x2, y2) {
+  // Cubic bezier — control points pulled toward each end (gentle S-curve)
+  const dx = x2 - x1, dy = y2 - y1;
+  const c1x = x1 + dx * 0.42, c1y = y1 + dy * 0.08;
+  const c2x = x1 + dx * 0.58, c2y = y1 + dy * 0.92;
+  return `M ${x1} ${y1} C ${c1x} ${c1y} ${c2x} ${c2y} ${x2} ${y2}`;
+}
+
+// ═══════════════════════════════════════════════════════
+// BUILD SVG
+// ═══════════════════════════════════════════════════════
+
+const svgEl = document.getElementById('mindmap');
+svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+svgEl.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+
+const ns = 'http://www.w3.org/2000/svg';
+
+function mkEl(tag, attrs = {}, parent = null) {
+  const el = document.createElementNS(ns, tag);
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+  if (parent) parent.appendChild(el);
+  return el;
+}
+
+function mkText(text, x, y, attrs = {}, parent) {
+  const el = mkEl('text', { x, y, ...attrs }, parent);
+  el.textContent = text;
+  return el;
+}
+
+// Main group (for zoom/pan)
+const g = mkEl('g', { id: 'main-g' }, svgEl);
+
+// — — — LINKS — — —
+
+// Root → cluster
+CLUSTERS.forEach(c => {
+  mkEl('path', {
+    d: curvedPath(CX, CY, c.x, c.y),
+    stroke: c.color, 'stroke-width': '2.8', fill: 'none', 'stroke-opacity': '0.38'
+  }, g);
+});
+
+// Cluster → tools
+CLUSTERS.forEach(c => {
+  c.tools.forEach(t => {
+    mkEl('path', {
+      d: curvedPath(c.x, c.y, t.x, t.y),
+      stroke: c.color, 'stroke-width': '1.6', fill: 'none', 'stroke-opacity': '0.32'
+    }, g);
+  });
+});
+
+// — — — TOOL NODES — — —
+CLUSTERS.forEach(c => {
+  c.tools.forEach(t => {
+    const { w, h } = toolNodeSize(t.name);
+    const grp = mkEl('g', { class: 'node-tool' }, g);
+    grp.dataset.solves = t.solves;
+    grp.dataset.when = t.when;
+    grp.dataset.name = t.name;
+    grp.dataset.layer = c.name;
+    grp.dataset.layerColor = c.color;
+    grp.dataset.layerBg = c.bg;
+
+    mkEl('rect', {
+      x: t.x - w / 2, y: t.y - h / 2, width: w, height: h, rx: 14,
+      fill: c.bg, stroke: c.border, 'stroke-width': '1.5'
+    }, grp);
+
+    mkText(t.name, t.x, t.y + 4, {
+      'text-anchor': 'middle', fill: c.color,
+      'font-family': "'JetBrains Mono', monospace", 'font-size': '11', 'font-weight': '500'
+    }, grp);
+
+    grp.addEventListener('mouseenter', showTooltip);
+    grp.addEventListener('mousemove', moveTooltip);
+    grp.addEventListener('mouseleave', hideTooltip);
+  });
+});
+
+// — — — CLUSTER NODES — — —
+CLUSTERS.forEach(c => {
+  const { w, h } = clusterNodeSize(c.name);
+  const grp = mkEl('g', { class: 'node-cluster' }, g);
+
+  mkEl('rect', {
+    x: c.x - w / 2, y: c.y - h / 2, width: w, height: h, rx: 21,
+    fill: c.bg, stroke: c.color, 'stroke-width': '2.2'
+  }, grp);
+
+  mkText(c.name, c.x, c.y - 4, {
+    'text-anchor': 'middle', fill: c.color,
+    'font-family': "'Inter', sans-serif", 'font-size': '12.5', 'font-weight': '700'
+  }, grp);
+
+  mkText(c.sub, c.x, c.y + 12, {
+    'text-anchor': 'middle', fill: c.color, opacity: '0.7',
+    'font-family': "'Inter', sans-serif", 'font-size': '10', 'font-weight': '400'
+  }, grp);
+});
+
+// — — — ROOT NODE — — —
+{
+  const rw = 158, rh = 54;
+  const grp = mkEl('g', { class: 'node-root' }, g);
+
+  mkEl('rect', {
+    x: CX - rw / 2, y: CY - rh / 2, width: rw, height: rh, rx: 14,
+    fill: '#1A1714'
+  }, grp);
+
+  mkText('AI Coding', CX, CY - 7, {
+    'text-anchor': 'middle', fill: '#FFFFFF',
+    'font-family': "'Inter', sans-serif", 'font-size': '14', 'font-weight': '700', 'letter-spacing': '-0.3'
+  }, grp);
+
+  mkText('Agent Stack', CX, CY + 11, {
+    'text-anchor': 'middle', fill: '#FFFFFF',
+    'font-family': "'Inter', sans-serif", 'font-size': '14', 'font-weight': '700', 'letter-spacing': '-0.3'
+  }, grp);
+
+  mkText('2026 · 6 layers · 25+ tools', CX, CY + 30, {
+    'text-anchor': 'middle', fill: 'rgba(255,255,255,0.45)',
+    'font-family': "'JetBrains Mono', monospace", 'font-size': '9'
+  }, grp);
+}
+
+// ═══════════════════════════════════════════════════════
+// TOOLTIP
+// ═══════════════════════════════════════════════════════
+
+const tooltip = document.getElementById('tooltip');
+
+function showTooltip(e) {
+  const d = e.currentTarget.dataset;
+  const color = d.layerColor;
+  const bg = d.layerBg;
+  tooltip.innerHTML = `
+    <div class="tt-name">${d.name}</div>
+    <div class="tt-layer" style="color:${color}">${d.layer}</div>
+    <div class="tt-solves">${d.solves}</div>
+    <div class="tt-when" style="background:${bg};color:${color}">Install: ${d.when}</div>
+  `;
+  tooltip.style.display = 'block';
+  posTooltip(e);
+}
+
+function moveTooltip(e) { posTooltip(e); }
+function hideTooltip()  { tooltip.style.display = 'none'; }
+
+function posTooltip(e) {
+  const tw = tooltip.offsetWidth, th = tooltip.offsetHeight;
+  let lx = e.clientX + 18, ly = e.clientY - 12;
+  if (lx + tw > window.innerWidth - 10) lx = e.clientX - tw - 14;
+  if (ly + th > window.innerHeight - 10) ly = e.clientY - th - 4;
+  tooltip.style.left = lx + 'px';
+  tooltip.style.top  = ly + 'px';
+}
+
+// ═══════════════════════════════════════════════════════
+// PAN / ZOOM
+// ═══════════════════════════════════════════════════════
+
+let panX = 0, panY = 0, scale = 1;
+let pinching = false, lastDist = 0;
+let dragging = false, dragX0 = 0, dragY0 = 0, panX0 = 0, panY0 = 0;
+
+// Initial scale-to-fit
+function fitView() {
+  const rect = svgEl.getBoundingClientRect();
+  const sx = rect.width / W, sy = (rect.height) / H;
+  scale = Math.min(sx, sy) * 0.94;
+  panX  = (rect.width  - W * scale) / 2;
+  panY  = (rect.height - H * scale) / 2;
+  applyTransform();
+}
+
+function applyTransform() {
+  g.setAttribute('transform', `translate(${panX},${panY}) scale(${scale})`);
+}
+
+window.addEventListener('resize', fitView);
+
+// Wheel zoom
+svgEl.addEventListener('wheel', e => {
+  e.preventDefault();
+  const rect = svgEl.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  const factor = e.deltaY < 0 ? 1.12 : 0.89;
+  const ns2 = Math.max(0.25, Math.min(4, scale * factor));
+  panX = mx - (mx - panX) * (ns2 / scale);
+  panY = my - (my - panY) * (ns2 / scale);
+  scale = ns2;
+  applyTransform();
+}, { passive: false });
+
+// Mouse drag
+svgEl.addEventListener('mousedown', e => {
+  if (e.target.closest('.node-tool')) return;
+  dragging = true;
+  dragX0 = e.clientX; dragY0 = e.clientY;
+  panX0 = panX; panY0 = panY;
+});
+window.addEventListener('mousemove', e => {
+  if (!dragging) return;
+  panX = panX0 + (e.clientX - dragX0);
+  panY = panY0 + (e.clientY - dragY0);
+  applyTransform();
+});
+window.addEventListener('mouseup', () => { dragging = false; });
+
+// Touch pan/pinch
+svgEl.addEventListener('touchstart', e => {
+  if (e.touches.length === 2) {
+    pinching = true;
+    lastDist = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+  } else if (e.touches.length === 1) {
+    dragging = true;
+    dragX0 = e.touches[0].clientX; dragY0 = e.touches[0].clientY;
+    panX0 = panX; panY0 = panY;
+  }
+}, { passive: true });
+
+svgEl.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (pinching && e.touches.length === 2) {
+    const dist = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+    const factor = dist / lastDist;
+    scale = Math.max(0.25, Math.min(4, scale * factor));
+    lastDist = dist;
+    applyTransform();
+  } else if (dragging && e.touches.length === 1) {
+    panX = panX0 + (e.touches[0].clientX - dragX0);
+    panY = panY0 + (e.touches[0].clientY - dragY0);
+    applyTransform();
+  }
+}, { passive: false });
+
+svgEl.addEventListener('touchend', () => { dragging = false; pinching = false; });
+
+function resetView() {
+  fitView();
+}
+
+// Init — defer one frame so CSS layout is settled
+requestAnimationFrame(fitView);
+</script>
+</body>
+</html>

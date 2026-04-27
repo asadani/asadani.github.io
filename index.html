@@ -383,6 +383,42 @@
   .tech-map-frame iframe { width: 100%; height: 100%; border: none; display: block; }
   .tech-map-mobile-cta { display: none; }
 
+  /* ─── PUBLICATIONS ───────────────────────────────────── */
+  .pub-card {
+    display: flex;
+    text-decoration: none;
+    color: inherit;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s;
+  }
+  .pub-card:hover { box-shadow: 0 4px 22px rgba(0,0,0,0.09); transform: translateY(-2px); border-color: var(--accent-border); }
+  .pub-strip { width: 4px; flex-shrink: 0; background: var(--blue); }
+  .pub-body { flex: 1; padding: 22px 26px; min-width: 0; }
+  .pub-top { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .pub-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: var(--mono); font-size: 10px; font-weight: 600;
+    padding: 3px 9px; border-radius: 4px; letter-spacing: 0.06em;
+    background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border);
+    text-transform: uppercase;
+  }
+  .pub-cat {
+    font-family: var(--mono); font-size: 10px; font-weight: 500;
+    padding: 3px 8px; border-radius: 4px; letter-spacing: 0.04em;
+    background: var(--bg-alt); color: var(--text-muted); border: 1px solid var(--border);
+  }
+  .pub-id { font-family: var(--mono); font-size: 10px; color: var(--text-subtle); letter-spacing: 0.03em; }
+  .pub-title { font-family: var(--serif); font-size: 22px; font-weight: 600; line-height: 1.3; color: var(--text); letter-spacing: -0.01em; margin-bottom: 8px; }
+  .pub-authors { font-family: var(--sans); font-size: 13px; color: var(--text-muted); margin-bottom: 14px; }
+  .pub-authors .pub-self { color: var(--accent); font-weight: 600; }
+  .pub-abstract { font-family: var(--serif); font-size: 15px; line-height: 1.7; color: var(--text-body); margin-bottom: 18px; }
+  .pub-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid var(--border-light); flex-wrap: wrap; gap: 8px; }
+  .pub-date { font-family: var(--mono); font-size: 11px; color: var(--text-subtle); }
+  .pub-link { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--accent); }
+
   /* ─── PAGINATION ─────────────────────────────────────── */
   .pagination { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-light); flex-wrap: wrap; gap: 10px; }
   .pagination-info { font-family: var(--mono); font-size: 11px; color: var(--text-subtle); }
@@ -415,16 +451,20 @@
     .pagination      { flex-direction: column; align-items: flex-start; }
     .tech-map-frame  { display: none; }
     .tech-map-mobile-cta { display: inline-flex; }
+    .pub-body        { padding: 18px; }
+    .pub-title       { font-size: 18px; }
+    .pub-abstract    { font-size: 14px; }
   }
 </style>
 </head>
 <body>
 
 <nav>
-  <a class="nav-brand" href="/">asadani</a>
+  <a class="nav-brand" href="/">asadani.tech</a>
   <div class="nav-links">
     <a class="nav-link" href="#journey">Journey</a>
     <a class="nav-link" href="#tech">Tech</a>
+    <a class="nav-link" href="#research">Research</a>
     <a class="nav-link" href="#articles">Articles</a>
   </div>
   <span class="nav-tag">Engineering Leader</span>
@@ -644,6 +684,30 @@
     </a>
 
 
+  </div>
+
+  <!-- ── RESEARCH ───────────────────────────────────────────── -->
+  <div class="section-wrap section-anchor" id="research">
+    <div class="section-label">Research</div>
+    <div class="section-heading">Publications</div>
+
+    <a class="pub-card" href="https://arxiv.org/abs/2604.21816" target="_blank" rel="noopener">
+      <div class="pub-strip"></div>
+      <div class="pub-body">
+        <div class="pub-top">
+          <span class="pub-badge">arXiv</span>
+          <span class="pub-cat">cs.AI</span>
+          <span class="pub-id">arXiv:2604.21816</span>
+        </div>
+        <div class="pub-title">Tool Attention Is All You Need: Dynamic Tool Gating and Lazy Schema Loading for Eliminating the MCP/Tools Tax in Scalable Agentic Workflows</div>
+        <div class="pub-authors"><span class="pub-self">Anuj Sadani</span>, Deepak Kumar</div>
+        <p class="pub-abstract">Introduces <em>Tool Attention</em> — gated attention over tool schemas combined with a two-phase lazy loader that keeps compact summaries in context and promotes full schemas only when needed. On a simulated 120-tool, six-server benchmark, per-turn tool tokens drop 95% (47.3k → 2.4k) and effective context utilisation rises from 24% to 91%. The argument: protocol-level efficiency, not raw context length, is the binding constraint for scalable agentic systems.</p>
+        <div class="pub-footer">
+          <span class="pub-date">Apr 23, 2026</span>
+          <span class="pub-link">Read on arXiv ↗</span>
+        </div>
+      </div>
+    </a>
   </div>
 
   <!-- ── ARTICLES ───────────────────────────────────────────── -->
