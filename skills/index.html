@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GenAI Architect Profile — Anuj Sadani</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=Syne+Mono&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+
+  :root {
+    --bg:      #0c0c0c;
+    --surface: #141414;
+    --border:  #2a2a2a;
+    --text:    #f0f0f0;
+    --muted:   #aaaaaa;
+    --dim:     #555555;
+
+    --c-ai:    #62b8ff;
+    --c-arch:  #52dc82;
+    --c-cloud: #ffaa55;
+    --c-lead:  #cc9fff;
+    --c-root:  #7ad4ff;
+
+    --legend-bg:   rgba(12,12,12,0.95);
+    --depth-pip-bg: rgba(14,14,14,0.7);
+
+    --sans: 'DM Sans', system-ui, sans-serif;
+    --mono: 'Syne Mono', 'Courier New', monospace;
+  }
+
+  body.light-mode {
+    --bg:      #F4F4F6;
+    --surface: #FFFFFF;
+    --border:  #D8D8DE;
+    --text:    #1A1A1F;
+    --muted:   #5A5A68;
+    --dim:     #A0A0B0;
+
+    --c-ai:    #1A62C0;
+    --c-arch:  #1A7A3A;
+    --c-cloud: #B85000;
+    --c-lead:  #6030B0;
+    --c-root:  #1A62C0;
+
+    --legend-bg:   rgba(255,255,255,0.97);
+    --depth-pip-bg: rgba(255,255,255,0.85);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* scanlines — hidden in light mode */
+  body:not(.light-mode)::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.06) 2px,
+      rgba(0,0,0,0.06) 4px
+    );
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  /* ── header ─────────────────────────────────────────── */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    height: 52px;
+    background: rgba(14,14,14,0.92);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    flex-shrink: 0;
+    z-index: 50;
+    gap: 16px;
+  }
+
+  .back-link {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    transition: color 0.15s;
+    flex-shrink: 0;
+  }
+  .back-link:hover { color: var(--c-root); }
+
+  .header-center {
+    text-align: center;
+    flex: 1;
+    min-width: 0;
+  }
+  .header-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: 0.02em;
+    display: block;
+  }
+  .header-sub {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .controls { display: flex; gap: 6px; flex-shrink: 0; }
+  .ctrl-btn {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .ctrl-btn:hover { border-color: var(--c-root); color: var(--c-root); }
+  .ctrl-btn.danger:hover { border-color: #ff5555; color: #ff5555; }
+
+  /* ── map container ───────────────────────────────────── */
+  #map-container {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+  }
+  #mindmap {
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: grab;
+    user-select: none;
+  }
+  #mindmap:active { cursor: grabbing; }
+
+  /* ── D3 node / link styles ───────────────────────────── */
+  .link {
+    fill: none;
+    stroke-width: 1;
+  }
+  .node { cursor: pointer; }
+  .node-label {
+    font-family: var(--sans);
+    pointer-events: none;
+    user-select: none;
+  }
+  .node-circle {
+    transition: stroke-width 0.1s;
+  }
+  .node:hover .node-circle { stroke-width: 2.5; }
+
+  /* ── legend ──────────────────────────────────────────── */
+  .legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    height: 36px;
+    background: var(--legend-bg);
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+    font-size: 11px;
+    padding: 0 20px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .d-ai    { background: var(--c-ai); }
+  .d-arch  { background: var(--c-arch); }
+  .d-cloud { background: var(--c-cloud); }
+  .d-lead  { background: var(--c-lead); }
+
+  /* ── HUD overlays ────────────────────────────────────── */
+  .zoom-badge {
+    position: absolute;
+    bottom: 10px;
+    right: 16px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--dim);
+    pointer-events: none;
+  }
+  .hint-badge {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--dim);
+    pointer-events: none;
+    transition: opacity 0.4s;
+    white-space: nowrap;
+  }
+  .depth-badge {
+    position: absolute;
+    top: 10px;
+    right: 16px;
+    display: flex;
+    gap: 6px;
+  }
+  .depth-pip {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--dim);
+    background: var(--depth-pip-bg);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .depth-pip:hover { border-color: var(--c-root); color: var(--c-root); }
+  .depth-pip.active { border-color: var(--c-root); color: var(--c-root); background: rgba(96,197,255,0.08); }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a class="back-link" href="/">&#8592; asadani</a>
+  <div class="header-center">
+    <span class="header-title">GenAI Architect Profile</span>
+    <span class="header-sub">Interactive Skills Map &middot; Click nodes to expand &middot; Scroll to zoom</span>
+  </div>
+  <div class="controls">
+    <button class="ctrl-btn" id="btn-expand">Expand All</button>
+    <button class="ctrl-btn danger" id="btn-collapse">Collapse All</button>
+    <button class="ctrl-btn" id="btn-reset">Reset View</button>
+    <button class="ctrl-btn" id="btn-theme" title="Toggle light/dark mode" style="padding:4px 9px;font-size:13px;">☀︎</button>
+  </div>
+</header>
+
+<div id="map-container">
+  <svg id="mindmap">
+    <g id="zoom-layer">
+      <g id="links-layer"></g>
+      <g id="nodes-layer"></g>
+    </g>
+  </svg>
+  <div class="depth-badge">
+    <span class="depth-pip active" data-depth="1">L1</span>
+    <span class="depth-pip" data-depth="2">L2</span>
+    <span class="depth-pip" data-depth="3">L3</span>
+  </div>
+  <div class="zoom-badge" id="zoom-badge">100%</div>
+  <div class="hint-badge" id="hint">Scroll to zoom &middot; Drag to pan</div>
+</div>
+
+<footer class="legend">
+  <span class="legend-item"><span class="legend-dot d-ai"></span>AI, ML &amp; GenAI</span>
+  <span class="legend-item"><span class="legend-dot d-arch"></span>Architecture &amp; Backend</span>
+  <span class="legend-item"><span class="legend-dot d-cloud"></span>Cloud &amp; DevOps</span>
+  <span class="legend-item"><span class="legend-dot d-lead"></span>Engineering Leadership</span>
+</footer>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+
+/* ── Tree Data ──────────────────────────────────────────────────── */
+const TREE_DATA = {
+  name: "Anuj Sadani",
+  type: "root",
+  children: [
+    {
+      name: "AI, ML & GenAI",
+      cid: "ai",
+      children: [
+        {
+          name: "Foundational Models",
+          children: [
+            {name:"OpenAI"}, {name:"Anthropic"}, {name:"Gemini"},
+            {name:"Gemma 4"}, {name:"Qwen 32B"},
+          ]
+        },
+        {
+          name: "Orchestration & Agents",
+          children: [
+            {name:"LangChain"}, {name:"LlamaIndex"}, {name:"CrewAI"},
+            {name:"Agentic Workflows"}, {name:"Multi-Agent Systems"},
+          ]
+        },
+        {
+          name: "Data & Retrieval (RAG)",
+          children: [
+            {name:"RAG Pipelines"}, {name:"ChromaDB"}, {name:"FAISS"},
+            {name:"Embeddings"}, {name:"Context Management"}, {name:"IDP"},
+          ]
+        },
+        {
+          name: "ML & Engineering",
+          children: [
+            {name:"scikit-learn"}, {name:"HuggingFace"}, {name:"PyTorch"},
+            {name:"NumPy"}, {name:"pandas"}, {name:"Feature Engineering"},
+          ]
+        },
+        {
+          name: "Lifecycle & Inference",
+          children: [
+            {name:"Prompt Engineering"}, {name:"Latent Reasoning"},
+            {name:"Evaluation Pipelines"}, {name:"MLflow"},
+            {name:"Ollama"}, {name:"llama.cpp"},
+          ]
+        },
+      ]
+    },
+    {
+      name: "Architecture & Backend",
+      cid: "arch",
+      children: [
+        {
+          name: "Core Philosophy",
+          children: [
+            {name:"Architecture over Prompts"}, {name:"Hybrid ML+AI"},
+            {name:"LLM Lifecycle Management"},
+          ]
+        },
+        {
+          name: "Languages & Frameworks",
+          children: [
+            {name:"Python"}, {name:"FastAPI"}, {name:"Flask"},
+          ]
+        },
+        {
+          name: "System Design",
+          children: [
+            {name:"Microservices"}, {name:"REST APIs"}, {name:"Design Patterns"},
+            {name:"Data Hygiene"}, {name:"Request Routing"},
+          ]
+        },
+        {
+          name: "Databases & Caching",
+          children: [
+            {name:"PostgreSQL"}, {name:"MongoDB"}, {name:"Redis"},
+          ]
+        },
+        {
+          name: "Async & Messaging",
+          children: [
+            {name:"RabbitMQ"}, {name:"Jupyter"},
+          ]
+        },
+      ]
+    },
+    {
+      name: "Cloud & DevOps",
+      cid: "cloud",
+      children: [
+        {
+          name: "Cloud & AI Services",
+          children: [
+            {name:"AWS"}, {name:"GCP"}, {name:"AWS Bedrock"}, {name:"Vertex AI"},
+          ]
+        },
+        {
+          name: "Containers & Orchestration",
+          children: [
+            {name:"Docker"}, {name:"Kubernetes"}, {name:"EKS"},
+          ]
+        },
+        {
+          name: "Infrastructure as Code",
+          children: [
+            {name:"Terraform"}, {name:"EC2"}, {name:"S3"}, {name:"Linux"},
+          ]
+        },
+        {
+          name: "CI/CD & Automation",
+          children: [
+            {name:"GitHub Actions"}, {name:"Jenkins"}, {name:"Argo CD"},
+            {name:"Git"}, {name:"ML Model Automation"},
+          ]
+        },
+        {
+          name: "Observability & Security",
+          children: [
+            {name:"Grafana"}, {name:"Kibana"}, {name:"Secure SDLC"},
+            {name:"Postman"}, {name:"Automated Testing"},
+          ]
+        },
+      ]
+    },
+    {
+      name: "Engineering Leadership",
+      cid: "lead",
+      children: [
+        {
+          name: "Technical Strategy",
+          children: [
+            {name:"Enterprise RAG Platform"}, {name:"AI Maturity Ladder"},
+            {name:"Technical Governance"}, {name:"Cost Optimization"},
+          ]
+        },
+        {
+          name: "Team & Execution",
+          children: [
+            {name:"Delivery Ownership"}, {name:"Team Mentorship"},
+            {name:"Talent Density"}, {name:"Hiring"}, {name:"Performance Dev"},
+          ]
+        },
+        {
+          name: "Business Alignment",
+          children: [
+            {name:"Business → OKRs"}, {name:"Product Roadmap"},
+            {name:"Stakeholder Comms"}, {name:"Scoping & Estimation"},
+            {name:"Release Planning"},
+          ]
+        },
+        {
+          name: "Agile Management",
+          children: [
+            {name:"Jira"}, {name:"Confluence"},
+          ]
+        },
+      ]
+    },
+  ]
+};
+
+/* ── Constants ──────────────────────────────────────────────────── */
+const DUR = 320;
+
+function cssVar(name) {
+  return getComputedStyle(document.body).getPropertyValue(name).trim();
+}
+
+function getColor(d) {
+  if (d.depth === 0) return cssVar('--c-root');
+  let n = d; while (n.depth > 1) n = n.parent;
+  return cssVar('--c-' + (n.data.cid || '')) || '#888';
+}
+
+function nodeR(d) {
+  return d.depth === 0 ? 9 : d.depth === 1 ? 7 : d.depth === 2 ? 5 : 3.5;
+}
+
+function fontSize(d) {
+  return d.depth === 0 ? '15px' : d.depth === 1 ? '14px' : d.depth === 2 ? '12.5px' : '11.5px';
+}
+
+function labelColor(d) {
+  const light = document.body.classList.contains('light-mode');
+  if (d.depth === 0) return light ? '#111111' : '#f2f2f2';
+  if (d.depth === 1) return light ? '#1A1A1F' : '#e8e8e8';
+  return getColor(d);
+}
+
+function pillWidth(name, depth) {
+  const charW = depth === 2 ? 6.8 : 6.2;
+  const pad   = depth === 2 ? 18  : 14;
+  return name.length * charW + pad;
+}
+function pillHeight(depth) { return depth === 2 ? 18 : 16; }
+function pillY(depth)      { return depth === 2 ? -9 : -8; }
+
+/* ── Setup ──────────────────────────────────────────────────────── */
+const svgEl  = document.getElementById('mindmap');
+const svgSel = d3.select(svgEl);
+const gSel   = d3.select('#zoom-layer');
+const zoomBadge = document.getElementById('zoom-badge');
+const hintEl    = document.getElementById('hint');
+
+const zoom = d3.zoom()
+  .scaleExtent([0.12, 3])
+  .on('zoom', ({ transform }) => {
+    gSel.attr('transform', transform);
+    zoomBadge.textContent = Math.round(transform.k * 100) + '%';
+  });
+
+svgSel.call(zoom).on('dblclick.zoom', null);
+
+svgEl.addEventListener('pointerdown', () => {
+  hintEl.style.opacity = '0';
+}, { once: true });
+
+/* ── Tree layout ────────────────────────────────────────────────── */
+const treeLayout = d3.tree().nodeSize([32, 268]);
+
+const root = d3.hierarchy(TREE_DATA);
+root.x0 = 0; root.y0 = 0;
+
+let uid = 0;
+
+/* Collapse d and all its descendants */
+function collapseAll(d) {
+  if (d.children) {
+    d._children = d.children;
+    d.children  = null;
+    d._children.forEach(collapseAll);
+  }
+}
+
+/* Expand d one level (not recursive) */
+function expandOne(d) {
+  if (d._children) { d.children = d._children; d._children = null; }
+}
+
+/* Expand d and all descendants recursively */
+function expandAll(d) {
+  if (d._children) { d.children = d._children; d._children = null; }
+  if (d.children)  d.children.forEach(expandAll);
+}
+
+/* Initial state: show only category nodes (depth 1 visible) */
+root.children.forEach(collapseAll);
+
+/* Link path generator (horizontal tree) */
+const linkGen = d3.linkHorizontal()
+  .x(d => d.y)
+  .y(d => d.x);
+
+/* ── Update ─────────────────────────────────────────────────────── */
+function update(source) {
+  treeLayout(root);
+
+  const nodes = root.descendants();
+  const links = root.links();
+
+  /* ── Nodes ── */
+  const nodeG = gSel.select('#nodes-layer')
+    .selectAll('g.node')
+    .data(nodes, d => d.uid || (d.uid = ++uid));
+
+  const enter = nodeG.enter()
+    .append('g')
+    .attr('class', 'node')
+    .attr('transform', `translate(${source.y0 ?? 0},${source.x0 ?? 0})`)
+    .style('cursor', d => (d.children || d._children) ? 'pointer' : 'default')
+    .on('click', (evt, d) => {
+      if (!d.children && !d._children) return;
+      evt.stopPropagation();
+      if (d.children) { d._children = d.children; d.children = null; }
+      else            { d.children = d._children; d._children = null; }
+      update(d);
+      nudgeLeft();
+    });
+
+  /* Outer glow ring (for depth 0 and 1) */
+  enter.filter(d => d.depth <= 1)
+    .append('circle')
+    .attr('class', 'node-ring')
+    .attr('r', 0)
+    .attr('fill', 'none')
+    .attr('stroke', getColor)
+    .attr('stroke-width', 1)
+    .attr('stroke-opacity', 0.22);
+
+  enter.append('circle')
+    .attr('class', 'node-circle')
+    .attr('r', 0)
+    .attr('fill', 'transparent')
+    .attr('stroke', getColor)
+    .attr('stroke-width', 1.5);
+
+  /* Pill background for subcategory (depth 2) and leaf (depth 3) nodes */
+  enter.filter(d => d.depth >= 2)
+    .append('rect')
+    .attr('class', 'node-pill')
+    .attr('rx', 3).attr('ry', 3)
+    .attr('x', d => nodeR(d) + 4)
+    .attr('y', d => pillY(d.depth))
+    .attr('width',  d => pillWidth(d.data.name, d.depth))
+    .attr('height', d => pillHeight(d.depth))
+    .attr('fill',   d => getColor(d) + '1a')
+    .attr('stroke', d => getColor(d) + '55')
+    .attr('stroke-width', 1)
+    .style('opacity', 0);
+
+  enter.append('text')
+    .attr('class', 'node-label')
+    .attr('dy', '0.32em')
+    .attr('x', d => nodeR(d) + 8)
+    .style('opacity', 0)
+    .style('font-size', fontSize)
+    .style('font-weight', d => d.depth <= 1 ? '500' : '400')
+    .style('fill', labelColor)
+    .text(d => d.data.name);
+
+  const all = enter.merge(nodeG);
+
+  all.transition().duration(DUR)
+    .attr('transform', d => `translate(${d.y},${d.x})`);
+
+  all.select('.node-ring').transition().duration(DUR)
+    .attr('r', d => nodeR(d) + 7)
+    .attr('stroke', getColor);
+
+  all.select('.node-circle').transition().duration(DUR)
+    .attr('r', nodeR)
+    .attr('fill', d => {
+      const c = getColor(d);
+      if (d._children)  return c + '14'; /* collapsed = hollow */
+      if (!d.children)  return c + 'cc'; /* leaf = solid */
+      return c + '44';                   /* expanded = semi */
+    })
+    .attr('stroke', getColor);
+
+  all.select('.node-pill').transition().duration(DUR)
+    .attr('x', d => nodeR(d) + 4)
+    .attr('y', d => pillY(d.depth))
+    .attr('width',  d => pillWidth(d.data.name, d.depth))
+    .attr('height', d => pillHeight(d.depth))
+    .attr('fill',   d => getColor(d) + '1a')
+    .attr('stroke', d => getColor(d) + '55')
+    .style('opacity', 1);
+
+  all.select('.node-label').transition().duration(DUR)
+    .style('opacity', 1)
+    .style('font-size', fontSize)
+    .style('fill', labelColor);
+
+  const exit = nodeG.exit();
+  exit.transition().duration(DUR)
+    .attr('transform', d => {
+      const p = d.parent;
+      if (p && p.y !== undefined) return `translate(${p.y},${p.x})`;
+      return `translate(${source.y ?? 0},${source.x ?? 0})`;
+    })
+    .remove();
+  exit.select('.node-circle').transition().duration(DUR).attr('r', 0);
+  exit.select('.node-ring').transition().duration(DUR).attr('r', 0);
+  exit.select('.node-pill').transition().duration(DUR).style('opacity', 0);
+  exit.select('.node-label').transition().duration(DUR).style('opacity', 0);
+
+  /* ── Links ── */
+  const linkG = gSel.select('#links-layer')
+    .selectAll('path.link')
+    .data(links, d => d.target.uid);
+
+  const src0 = { x: source.x0 ?? 0, y: source.y0 ?? 0 };
+  linkG.enter()
+    .append('path')
+    .attr('class', 'link')
+    .attr('d', () => linkGen({ source: src0, target: src0 }))
+    .attr('stroke', d => getColor(d.target))
+    .attr('stroke-opacity', 0)
+    .attr('stroke-width', d => d.target.depth === 1 ? 1.5 : 1)
+    .merge(linkG)
+    .transition().duration(DUR)
+    .attr('d', linkGen)
+    .attr('stroke', d => getColor(d.target))
+    .attr('stroke-opacity', d => d.target.depth === 1 ? 0.55 : 0.28);
+
+  linkG.exit().transition().duration(DUR)
+    .attr('d', d => {
+      const p = { x: source.x ?? 0, y: source.y ?? 0 };
+      return linkGen({ source: p, target: p });
+    })
+    .attr('stroke-opacity', 0)
+    .remove();
+
+  /* Store positions */
+  nodes.forEach(d => { d.x0 = d.x; d.y0 = d.y; });
+}
+
+/* ── Fit view (centered — used for initial load, buttons, depth presets) ── */
+function fitView(delay) {
+  setTimeout(() => {
+    const nodes = root.descendants();
+    if (!nodes.length) return;
+    let l = Infinity, r = -Infinity, t = Infinity, b = -Infinity;
+    nodes.forEach(d => {
+      const hx = d.y ?? 0, hy = d.x ?? 0;
+      if (hx < l) l = hx; if (hx > r) r = hx;
+      if (hy < t) t = hy; if (hy > b) b = hy;
+    });
+    const W = svgEl.clientWidth  || 900;
+    const H = svgEl.clientHeight || 600;
+    const labelPad = 220;
+    const contentW = r - l + labelPad;
+    const contentH = b - t + 80;
+    const scale = Math.min(W / contentW, H / contentH, 1.05) * 0.9;
+    /* Center the content */
+    const tx = (W - contentW * scale) / 2 - l * scale + 30;
+    const ty = H / 2 - ((t + b) / 2) * scale;
+    svgSel.transition().duration(450)
+      .call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(scale));
+  }, delay || 0);
+}
+
+/* ── Nudge left (used on node click — preserves zoom, only pans if needed) ── */
+function nudgeLeft() {
+  setTimeout(() => {
+    const nodes = root.descendants();
+    if (!nodes.length) return;
+    const ct = d3.zoomTransform(svgEl);
+    const W  = svgEl.clientWidth || 900;
+
+    /* Find the rightmost screen-x across all visible nodes */
+    let maxSx = -Infinity;
+    nodes.forEach(d => {
+      if (d.y === undefined) return;
+      /* Estimate label end: pill width for deep nodes, rough estimate for others */
+      const labelEst = d.depth <= 1 ? 160 : pillWidth(d.data.name, d.depth) + 20;
+      const sx = d.y * ct.k + ct.x + labelEst;
+      if (sx > maxSx) maxSx = sx;
+    });
+
+    const overflow = maxSx - (W - 24);
+    if (overflow > 0) {
+      svgSel.transition().duration(380).ease(d3.easeCubicOut)
+        .call(zoom.transform, d3.zoomIdentity
+          .translate(ct.x - overflow, ct.y)
+          .scale(ct.k));
+    }
+  }, DUR + 40);
+}
+
+/* ── Initial render ─────────────────────────────────────────────── */
+update(root);
+fitView(100);
+
+/* ── Depth presets (L1 / L2 / L3) ───────────────────────────────── */
+function setDepth(depth) {
+  /* Reset first */
+  root.children.forEach(collapseAll);
+  if (depth >= 2) root.children.forEach(expandOne);
+  if (depth >= 3) {
+    root.children.forEach(d => {
+      if (d.children) d.children.forEach(expandOne);
+      if (d._children) {
+        d.children = d._children; d._children = null;
+        d.children.forEach(expandOne);
+      }
+    });
+  }
+  update(root);
+  fitView(DUR + 80);
+
+  document.querySelectorAll('.depth-pip').forEach(pip => {
+    pip.classList.toggle('active', +pip.dataset.depth === depth);
+  });
+}
+
+document.querySelectorAll('.depth-pip').forEach(pip => {
+  pip.addEventListener('click', () => setDepth(+pip.dataset.depth));
+});
+
+/* ── Main controls ──────────────────────────────────────────────── */
+document.getElementById('btn-expand').addEventListener('click', () => {
+  expandAll(root);
+  update(root);
+  fitView(DUR + 80);
+  document.querySelectorAll('.depth-pip').forEach(p => p.classList.remove('active'));
+});
+
+document.getElementById('btn-collapse').addEventListener('click', () => {
+  root.children.forEach(collapseAll);
+  update(root);
+  fitView(DUR + 80);
+  document.querySelector('.depth-pip[data-depth="1"]').classList.add('active');
+  document.querySelector('.depth-pip[data-depth="2"]').classList.remove('active');
+  document.querySelector('.depth-pip[data-depth="3"]').classList.remove('active');
+});
+
+document.getElementById('btn-reset').addEventListener('click', () => fitView(0));
+
+/* ── Theme toggle ───────────────────────────────────────────────── */
+const themeBtn = document.getElementById('btn-theme');
+themeBtn.addEventListener('click', () => {
+  document.body.classList.toggle('light-mode');
+  themeBtn.textContent = document.body.classList.contains('light-mode') ? '🌙' : '☀︎';
+  update(root);
+});
+
+/* ── Keyboard shortcuts ─────────────────────────────────────────── */
+document.addEventListener('keydown', e => {
+  if (e.key === '1') setDepth(1);
+  if (e.key === '2') setDepth(2);
+  if (e.key === '3') setDepth(3);
+  if (e.key === 'r' || e.key === 'R') fitView(0);
+});
+
+</script>
+</body>
+</html>

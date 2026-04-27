@@ -219,6 +219,30 @@
   .tl-role-desc  { font-size: 13px; color: var(--text-muted); grid-column: 1; margin-top: 3px; line-height: 1.55; }
   .tl-role-dates { font-family: var(--mono); font-size: 11px; color: var(--text-subtle); white-space: nowrap; padding-top: 2px; }
 
+  .tl-exit {
+    margin-top: 20px;
+    padding: 14px 18px;
+    background: var(--bg-alt);
+    border-radius: 6px;
+    border-left: 3px solid var(--border);
+    font-family: var(--serif);
+    font-size: 14px;
+    font-style: italic;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+  .tl-exit-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 500;
+    color: var(--text-subtle);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+  }
+
   /* ════════════════════════════════════════════════════════
      ARTICLE LIST  (one per row, rectangular)
   ════════════════════════════════════════════════════════ */
@@ -292,6 +316,82 @@
   .share-btn.copied { border-color: var(--green); color: var(--green); }
   .share-btn svg { width: 12px; height: 12px; }
 
+  /* ─── NAV LINKS ──────────────────────────────────────── */
+  .nav-links { display: flex; gap: 20px; }
+  .nav-link { font-family: var(--sans); font-size: 13px; font-weight: 500; color: var(--text-muted); text-decoration: none; letter-spacing: 0.01em; transition: color 0.15s; }
+  .nav-link:hover { color: var(--text); }
+  .nav-link.active { color: var(--accent); }
+
+  /* ─── SCROLL ANCHOR OFFSET ───────────────────────────── */
+  .section-anchor { scroll-margin-top: 64px; }
+
+  /* ─── TECH STACK ─────────────────────────────────────── */
+  .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; }
+  .tech-group { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; }
+  .tech-group-label { font-family: var(--sans); font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border-light); }
+  .tech-badges { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tech-badge { display: inline-block; font-family: var(--mono); font-size: 10px; font-weight: 500; padding: 3px 9px; border-radius: 4px; letter-spacing: 0.04em; white-space: nowrap; border: 1px solid; line-height: 1.6; }
+  .tech-blue    { background: var(--blue-bg);   color: var(--blue);   border-color: var(--blue-border); }
+  .tech-green   { background: var(--green-bg);  color: var(--green);  border-color: var(--green-border); }
+  .tech-accent  { background: var(--accent-bg); color: var(--accent); border-color: var(--accent-border); }
+  .tech-neutral { background: var(--bg-alt);    color: var(--text-muted); border-color: var(--border); }
+
+  /* ─── EMBEDDED MIND MAP ──────────────────────────────── */
+  .tech-map-wrap {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  }
+  .tech-map-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .tech-map-topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tech-map-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 6px rgba(200,92,45,0.5);
+  }
+  .tech-map-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .tech-map-open {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: opacity 0.15s;
+  }
+  .tech-map-open:hover { opacity: 0.7; }
+  .tech-map-frame { height: 500px; background: #0c0c0c; display: block; }
+  .tech-map-frame iframe { width: 100%; height: 100%; border: none; display: block; }
+  .tech-map-mobile-cta { display: none; }
+
+  /* ─── PAGINATION ─────────────────────────────────────── */
+  .pagination { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-light); flex-wrap: wrap; gap: 10px; }
+  .pagination-info { font-family: var(--mono); font-size: 11px; color: var(--text-subtle); }
+  .pagination-controls { display: flex; align-items: center; gap: 6px; }
+  .page-btn { font-family: var(--sans); font-size: 12px; font-weight: 500; padding: 5px 11px; border: 1px solid var(--border); border-radius: 5px; background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
+  .page-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .page-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .page-btn:disabled { opacity: 0.35; cursor: default; }
+
   /* ─── FOOTER ──────────────────────────────────────────── */
   footer { background: var(--surface); border-top: 1px solid var(--border); padding: 24px 48px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--text-muted); }
   .footer-links { display: flex; gap: 24px; }
@@ -301,6 +401,7 @@
   /* ─── RESPONSIVE ──────────────────────────────────────── */
   @media (max-width: 700px) {
     nav { padding: 0 20px; }
+    .nav-links { display: none; }
     footer { padding: 20px; flex-direction: column; gap: 14px; text-align: center; }
     .page-wrap  { padding: 0 20px 60px; }
     .hero       { padding: 48px 0 40px; }
@@ -310,6 +411,10 @@
     .tl-role    { grid-template-columns: 1fr; }
     .tl-role-dates { margin-top: 2px; }
     .tl-detail  { padding: 18px; }
+    .tech-grid       { grid-template-columns: 1fr; }
+    .pagination      { flex-direction: column; align-items: flex-start; }
+    .tech-map-frame  { display: none; }
+    .tech-map-mobile-cta { display: inline-flex; }
   }
 </style>
 </head>
@@ -317,6 +422,11 @@
 
 <nav>
   <a class="nav-brand" href="/">asadani</a>
+  <div class="nav-links">
+    <a class="nav-link" href="#journey">Journey</a>
+    <a class="nav-link" href="#tech">Tech</a>
+    <a class="nav-link" href="#articles">Articles</a>
+  </div>
   <span class="nav-tag">Engineering Leader</span>
 </nav>
 
@@ -351,7 +461,7 @@
   </section>
 
   <!-- ── JOURNEY ────────────────────────────────────────────── -->
-  <div class="section-wrap">
+  <div class="section-wrap section-anchor" id="journey">
     <div class="section-label">Career</div>
     <div class="section-heading">Journey</div>
 
@@ -437,18 +547,22 @@
           <div class="tl-role">
             <div class="tl-role-title">Senior Tools Development Engineer</div>
             <div class="tl-role-dates">Oct 2014 – Jan 2020</div>
-            <div class="tl-role-desc">Led a team of 8+ engineers delivering embedded automation frameworks and internal tooling across multiple product lines. Drove full SDLC ownership and advocated automation-first practices across QA, release, and platform teams.</div>
+            <div class="tl-role-desc">By this point I'd outgrown .NET and made a deliberate pivot to Python — new territory, but I adapted fast and never looked back. The scope expanded: I led a small team of Python developers, built automation frameworks for the Tegra/Jetson embedded platform, and added data analytics and reporting tooling on top of the existing automation work. I went from writing tests to leading the engineers writing them — and owning the full SDLC end to end.</div>
           </div>
           <div class="tl-role">
             <div class="tl-role-title">Tools Development Engineer</div>
             <div class="tl-role-dates">Aug 2010 – Sep 2014</div>
-            <div class="tl-role-desc">Designed and maintained scalable data management solutions for production systems. Collaborated cross-functionally to improve deployment stability and system performance.</div>
+            <div class="tl-role-desc">Built NVQM — a full-stack .NET application that managed NVIDIA's internal software quality lifecycle: test case management, bug tracking, RCCA, reporting, and analytics. This is where I discovered I genuinely enjoyed building for engineers, making their daily work less painful. The system touched QA and dev teams across the org, which meant constant stakeholder conversations, requirement translation, and shipping features people actually used.</div>
           </div>
           <div class="tl-role">
             <div class="tl-role-title">Software Quality Assurance Engineer</div>
             <div class="tl-role-dates">Aug 2009 – Jul 2010</div>
-            <div class="tl-role-desc">Root cause and corrective action analysis for complex production issues — improving defect triage accuracy and reducing recurring failures.</div>
+            <div class="tl-role-desc">An honest pit stop in the QA department before moving into tools development. I spent the year building dashboards and internal tracking tools to help the QA team work more effectively — and in doing so, realised my instinct was less to find bugs and more to build things that helped others find them.</div>
           </div>
+        </div>
+        <div class="tl-exit">
+          <span class="tl-exit-label">Why I left</span>
+          Ten years at NVIDIA gave me a deep technical foundation — but it was a long run on an internal stage. Everything I built was for engineers inside NVIDIA. I was proud of the work, but I wanted to build products that customers actually touched. I left looking for a role where the audience wasn't just the person three desks away.
         </div>
       </div>
 
@@ -462,10 +576,14 @@
         </div>
         <div class="tl-roles">
           <div class="tl-role">
-            <div class="tl-role-title">Software Engineer</div>
+            <div class="tl-role-title">Software Engineer II</div>
             <div class="tl-role-dates">Feb 2020 – Dec 2020</div>
-            <div class="tl-role-desc">Built and scaled Python microservices (Flask) for a high-traffic logistics platform, ensuring reliable real-time order processing across distributed systems. Integrated analytical workflows with Data Science and BI teams to drive data-driven operations.</div>
+            <div class="tl-role-desc">Joined a logistics tribe inside one of the world's largest food delivery networks — responsible for the infrastructure that moves orders from restaurants to riders to customers at scale. Hands-on with Python/Flask microservices, on-call rotations, Kubernetes, containerisation, CI/CD, and end-to-end release management. Worked closely with Data Science and BI teams to integrate analytical workflows that shaped real-time operational decisions. This was my first taste of genuine end-to-end ownership: you build it, you ship it, you support it — and it changed how I think about software.</div>
           </div>
+        </div>
+        <div class="tl-exit">
+          <span class="tl-exit-label">Why I left</span>
+          Eleven months, six nationalities in one pod, and the most culturally rewarding experience of my career to that point. I hadn't planned to leave — the work was meaningful and the team exceptional. But COVID brought uncertainty, and family back in India brought clarity. I returned home.
         </div>
       </div>
 
@@ -474,24 +592,24 @@
           <div class="tl-detail-logo"><img src="/assets/infrrd_logo.jpeg" alt="Infrrd"></div>
           <div>
             <div class="tl-detail-company">Infrrd</div>
-            <div class="tl-detail-total">Pune, India &nbsp;·&nbsp; Full-time &nbsp;·&nbsp; 5 yrs 4 mos &nbsp;·&nbsp; <span style="color:var(--green);font-weight:500">Current</span></div>
+            <div class="tl-detail-total">Pune / Bangalore, India &nbsp;·&nbsp; Full-time &nbsp;·&nbsp; 5 yrs 4 mos &nbsp;·&nbsp; <span style="color:var(--green);font-weight:500">Current</span></div>
           </div>
         </div>
         <div class="tl-roles">
           <div class="tl-role">
             <div class="tl-role-title">Principal Software Development Engineer</div>
             <div class="tl-role-dates">May 2025 – Present</div>
-            <div class="tl-role-desc">Architecting GenAI platforms and hybrid ML+AI systems that helped put Infrrd in the Gartner Magic Quadrant. Leading cross-departmental AI strategy and engineering excellence.</div>
+            <div class="tl-role-desc">Moved from Applied ML practitioner to Principal Engineer — from building AI systems to leading the strategy behind them. I now own the Python stack across the organisation, lead and mentor a team of 8+ engineers, and run a focused LLM cost-optimisation pod alongside multi-feature delivery teams. The GenAI and hybrid ML+AI work I've architected contributed to Infrrd's recognition as a Leader in the Gartner Magic Quadrant and by Everest Group. Two patents are grant-pending. One paper is on arXiv. The work continues.</div>
           </div>
           <div class="tl-role">
             <div class="tl-role-title">ML Engineering Technical Architect</div>
             <div class="tl-role-dates">Nov 2021 – Apr 2025</div>
-            <div class="tl-role-desc">Designed hybrid ML+AI cost architecture achieving 30–40% reduction vs LLM-only. Built agentic workflows with CrewAI, owned the enterprise Python stack, co-authored two technical patents, and received "Innovator of the Year" recognition.</div>
+            <div class="tl-role-desc">Went deep on Applied ML and started owning the AI transition company-wide. I moved from practitioner to architect — designed the hybrid ML+AI cost architecture that cut operational costs 30–40% versus LLM-only approaches, led the GenAI platform work, built agentic workflows with CrewAI, and co-authored two technical patents. Owned the enterprise Python stack and evangelised MLOps best practices across engineering. The "Innovator of the Year" recognition from Deep Analysis meant more than any award — it came from people who watched the work firsthand.</div>
           </div>
           <div class="tl-role">
             <div class="tl-role-title">Technical Specialist</div>
             <div class="tl-role-dates">Jan 2021 – Oct 2021</div>
-            <div class="tl-role-desc">Established foundational AI/ML engineering standards, secure SDLC practices, and Python architecture patterns across the engineering organisation.</div>
+            <div class="tl-role-desc">Joined the R&amp;D team as the bridge between research and engineering — translating business needs into technical decisions and research outputs into shipped product. Built the foundational feedback loop for the IDP solution: data collection, ingestion, preprocessing, stratification, training, evaluation, deployment, monitoring. Unglamorous work, but the kind that makes everything else possible. Also set the Python architecture standards and secure SDLC practices that the engineering org still follows.</div>
           </div>
         </div>
       </div>
@@ -499,8 +617,35 @@
     </div>
   </div>
 
+  <!-- ── TECH STACK ───────────────────────────────────────────── -->
+  <div class="section-wrap section-anchor" id="tech">
+    <div class="section-label">Skills</div>
+    <div class="section-heading" style="margin-bottom:16px">What I Work With</div>
+
+    <!-- Embedded interactive mind map (hidden on mobile, CTA shown instead) -->
+    <div class="tech-map-wrap">
+      <div class="tech-map-topbar">
+        <div class="tech-map-topbar-left">
+          <span class="tech-map-dot"></span>
+          <span class="tech-map-label">Skills &amp; Technologies — Interactive Map</span>
+        </div>
+        <a class="tech-map-open" href="/skills/" target="_blank" rel="noopener">Open full screen ↗</a>
+      </div>
+      <div class="tech-map-frame">
+        <iframe src="/skills/" title="Skills & Technologies — Interactive Mind Map" loading="lazy" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <!-- Mobile fallback: plain link -->
+    <a href="/skills/" class="tech-map-mobile-cta" style="align-items:center;gap:8px;font-family:var(--mono);font-size:11px;font-weight:500;color:var(--accent);text-decoration:none;border:1px solid var(--accent-border);background:var(--accent-bg);padding:6px 14px;border-radius:5px;letter-spacing:0.04em;margin-bottom:24px;transition:opacity 0.15s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+      What I Work With — Skills Map →
+    </a>
+
+
+  </div>
+
   <!-- ── ARTICLES ───────────────────────────────────────────── -->
-  <section>
+  <section class="section-anchor" id="articles">
     <div class="section-label">Writing</div>
     <div class="section-heading">Articles</div>
 
@@ -697,6 +842,16 @@
       </a>
 
     </div>
+
+    <div class="pagination" id="pagination">
+      <span class="pagination-info" id="pagination-info"></span>
+      <div class="pagination-controls" id="pagination-controls">
+        <button class="page-btn" id="prev-btn" disabled>&#8592; Prev</button>
+        <span id="page-nums" style="display:flex;gap:6px;align-items:center"></span>
+        <button class="page-btn" id="next-btn" disabled>Next &#8594;</button>
+      </div>
+    </div>
+
   </section>
 
 </div>
@@ -731,21 +886,83 @@
     });
   });
 
-  /* ── Article filter ── */
-  const pills = document.querySelectorAll('.filter-pill');
-  const rows  = document.querySelectorAll('.articles-list .art-row');
+  /* ── Article filter + pagination ── */
+  const ARTICLES_PER_PAGE = 10;
+  let currentPage = 1;
+  let currentFilter = 'all';
+  const allRows     = Array.from(document.querySelectorAll('.articles-list .art-row'));
+  const pills       = document.querySelectorAll('.filter-pill');
+  const paginationInfo   = document.getElementById('pagination-info');
+  const paginationCtrls  = document.getElementById('pagination-controls');
+  const pageNumsEl       = document.getElementById('page-nums');
+  const prevBtn          = document.getElementById('prev-btn');
+  const nextBtn          = document.getElementById('next-btn');
+
+  function filteredRows() {
+    if (currentFilter === 'all') return allRows;
+    return allRows.filter(r => (r.dataset.tags || '').split(' ').includes(currentFilter));
+  }
+
+  function renderPage(page) {
+    const rows       = filteredRows();
+    const total      = rows.length;
+    const totalPages = Math.max(1, Math.ceil(total / ARTICLES_PER_PAGE));
+    currentPage      = Math.max(1, Math.min(page, totalPages));
+    const start      = (currentPage - 1) * ARTICLES_PER_PAGE;
+    const end        = start + ARTICLES_PER_PAGE;
+
+    allRows.forEach(r => r.classList.add('hidden'));
+    rows.slice(start, end).forEach(r => r.classList.remove('hidden'));
+
+    const s = total === 0 ? 0 : start + 1;
+    const e = Math.min(end, total);
+    paginationInfo.textContent = total === 0 ? 'No articles found'
+      : `Showing ${s}–${e} of ${total}`;
+
+    prevBtn.disabled = currentPage <= 1;
+    nextBtn.disabled = currentPage >= totalPages;
+
+    pageNumsEl.innerHTML = '';
+    if (totalPages > 1) {
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'page-btn' + (i === currentPage ? ' active' : '');
+        btn.textContent = i;
+        btn.addEventListener('click', () => renderPage(i));
+        pageNumsEl.appendChild(btn);
+      }
+    }
+
+    paginationCtrls.style.display = totalPages <= 1 ? 'none' : 'flex';
+  }
 
   pills.forEach(pill => {
     pill.addEventListener('click', () => {
       pills.forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
-      const filter = pill.dataset.filter;
-      rows.forEach(row => {
-        const tags = (row.dataset.tags || '').split(' ');
-        row.classList.toggle('hidden', filter !== 'all' && !tags.includes(filter));
-      });
+      currentFilter = pill.dataset.filter;
+      renderPage(1);
     });
   });
+
+  prevBtn.addEventListener('click', () => renderPage(currentPage - 1));
+  nextBtn.addEventListener('click', () => renderPage(currentPage + 1));
+
+  renderPage(1);
+
+  /* ── Nav active section highlight ── */
+  const navLinks   = document.querySelectorAll('.nav-link');
+  const sections   = document.querySelectorAll('.section-anchor, .hero');
+  const observer   = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const link = document.querySelector('.nav-link[href="#' + entry.target.id + '"]');
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => { if (s.id) observer.observe(s); });
 
   /* ── Share buttons ── */
   document.querySelectorAll('.share-btn').forEach(btn => {
