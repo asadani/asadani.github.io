@@ -195,6 +195,7 @@
   }
 
   /* ── detail panel ── */
+  .tl-mobile { display: none; }
   .tl-detail-wrap { margin-top: 28px; }
   .tl-detail {
     display: none;
@@ -428,6 +429,44 @@
   .page-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
   .page-btn:disabled { opacity: 0.35; cursor: default; }
 
+  /* ─── INTERESTS ───────────────────────────────────────── */
+  .interests-grid { display: flex; flex-direction: column; gap: 10px; }
+  .interest-card {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+  }
+  .interest-card.ic-blue   { border-left-color: var(--blue); }
+  .interest-card.ic-green  { border-left-color: var(--green); }
+  .interest-card.ic-purple { border-left-color: #7B5EA7; }
+  .interest-card.ic-orange { border-left-color: #FF6719; }
+  .interest-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .interest-icon {
+    width: 32px; height: 32px; border-radius: 7px; flex-shrink: 0;
+    background: var(--accent-bg);
+    display: flex; align-items: center; justify-content: center; font-size: 16px;
+  }
+  .interest-card.ic-blue   .interest-icon { background: var(--blue-bg); }
+  .interest-card.ic-green  .interest-icon { background: var(--green-bg); }
+  .interest-card.ic-purple .interest-icon { background: #F3F0FA; }
+  .interest-card.ic-orange .interest-icon { background: #FFF4EE; }
+  .interest-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--text-muted);
+  }
+  .interest-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .interest-tag {
+    font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 20px;
+    border: 1px solid var(--border); background: var(--bg); color: var(--text-body);
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    cursor: default; text-decoration: none; display: inline-block;
+  }
+  .interest-tag:hover { background: var(--accent-bg); border-color: var(--accent-border); color: var(--accent); }
+  a.interest-tag { cursor: pointer; }
+  a.interest-tag:hover { background: #FFF4EE; border-color: #FFB899; color: #FF6719; }
+
   /* ─── FOOTER ──────────────────────────────────────────── */
   footer { background: var(--surface); border-top: 1px solid var(--border); padding: 24px 48px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--text-muted); }
   .footer-links { display: flex; gap: 24px; }
@@ -447,6 +486,25 @@
     .tl-role    { grid-template-columns: 1fr; }
     .tl-role-dates { margin-top: 2px; }
     .tl-detail  { padding: 18px; }
+    .tl-scroll-wrap { display: none; }
+    .tl-mobile { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+    .tl-mobile-row {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--surface); border: 1px solid var(--border-light);
+      border-radius: 12px; padding: 12px 14px; cursor: pointer;
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+    .tl-mobile-row:active { box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+    .tl-mobile-row.active { border-color: var(--accent); box-shadow: 0 2px 12px rgba(200,92,45,0.18); }
+    .tl-mobile-accent { width: 4px; height: 40px; border-radius: 2px; flex-shrink: 0; }
+    .tl-mobile-accent.nvidia { background: var(--nvidia); }
+    .tl-mobile-accent.dh     { background: var(--dh); }
+    .tl-mobile-accent.infrrd { background: var(--infrrd); }
+    .tl-mobile-logo { width: 38px; height: 38px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); overflow: hidden; padding: 3px; flex-shrink: 0; }
+    .tl-mobile-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .tl-mobile-info { flex: 1; min-width: 0; }
+    .tl-mobile-name { font-size: 14px; font-weight: 600; color: var(--text); }
+    .tl-mobile-years { font-family: var(--mono); font-size: 11px; color: var(--text-subtle); margin-top: 2px; }
     .tech-grid       { grid-template-columns: 1fr; }
     .pagination      { flex-direction: column; align-items: flex-start; }
     .tech-map-frame  { display: none; }
@@ -466,6 +524,7 @@
     <a class="nav-link" href="#tech">Tech</a>
     <a class="nav-link" href="#research">Research</a>
     <a class="nav-link" href="#articles">Articles</a>
+    <a class="nav-link" href="#interests">Interests</a>
   </div>
   <span class="nav-tag">Engineering Leader</span>
 </nav>
@@ -492,6 +551,10 @@
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
             Medium
           </a>
+          <a class="cta-link cta-medium" href="https://devpandaandvibedragon.substack.com/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+            Dev Panda &amp; Vibe Dragon
+          </a>
         </div>
       </div>
       <div class="hero-pic-wrap">
@@ -509,7 +572,7 @@
       <div class="tl-track">
 
         <!-- 2009 — NVIDIA starts -->
-        <div class="tl-col nvidia">
+        <div class="tl-col tl-col-start nvidia">
           <div class="tl-yr">2009</div>
           <div class="tl-bar"></div>
           <div class="tl-icon-slot">
@@ -535,7 +598,7 @@
         <div class="tl-col nvidia"><div class="tl-yr">2019</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
 
         <!-- 2020 — Delivery Hero -->
-        <div class="tl-col dh">
+        <div class="tl-col tl-col-start dh">
           <div class="tl-yr">2020</div>
           <div class="tl-bar"></div>
           <div class="tl-icon-slot">
@@ -549,7 +612,7 @@
         </div>
 
         <!-- 2021 — Infrrd starts -->
-        <div class="tl-col infrrd">
+        <div class="tl-col tl-col-start infrrd">
           <div class="tl-yr">2021</div>
           <div class="tl-bar"></div>
           <div class="tl-icon-slot">
@@ -572,6 +635,34 @@
       </div>
     </div>
 
+    <!-- Mobile company list (hidden on desktop) -->
+    <div class="tl-mobile">
+      <button class="tl-mobile-row" data-company="nvidia">
+        <div class="tl-mobile-accent nvidia"></div>
+        <div class="tl-mobile-logo"><img src="/assets/nvidia_logo.jpeg" alt="NVIDIA"></div>
+        <div class="tl-mobile-info">
+          <div class="tl-mobile-name">NVIDIA</div>
+          <div class="tl-mobile-years">2009 – 2019 &nbsp;·&nbsp; 10 yrs</div>
+        </div>
+      </button>
+      <button class="tl-mobile-row" data-company="dh">
+        <div class="tl-mobile-accent dh"></div>
+        <div class="tl-mobile-logo"><img src="/assets/delivery_hero_se_logo.jpeg" alt="Delivery Hero"></div>
+        <div class="tl-mobile-info">
+          <div class="tl-mobile-name">Delivery Hero</div>
+          <div class="tl-mobile-years">2020 &nbsp;·&nbsp; 1 yr</div>
+        </div>
+      </button>
+      <button class="tl-mobile-row" data-company="infrrd">
+        <div class="tl-mobile-accent infrrd"></div>
+        <div class="tl-mobile-logo"><img src="/assets/infrrd_logo.jpeg" alt="Infrrd"></div>
+        <div class="tl-mobile-info">
+          <div class="tl-mobile-name">Infrrd</div>
+          <div class="tl-mobile-years">2021 – present &nbsp;·&nbsp; 5 yrs</div>
+        </div>
+      </button>
+    </div>
+
     <!-- Detail panels — all hidden by default -->
     <div class="tl-detail-wrap">
 
@@ -580,7 +671,7 @@
           <div class="tl-detail-logo"><img src="/assets/nvidia_logo.jpeg" alt="NVIDIA"></div>
           <div>
             <div class="tl-detail-company">NVIDIA</div>
-            <div class="tl-detail-total">Pune / Pimpri-Chinchwad &nbsp;·&nbsp; Full-time &nbsp;·&nbsp; 10 yrs 6 mos</div>
+            <div class="tl-detail-total">Pune &nbsp;·&nbsp; Full-time &nbsp;·&nbsp; 10 yrs 6 mos</div>
           </div>
         </div>
         <div class="tl-roles">
@@ -920,6 +1011,81 @@
 
   </section>
 
+  <!-- ── INTERESTS ─────────────────────────────────────────── -->
+  <div class="section-wrap section-anchor" id="interests">
+    <div class="section-label">Personal</div>
+    <div class="section-heading">Interests &amp; Passions</div>
+
+    <div class="interests-grid">
+
+      <div class="interest-card">
+        <div class="interest-head">
+          <div class="interest-icon">💻</div>
+          <div class="interest-title">AI &amp; Architecture</div>
+        </div>
+        <div class="interest-tags">
+          <span class="interest-tag">System Architecture</span>
+          <span class="interest-tag">AI Philosophy</span>
+          <span class="interest-tag">GenAI &amp; LLMs</span>
+          <span class="interest-tag">Cloud Infrastructure</span>
+          <span class="interest-tag">Tech Trade-offs</span>
+        </div>
+      </div>
+
+      <div class="interest-card ic-blue">
+        <div class="interest-head">
+          <div class="interest-icon">🎯</div>
+          <div class="interest-title">Product &amp; Vision</div>
+        </div>
+        <div class="interest-tags">
+          <span class="interest-tag">Product Strategy</span>
+          <span class="interest-tag">Design Thinking</span>
+          <span class="interest-tag">Visionary Products</span>
+          <span class="interest-tag">Out-of-box Ideas</span>
+        </div>
+      </div>
+
+      <div class="interest-card ic-green">
+        <div class="interest-head">
+          <div class="interest-icon">🌍</div>
+          <div class="interest-title">Travel &amp; Family</div>
+        </div>
+        <div class="interest-tags">
+          <span class="interest-tag">World Travel</span>
+          <span class="interest-tag">Cultural Immersion</span>
+          <span class="interest-tag">Family Time</span>
+        </div>
+      </div>
+
+      <div class="interest-card">
+        <div class="interest-head">
+          <div class="interest-icon">🤝</div>
+          <div class="interest-title">Community &amp; People</div>
+        </div>
+        <div class="interest-tags">
+          <span class="interest-tag">Team Building</span>
+          <span class="interest-tag">Mentorship</span>
+          <span class="interest-tag">Knowledge Sharing</span>
+          <span class="interest-tag">Casual Chit-chat</span>
+        </div>
+      </div>
+
+      <div class="interest-card ic-purple">
+        <div class="interest-head">
+          <div class="interest-icon">🎭</div>
+          <div class="interest-title">Philosophy &amp; Culture</div>
+        </div>
+        <div class="interest-tags">
+          <span class="interest-tag">Deep Philosophy</span>
+          <span class="interest-tag">Profound Quotes</span>
+          <span class="interest-tag">Anime &amp; Podcasts</span>
+          <span class="interest-tag">Meme Culture</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div>
 
 <footer>
@@ -928,28 +1094,32 @@
     <a href="https://github.com/asadani"         target="_blank" rel="noopener">GitHub</a>
     <a href="https://linkedin.com/in/anujsadani" target="_blank" rel="noopener">LinkedIn</a>
     <a href="https://medium.com/@anuj.sadani"    target="_blank" rel="noopener">Medium</a>
+    <a href="https://devpandaandvibedragon.substack.com/" target="_blank" rel="noopener">Dev Panda &amp; Vibe Dragon</a>
   </div>
 </footer>
 
 <script>
   /* ── Timeline: click logo to toggle detail, click again to close ── */
+  function tlOpen(company, triggerBtn) {
+    const panel   = document.getElementById('detail-' + company);
+    const wasOpen = triggerBtn.classList.contains('active');
+
+    document.querySelectorAll('.tl-logo-btn, .tl-mobile-row').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tl-detail').forEach(d => d.classList.remove('open'));
+
+    if (!wasOpen) {
+      triggerBtn.classList.add('active');
+      panel.classList.add('open');
+      setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+    }
+  }
+
   document.querySelectorAll('.tl-logo-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const company  = btn.dataset.company;
-      const panel    = document.getElementById('detail-' + company);
-      const wasOpen  = btn.classList.contains('active');
+    btn.addEventListener('click', () => tlOpen(btn.dataset.company, btn));
+  });
 
-      /* close all */
-      document.querySelectorAll('.tl-logo-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tl-detail').forEach(d => d.classList.remove('open'));
-
-      /* if it wasn't already open, open it */
-      if (!wasOpen) {
-        btn.classList.add('active');
-        panel.classList.add('open');
-        setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
-      }
-    });
+  document.querySelectorAll('.tl-mobile-row').forEach(btn => {
+    btn.addEventListener('click', () => tlOpen(btn.dataset.company, btn));
   });
 
   /* ── Article filter + pagination ── */
