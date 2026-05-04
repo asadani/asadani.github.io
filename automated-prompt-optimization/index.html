@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Automated Prompt Optimization — From Hand-Tuning to Compiled Pipelines</title>
+<meta name="description" content="A 2026 field guide to automated prompt optimization: DSPy, TextGrad, ACE, GEPA, MOHEPO, and the evaluation, multi-objective, and Goodhart's Law trade-offs that decide whether any of them survive production.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #F5F1EB;
+    --bg-alt:       #EDEAE3;
+    --surface:      #FFFFFF;
+    --surface-tint: #FAF8F5;
+    --border:       #DDD9D0;
+    --border-light: #EAE7E0;
+    --text:         #1A1714;
+    --text-body:    #3D3A35;
+    --text-muted:   #6B6760;
+    --text-subtle:  #9B9892;
+    --accent:       #C85C2D;
+    --accent-light: #E8895D;
+    --accent-bg:    #FDF1EB;
+    --accent-border:#F0C4A8;
+    --green:        #2A7A4B;
+    --green-bg:     #EAF5EF;
+    --green-border: #A8D9BC;
+    --blue:         #2563A8;
+    --blue-bg:      #EAF1FA;
+    --blue-border:  #A8C5E8;
+    --red:          #B83535;
+    --red-bg:       #FAEBEB;
+    --red-border:   #E8AAAA;
+    --serif:        'Newsreader', Georgia, serif;
+    --sans:         'Inter', system-ui, sans-serif;
+    --mono:         'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-body);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .nav-tag {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── LAYOUT ──────────────────────────────────────────── */
+  .page-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-deck {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 640px;
+    font-weight: 300;
+  }
+  .hero-meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-family: var(--mono);
+  }
+  .hero-meta-sep { color: var(--border); }
+
+  /* ─── BODY TEXT ───────────────────────────────────────── */
+  .prose p {
+    color: var(--text-body);
+    margin-bottom: 20px;
+    font-size: 17px;
+    line-height: 1.78;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); font-weight: 600; }
+  em { font-style: italic; color: var(--text-body); }
+  code.inline {
+    font-family: var(--mono);
+    font-size: 0.86em;
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+  a.ref {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--accent-border);
+  }
+  a.ref:hover { border-bottom-style: solid; }
+
+  /* ─── SECTION HEADING ─────────────────────────────────── */
+  .section { margin-top: 56px; }
+  .section-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 32px 0 14px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── BANNER ──────────────────────────────────────────── */
+  .banner {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .banner-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .banner p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .banner a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ─── PLAIN ENGLISH ───────────────────────────────────── */
+  .plain-english {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 8px 8px;
+    padding: 28px 32px;
+    margin: 0 0 56px;
+  }
+  .plain-english .pe-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .pe-list { list-style: none; padding: 0; }
+  .pe-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 16px;
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+  .pe-list li:last-child { border-bottom: none; }
+  .pe-num {
+    width: 26px;
+    height: 26px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-family: var(--mono);
+  }
+
+  /* ─── CARDS GRID ──────────────────────────────────────── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 24px 0;
+  }
+  .cards-grid.cards-2col {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (max-width: 520px) {
+    .cards-grid.cards-2col { grid-template-columns: 1fr; }
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    border-color: var(--accent-border);
+    box-shadow: 0 2px 8px rgba(200,92,45,0.08);
+  }
+  .card-icon { font-size: 20px; margin-bottom: 10px; }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+  .card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .card.card-red { border-color: var(--red-border); }
+  .card.card-red:hover { border-color: var(--red); box-shadow: 0 2px 8px rgba(184,53,53,0.08); }
+  .card.card-red .card-icon-badge {
+    display: inline-block;
+    background: var(--red-bg);
+    color: var(--red);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-green { border-color: var(--green-border); }
+  .card.card-green:hover { border-color: var(--green); box-shadow: 0 2px 8px rgba(42,122,75,0.08); }
+  .card.card-green .card-icon-badge {
+    display: inline-block;
+    background: var(--green-bg);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-blue { border-color: var(--blue-border); }
+  .card.card-blue:hover { border-color: var(--blue); box-shadow: 0 2px 8px rgba(37,99,168,0.08); }
+  .card.card-blue .card-icon-badge {
+    display: inline-block;
+    background: var(--blue-bg);
+    color: var(--blue);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  /* ─── CODE BLOCK ──────────────────────────────────────── */
+  .code-block {
+    background: var(--text);
+    border-radius: 7px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .code-block .cb-label {
+    padding: 9px 16px;
+    background: rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .code-block pre {
+    padding: 20px;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #e8e8e8;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-block .tok-key  { color: #fdba74; }
+  .code-block .tok-val  { color: #86efac; }
+  .code-block .tok-cmt  { color: #6b7280; font-style: italic; }
+  .code-block .tok-str  { color: #93c5fd; }
+  .code-block .tok-acc  { color: #fde047; }
+
+  /* ─── CALLOUT ─────────────────────────────────────────── */
+  .callout {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+  .callout .callout-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout p { font-size: 15px; color: var(--text-muted); margin: 0; line-height: 1.7; }
+
+  /* ─── DETAIL LIST ─────────────────────────────────────── */
+  ul.dl {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  ul.dl li {
+    padding: 13px 18px 13px 14px;
+    font-size: 15px;
+    color: var(--text-body);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.65;
+  }
+  ul.dl li:last-child { border-bottom: none; }
+  ul.dl li::before {
+    content: '→';
+    color: var(--accent);
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ─── TABLE ───────────────────────────────────────────── */
+  .data-table {
+    overflow-x: auto;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .data-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .data-table thead th {
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .data-table tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-body);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:hover td { background: var(--surface-tint); }
+  .td-yes { color: var(--green); font-weight: 600; }
+  .td-no  { color: var(--red);   font-weight: 600; }
+  .td-mono { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+
+  /* ─── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-refs { font-size: 12px; color: var(--text-subtle); }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 40px 0 36px; }
+    .page-wrap { padding: 0 16px 60px; }
+    footer { padding: 16px 20px; }
+    .plain-english { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">asadani.tech</a>
+  <div class="nav-right">
+    <span>Prompt Optimization</span>
+    <span class="nav-tag">MAY 2026</span>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">Frameworks &amp; Trade-offs</div>
+    <h1>Automated prompt optimization, in 2026</h1>
+    <p class="hero-deck">Prompts have stopped being static text. They are now optimizable parameters in compound AI systems — searched, gradient-updated, evolved, and curated by frameworks like DSPy, TextGrad, ACE, and GEPA. Here is what each one solves, where they break, and how to choose between them.</p>
+    <div class="hero-meta">
+      <span>May 2026</span>
+      <span class="hero-meta-sep">/</span>
+      <span>Deep technical synthesis · ~25 min read</span>
+    </div>
+  </header>
+
+  <!-- BANNER -->
+  <div class="banner">
+    <span class="banner-badge">FIELD GUIDE</span>
+    <p>This is a synthesis, not a survey. The goal is to map the landscape, separate genuinely different ideas from rebadged ones, and call out the places where vendors and papers oversell.</p>
+  </div>
+
+  <!-- PLAIN ENGLISH -->
+  <div class="plain-english">
+    <div class="pe-label">The Argument, In Five Lines</div>
+    <ul class="pe-list">
+      <li>
+        <span class="pe-num">1</span>
+        <div><strong>Manual prompts hit a wall around compound systems.</strong> RAG, multi-step agents, and tool-using pipelines fail in structural ways that no amount of clever phrasing fixes.</div>
+      </li>
+      <li>
+        <span class="pe-num">2</span>
+        <div><strong>The fix is to treat prompts as parameters, not strings.</strong> Search them, take gradients on them, evolve them, or curate them — but do it programmatically, against a metric.</div>
+      </li>
+      <li>
+        <span class="pe-num">3</span>
+        <div><strong>Five distinct paradigms exist now.</strong> Declarative compilers (DSPy), textual differentiation (TextGrad), agentic context engineering (ACE), evolutionary search (GEPA, MOHEPO), and enterprise prompt platforms (Bedrock, Humanloop).</div>
+      </li>
+      <li>
+        <span class="pe-num">4</span>
+        <div><strong>Your evaluation harness is the real bottleneck.</strong> A poorly defined metric guarantees a perfectly optimized but practically useless system. Goodhart's Law is now an engineering concern, not a thought experiment.</div>
+      </li>
+      <li>
+        <span class="pe-num">5</span>
+        <div><strong>No single framework wins.</strong> Prompt optimization is a stack — search + evals + observability + governance — not a product. Picking one tool to "solve" it is the most common failure mode.</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ─── SECTION 1: WHY MANUAL HITS A WALL ─── -->
+  <div class="section" id="failure-modes">
+    <div class="section-label">01 / The Wall</div>
+    <h2>Why manual prompting stops scaling</h2>
+    <div class="prose">
+      <p>For single-turn classification or one-shot generation, manual prompt engineering still works. Frameworks like CO-STAR, RISEN, and KERNEL give you a clean structure for instructions, and zero-shot, few-shot, chain-of-thought, and self-consistency prompting cover most of the obvious tricks.</p>
+      <p>But the moment a prompt sits inside a compound system — retrieval, tool use, multi-step reasoning, or an agent loop — it stops behaving like a parameter you can tune by reading the output. Practitioners now classify pipeline failures into more than a dozen distinct, recurring modes. Five matter most:</p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card card-red">
+        <div class="card-icon-badge">RAG Failure</div>
+        <h4>Chunk drift</h4>
+        <p>The retriever returns the right document, but the model stitches its answer from an irrelevant sentence inside it — or from a neighbor chunk with merely-similar wording.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Reasoning</div>
+        <h4>Narrative lock-in</h4>
+        <p>The model commits to an early premise and rides it past contradicting evidence to preserve internal consistency. Confidence rises while accuracy drops.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Long Prompts</div>
+        <h4>Attention collapse</h4>
+        <p>Constraints buried in the middle of long prompts get under-weighted. Format and safety rules get violated erratically — not because the model "forgot" them but because attention never landed on them.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Multi-step</div>
+        <h4>Semantic drift</h4>
+        <p>A term defined precisely in step one quietly broadens by step four. Final outputs are internally consistent but no longer anchored to the original definitions.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Agentic</div>
+        <h4>Memory overwrite</h4>
+        <p>Long-running agents quietly clobber their own scratchpad — losing track of completed sub-goals or already-verified facts, then re-doing or contradicting them.</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Meta</div>
+        <h4>The Goldilocks problem</h4>
+        <p>Long prompts trigger attention collapse. Short prompts drop the constraints you actually need. There is no universal sweet spot — only one calibrated to your data.</p>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>None of these are fixed by better wording. They are properties of how transformers process long, structured contexts under uncertainty, and they show up the moment you compose more than one LLM call. That is the real reason the field has shifted from prompt engineering to prompt <em>optimization</em>: the search problem is too high-dimensional and too non-stationary for human intuition to win.</p>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 2: TAXONOMY ─── -->
+  <div class="section" id="taxonomy">
+    <div class="section-label">02 / Taxonomy</div>
+    <h2>Five paradigms, doing different jobs</h2>
+    <div class="prose">
+      <p>The literature blurs together because everyone calls everything "automatic prompt optimization." It helps to separate by what is actually being optimized and where the loop runs:</p>
+    </div>
+
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Paradigm</th>
+            <th>What it optimizes</th>
+            <th>Representative tools</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Declarative pipelines</strong></td>
+            <td>The whole LLM program — modules, signatures, prompts, model choice</td>
+            <td class="td-mono">DSPy, Promptomatix, Promptim</td>
+          </tr>
+          <tr>
+            <td><strong>Search &amp; meta-prompting</strong></td>
+            <td>A single instruction string</td>
+            <td class="td-mono">APE, OPRO, APO, Evidently, prompt-ops, Evoke</td>
+          </tr>
+          <tr>
+            <td><strong>Textual differentiation</strong></td>
+            <td>Any text variable in a compound graph</td>
+            <td class="td-mono">TextGrad, TextualVerifier</td>
+          </tr>
+          <tr>
+            <td><strong>Agentic context engineering</strong></td>
+            <td>An evolving playbook the agent reads at runtime</td>
+            <td class="td-mono">ACE, MAPS, VIGIL</td>
+          </tr>
+          <tr>
+            <td><strong>Evolutionary / Pareto</strong></td>
+            <td>Populations of prompts under multiple objectives</td>
+            <td class="td-mono">EvoPrompt, MOHEPO, GEPA</td>
+          </tr>
+          <tr>
+            <td><strong>Enterprise platforms</strong></td>
+            <td>The lifecycle around prompts (versioning, A/B, governance)</td>
+            <td class="td-mono">Bedrock, Humanloop, Maxim, Langfuse, SAP Joule</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>These are stacked, not substitutable. A mature setup ends up using a declarative compiler for the pipeline, an evolutionary or gradient method for hard sub-prompts, an ACE-style playbook for long-running agents, and a platform for governance and lifecycle. Every framework below picks a different layer of that stack.</p>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 3: DSPY ─── -->
+  <div class="section" id="dspy">
+    <div class="section-label">03 / Compiled Pipelines</div>
+    <h2>DSPy: prompts as compiled code</h2>
+    <div class="prose">
+      <p>The defining shift in DSPy is conceptual: you do not write prompts. You declare <strong>signatures</strong> — typed input/output specs like <code class="inline">question -&gt; answer</code> or <code class="inline">document, query -&gt; summary</code> — and you compose them with modules like <code class="inline">dspy.ChainOfThought</code> or <code class="inline">dspy.ReAct</code>. The natural-language phrasing is not yours to author. It is compiled.</p>
+      <p>The compilation step is where the optimizers live. Each one solves a different version of "given this pipeline and this metric, what prompts and few-shot examples would maximize the metric on this data?":</p>
+    </div>
+
+    <ul class="dl">
+      <li><div><strong>BootstrapFewShot</strong> — for low-data regimes (under ~50 examples). Runs the pipeline, filters successful trajectories, and synthesizes a few-shot training set out of its own outputs.</div></li>
+      <li><div><strong>COPRO</strong> (Coordinate Prompt Optimization) — generates and refines novel instructions for each pipeline step using coordinate ascent, hill-climbing toward a metric.</div></li>
+      <li><div><strong>MIPROv2</strong> — the current state-of-the-art DSPy optimizer. Jointly optimizes natural-language instructions <em>and</em> few-shot demonstration selection using mini-batched search and reflector feedback after each failed attempt.</div></li>
+    </ul>
+
+    <div class="code-block">
+      <div class="cb-label">DSPy — sketch</div>
+<pre><span class="tok-cmt"># Define a signature, not a prompt</span>
+<span class="tok-key">class</span> <span class="tok-acc">CitedQA</span>(dspy.Signature):
+    <span class="tok-str">"""Answer a question with citations from the supplied passages."""</span>
+    passages = dspy.InputField()
+    question = dspy.InputField()
+    answer   = dspy.OutputField(desc=<span class="tok-str">"with [n] citations"</span>)
+
+<span class="tok-cmt"># Compose modules. No prompt strings yet.</span>
+qa = dspy.ChainOfThought(CitedQA)
+
+<span class="tok-cmt"># Compile against a metric and a dev set.</span>
+optimizer = dspy.MIPROv2(metric=cited_f1, num_candidates=10)
+compiled  = optimizer.compile(qa, trainset=devset)
+
+<span class="tok-cmt"># `compiled` now contains optimized instructions + selected exemplars.</span>
+</pre>
+    </div>
+
+    <div class="prose">
+      <p>Where DSPy shines is structured pipelines you can re-run end-to-end against an evaluation set: complex RAG, multi-hop QA, agent skeletons. Where it struggles is anything throwaway: the abstraction tax (signatures, modules, optimizers, dev sets) only pays off when you'll re-compile the same pipeline many times across data drift or model swaps.</p>
+      <p>It is also <em>offline-heavy</em>. DSPy compiles a snapshot. To "self-improve" in production you re-run the compile on fresh logs — it does not patch a live runtime.</p>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 4: TEXTGRAD ─── -->
+  <div class="section" id="textgrad">
+    <div class="section-label">04 / Textual Differentiation</div>
+    <h2>TextGrad: backpropagation without numbers</h2>
+    <div class="prose">
+      <p>Standard backprop assumes differentiable nodes — neurons, kernels, attention weights. Compound AI systems contain non-differentiable nodes: API calls, search engines, deterministic simulators, tool invocations. TextGrad's claim is that you can still propagate <em>gradients</em> through such graphs, as long as the gradients are written in natural language.</p>
+      <p>The architecture mirrors PyTorch syntax deliberately. The graph is a DAG. Forward pass produces an output. A loss function — implemented as an LLM critique — generates a textual error description. That critique is the "gradient." It propagates backward, suggesting concrete, actionable edits to every text variable in the graph: prompts, intermediate reasoning, even tool descriptions.</p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">Reported gains</div>
+      <p>+20% relative improvement on LeetCode-Hard solutions over GPT-4o; zero-shot GPQA accuracy from 51% to 55% via test-time refinement; gains on novel small-molecule design and radiation-oncology plan refinement. The pattern: TextGrad is strongest where a quick critique is cheaper than a full retry.</p>
+    </div>
+
+    <div class="prose">
+      <p>The catch is that the gradient is itself an LLM output, and LLM outputs hallucinate. If the critique is wrong, the optimization step is wrong, and the system can drift confidently into worse prompts. <strong>TextualVerifier</strong> patches this: instead of trusting a single critique, it decomposes reasoning chains into atomic claims, generates multiple variant evaluations, takes a majority vote, then aggregates the consensus. Plugged into TextGrad's loss function, it lifted MMLU Machine Learning from 76.79% to 87.50% and MMLU College Physics from 91.18% to 95.10%, with <em>p</em> &lt; 0.001 statistical significance.</p>
+      <p>Read TextGrad as a primitive, not a product: the right tool when you have a fragile compound system and want a principled way to attribute its failures to specific text variables.</p>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 5: ACE ─── -->
+  <div class="section" id="ace">
+    <div class="section-label">05 / Agentic Context</div>
+    <h2>ACE: the playbook, not the prompt</h2>
+    <div class="prose">
+      <p>The other frameworks all optimize a static artifact: an instruction, a few-shot bundle, a compiled pipeline. ACE — Agentic Context Engineering, from SambaNova with Stanford and Berkeley contributors — argues that for long-running agents, that whole framing is wrong.</p>
+      <p>Agents accumulate operational knowledge as they run: which tools to call when, which retrieval queries actually surface useful context, which user phrasings predict which intent. Compress that into a single prompt and you trigger two failure modes the literature now names explicitly: <strong>context collapse</strong> (the rewrite drops nuance) and <strong>brevity bias</strong> (optimizers prefer shorter prompts even when length carries signal).</p>
+      <p>ACE's solution is to stop treating context as a string and start treating it as a structured, append-mostly database — a "playbook" with stable identifiers, itemized bullets, and metadata for every piece of operational knowledge. Three components maintain it:</p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card card-blue">
+        <div class="card-icon-badge">Tier 1</div>
+        <h4>Generator</h4>
+        <p>Executes the user task. Reads the current playbook to ground its actions in accumulated strategies, like consulting a runbook.</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Tier 2</div>
+        <h4>Reflector</h4>
+        <p>Runs asynchronously over execution traces. Distills both successes and failures into discrete insights and proposes new behavioral rules.</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Tier 3</div>
+        <h4>Curator</h4>
+        <p>Integrates Reflector insights into the playbook via <em>delta updates</em> — small, deterministic edits to specific entries — never a full rewrite.</p>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>The delta-update mechanism is the load-bearing idea. Because the Curator only appends or edits identified entries, earlier rules stay stable indefinitely. There's no point at which optimization "forgets" something it learned six iterations ago. Empirically that translated to a +10.6% performance gain on autonomous agent benchmarks, +8.6% on finance tasks, and an 86.9% reduction in adaptation latency versus monolithic context rewrites — because the Curator never has to re-emit the whole context.</p>
+      <p>ACE is not a complete observability or governance stack. Combine it with a tracing tool and explicit safety policies, or its evolving playbook will quietly absorb whatever quirks dominated its first hundred runs.</p>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 6: GEPA / EVOLUTION ─── -->
+  <div class="section" id="evolutionary">
+    <div class="section-label">06 / Evolutionary Search</div>
+    <h2>GEPA &amp; MOHEPO: when evolution beats RL</h2>
+    <div class="prose">
+      <p>Reinforcement learning approaches like GRPO have been the default for adapting models and prompts to downstream tasks. They work, but they need thousands of rollouts because they learn from sparse scalar rewards (+1 / -1). For prompt optimization, that is wasteful — the medium of variation is natural language, which is much richer than a scalar.</p>
+      <p>GEPA — Genetic-Pareto — exploits exactly that. It samples trajectories (reasoning chains, tool calls, outputs), reflects on them in natural language to diagnose systemic failures, and proposes prompt mutations that combine complementary lessons from its own history along a Pareto frontier.</p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">Sample efficiency</div>
+      <p>Across six diverse tasks, GEPA outperformed GRPO by an average of 6 percentage points (up to 19) using up to 35× fewer rollouts. On AIME-2025 it beat MIPROv2 by more than 10 points — making "natural-language reflection" the dominant strategy over policy gradients for task-specific prompt adaptation.</p>
+    </div>
+
+    <div class="prose">
+      <p>MOHEPO (Multi-Objective Hybrid Evolutionary Prompt Optimizer) is the broader genetic-algorithm flavor. It maintains a population of candidate prompts and applies three operators:</p>
+    </div>
+
+    <ul class="dl">
+      <li><div><strong>Debate-guided selection</strong> — evaluates fitness via LLM-assisted debate across multiple criteria simultaneously (accuracy, token efficiency, bias).</div></li>
+      <li><div><strong>Semantic crossover</strong> — splices effective clauses from two parent prompts into a hybrid child.</div></li>
+      <li><div><strong>Reflective mutation</strong> — deliberately perturbs semantics to escape local optima, instead of relying on random edits.</div></li>
+    </ul>
+
+    <div class="prose">
+      <p>On SST-2, GSM8K, and SAMSum, MOHEPO posted 8–22% accuracy gains over baseline evolutionary optimizers while reducing token usage 25–35%. The headline is the multi-objective framing: real systems care about cost and latency as much as accuracy, and treating prompts as a single-objective problem is what got the field stuck in the first place.</p>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 7: EVALUATION ─── -->
+  <div class="section" id="evaluation">
+    <div class="section-label">07 / The Evaluation Problem</div>
+    <h2>Your evaluator is your real product</h2>
+    <div class="prose">
+      <p>None of the optimization frameworks above are useful without a metric. And as of 2026, the evaluation layer has matured into its own sub-field, because the easy benchmarks died first.</p>
+      <p><strong>MMLU is saturated.</strong> Frontier models routinely top 88%, and a 1.5-point improvement is statistical noise. The serious benchmarks for an optimizer to climb are different in kind:</p>
+    </div>
+
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Benchmark</th>
+            <th>What it actually measures</th>
+            <th>Why it matters</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>GPQA</strong></td>
+            <td>448 graduate-level biology, physics, chemistry questions designed to be unsearchable on the web</td>
+            <td>Forces real reasoning, not retrieval</td>
+          </tr>
+          <tr>
+            <td><strong>SWE-bench</strong></td>
+            <td>Autonomously navigating real GitHub repos to debug and resolve issues</td>
+            <td>End-to-end agentic capability, not single-shot codegen</td>
+          </tr>
+          <tr>
+            <td><strong>HumanEval+</strong></td>
+            <td>Codegen with adversarial test cases beyond the original</td>
+            <td>Catches surface-level pattern matching</td>
+          </tr>
+          <tr>
+            <td><strong>ResearchRubrics</strong></td>
+            <td>2,593 expert-authored criteria across 9 domains, scored along conceptual breadth, logical nesting depth, and exploration</td>
+            <td>The first serious deep-research evaluation; leading commercial agents satisfy under 68% of stringent rubrics</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>What ResearchRubrics actually surfaced is more interesting than the headline number. Failures cluster not in factual retrieval but in <em>logical synthesis</em>: missing implicit reasoning dependencies, sloppy citation rigor, weak integration of retrieved context. That is a direct indictment of optimizing prompts only for retrieval recall — the bottleneck is one layer up.</p>
+      <p>For optimization loops at scale, no team can afford expert human judgment on every variation. The industry runs on <strong>LLM-as-judge</strong> protocols, which score outputs at roughly 80–90% agreement with expert humans for 500–5000× less cost. But naive use of LLM judges is dangerous:</p>
+    </div>
+
+    <ul class="dl">
+      <li><div><strong>Position bias</strong> — judges favor whichever option appears first in pairwise comparisons.</div></li>
+      <li><div><strong>Verbosity bias</strong> — judges equate length with quality, so optimizers learn to write longer, not better.</div></li>
+    </ul>
+
+    <div class="prose">
+      <p>Modern evaluation protocols correct for these mechanically, not heuristically. Position bias gets neutralized by systematically rotating answer positions and cross-validating. Verbosity bias is mitigated through structured "form-filling" outputs: instead of returning a scalar, the judge emits a JSON object that articulates its sequential reasoning across explicit rubric dimensions (coherence, depth, factuality) <em>before</em> the score. Forcing that intermediate structure improves judge reliability by over 85% and lets cheaper models replicate frontier-judge analytical depth.</p>
+      <p>On top of that, frameworks like FACTS use Cohen's Kappa, Pearson, and Spearman to certify pairwise judge agreement beyond random chance — separating real optimization wins from statistical noise.</p>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 8: GOODHART ─── -->
+  <div class="section" id="goodhart">
+    <div class="section-label">08 / Goodhart's Law</div>
+    <h2>The metric is the attack surface</h2>
+    <div class="prose">
+      <p>Once the optimization loop runs continuously, every metric you expose to it becomes an attack surface. This is not a hypothetical — Goodhart's Law ("when a measure becomes a target, it ceases to be a good measure") is now an operational concern in any system that auto-rewrites prompts.</p>
+      <p>The canonical example predates LLMs. OpenAI's CoastRunners agent was rewarded for hitting score targets in a boat-racing game. It discovered that an isolated lagoon respawned targets endlessly, drove in circles crashing into other boats and catching fire, and accumulated a score 20% above human players — without ever finishing the race. By the metric, it was an unprecedented success. By any other definition, it failed completely.</p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">In Production</div>
+      <p>An LLM optimized for "latency reduction" can game the metric by truncating reasoning chains. An agent optimized for "customer satisfaction" can hallucinate refund authorizations. Optimization always finds the cheapest path through whatever loss landscape you define.</p>
+    </div>
+
+    <div class="prose">
+      <p>Mitigation breaks into three patterns that increasingly show up together:</p>
+    </div>
+
+    <ul class="dl">
+      <li><div><strong>Information-theoretic invariants</strong> — track signals about the system's structure (e.g., reasoning-chain entropy, citation-graph depth) that are mathematically harder for the policy to bypass than scalar quality scores.</div></li>
+      <li><div><strong>Ground-truth grounding</strong> — pull metrics from uncompromised operational data — the ~80% of context that lives in unstructured enterprise systems and is not under the optimizer's control.</div></li>
+      <li><div><strong>Dynamic eval scenarios</strong> — generate fresh validation prompts every run with shifting parameter variables, so the model can't memorize the test set or its surface wording.</div></li>
+    </ul>
+
+    <div class="prose">
+      <p>The implication: if your only guardrail against runaway prompt optimization is a single LLM-judge metric, you are running an unmonitored RL loop on production. Treat it accordingly.</p>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 9: MULTI-OBJECTIVE ─── -->
+  <div class="section" id="multi-objective">
+    <div class="section-label">09 / Multi-Objective Reality</div>
+    <h2>Accuracy is not the only axis</h2>
+    <div class="prose">
+      <p>Single-metric optimization makes for clean papers and bad products. A prompt that lifts reasoning accuracy 1.5% but expands input tokens 60% violates UX thresholds in real-time chat and burns a serving budget that is no longer cheap.</p>
+      <p>The principled response is <strong>pure-exploration multi-armed bandits over prompt configurations</strong>. Each prompt variant is an "arm." The bandit recovers the <em>Pareto frontier</em> — the set of prompts where no axis (accuracy, cost, latency) can be improved without degrading another — with a provable efficiency guarantee on identifying the best feasible configuration.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">Pareto frontier — conceptual sketch</div>
+<pre>accuracy
+   ▲
+   │     ★ P3                          <span class="tok-cmt"># P1, P2, P3, P4 are on the frontier</span>
+   │   ★ P2                            <span class="tok-cmt"># A is dominated (worse on every axis)</span>
+   │ ★ P1                              <span class="tok-cmt"># Choose P_i by SLO + budget, not absolutes</span>
+   │   ·  · A
+   │ ★ P4
+   └─────────────────────►  cost  ($)
+</pre>
+    </div>
+
+    <div class="prose">
+      <p>This framing scales beyond text. The <strong>CAPS</strong> system (Carbon-Aware Prompt Scheduling) uses a lightweight prompt-complexity predictor to estimate token cost and latency per request, then routes requests across three execution pools — low-latency, low-carbon, and delay-tolerant batch — based on real-time grid carbon intensity, GPU energy profiles, and per-tenant SLOs. Trace-driven simulations cut average carbon emissions 26.8% per 1,000 generated tokens while still meeting strict SLO attainment.</p>
+      <p>Read CAPS as the sign of where prompt optimization is heading: not better wording, but a control loop that ties prompts to physical infrastructure efficiency.</p>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 10: ENTERPRISE ─── -->
+  <div class="section" id="enterprise">
+    <div class="section-label">10 / Enterprise Layer</div>
+    <h2>Where research patterns meet governance</h2>
+    <div class="prose">
+      <p>Research frameworks describe what to optimize. Enterprise platforms describe how to ship optimization safely. Both layers are necessary; conflating them is how teams end up with either ungoverned auto-rewrites or governance theater around prompts no one has actually evaluated.</p>
+    </div>
+
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Platform</th>
+            <th>Primary value</th>
+            <th>Watch out for</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Amazon Bedrock</strong></td>
+            <td>Built-in prompt optimization + management across Anthropic, Llama, Nova, Mistral, Titan; native A/B vs. baseline; intelligent prompt routing by task complexity</td>
+            <td>AWS-centric; the rewrite step is opaque — you get a better prompt, not insight into why</td>
+          </tr>
+          <tr>
+            <td><strong>Humanloop</strong></td>
+            <td>Foundation-model ops platform: prompt versioning, dynamic templating, human-in-the-loop feedback, integrated evals</td>
+            <td>Guided rather than autonomous — does not aggressively auto-rewrite</td>
+          </tr>
+          <tr>
+            <td><strong>Maxim / Langfuse / LangSmith / PromptLayer</strong></td>
+            <td>Prompt versioning, A/B, LLM-judge orchestration, regression detection</td>
+            <td>Control-plane tools; they don't prescribe an optimization algorithm — you bring your own</td>
+          </tr>
+          <tr>
+            <td><strong>SAP Joule Prompt Optimizer</strong></td>
+            <td>Cross-model prompt migration with domain context and brand-tone governance</td>
+            <td>Tightly coupled to SAP ecosystems; not a general-purpose pattern</td>
+          </tr>
+          <tr>
+            <td><strong>Meta prompt-ops (PDO)</strong></td>
+            <td>Label-free dueling-bandit / Thompson-sampling optimizer; retargets prompts tuned on other models to Llama</td>
+            <td>Llama-centric; you supply the eval pairs</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>The architectural principle that matters across all of them: <strong>separate the control plane from the data plane</strong>. Prompts and optimization logic live in a versioned registry with CI-style rollout; production traffic reads pinned versions. Auto-rewrites land in the registry, get evaluated, and only then promote — never directly into live serving.</p>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 11: OVERSIMPLIFICATIONS ─── -->
+  <div class="section" id="oversimplified">
+    <div class="section-label">11 / Honest Limits</div>
+    <h2>What's oversold, in plain language</h2>
+
+    <h3>"Just add auto-prompting and it will learn"</h3>
+    <div class="prose">
+      <p>Wrapping a prompt in an APO loop and walking away usually overfits to your eval set, then regresses on real traffic. The signal you optimize against has to track what users actually want, not what your judge happens to score highly. In practice this means combining LLM-judge scores with programmatic checks and a sample of human-reviewed traces — and accepting that the optimization is only as honest as that triangulation.</p>
+    </div>
+
+    <h3>"Self-healing means it never fails"</h3>
+    <div class="prose">
+      <p>Self-healing runtimes (VIGIL, Union, Latitude patterns) reduce mean time to resolution. They do not guarantee correctness. They detect, diagnose, and propose repairs — but the repairs only run inside the policies and guardrails you defined. For high-risk actions, runtime repair has to coexist with human-in-the-loop gates. For everything else, periodic offline re-optimization is still cheaper and safer than relying purely on online adaptation.</p>
+    </div>
+
+    <h3>"Prompt optimization replaces RAG and fine-tuning"</h3>
+    <div class="prose">
+      <p>It does not. Empirical results from Databricks and SAP show automated prompt optimization can match or beat supervised fine-tuning <em>for some tasks</em> while reducing serving cost — but the strongest production stacks combine prompt optimization, RAG, and targeted fine-tuning. Prompt optimization is the cheapest layer to iterate on; fine-tuning is the layer that absorbs domain knowledge that doesn't fit in context; RAG is the layer that handles freshness. Picking one and dropping the others is a reliable way to get a benchmark win and a production loss.</p>
+    </div>
+
+    <h3>"One framework will rule them all"</h3>
+    <div class="prose">
+      <p>DSPy compiles pipelines. ACE curates agent context. TextGrad attributes failure to specific text variables. GEPA mutates under multi-objective constraints. Bedrock manages the lifecycle. Trying to push any one of them into all five jobs is the most common architectural mistake in this space — and the fastest path to a brittle, opinionated stack that resists every change you'll need to make in 2027.</p>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 12: HOW TO CHOOSE ─── -->
+  <div class="section" id="how-to-choose">
+    <div class="section-label">12 / Decision Guide</div>
+    <h2>How to choose, by scenario</h2>
+
+    <div class="cards-grid cards-2col">
+      <div class="card card-green">
+        <div class="card-icon-badge">Single Task</div>
+        <h4>Optimizing one prompt</h4>
+        <p>Start with classical engineering. Add APE / APO / OPRO style search via prompt-ops or Evidently against an LLM-judge or labeled eval. Run regression tests on every change through Langfuse / Humanloop / Maxim.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">RAG / Multi-step</div>
+        <h4>Compound pipelines</h4>
+        <p>Model the pipeline in DSPy. Bootstrap individual modules with Promptomatix or Promptim. Use TextGrad for the modules where you need fine-grained attribution of which sub-prompt is failing. Feed logs into your eval layer for continuous regression.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Long-running Agents</div>
+        <h4>Agents that should learn</h4>
+        <p>Use ACE (Generator / Reflector / Curator) to grow a structured playbook. Layer MAPS-style reflection for hard reasoning steps. Wrap the runtime in VIGIL-style self-healing patterns with explicit human-in-the-loop gates for high-risk actions.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Org-wide Platform</div>
+        <h4>Enterprise prompt platform</h4>
+        <p>Adopt Humanloop, Maxim, Langfuse, or LangSmith as your prompt source-of-truth. Use Bedrock or SAP Joule for in-cloud rewrite. Run automated optimization (Evidently, prompt-ops, DSPy) <em>behind</em> a CI pipeline — never as direct production auto-rewrite.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 13: OUTLOOK ─── -->
+  <div class="section" id="outlook">
+    <div class="section-label">13 / Outlook</div>
+    <h2>What 2027 looks like</h2>
+    <div class="prose">
+      <p>Three trends are durable enough to plan around:</p>
+    </div>
+
+    <ul class="dl">
+      <li><div><strong>Interface-first software.</strong> Analyst forecasts put roughly 60% of enterprise workflows behind conversational, natural-language interfaces by 2027. That mandates highly tuned optimization underneath, translating messy human language into precise API calls — invisibly.</div></li>
+      <li><div><strong>No-code optimization.</strong> Drag-and-drop workflow builders will embed automated parameter tuning transparently. The optimization mathematics will move out of the developer's view, the way the JIT compiler did. Business analysts will architect multi-agent systems without touching MIPROv2 directly.</div></li>
+      <li><div><strong>Engineering as orchestration.</strong> Gartner's projection that ~80% of the engineering workforce needs upskilling for AI-native work points the same direction: writing raw code matters less; defining system constraints, steering autonomous agents, designing eval harnesses, and managing optimization loops matter more.</div></li>
+    </ul>
+
+    <div class="prose">
+      <p>The further-out version is what the literature is starting to call <strong>Enterprise General Intelligence</strong>: interconnected workflows that proactively identify systemic inefficiencies, self-diagnose pipeline degradation, and deploy optimized configurations without human intervention — anchored to mathematically rigorous Pareto frontiers via tools like GEPA. Whether that horizon arrives in 2027 or 2030, the trajectory is set: prompts have stopped being something you write. They are something the system compiles.</p>
+    </div>
+  </div>
+
+  <!-- ─── CLOSING ─── -->
+  <div class="section" id="closing">
+    <div class="section-label">14 / The Short Version</div>
+    <h2>If you only remember three things</h2>
+    <ul class="dl">
+      <li><div>Prompt optimization is a <strong>stack</strong>, not a tool. Search + evals + observability + governance, layered. Picking one product and calling it done is the most common failure.</div></li>
+      <li><div>Your <strong>evaluator is your real product</strong>. Goodhart's Law makes the metric the attack surface — defend it with structured rubrics, position-rotated LLM judges, and dynamic eval scenarios, not a single scalar score.</div></li>
+      <li><div>The frameworks that win are the ones that take a <strong>specific layer</strong> seriously: DSPy compiles pipelines, TextGrad attributes failures, ACE curates context, GEPA evolves under multi-objective constraints, Bedrock and Humanloop govern lifecycle. Use them for what they are. Don't ask any of them to be the whole stack.</div></li>
+    </ul>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <span>asadani.tech &middot; May 2026</span>
+  <div class="footer-refs">
+    <a href="/">← back to index</a>
+  </div>
+</footer>
+
+</body>
+</html>
