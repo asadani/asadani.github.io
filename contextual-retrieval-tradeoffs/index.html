@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contextual Retrieval, Honestly — Real Gains, Real Costs, Real Blind Spots</title>
+<meta name="description" content="A grounded read on Anthropic's contextual retrieval: a solid evolution of contextualized embeddings, hybrid search, and reranking — not magic. Real gains, real preprocessing costs, and real limits around long-horizon reasoning and governance.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #F5F1EB;
+    --bg-alt:       #EDEAE3;
+    --surface:      #FFFFFF;
+    --surface-tint: #FAF8F5;
+    --border:       #DDD9D0;
+    --border-light: #EAE7E0;
+    --text:         #1A1714;
+    --text-body:    #3D3A35;
+    --text-muted:   #6B6760;
+    --text-subtle:  #9B9892;
+    --accent:       #C85C2D;
+    --accent-light: #E8895D;
+    --accent-bg:    #FDF1EB;
+    --accent-border:#F0C4A8;
+    --green:        #2A7A4B;
+    --green-bg:     #EAF5EF;
+    --green-border: #A8D9BC;
+    --blue:         #2563A8;
+    --blue-bg:      #EAF1FA;
+    --blue-border:  #A8C5E8;
+    --red:          #B83535;
+    --red-bg:       #FAEBEB;
+    --red-border:   #E8AAAA;
+    --serif:        'Newsreader', Georgia, serif;
+    --sans:         'Inter', system-ui, sans-serif;
+    --mono:         'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-body);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .nav-tag {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── LAYOUT ──────────────────────────────────────────── */
+  .page-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-deck {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 640px;
+    font-weight: 300;
+  }
+  .hero-meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-family: var(--mono);
+  }
+  .hero-meta-sep { color: var(--border); }
+
+  /* ─── BODY TEXT ───────────────────────────────────────── */
+  .prose p {
+    color: var(--text-body);
+    margin-bottom: 20px;
+    font-size: 17px;
+    line-height: 1.78;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); font-weight: 600; }
+  em { font-style: italic; color: var(--text-body); }
+  code.inline {
+    font-family: var(--mono);
+    font-size: 13.5px;
+    background: var(--bg-alt);
+    border: 1px solid var(--border-light);
+    color: var(--text);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  /* ─── SECTION HEADING ─────────────────────────────────── */
+  .section { margin-top: 56px; }
+  .section-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 32px 0 14px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── BANNER ──────────────────────────────────────────── */
+  .banner {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .banner-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .banner p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .banner a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ─── PLAIN ENGLISH ───────────────────────────────────── */
+  .plain-english {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 8px 8px;
+    padding: 28px 32px;
+    margin: 0 0 56px;
+  }
+  .plain-english .pe-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .pe-list { list-style: none; padding: 0; }
+  .pe-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 16px;
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+  .pe-list li:last-child { border-bottom: none; }
+  .pe-num {
+    width: 26px;
+    height: 26px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-family: var(--mono);
+  }
+
+  /* ─── CARDS GRID ──────────────────────────────────────── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 24px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    border-color: var(--accent-border);
+    box-shadow: 0 2px 8px rgba(200,92,45,0.08);
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+  .card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .card.card-red { border-color: var(--red-border); }
+  .card.card-red:hover { border-color: var(--red); box-shadow: 0 2px 8px rgba(184,53,53,0.08); }
+  .card.card-red .card-icon-badge {
+    display: inline-block;
+    background: var(--red-bg);
+    color: var(--red);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-green { border-color: var(--green-border); }
+  .card.card-green:hover { border-color: var(--green); box-shadow: 0 2px 8px rgba(42,122,75,0.08); }
+  .card.card-green .card-icon-badge {
+    display: inline-block;
+    background: var(--green-bg);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-blue { border-color: var(--blue-border); }
+  .card.card-blue:hover { border-color: var(--blue); box-shadow: 0 2px 8px rgba(37,99,168,0.08); }
+  .card.card-blue .card-icon-badge {
+    display: inline-block;
+    background: var(--blue-bg);
+    color: var(--blue);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  /* ─── CODE BLOCK ──────────────────────────────────────── */
+  .code-block {
+    background: var(--text);
+    border-radius: 7px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .code-block .cb-label {
+    padding: 9px 16px;
+    background: rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .code-block pre {
+    padding: 20px;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.7;
+    color: #e8e8e8;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-block .tok-key  { color: #fdba74; }
+  .code-block .tok-val  { color: #86efac; }
+  .code-block .tok-cmt  { color: #6b7280; font-style: italic; }
+  .code-block .tok-str  { color: #93c5fd; }
+  .code-block .tok-acc  { color: #fde047; }
+
+  /* ─── CALLOUT ─────────────────────────────────────────── */
+  .callout {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+  .callout .callout-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout p { font-size: 15px; color: var(--text-muted); margin: 0; line-height: 1.7; }
+
+  /* ─── DETAIL LIST ─────────────────────────────────────── */
+  ul.dl {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  ul.dl li {
+    padding: 13px 18px 13px 14px;
+    font-size: 15px;
+    color: var(--text-body);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.65;
+  }
+  ul.dl li:last-child { border-bottom: none; }
+  ul.dl li::before {
+    content: '→';
+    color: var(--accent);
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ─── TABLE ───────────────────────────────────────────── */
+  .data-table {
+    overflow-x: auto;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .data-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .data-table thead th {
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .data-table tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-body);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:hover td { background: var(--surface-tint); }
+  .td-yes { color: var(--green); font-weight: 600; }
+  .td-no  { color: var(--red);   font-weight: 600; }
+  .td-mono { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+
+  /* ─── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-refs { font-size: 12px; color: var(--text-subtle); }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 40px 0 36px; }
+    .page-wrap { padding: 0 16px 60px; }
+    footer { padding: 16px 20px; }
+    .plain-english { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">asadani.tech</a>
+  <div class="nav-right">
+    <span>Contextual Retrieval</span>
+    <span class="nav-tag">MAY 2026</span>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">RAG &mdash; Honest Take</div>
+    <h1>Contextual retrieval, honestly</h1>
+    <p class="hero-deck">Anthropic&rsquo;s contextual retrieval is a solid, well-packaged evolution of techniques the RAG community already had: contextualized embeddings, hybrid search, and reranking. Real gains. Real preprocessing costs. Real blind spots around long-horizon reasoning and governance.</p>
+    <div class="hero-meta">
+      <span>May 2026</span>
+      <span class="hero-meta-sep">/</span>
+      <span>Comparative trade-off analysis &middot; ~14 min read</span>
+    </div>
+  </header>
+
+  <!-- BANNER -->
+  <div class="banner">
+    <span class="banner-badge">TL;DR</span>
+    <p>Contextual retrieval = LLM-generated chunk metadata + hybrid (vector + BM25) search + reranker, made affordable by prompt caching. It cuts retrieval failures meaningfully on Anthropic&rsquo;s benchmarks. It does not fix &ldquo;context blindness&rdquo;, agentic reasoning, or content lifecycle. Treat it as a strong default chunk-level upgrade, not a strategy.</p>
+  </div>
+
+  <!-- PLAIN ENGLISH -->
+  <div class="plain-english">
+    <div class="pe-label">The argument, in five lines</div>
+    <ul class="pe-list">
+      <li>
+        <span class="pe-num">1</span>
+        <div><strong>The recipe is not new.</strong> LLM-generated chunk context, hybrid retrieval, and reranking exist independently across the ecosystem (HyDE, summary-enriched chunks, hybrid stacks).</div>
+      </li>
+      <li>
+        <span class="pe-num">2</span>
+        <div><strong>The packaging is what&rsquo;s new.</strong> Anthropic combined the parts into a clean recipe and made it cheap with prompt caching &mdash; that is a genuine platform unlock, not a research breakthrough.</div>
+      </li>
+      <li>
+        <span class="pe-num">3</span>
+        <div><strong>The gains are real but bounded.</strong> Up to ~67% reduction in failed retrievals with reranking, on their internal evals. Your domain&rsquo;s actual lift will depend on whether chunk context is the bottleneck.</div>
+      </li>
+      <li>
+        <span class="pe-num">4</span>
+        <div><strong>It does not fix the systemic stuff.</strong> Context blindness, multi-turn reasoning, structured-data grounding, and content drift sit outside the chunk-embedding loop.</div>
+      </li>
+      <li>
+        <span class="pe-num">5</span>
+        <div><strong>The trade-offs are real.</strong> More ingestion complexity, more infra to run, more debugging surfaces, more derived text that can go stale. Worth it for high-value corpora; not free.</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ─── SECTION 1: WHAT IT IS ─── -->
+  <div class="section" id="what-it-is">
+    <div class="section-label">01 / The Method</div>
+    <h2>What contextual retrieval actually is</h2>
+    <div class="prose">
+      <p>Stripped of marketing, the recipe has four moving parts. Three are common knowledge in the RAG community. The fourth is where Anthropic adds something distinctive.</p>
+    </div>
+
+    <ul class="dl">
+      <li><div><strong>Contextual embeddings.</strong> For each chunk, prompt the model with the <em>whole document</em> plus the chunk and ask it to produce a short situating description. Prepend that description to the chunk before embedding. The vector now carries global document context, not just local text.</div></li>
+      <li><div><strong>Contextual BM25.</strong> Index the same context-prefixed text in a BM25 / keyword index alongside the vector store. Query both. This is a standard hybrid stack; the trick is that BM25 now matches against LLM-augmented text.</div></li>
+      <li><div><strong>Reranking.</strong> Pull a wide top-N (e.g. 150) from hybrid retrieval, then run an LLM or smaller cross-encoder reranker to pick the final 20. ~100&ndash;200&nbsp;ms latency overhead per query in the cookbook&rsquo;s numbers, plus per-query API cost.</div></li>
+      <li><div><strong>Prompt caching to make ingestion affordable.</strong> Load the document into the cache once, then apply a cheap per-chunk prompt against the cached doc. Anthropic estimates roughly $1&ndash;3 per million document tokens, one-time. This is the platform unlock.</div></li>
+    </ul>
+
+    <div class="prose">
+      <p>Algorithmically: <em>LLM-generated metadata + hybrid retrieval + rerank</em>. Operationally: a prescriptive recipe with a cost story that depends on Claude&rsquo;s caching primitive.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">Pipeline at a glance</div>
+<pre><span class="tok-cmt"># Ingestion (one-time, cached)</span>
+doc        = load(<span class="tok-str">"policy.pdf"</span>)
+chunks     = split(doc, <span class="tok-key">size</span>=800, <span class="tok-key">overlap</span>=100)
+
+<span class="tok-cmt"># Per chunk: cached doc + cheap chunk-specific prompt</span>
+<span class="tok-key">for</span> c <span class="tok-key">in</span> chunks:
+    ctx = claude.<span class="tok-acc">situate</span>(doc=cache(doc), chunk=c)   <span class="tok-cmt"># 1–2 sentences</span>
+    enriched = ctx + <span class="tok-str">"\n\n"</span> + c.text
+    vector_index.add(embed(enriched), meta=c)
+    bm25_index.add(enriched, meta=c)
+
+<span class="tok-cmt"># Query (per request)</span>
+v_hits   = vector_index.search(embed(query), k=<span class="tok-val">150</span>)
+b_hits   = bm25_index.search(query,           k=<span class="tok-val">150</span>)
+fused    = rrf(v_hits, b_hits)                    <span class="tok-cmt"># reciprocal-rank fusion</span>
+top_k    = reranker.<span class="tok-acc">rerank</span>(query, fused, k=<span class="tok-val">20</span>) <span class="tok-cmt"># ~100–200 ms</span>
+<span class="tok-key">return</span> top_k
+</pre>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 2: PRIOR ART ─── -->
+  <div class="section" id="prior-art">
+    <div class="section-label">02 / Prior Art</div>
+    <h2>None of the parts are new</h2>
+    <div class="prose">
+      <p>If you already run hybrid retrieval with LLM-augmented chunks, you have most of this. Anthropic&rsquo;s contribution is taking three known ideas, prescribing a specific composition, and pricing it down. That is genuinely useful &mdash; but it is packaging, not invention.</p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card card-blue">
+        <div class="card-icon-badge">Existing</div>
+        <h4>HyDE</h4>
+        <p>Generate a hypothetical answer with an LLM, embed <em>that</em>, retrieve against it. Anthropic explicitly compares against HyDE and reports it helped less than contextual chunking on their evals.</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Existing</div>
+        <h4>Summary-enriched chunks</h4>
+        <p>Generate a title, summary, or tags per chunk and index alongside the raw text. Pluralsight, Datacamp, and others have walkthroughs going back years on the noise-vs-precision balance.</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Existing</div>
+        <h4>Hybrid + rerank</h4>
+        <p>Vector DB + BM25 + cross-encoder reranker is the default stack in Elastic, OpenSearch, Pinecone, and Bedrock Knowledge Bases. AWS now ships a contextual-retrieval variant on Bedrock with the same telemetry.</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Existing</div>
+        <h4>LangChain templates</h4>
+        <p>Open-source templates implementing Anthropic-style chunk situating already exist. Zep, Pinecone, and others publish similar pipelines in their cookbooks.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">What&rsquo;s actually novel</div>
+      <p>Prompt caching applied to per-chunk LLM augmentation. Without it, &ldquo;contextualize every chunk against the full document&rdquo; would be cost-prohibitive on most enterprise corpora. With it, ingestion lands at roughly $1&ndash;3 per million tokens. That is the load-bearing innovation, and it is platform-specific.</p>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 3: WHAT'S REAL ─── -->
+  <div class="section" id="real-gains">
+    <div class="section-label">03 / Real Gains</div>
+    <h2>What the numbers actually say</h2>
+    <div class="prose">
+      <p>The benchmark numbers are real but narrow. They come from Anthropic&rsquo;s internal evals with Anthropic&rsquo;s definitions of &ldquo;failure.&rdquo; Read them as evidence of strong relative lift on document-style corpora, not as a generic ranking improvement that ports to every workload.</p>
+    </div>
+
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Configuration</th>
+            <th>Reduction in failed retrievals (top-20)</th>
+            <th>Where it helps most</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Contextual embeddings only</strong></td>
+            <td class="td-mono">~35%</td>
+            <td>Short, fragmented chunks where context is the missing signal</td>
+          </tr>
+          <tr>
+            <td><strong>Contextual embeddings + contextual BM25</strong></td>
+            <td class="td-mono">~49%</td>
+            <td>Mixed semantic + keyword queries (acronyms, IDs, specific terms)</td>
+          </tr>
+          <tr>
+            <td><strong>Above + reranker</strong></td>
+            <td class="td-mono">up to ~67%</td>
+            <td>Long-tail or ambiguous queries, when wide recall + precise rerank pays</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Where the lift is genuinely useful</h3>
+    <ul class="dl">
+      <li><div><strong>Cross-referenced clauses.</strong> Chunk A has the rule, chunk B has the exceptions. Naive chunking isolates them. Contextual situating helps both surface for the same query &mdash; concretely valuable for HR, policy, legal, and compliance docs.</div></li>
+      <li><div><strong>Hybrid term + concept queries.</strong> BM25 catches exact identifiers (error codes, SKUs, statute numbers). Contextual embeddings catch concept matches. Fusion + rerank gives you both without compromising either.</div></li>
+      <li><div><strong>One-time ingestion, repeated queries.</strong> If your corpus is high-value and reasonably stable (handbooks, manuals, support docs), the $1&ndash;3 / M tokens one-time cost amortizes well across queries.</div></li>
+    </ul>
+
+    <div class="callout">
+      <div class="callout-lbl">How to read those percentages</div>
+      <p>&ldquo;67% reduction in failed retrievals&rdquo; is a relative number on a benchmark with a particular failure definition. If your baseline retrieval is already good, the absolute lift is smaller. If your real bottleneck is bad query phrasing, ambiguous user intent, or missing documents, contextual retrieval will not move your top-line metric much.</p>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 4: BLIND SPOTS ─── -->
+  <div class="section" id="blind-spots">
+    <div class="section-label">04 / Blind Spots</div>
+    <h2>What it doesn&rsquo;t fix</h2>
+    <div class="prose">
+      <p>The marketing framing flattens trade-offs that are still very much present. Five worth naming explicitly.</p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card card-red">
+        <div class="card-icon-badge">Limit</div>
+        <h4>Dataset-dependence</h4>
+        <p>The 49&ndash;67% lift is on Anthropic&rsquo;s internal evals with their failure definition. Your corpus, query distribution, and judge model can easily produce half that &mdash; or none.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Limit</div>
+        <h4>Context blindness persists</h4>
+        <p>Retrieval is still driven by a short query vector, not the full conversation history, intermediate reasoning, or plan state. Better chunk semantics doesn&rsquo;t close that gap.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Limit</div>
+        <h4>Platform lock-in on cost</h4>
+        <p>Cheap ingestion depends on Claude prompt caching. Port the pattern to a provider without similar caching and the numbers stop looking friendly.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Limit</div>
+        <h4>Stale context metadata</h4>
+        <p>LLM-generated chunk descriptions are frozen at ingestion. When source docs evolve, the situating text drifts subtly out of alignment. Re-ingest policies are rarely discussed.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Limit</div>
+        <h4>Structured-domain flattening</h4>
+        <p>In legal, financial, or spec-heavy domains, LLM-generated context can smooth over critical numerical thresholds or scope conditions, producing convincing but off-target retrievals.</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Meta</div>
+        <h4>It&rsquo;s a chunk-level fix</h4>
+        <p>Contextual retrieval improves <em>local</em> chunk semantics. It is not a substitute for query reformulation, agentic planning, structured grounding, or evals.</p>
+      </div>
+    </div>
+
+    <h3>Context blindness, in one sentence</h3>
+    <div class="prose">
+      <p>However well you describe a chunk, the system still asks &ldquo;which chunks look like this query string?&rdquo; not &ldquo;what does this user actually need given the conversation, the half-formed plan, and what we&rsquo;ve already retrieved?&rdquo; That is a system-level limitation, and contextual retrieval doesn&rsquo;t address it.</p>
+    </div>
+
+    <h3>Governance is the unspoken cost</h3>
+    <div class="prose">
+      <p>Every chunk now has an LLM-generated derivative attached to it. That derivative needs the same lifecycle treatment as the source: re-ingest on change, audit on disagreement, version on drift. The marketing materials are notably quiet on this. In regulated environments it is not optional.</p>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 5: TRADE-OFFS ─── -->
+  <div class="section" id="tradeoffs">
+    <div class="section-label">05 / Engineering Trade-offs</div>
+    <h2>What you sign up for if you adopt it</h2>
+    <div class="prose">
+      <p>Four trade-offs are load-bearing once you go beyond a demo. None are dealbreakers; all of them deserve explicit budget.</p>
+    </div>
+
+    <h3>1. Ingestion complexity</h3>
+    <div class="prose">
+      <p>Your pipeline now does: chunk &rarr; cache document &rarr; per-chunk LLM call for context &rarr; merge &rarr; embed &rarr; index to <em>two</em> stores. Every stage has a knob (chunk size, overlap, context length, prompt phrasing, summary verbosity) that interacts with retrieval quality non-trivially. Too much added context and embeddings get noisy and precision drops; too little and you&rsquo;ve added cost for nothing.</p>
+    </div>
+
+    <h3>2. Query-path latency and cost</h3>
+    <div class="prose">
+      <p>Hybrid + rerank adds infra (BM25 index, often a separate reranker model) and roughly 100&ndash;200&nbsp;ms per query plus per-query API cost (cookbook examples land near $0.002 / query). For interactive chat this is fine. For high-QPS, low-latency workloads it eats your error budget &mdash; and reranker timeouts become an operational concern.</p>
+    </div>
+
+    <h3>3. Operational surface area</h3>
+    <div class="prose">
+      <p>You now run a vector index, a BM25 index, an ingestion job system, ideally an eval harness, and possibly a separate reranker service. Debugging a bad answer goes from &ldquo;why did this chunk match?&rdquo; to &ldquo;was it the situating text, the original chunk, the hybrid score weighting, or the reranker that put this chunk in the prompt?&rdquo; You need observability before this is comfortable in production.</p>
+    </div>
+
+    <h3>4. Recall vs. precision is still your call</h3>
+    <div class="prose">
+      <p>Contextual retrieval tends to improve recall. It does not remove the recall&ndash;precision trade-off &mdash; you still set the operating point. For agents, broader recall with rerank is usually right; for safety-critical or single-answer questions, you want tighter precision. The technique gives you better candidates; it does not pick your operating point.</p>
+    </div>
+
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Workload</th>
+            <th>Adopt contextual retrieval?</th>
+            <th>Why</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Stable enterprise KB (HR, policy, support)</td>
+            <td class="td-yes">Yes</td>
+            <td>One-time ingestion, high reuse, fragmented-clause problem is real here</td>
+          </tr>
+          <tr>
+            <td>Code search / repo Q&amp;A</td>
+            <td class="td-yes">Yes, partial</td>
+            <td>Chunk-level context helps; pair with symbol-aware retrieval &mdash; don&rsquo;t rely on it alone</td>
+          </tr>
+          <tr>
+            <td>High-QPS consumer search</td>
+            <td class="td-no">Often no</td>
+            <td>Rerank latency + cost don&rsquo;t fit the SLA; invest in query understanding instead</td>
+          </tr>
+          <tr>
+            <td>Structured / numeric data (finance, specs)</td>
+            <td class="td-no">No, alone</td>
+            <td>Schema-aware retrieval, joins, and explicit constraint handling matter more</td>
+          </tr>
+          <tr>
+            <td>Rapidly-changing docs</td>
+            <td class="td-no">Not without lifecycle</td>
+            <td>Context metadata goes stale; you need re-ingest tooling before you adopt this</td>
+          </tr>
+          <tr>
+            <td>Agentic, multi-turn workflows</td>
+            <td class="td-yes">Yes, but&hellip;</td>
+            <td>Pair with query reformulation &mdash; retrieval still doesn&rsquo;t see the full plan</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 6: PRIORITIZATION ─── -->
+  <div class="section" id="priorities">
+    <div class="section-label">06 / The Priority Question</div>
+    <h2>Where it ranks against the alternatives</h2>
+    <div class="prose">
+      <p>If you&rsquo;re refactoring a RAG stack today, the honest order of priority looks like this. Contextual retrieval is in there &mdash; but it is not first.</p>
+    </div>
+
+    <ul class="dl">
+      <li><div><strong>1. A real evaluation harness.</strong> Without it you can&rsquo;t tell whether contextual retrieval helped, hurt, or did nothing on your data. Ground-truth Q&amp;A pairs, recall@k, MRR, answer correctness, and a regression suite tied to deploys. This is the highest-leverage investment by a wide margin.</div></li>
+      <li><div><strong>2. Query reformulation and intent handling.</strong> Most production RAG failures are query-side, not chunk-side. Multi-query expansion, decomposition, and clarification turn ambiguous user input into something a retriever can actually serve.</div></li>
+      <li><div><strong>3. Hybrid retrieval + rerank.</strong> Even without LLM-generated context, vector + BM25 + cross-encoder is a large step up from vector-only. Land this first; it&rsquo;s most of the gain at most of the simplicity.</div></li>
+      <li><div><strong>4. Contextual embeddings.</strong> Once 1&ndash;3 are in place, layer LLM-generated chunk situating on top. This is where you get the marginal lift Anthropic advertises &mdash; and now you have evals to confirm it.</div></li>
+      <li><div><strong>5. Agentic loops over retrieval.</strong> For multi-step workflows, retrieve-reason-retrieve patterns, tool-augmented search, and plan-aware retrieval move the ceiling further than any chunk-level technique can.</div></li>
+      <li><div><strong>6. Structured grounding for the parts that need it.</strong> Tables, schemas, joins, and constraint-aware retrieval for finance/legal/specs. Don&rsquo;t expect contextual chunks to substitute.</div></li>
+    </ul>
+
+    <div class="callout">
+      <div class="callout-lbl">The short version</div>
+      <p>Contextual retrieval is a strong default chunk-level upgrade. It is not a strategy, it is not a moat, and it is not first on the priority list. Ship evals and query understanding before you ship contextual chunks. Then layer it in &mdash; and measure.</p>
+    </div>
+  </div>
+
+  <!-- ─── CLOSING ─── -->
+  <div class="section" id="closing">
+    <div class="section-label">07 / Bottom Line</div>
+    <h2>If you only remember three things</h2>
+    <ul class="dl">
+      <li><div>Contextual retrieval is <strong>good packaging of known parts</strong>: contextualized embeddings + hybrid search + rerank, made cheap by prompt caching. The packaging is real value; it is not a research breakthrough.</div></li>
+      <li><div>The reported gains are <strong>real but bounded</strong>. Up to ~67% fewer failed retrievals on Anthropic&rsquo;s evals. Your corpus, query distribution, and evaluation method decide whether you see anywhere near that.</div></li>
+      <li><div>It does not fix the systemic problems &mdash; <strong>context blindness, agentic reasoning, structured grounding, and content drift</strong>. Build evals and query reformulation first; layer contextual retrieval on top, not in place.</div></li>
+    </ul>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <span>asadani.tech &middot; May 2026</span>
+  <div class="footer-refs">
+    <a href="/">&larr; back to index</a>
+  </div>
+</footer>
+
+</body>
+</html>
