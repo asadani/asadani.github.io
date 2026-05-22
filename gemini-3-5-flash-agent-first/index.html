@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Is Quietly Changing What "Flash" Means — Gemini 3.5 Flash</title>
+<meta name="description" content="Gemini 3.5 Flash beats Gemini 3.1 Pro on agentic and coding benchmarks, ships straight to GA, and triples the per-token cost of 3 Flash. An opinionated read on what Google's first agent-first model actually means for builders.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #F5F1EB;
+    --bg-alt:       #EDEAE3;
+    --surface:      #FFFFFF;
+    --surface-tint: #FAF8F5;
+    --border:       #DDD9D0;
+    --border-light: #EAE7E0;
+    --text:         #1A1714;
+    --text-body:    #3D3A35;
+    --text-muted:   #6B6760;
+    --text-subtle:  #9B9892;
+    --accent:       #C85C2D;
+    --accent-light: #E8895D;
+    --accent-bg:    #FDF1EB;
+    --accent-border:#F0C4A8;
+    --green:        #2A7A4B;
+    --green-bg:     #EAF5EF;
+    --green-border: #A8D9BC;
+    --blue:         #2563A8;
+    --blue-bg:      #EAF1FA;
+    --blue-border:  #A8C5E8;
+    --red:          #B83535;
+    --red-bg:       #FAEBEB;
+    --red-border:   #E8AAAA;
+    --serif:        'Newsreader', Georgia, serif;
+    --sans:         'Inter', system-ui, sans-serif;
+    --mono:         'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-body);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .nav-tag {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── LAYOUT ──────────────────────────────────────────── */
+  .page-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-deck {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 640px;
+    font-weight: 300;
+  }
+  .hero-meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-family: var(--mono);
+  }
+  .hero-meta-sep { color: var(--border); }
+
+  /* ─── BODY TEXT ───────────────────────────────────────── */
+  .prose p {
+    color: var(--text-body);
+    margin-bottom: 20px;
+    font-size: 17px;
+    line-height: 1.78;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); font-weight: 600; }
+  em { font-style: italic; color: var(--text-body); }
+  .prose a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+  .prose a:hover { color: var(--accent-light); }
+  code.inline {
+    font-family: var(--mono);
+    font-size: 14px;
+    background: var(--bg-alt);
+    color: var(--text);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid var(--border-light);
+  }
+
+  /* ─── SECTION HEADING ─────────────────────────────────── */
+  .section { margin-top: 56px; }
+  .section-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 32px 0 14px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── BANNER ──────────────────────────────────────────── */
+  .banner {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .banner-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .banner p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .banner a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ─── PLAIN ENGLISH ───────────────────────────────────── */
+  .plain-english {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 8px 8px;
+    padding: 28px 32px;
+    margin: 0 0 56px;
+  }
+  .plain-english .pe-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .pe-list { list-style: none; padding: 0; }
+  .pe-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 16px;
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+  .pe-list li:last-child { border-bottom: none; }
+  .pe-num {
+    width: 26px;
+    height: 26px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-family: var(--mono);
+  }
+
+  /* ─── CARDS GRID ──────────────────────────────────────── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 24px 0;
+  }
+  .cards-grid.cards-2col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width: 540px) {
+    .cards-grid.cards-2col { grid-template-columns: 1fr; }
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    border-color: var(--accent-border);
+    box-shadow: 0 2px 8px rgba(200,92,45,0.08);
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+  .card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .card.card-red { border-color: var(--red-border); }
+  .card.card-red:hover { border-color: var(--red); box-shadow: 0 2px 8px rgba(184,53,53,0.08); }
+  .card.card-red .card-icon-badge {
+    display: inline-block;
+    background: var(--red-bg);
+    color: var(--red);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-green { border-color: var(--green-border); }
+  .card.card-green:hover { border-color: var(--green); box-shadow: 0 2px 8px rgba(42,122,75,0.08); }
+  .card.card-green .card-icon-badge {
+    display: inline-block;
+    background: var(--green-bg);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-blue { border-color: var(--blue-border); }
+  .card.card-blue:hover { border-color: var(--blue); box-shadow: 0 2px 8px rgba(37,99,168,0.08); }
+  .card.card-blue .card-icon-badge {
+    display: inline-block;
+    background: var(--blue-bg);
+    color: var(--blue);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  /* ─── CODE BLOCK ──────────────────────────────────────── */
+  .code-block {
+    background: var(--text);
+    border-radius: 7px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .code-block .cb-label {
+    padding: 9px 16px;
+    background: rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .code-block pre {
+    padding: 20px;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.65;
+    color: #e8e8e8;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-block .tok-key  { color: #fdba74; }
+  .code-block .tok-val  { color: #86efac; }
+  .code-block .tok-cmt  { color: #6b7280; font-style: italic; }
+  .code-block .tok-str  { color: #93c5fd; }
+  .code-block .tok-acc  { color: #fde047; }
+
+  /* ─── CALLOUT ─────────────────────────────────────────── */
+  .callout {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+  .callout .callout-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout p { font-size: 15px; color: var(--text-muted); margin: 0; line-height: 1.7; }
+
+  /* ─── DETAIL LIST ─────────────────────────────────────── */
+  ul.dl {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  ul.dl li {
+    padding: 13px 18px 13px 14px;
+    font-size: 15px;
+    color: var(--text-body);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.65;
+  }
+  ul.dl li:last-child { border-bottom: none; }
+  ul.dl li::before {
+    content: '→';
+    color: var(--accent);
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ─── TABLE ───────────────────────────────────────────── */
+  .data-table {
+    overflow-x: auto;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .data-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .data-table thead th {
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .data-table tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-body);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:hover td { background: var(--surface-tint); }
+  .td-yes { color: var(--green); font-weight: 600; }
+  .td-no  { color: var(--red);   font-weight: 600; }
+  .td-mono { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+  .td-bench { font-weight: 600; color: var(--text); }
+  .td-win { color: var(--green); font-weight: 600; }
+  .td-lose { color: var(--red); font-weight: 600; }
+  .data-table tbody tr.row-baseline td { background: var(--bg-alt); }
+  .data-table tbody tr.row-baseline:hover td { background: var(--bg-alt); }
+  .data-table tbody tr.row-replacement td { background: var(--red-bg); }
+  .data-table tbody tr.row-replacement:hover td { background: var(--red-bg); }
+  .row-tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .row-tag.tag-baseline { background: var(--text); color: var(--bg); }
+  .row-tag.tag-replacement { background: var(--red); color: #fff; }
+  .data-table.data-table-wide table { font-size: 12.5px; }
+  .data-table.data-table-wide thead th { padding: 9px 10px; font-size: 10px; }
+  .data-table.data-table-wide tbody td { padding: 8px 10px; line-height: 1.45; }
+  .data-table.data-table-wide .td-mod { font-family: var(--mono); font-size: 11px; color: var(--text-muted); text-align: center; }
+  .data-table.data-table-wide .td-mod.yes { color: var(--green); font-weight: 600; }
+  .data-table.data-table-wide .td-mod.no  { color: var(--text-subtle); }
+  .fit-pill {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .fit-pill.fit-good    { background: var(--green-bg); color: var(--green); }
+  .fit-pill.fit-warn    { background: #FFF4E0;        color: #B85C00; }
+  .fit-pill.fit-bad     { background: var(--red-bg);   color: var(--red); }
+  .fit-pill.fit-preview { background: var(--blue-bg);  color: var(--blue); }
+
+  /* ─── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-refs { font-size: 12px; color: var(--text-subtle); }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 40px 0 36px; }
+    .page-wrap { padding: 0 16px 60px; }
+    footer { padding: 16px 20px; }
+    .plain-english { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">asadani.tech</a>
+  <div class="nav-right">
+    <span>Models &amp; Roadmap</span>
+    <span class="nav-tag">MAY 2026</span>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">Gemini 3.5 Flash — Field Read</div>
+    <h1>Google is quietly changing what "Flash" means.</h1>
+    <p class="hero-deck">Gemini 3.5 Flash beats Gemini 3.1 Pro on the benchmarks builders actually care about, ships straight to GA across Google's whole surface area, and quietly triples its own per-token cost. This is what Google's first agent-first frontier model actually means for the people building on it.</p>
+    <div class="hero-meta">
+      <span>May 2026</span>
+      <span class="hero-meta-sep">/</span>
+      <span>Opinionated synthesis</span>
+      <span class="hero-meta-sep">/</span>
+      <span>~3,500 words</span>
+    </div>
+  </header>
+
+  <!-- BANNER -->
+  <div class="banner">
+    <span class="banner-badge">TL;DR</span>
+    <p>3.5 Flash is the first model in the 3.5 family, launched GA as the default in the Gemini app and AI Mode in Search. It posts higher Terminal-Bench, MCP Atlas, OSWorld and GDPval scores than Gemini 3.1 Pro, runs at ~280 tokens/s, and now costs roughly <strong>1.50&#8239;USD&#160;in&#160;/&#160;9.00&#8239;USD&#160;out</strong> per million tokens — about 3× Gemini 3 Flash. Pro and Lite versions of 3.5 are still ahead of you on the roadmap.</p>
+  </div>
+
+  <!-- PLAIN ENGLISH -->
+  <div class="plain-english">
+    <div class="pe-label">In Plain English — Three Things That Actually Changed</div>
+    <ul class="pe-list">
+      <li>
+        <span class="pe-num">1</span>
+        <div><strong>Flash is no longer the cheap sibling.</strong> It is the new default everywhere, beats Gemini 3.1 Pro on agentic and coding benchmarks, and prices itself well above the old Flash tier. "Flash" now means <em>fast frontier worker</em>, not <em>budget option</em>.</div>
+      </li>
+      <li>
+        <span class="pe-num">2</span>
+        <div><strong>The product is agents, not chat.</strong> 3.5 Flash was co-developed with Antigravity, is wired into the Gemini Enterprise Agent Platform, and is explicitly tuned for multi-hour tool-using sessions. Single-pass chat is no longer the design target.</div>
+      </li>
+      <li>
+        <span class="pe-num">3</span>
+        <div><strong>The 2.5 line is on a clock.</strong> Gemini API docs now list 2.5 Pro, 2.5 Flash, and 2.5 Flash-Lite for shutdown no earlier than October 16, 2026, and Google is naming 3.5 Flash as the recommended replacement for 2.5 Flash. Migration is the work of the next two quarters.</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="section">
+    <div class="section-label">01 / The Headline</div>
+    <h2>What 3.5 Flash actually is</h2>
+    <div class="prose">
+      <p>Gemini 3.5 Flash is the first model in the 3.5 family, and Google has not been subtle about the framing. It is positioned as "frontier intelligence with action" — in practice, the strongest agentic and coding model Google has shipped, at output speeds <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-5/">around 4× other frontier-class models</a>. It is already the default in the Gemini app and in AI Mode in Search, and it is the engine behind Antigravity, the Gemini Enterprise Agent Platform, and the upcoming personal agent ("Gemini Spark").</p>
+      <p>Two things make this release a real reset rather than a routine point update. First, the model card and independent measurements both show Flash <em>beating</em> the previous-generation Pro on the benchmarks that map to real builder workflows — Terminal-Bench 2.1, MCP Atlas, OSWorld-Verified, GDPval-AA, SWE-Bench Pro. Second, every product announcement around it talks about agents and long-horizon workflows, not chatbots. Google's own demos pitch 3.5 Flash as something that can refactor an entire legacy codebase to Next.js or stand up an OS inside Antigravity, with sub-agents fanning out underneath it.</p>
+      <p>If you were used to thinking of Flash as the cheap, fast option you reach for when you do not need Pro, the rest of this post is mostly about how aggressively that mental model is now wrong.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section">
+    <div class="section-label">02 / Surprise</div>
+    <h2>Four things that are genuinely new</h2>
+    <div class="prose">
+      <p>Strip out the marketing and there are four substantive shifts in this release.</p>
+    </div>
+
+    <div class="cards-grid cards-2col">
+      <div class="card card-red">
+        <div class="card-icon-badge">Flash &gt; Pro</div>
+        <h4>The tier ladder broke</h4>
+        <p>Flash is no longer "smaller than Pro." On Terminal-Bench, MCP Atlas, OSWorld and GDPval-AA it scores ahead of Gemini 3.1 Pro. The fast tier passed the reasoning tier on the metrics builders read first.</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Speed</div>
+        <h4>Frontier-tier, not budget-tier</h4>
+        <p>Independent measurements put 3.5 Flash above 280 tokens/s and at the top of the intelligence-vs-speed Pareto frontier. The design point is clearly "many agents in parallel," not "snappier chat."</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Distribution</div>
+        <h4>GA across the whole surface</h4>
+        <p>Gemini App, Search AI Mode, AI Studio, the Gemini API, Android Studio, Gemini Enterprise, Antigravity — all on day one. No staged Labs rollout, no narrow preview SKUs.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Story</div>
+        <h4>Agents, not chatbots</h4>
+        <p>The launch barely mentions chat. Demos showcase multi-hour autonomous runs, sub-agent orchestration, and long-horizon enterprise workflows. Google is publicly betting against single-pass UX as the next product.</p>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>If you have been tracking the Gemini line, the surprise is less "is this model better" and more "Google reshuffled which tier <em>does</em> what." A Flash that wins on agentic benchmarks <em>and</em> ships as the consumer default is a signal about Google's roadmap, not just a model card.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section">
+    <div class="section-label">03 / Benchmarks</div>
+    <h2>Where 3.5 Flash actually wins</h2>
+    <div class="prose">
+      <p>The headline numbers are clustered in agentic and tool-use evals. Pulling the four most-cited rows together makes the pattern obvious: 3.5 Flash beats 3 Flash by a large margin, and it beats 3.1 Pro by a smaller but consistent one on these axes.</p>
+    </div>
+
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Benchmark</th>
+            <th>Gemini 3 Flash</th>
+            <th>Gemini 3.1 Pro</th>
+            <th>Gemini 3.5 Flash</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-bench">Terminal-Bench 2.1<br><span style="font-size:11px;color:var(--text-subtle);font-family:var(--mono)">agentic coding</span></td>
+            <td>58.0%</td>
+            <td>70.3%</td>
+            <td class="td-win">76.2%</td>
+          </tr>
+          <tr>
+            <td class="td-bench">MCP Atlas<br><span style="font-size:11px;color:var(--text-subtle);font-family:var(--mono)">multi-step tool workflows</span></td>
+            <td>62.0%</td>
+            <td>78.2%</td>
+            <td class="td-win">83.6%</td>
+          </tr>
+          <tr>
+            <td class="td-bench">OSWorld-Verified<br><span style="font-size:11px;color:var(--text-subtle);font-family:var(--mono)">agentic UI control</span></td>
+            <td>65.1%</td>
+            <td>76.2%</td>
+            <td class="td-win">78.4%</td>
+          </tr>
+          <tr>
+            <td class="td-bench">GDPval-AA<br><span style="font-size:11px;color:var(--text-subtle);font-family:var(--mono)">economically useful knowledge work, Elo</span></td>
+            <td>1204</td>
+            <td>1314</td>
+            <td class="td-win">1656</td>
+          </tr>
+          <tr>
+            <td class="td-bench">CharXiv Reasoning<br><span style="font-size:11px;color:var(--text-subtle);font-family:var(--mono)">complex chart reasoning</span></td>
+            <td>—</td>
+            <td>~83%</td>
+            <td class="td-win">84.2%</td>
+          </tr>
+          <tr>
+            <td class="td-bench">MMMU-Pro<br><span style="font-size:11px;color:var(--text-subtle);font-family:var(--mono)">multimodal reasoning</span></td>
+            <td>—</td>
+            <td>&lt;83.6%</td>
+            <td class="td-win">83.6%</td>
+          </tr>
+          <tr>
+            <td class="td-bench">128k MRCR v2<br><span style="font-size:11px;color:var(--text-subtle);font-family:var(--mono)">long-context retrieval</span></td>
+            <td>lower</td>
+            <td class="td-win">leads</td>
+            <td class="td-lose">trails 3.1 Pro</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>Three things to read out of that table. The agentic gap between Flash and Pro is large and consistent — these are not noisy wins. The multimodal numbers are strong but incremental rather than transformative. And on long-context retrieval at 128k, Flash still trails Pro, which is exactly the seam that a future 3.5 Pro is presumably being shipped to close.</p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">What this means in practice</div>
+      <p>If your workload is "drive a terminal, click around a browser, call a chain of tools" — pick 3.5 Flash. If your workload is "read a 300-page contract and answer questions across it" — keep your 3.1 Pro deployment, and re-evaluate when 3.5 Pro lands.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section">
+    <div class="section-label">04 / The Good</div>
+    <h2>Where 3.5 Flash genuinely shines</h2>
+
+    <h3>Coding and dev workflows are the obvious sweet spot</h3>
+    <div class="prose">
+      <p>3.5 Flash was co-developed with Antigravity, Google's agent-first IDE. That co-design shows up in the kinds of demos Google leads with: agents iterating an OS inside Antigravity, refactoring entire legacy codebases to Next.js, spawning sub-agents to generate, test, and fix code in a loop. Benchmarks like SWE-Bench Pro back it up — gains over 3 Flash, parity or slight wins over 3.1 Pro.</p>
+      <p>If you are building anything in the "coding agent with tools" shape — a Cursor-style IDE companion, a CI-fixing bot, a repo-wide migration runner — 3.5 Flash is now the most capable Gemini-family option and one of the most cost-competitive frontier choices in absolute terms, even after the price hike.</p>
+    </div>
+
+    <h3>Multimodal is solid, with one specific caveat</h3>
+    <div class="prose">
+      <p>Text, image, audio, video, and PDF inputs are all in. The context window is 1M in / 64k out. CharXiv Reasoning sits at 84.2% (slightly ahead of 3.1 Pro) and MMMU-Pro at 83.6% (ahead of both 3 Flash and 3.1 Pro). For everyday multi-doc, multi-modal agent work this is "frontier-tier enough" and probably the boring right choice.</p>
+      <p>The caveat is long-context retrieval: at 128k MRCR v2, Gemini 3.1 Pro still leads. If your stack stuffs a single very large document into context and depends on accurate retrieval inside it, 3.5 Flash is not unambiguously an upgrade.</p>
+    </div>
+
+    <h3>It is actually shipping</h3>
+    <div class="prose">
+      <p>A lot of "frontier" announcements stay locked inside a Labs preview or a single SKU. 3.5 Flash launched simultaneously into the Gemini app, Search AI Mode, AI Studio, the Gemini API, Android Studio, Gemini Enterprise, and Antigravity. That breadth is itself a statement: Google is treating this model, not Pro, as the new product floor.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="section">
+    <div class="section-label">05 / The Bad</div>
+    <h2>"Buyer beware" — four trade-offs that matter</h2>
+
+    <h3>Cost: Flash in name, not in price</h3>
+    <div class="prose">
+      <p>The Flash brand used to mean "cheap and fast." Half of that is still true. Artificial Analysis reports list pricing around <strong>1.50&#8239;USD&#160;/&#160;9.00&#8239;USD per million input/output tokens</strong>, versus 0.50&#8239;/&#8239;3.00 for Gemini 3 Flash — about a 3× jump on the rate card. On their Intelligence Index workloads, where output tokens dominate, real runs come in over 5× more expensive than 3 Flash and roughly <strong>75% more expensive than Gemini 3.1 Pro</strong>.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">Cost ladder — list price per million tokens (USD)</div>
+<pre><span class="tok-cmt"># Approximate published rates, May 2026</span>
+<span class="tok-key">Gemini 3 Flash</span>     <span class="tok-val">input</span> <span class="tok-acc">0.50</span>   <span class="tok-val">output</span> <span class="tok-acc">3.00</span>
+<span class="tok-key">Gemini 3.1 Pro</span>     <span class="tok-val">input</span> <span class="tok-acc">~2.00</span>  <span class="tok-val">output</span> <span class="tok-acc">~10–12</span>   <span class="tok-cmt"># tier-dependent</span>
+<span class="tok-key">Gemini 3.5 Flash</span>   <span class="tok-val">input</span> <span class="tok-acc">1.50</span>   <span class="tok-val">output</span> <span class="tok-acc">9.00</span>
+                   <span class="tok-cmt">↑ 3× input vs 3 Flash · 3× output vs 3 Flash</span>
+                   <span class="tok-cmt">↑ &gt;5× total cost on output-heavy agentic runs</span></pre>
+    </div>
+
+    <div class="prose">
+      <p>The honest read is that the agentic tier has its own price band now, and Google is calling it "Flash" because it inherits the latency profile, not the cost profile. If your workload is verbose or tool-heavy — i.e. the workload the model is optimized for — you should re-cost it before flipping the model name in your config.</p>
+    </div>
+
+    <h3>It is opinionated — built for agents, not single-pass chat</h3>
+    <div class="prose">
+      <p>3.5 Flash is explicitly tuned for long-horizon, multi-step, tool-using sessions, with sub-agents and pauses for human confirmation at decision points. That is fantastic if you are building Antigravity-style systems. It is largely irrelevant if you are building a documentation Q&amp;A bot, a customer support assistant, or a small refactor helper that calls the model once and returns a string.</p>
+      <p>For those single-pass workloads, you are paying a premium for headroom you do not use. The right move there is often "stay on 3.1 Pro or 3 Flash, wait for 3.5 Lite or 3.5 Pro, then re-evaluate" — not "ship the newest model because it is the newest."</p>
+    </div>
+
+    <h3>Long-context regressions vs Pro</h3>
+    <div class="prose">
+      <p>The model card itself acknowledges that 3.5 Flash does not meaningfully surpass Gemini 3.1 Pro on frontier-safety capability evals and trails Pro on some hard reasoning and long-context benchmarks. Independent write-ups specifically call out 128k MRCR v2 as a place to stay on 3.1 Pro. For deep legal, scientific, or multi-book single-pass workloads, "newer" is not the same as "better" here.</p>
+    </div>
+
+    <h3>Safety and operational blast radius</h3>
+    <div class="prose">
+      <p>3.5 was developed under Google's Frontier Safety Framework, and the published claim is strengthened cyber and CBRN safeguards, plus better calibration on sensitive questions (less over-refusal). Independent of how good the model itself is, broad agent availability — including personal agents like Gemini Spark that run continuously — increases the blast radius for misaligned behavior. Google is already in litigation tied to prior Gemini conduct. Enterprises shipping this need their own guardrails, audit layers, and incident playbooks; the model card does not absorb that risk for you.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 6 -->
+  <div class="section">
+    <div class="section-label">06 / Deprecations</div>
+    <h2>The 2.5 line is on a clock</h2>
+    <div class="prose">
+      <p>The 3.5 Flash launch is paired with explicit deprecation timelines in the Gemini API docs and a parallel notice for Vertex AI. The earliest shutdown date for the 2.5 family is <strong>October 16, 2026</strong>, with at least six months of notice once the Gemini 3 migration path is fully GA.</p>
+    </div>
+
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Model being retired</th>
+            <th>Earliest shutdown</th>
+            <th>Recommended replacement</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-mono">gemini-2.5-pro</td>
+            <td>Oct 16, 2026</td>
+            <td class="td-mono">gemini-3.1-pro-preview</td>
+          </tr>
+          <tr>
+            <td class="td-mono">gemini-2.5-flash</td>
+            <td>Oct 16, 2026</td>
+            <td class="td-mono">gemini-3.5-flash</td>
+          </tr>
+          <tr>
+            <td class="td-mono">gemini-2.5-flash-lite</td>
+            <td>Oct 16, 2026</td>
+            <td class="td-mono">gemini-3.1-flash-lite</td>
+          </tr>
+          <tr>
+            <td class="td-mono">gemini-2.0-flash</td>
+            <td>earlier (2026)</td>
+            <td class="td-mono">gemini-2.5-flash → 3.x</td>
+          </tr>
+          <tr>
+            <td class="td-mono">gemini-2.0-flash-lite</td>
+            <td>earlier (2026)</td>
+            <td class="td-mono">gemini-2.5-flash-lite → 3.x</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>The direction of travel is unambiguous: you have runway, but you are expected to be on 3.x or 3.5 in production within the next year. Two specific traps to plan around:</p>
+    </div>
+
+    <ul class="dl">
+      <li><div><strong>The 2.5 Flash → 3.5 Flash hop is not free.</strong> The recommended replacement is a more expensive model with a different output distribution. Treat the migration as a re-eval, not a string-replace on the model name. Re-cost it on real traffic before you cut over.</div></li>
+      <li><div><strong>2.5 Flash-Lite hands off to 3.1 Flash-Lite, not 3.5.</strong> There is no 3.5 Lite yet. If your stack relies on a true low-cost-per-token tier, the migration target today is 3.1 Flash-Lite, and you will likely re-migrate again when 3.5 Lite ships.</div></li>
+      <li><div><strong>Live / streaming endpoints are migrating too.</strong> Old <code class="inline">flash-live</code> endpoints under 2.0/2.5 are being pointed at <code class="inline">gemini-3.1-flash-live-preview</code> as their successor. If you have anything in real-time voice or video, that is a separate migration thread to track.</div></li>
+    </ul>
+  </div>
+
+  <!-- SECTION 7 -->
+  <div class="section">
+    <div class="section-label">07 / Roadmap</div>
+    <h2>What 3.5 Pro and 3.5 Lite are likely to be</h2>
+    <div class="prose">
+      <p>Google has said the 3.5 family will fill out — Pro is being used internally and is the next public drop, and there is no 3.5 Lite model card yet. We can say plausible things about each without inventing numbers.</p>
+    </div>
+
+    <h3>3.5 Pro — the planner and reasoning brain</h3>
+    <div class="prose">
+      <p>The framing Google has used publicly is that <strong>Pro orchestrates and Flash executes</strong>: Pro holds the long-horizon plan, Flash carries out brute-force tool calls and parallel work as sub-agents underneath it. Combine that with the fact that 3.5 Flash slightly regresses against 3.1 Pro on long-context and hard reasoning, and the implication is clear: 3.5 Pro is being built to restore that lead and to act as the top of an explicitly hierarchical agent stack.</p>
+      <p>Expect: highest-reasoning, deepest long-context, more expensive, and pitched as the orchestrator in multi-agent topologies — not as a chat default.</p>
+    </div>
+
+    <h3>3.5 Lite — the high-volume worker</h3>
+    <div class="prose">
+      <p>3.5 Lite (or 3.5 Flash-Lite, the naming is not pinned yet) has not shipped, but the prior at 3.1 Flash-Lite is "scalable thinking model for high-volume tasks at low cost and latency." Read forward: a tier optimized for tagging, summarization, classification, and the kinds of simple agents where you fire millions of small calls and care about per-token cost above all else.</p>
+      <p>It will almost certainly absorb the migration target currently pointed at 3.1 Flash-Lite, finishing the deprecation table.</p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">The architectural pattern Google is telegraphing</div>
+      <p><strong>Pro orchestrates. Flash executes heavy agentic work. Lite handles massive, cheap workloads.</strong> That is a coherent three-tier story for multi-agent systems — Pro at the top of the planning graph, Flash as the worker pool, Lite as the long tail. It is also the first time a major lab has shipped its tiering with this much built-in agent topology in mind.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">Mental model · 3.5 family in an agent stack</div>
+<pre><span class="tok-cmt">                  ┌──────────────────────────────┐</span>
+<span class="tok-cmt">                  │   Gemini 3.5 Pro             │  ← plans, decides,</span>
+<span class="tok-cmt">                  │   "planner / reasoning"      │    holds long context</span>
+<span class="tok-cmt">                  └──────────────┬───────────────┘</span>
+<span class="tok-cmt">                                 │  delegates</span>
+<span class="tok-cmt">                  ┌──────────────▼───────────────┐</span>
+<span class="tok-cmt">                  │   Gemini 3.5 Flash  × N      │  ← drives terminals,</span>
+<span class="tok-cmt">                  │   "agentic worker pool"      │    browsers, MCP tools</span>
+<span class="tok-cmt">                  └──────────────┬───────────────┘</span>
+<span class="tok-cmt">                                 │  fans out to</span>
+<span class="tok-cmt">                  ┌──────────────▼───────────────┐</span>
+<span class="tok-cmt">                  │   Gemini 3.5 Lite   × N·M    │  ← tag, classify,</span>
+<span class="tok-cmt">                  │   "high-volume workhorse"    │    summarize, filter</span>
+<span class="tok-cmt">                  └──────────────────────────────┘</span></pre>
+    </div>
+  </div>
+
+  <!-- SECTION 8 -->
+  <div class="section">
+    <div class="section-label">08 / Live vs Long-Running</div>
+    <h2>From streaming chat to multi-hour sessions</h2>
+    <div class="prose">
+      <p>One underdiscussed shift between 2.5 and 3.5: Google has effectively split "live" into two product lines. The streaming, voice-and-video <code class="inline">flash-live</code> endpoints are being routed to <code class="inline">gemini-3.1-flash-live-preview</code> — that remains an explicitly low-latency, conversational mode. Separately, 3.5 Flash is designed for <strong>multi-hour autonomous sessions</strong>, with pauses for human confirmation at decision points, and is positioned as the core engine for Antigravity-style harnesses and the Gemini Enterprise Agent Platform.</p>
+      <p>In 2.5, long-running and live felt like preview features grafted onto a chat model. In 3.5, the long-running case is a first-class product surface — that is the actual productization step here, not just "we added streaming."</p>
+    </div>
+  </div>
+
+  <!-- SECTION 9 -->
+  <div class="section">
+    <div class="section-label">09 / Counterpoint</div>
+    <h2>Not everyone wants an agent — and that's okay</h2>
+    <div class="prose">
+      <p>The honest version of this story is that "agent &gt; chat" is not obviously true for everyone. A large share of real workloads are still fundamentally single-pass: RAG-style Q&amp;A over docs, customer support, simple summarization, unit tests, small refactors, lightweight code suggestions. For those, the model gets called once, returns a string or JSON, and the workflow moves on.</p>
+      <p>Agentic stacks add failure modes that simply do not exist in a single-pass call: tool misconfiguration, environment drift, brittle DOMs or terminals, race conditions between sub-agents, and a much larger surface for prompt-injection. Buying a model that is optimized for those workflows when you do not run them means paying for headroom you cannot use, and inheriting risks you do not have to take.</p>
+      <p>The right framing is not "should I move to 3.5 Flash?" It is "is my workload shaped like an agent?" If yes, 3.5 Flash is probably the strongest Google option in front of you right now. If no, 3.1 Pro / 3 Flash / future 3.5 Lite are all defensible choices, and "default in the Gemini app" is not a reason to migrate.</p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card card-green">
+        <div class="card-icon-badge">Move to 3.5 Flash</div>
+        <h4>If you are building agents</h4>
+        <p>Coding agents, browser/UI control, MCP tool chains, multi-hour autonomous runs, sub-agent topologies. This is the workload the model was built for.</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Hold for 3.5 Pro</div>
+        <h4>If you live in long-context reasoning</h4>
+        <p>Heavy single-pass retrieval at 128k+, deep legal or scientific reading, plan-and-orchestrate workloads. 3.1 Pro still leads here; 3.5 Pro is the upgrade to wait for.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Stay simple</div>
+        <h4>If you are doing single-pass chat or RAG</h4>
+        <p>Documentation Q&amp;A, support bots, classification, small refactors. Stay on 3 Flash or wait for 3.5 Lite — do not pay agent prices for a one-shot call.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 10 -->
+  <div class="section">
+    <div class="section-label">10 / Off-Ramps</div>
+    <h2>If 3.5 Flash is a dead end for you, where do 2.5 Flash teams actually go?</h2>
+    <div class="prose">
+      <p>One question I keep getting from people on Gemini 2.5 Flash: the recommended migration target is 3.5 Flash, but the new model is 3× the per-token cost, optimized for agents you do not run, and verbose in ways that inflate real bills further. What does the cross-vendor landscape look like if you treat the 2.5 Flash price/feature profile as the actual constraint, not "stay on Google"?</p>
+      <p>The anchor: 2.5 Flash sits at <strong>$0.30 in&#160;/&#160;$2.50 out per million tokens, 1M context, 65K output</strong>, multimodal (text&#160;+&#160;image in&#160;→ text out), prompt caching, GA on Vertex AI. Below is the full landscape — every serious cross-vendor option in the same price-and-capability neighborhood — with 2.5 Flash at the top and 3.5 Flash at the bottom as bookends. Each row is tagged with the single biggest reason it fits or does not.</p>
+      <p style="font-size:14px;color:var(--text-muted)"><strong>Reading note:</strong> every row below supports text&#160;+&#160;image input and prompt caching — those columns are dropped to keep the table readable. The PDF column captures the one modality that actually varies (native, via Converse API, or partial). All rows output text.</p>
+    </div>
+
+    <div class="data-table data-table-wide">
+      <table>
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Platform</th>
+            <th>In&#160;$/M</th>
+            <th>Out&#160;$/M</th>
+            <th>Ctx</th>
+            <th>Max Out</th>
+            <th>PDF</th>
+            <th>Fit</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr class="row-baseline">
+            <td class="td-bench">Gemini 2.5 Flash <span class="row-tag tag-baseline">Baseline</span></td>
+            <td>Vertex AI</td>
+            <td>$0.30</td>
+            <td>$2.50</td>
+            <td>1M</td>
+            <td>65K</td>
+            <td class="td-mod yes">✓</td>
+            <td><span style="color:var(--text-subtle);font-family:var(--mono);font-size:11px">— anchor —</span></td>
+          </tr>
+
+          <tr>
+            <td class="td-bench">Amazon Nova 2 Lite</td>
+            <td>Bedrock</td>
+            <td>$0.30</td>
+            <td>$2.50</td>
+            <td>1M</td>
+            <td>64K</td>
+            <td class="td-mod yes">Converse</td>
+            <td><span class="fit-pill fit-good">Exact 1:1 swap</span></td>
+          </tr>
+          <tr>
+            <td class="td-bench">GPT-5 mini</td>
+            <td>Azure Foundry</td>
+            <td class="td-win">$0.25</td>
+            <td class="td-win">$2.00</td>
+            <td>400K</td>
+            <td>128K</td>
+            <td class="td-mod yes">✓</td>
+            <td><span class="fit-pill fit-good">Cheapest fit</span></td>
+          </tr>
+          <tr>
+            <td class="td-bench">GPT-4.1 mini</td>
+            <td>Azure Foundry</td>
+            <td>$0.40</td>
+            <td class="td-win">$1.60</td>
+            <td>1M</td>
+            <td>32K</td>
+            <td class="td-mod yes">✓</td>
+            <td><span class="fit-pill fit-good">Cheapest output</span></td>
+          </tr>
+          <tr>
+            <td class="td-bench">Claude Haiku 4.5</td>
+            <td>Bedrock, Vertex&#160;AI <span style="color:var(--text-subtle);font-size:11px">(Foundry preview)</span></td>
+            <td class="td-lose">$1.25</td>
+            <td class="td-lose">$5.00</td>
+            <td>200K</td>
+            <td>64K</td>
+            <td class="td-mod yes">Native</td>
+            <td><span class="fit-pill fit-good">Premium quality</span></td>
+          </tr>
+          <tr>
+            <td class="td-bench">Gemini 2.5 Flash-Lite</td>
+            <td>Vertex AI</td>
+            <td class="td-win">$0.10</td>
+            <td class="td-win">$0.40</td>
+            <td>1M</td>
+            <td>65K</td>
+            <td class="td-mod yes">✓</td>
+            <td><span class="fit-pill fit-bad">Deprecating Oct '26</span></td>
+          </tr>
+
+          <tr>
+            <td class="td-bench">Amazon Nova Lite</td>
+            <td>Bedrock</td>
+            <td class="td-win">$0.06</td>
+            <td class="td-win">$0.24</td>
+            <td>300K</td>
+            <td class="td-lose">5K</td>
+            <td class="td-mod yes">Converse</td>
+            <td><span class="fit-pill fit-warn">Output 5K</span></td>
+          </tr>
+          <tr>
+            <td class="td-bench">Llama 4 Scout</td>
+            <td>Bedrock, Vertex AI</td>
+            <td class="td-win">$0.17</td>
+            <td class="td-win">$0.66</td>
+            <td>10M</td>
+            <td class="td-lose">8K</td>
+            <td class="td-mod no">Partial</td>
+            <td><span class="fit-pill fit-warn">Output 8K · 10M ctx</span></td>
+          </tr>
+          <tr>
+            <td class="td-bench">Llama 4 Maverick 17B</td>
+            <td>Bedrock, Vertex AI</td>
+            <td class="td-win">$0.24</td>
+            <td class="td-win">$0.97</td>
+            <td>1M</td>
+            <td class="td-lose">8K</td>
+            <td class="td-mod no">Partial</td>
+            <td><span class="fit-pill fit-warn">Output 8K</span></td>
+          </tr>
+          <tr>
+            <td class="td-bench">Ministral 3 14B</td>
+            <td>Bedrock</td>
+            <td>$0.40</td>
+            <td class="td-win">$1.20</td>
+            <td class="td-lose">128K</td>
+            <td class="td-lose">8K</td>
+            <td class="td-mod yes">✓</td>
+            <td><span class="fit-pill fit-warn">Ctx 128K · Output 8K</span></td>
+          </tr>
+          <tr>
+            <td class="td-bench">Qwen3-VL 235B-A22B</td>
+            <td>Bedrock</td>
+            <td>$0.30</td>
+            <td class="td-win">$1.50</td>
+            <td>256K</td>
+            <td class="td-lose">8K</td>
+            <td class="td-mod yes">✓</td>
+            <td><span class="fit-pill fit-warn">Output 8K · vision-first</span></td>
+          </tr>
+          <tr>
+            <td class="td-bench">Mistral Large 3 (675B)</td>
+            <td>Bedrock, Vertex AI</td>
+            <td>$0.50</td>
+            <td class="td-win">$1.50</td>
+            <td>256K</td>
+            <td class="td-lose">8K</td>
+            <td class="td-mod yes">✓</td>
+            <td><span class="fit-pill fit-warn">Output 8K</span></td>
+          </tr>
+          <tr>
+            <td class="td-bench">Magistral Small 2509</td>
+            <td>Bedrock</td>
+            <td>$0.50</td>
+            <td class="td-win">$1.50</td>
+            <td class="td-lose">128K</td>
+            <td class="td-lose">8K</td>
+            <td class="td-mod yes">✓</td>
+            <td><span class="fit-pill fit-warn">Ctx 128K · Output 8K</span></td>
+          </tr>
+          <tr>
+            <td class="td-bench">Amazon Nova Pro</td>
+            <td>Bedrock</td>
+            <td>$0.80</td>
+            <td class="td-lose">$3.20</td>
+            <td>300K</td>
+            <td class="td-lose">5K</td>
+            <td class="td-mod yes">✓</td>
+            <td><span class="fit-pill fit-warn">Output 5K</span></td>
+          </tr>
+
+          <tr>
+            <td class="td-bench">Gemini 3 Flash</td>
+            <td>Vertex AI</td>
+            <td>$0.50</td>
+            <td class="td-lose">$3.00</td>
+            <td>1M</td>
+            <td>65K</td>
+            <td class="td-mod yes">✓</td>
+            <td><span class="fit-pill fit-preview">Preview</span></td>
+          </tr>
+          <tr>
+            <td class="td-bench">Pixtral Large 25.02</td>
+            <td>Bedrock</td>
+            <td class="td-lose">$2.00</td>
+            <td class="td-lose">$6.00</td>
+            <td class="td-lose">128K</td>
+            <td>16K</td>
+            <td class="td-mod yes">✓</td>
+            <td><span class="fit-pill fit-bad">Cost · ctx 128K</span></td>
+          </tr>
+          <tr>
+            <td class="td-bench">GPT-4.1</td>
+            <td>Azure Foundry</td>
+            <td class="td-lose">$2.00</td>
+            <td class="td-lose">$8.00</td>
+            <td>1M</td>
+            <td>32K</td>
+            <td class="td-mod yes">✓</td>
+            <td><span class="fit-pill fit-bad">Input 6.7× over</span></td>
+          </tr>
+          <tr class="row-replacement">
+            <td class="td-bench">Gemini 3.5 Flash <span class="row-tag tag-replacement">Google's Pick</span></td>
+            <td>Vertex AI</td>
+            <td class="td-lose">$1.50</td>
+            <td class="td-lose">$9.00</td>
+            <td>1M</td>
+            <td>65K</td>
+            <td class="td-mod yes">✓</td>
+            <td><span class="fit-pill fit-bad">Output 3.6× over</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <div class="prose">
+      <p>Reading the table:</p>
+    </div>
+
+    <ul class="dl">
+      <li><div><strong>The strict fits are the four pills marked <span class="fit-pill fit-good">good</span> near the top</strong> — Nova 2 Lite, GPT-5 mini, GPT-4.1 mini, and Claude Haiku 4.5. These meet the full 2.5 Flash profile: price within roughly 1× of baseline, context ≥ 200K, output ≥ 20K, full multimodal input, prompt caching, and GA today. Flash-Lite would belong in this band on price alone, but it shares the October 2026 shutdown clock with 2.5 Flash, which makes it a worse migration target than the model it would replace.</div></li>
+      <li><div><strong>The yellow band is where output length stops mattering</strong> — eight cheaper alternatives sit at 5–8K max output. If your real workloads emit short answers (chat, RAG, extraction, classification, structured output), every row in this band is genuinely usable and often dramatically cheaper than the baseline. If you regularly emit &gt; 20K, only the four strict-fit rows and 3.5 Flash itself remain viable.</div></li>
+      <li><div><strong>The bottom of the table sorts itself into two failure modes</strong> — preview-but-otherwise-fits (Gemini 3 Flash, perfectly usable specs but not yet GA on Vertex) and cost-too-high (Pixtral Large, GPT-4.1, and Google's own 3.5 Flash, all sit well above the output budget). I dropped the former-flagship tier (Gemini 2.5 Pro, GPT-5) — at ≥&#8239;$10/M output, those are not in the same conversation as 2.5 Flash and never were.</div></li>
+      <li><div><strong>The single closest 1:1 swap on cost is Amazon Nova 2 Lite.</strong> Exact match on $0.30&#8239;/&#8239;$2.50 and on the 1M&#8239;/&#8239;64K context window, GA on Bedrock with the Converse API for PDF input, prompt caching, code interpreter and web grounding built in. If you are already on AWS, this is the lowest-risk lateral move.</div></li>
+    </ul>
+
+    <div class="callout">
+      <div class="callout-lbl">Heads-up on lifecycle</div>
+      <p>Cross-vendor deprecation timelines are not published in one place. Each of these is "GA today," but the same clock risk you are migrating <em>away from</em> in 2.5 applies in different shapes to every other vendor — Nova will get a Nova 3, Llama 4 will get a Llama 5, Haiku will get a Haiku 5. Before you commit to a multi-year build on any of these, pull the vendor's own deprecation policy and the model card's listed retirement date, and assume an 18-month effective lifetime unless the vendor commits otherwise.</p>
+    </div>
+
+    <div class="prose">
+      <p>The honest framing: "stay on Google" is one valid migration, but it is not the only one, and given how aggressively Google has repriced Flash, it is worth at least putting two or three of these on a real eval bench. The 2.5&#8239;→&#8239;3.5 hop is not free — and the cross-vendor hop, evaluated this quarter, may be the cheaper version of the same work.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 11 -->
+  <div class="section">
+    <div class="section-label">11 / Migration Checklist</div>
+    <h2>How to evaluate 3.5 Flash for your stack this week</h2>
+    <div class="prose">
+      <p>If you are on 2.5 Flash today and the migration target is 3.5 Flash, do not change the model string in your config and call it done. The deprecation is real, but the new model has a different cost profile, different output verbosity, and a different design target. Treat the cutover as a real re-eval.</p>
+    </div>
+
+    <ul class="dl">
+      <li><div><strong>Replay your top 100 prompts in shadow mode.</strong> Diff outputs, token counts, latency, and tool-call patterns against your current 2.5 Flash baseline. The risk is not quality; it is verbosity blowing up cost.</div></li>
+      <li><div><strong>Re-cost on real traffic, not list price.</strong> Output dominates total cost for tool-using workloads. Track effective $/successful-run, not $/M tokens.</div></li>
+      <li><div><strong>Probe long-context behavior explicitly.</strong> If you push past 64k, run a small MRCR-style eval inside your domain. If accuracy drops, hold on 3.1 Pro until 3.5 Pro lands.</div></li>
+      <li><div><strong>Stress the agentic path.</strong> Run your tool-using chains end-to-end with sub-agents enabled. The headline benchmark wins are agentic — if you do not exercise that path, you will not see them.</div></li>
+      <li><div><strong>Add a kill-switch on autonomous runs.</strong> Multi-hour sessions only make sense with hard timeouts, budget caps, and human confirmation gates. Build those before you ship, not after the first incident.</div></li>
+      <li><div><strong>Re-read the safety surface for your domain.</strong> Better calibration on sensitive prompts changes refusal patterns. Regression-test your safety filters and audit your refusal logs after cutover.</div></li>
+    </ul>
+  </div>
+
+  <!-- CLOSING -->
+  <div class="section" id="closing">
+    <div class="section-label">12 / The Short Version</div>
+    <h2>If you only remember three things</h2>
+    <ul class="dl">
+      <li><div><strong>Flash is the new product floor, not the cheap tier.</strong> Google reshuffled which tier <em>does</em> what. 3.5 Flash beats 3.1 Pro on agentic and coding work, and the next surprise will be 3.5 Pro reclaiming the top of the reasoning ladder.</div></li>
+      <li><div><strong>The roadmap is agents, and the price reflects it.</strong> 3× input and 3× output cost vs 3 Flash, multi-hour sessions as a first-class mode, an explicit Pro-orchestrates / Flash-executes / Lite-fans-out topology. If you are not running agents, you are subsidizing the people who are.</div></li>
+      <li><div><strong>Migrations are now an eval problem, not a config change.</strong> 2.5 is on a clock through October 2026, and the recommended replacement for 2.5 Flash is a more expensive, more verbose model. Shadow-replay, re-cost, and re-baseline before you flip the switch.</div></li>
+    </ul>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <span>asadani.tech &middot; May 2026</span>
+  <div class="footer-refs">
+    <a href="/">← back to index</a>
+  </div>
+</footer>
+
+</body>
+</html>
