@@ -495,6 +495,61 @@
   .fit-pill.fit-bad     { background: var(--red-bg);   color: var(--red); }
   .fit-pill.fit-preview { background: var(--blue-bg);  color: var(--blue); }
 
+  /* ─── TOC (jump links) ───────────────────────────────── */
+  .toc {
+    background: var(--surface-tint);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px 22px;
+    margin: 0 0 56px;
+  }
+  .toc-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 28px;
+  }
+  .toc-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .toc-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-subtle);
+    flex-shrink: 0;
+    width: 18px;
+  }
+  .toc-list a {
+    color: var(--text-body);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .toc-list a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent-border);
+  }
+  @media (max-width: 540px) {
+    .toc-list { grid-template-columns: 1fr; }
+  }
+
+  /* Anchor offset so sticky nav doesn't cover section headings */
+  .section { scroll-margin-top: 72px; }
+
   /* ─── FOOTER ──────────────────────────────────────────── */
   footer {
     background: var(--surface);
@@ -573,8 +628,27 @@
     </ul>
   </div>
 
+  <!-- TOC -->
+  <nav class="toc" aria-label="Jump to section">
+    <div class="toc-label">Jump to</div>
+    <ol class="toc-list">
+      <li><span class="toc-num">01</span><a href="#headline">The Headline</a></li>
+      <li><span class="toc-num">07</span><a href="#roadmap">Roadmap</a></li>
+      <li><span class="toc-num">02</span><a href="#surprise">Surprise</a></li>
+      <li><span class="toc-num">08</span><a href="#live-vs-long-running">Live vs Long-Running</a></li>
+      <li><span class="toc-num">03</span><a href="#benchmarks">Benchmarks</a></li>
+      <li><span class="toc-num">09</span><a href="#counterpoint">Counterpoint</a></li>
+      <li><span class="toc-num">04</span><a href="#the-good">The Good</a></li>
+      <li><span class="toc-num">10</span><a href="#off-ramps">Off-Ramps</a></li>
+      <li><span class="toc-num">05</span><a href="#the-bad">The Bad</a></li>
+      <li><span class="toc-num">11</span><a href="#migration-checklist">Migration Checklist</a></li>
+      <li><span class="toc-num">06</span><a href="#deprecations">Deprecations</a></li>
+      <li><span class="toc-num">12</span><a href="#short-version">The Short Version</a></li>
+    </ol>
+  </nav>
+
   <!-- SECTION 1 -->
-  <div class="section">
+  <div class="section" id="headline">
     <div class="section-label">01 / The Headline</div>
     <h2>What 3.5 Flash actually is</h2>
     <div class="prose">
@@ -585,7 +659,7 @@
   </div>
 
   <!-- SECTION 2 -->
-  <div class="section">
+  <div class="section" id="surprise">
     <div class="section-label">02 / Surprise</div>
     <h2>Four things that are genuinely new</h2>
     <div class="prose">
@@ -621,7 +695,7 @@
   </div>
 
   <!-- SECTION 3 -->
-  <div class="section">
+  <div class="section" id="benchmarks">
     <div class="section-label">03 / Benchmarks</div>
     <h2>Where 3.5 Flash actually wins</h2>
     <div class="prose">
@@ -696,7 +770,7 @@
   </div>
 
   <!-- SECTION 4 -->
-  <div class="section">
+  <div class="section" id="the-good">
     <div class="section-label">04 / The Good</div>
     <h2>Where 3.5 Flash genuinely shines</h2>
 
@@ -719,7 +793,7 @@
   </div>
 
   <!-- SECTION 5 -->
-  <div class="section">
+  <div class="section" id="the-bad">
     <div class="section-label">05 / The Bad</div>
     <h2>"Buyer beware" — four trade-offs that matter</h2>
 
@@ -760,7 +834,7 @@
   </div>
 
   <!-- SECTION 6 -->
-  <div class="section">
+  <div class="section" id="deprecations">
     <div class="section-label">06 / Deprecations</div>
     <h2>The 2.5 line is on a clock</h2>
     <div class="prose">
@@ -818,7 +892,7 @@
   </div>
 
   <!-- SECTION 7 -->
-  <div class="section">
+  <div class="section" id="roadmap">
     <div class="section-label">07 / Roadmap</div>
     <h2>What 3.5 Pro and 3.5 Lite are likely to be</h2>
     <div class="prose">
@@ -862,7 +936,7 @@
   </div>
 
   <!-- SECTION 8 -->
-  <div class="section">
+  <div class="section" id="live-vs-long-running">
     <div class="section-label">08 / Live vs Long-Running</div>
     <h2>From streaming chat to multi-hour sessions</h2>
     <div class="prose">
@@ -872,7 +946,7 @@
   </div>
 
   <!-- SECTION 9 -->
-  <div class="section">
+  <div class="section" id="counterpoint">
     <div class="section-label">09 / Counterpoint</div>
     <h2>Not everyone wants an agent — and that's okay</h2>
     <div class="prose">
@@ -901,7 +975,7 @@
   </div>
 
   <!-- SECTION 10 -->
-  <div class="section">
+  <div class="section" id="off-ramps">
     <div class="section-label">10 / Off-Ramps</div>
     <h2>If 3.5 Flash is a dead end for you, where do 2.5 Flash teams actually go?</h2>
     <div class="prose">
@@ -1136,7 +1210,7 @@
   </div>
 
   <!-- SECTION 11 -->
-  <div class="section">
+  <div class="section" id="migration-checklist">
     <div class="section-label">11 / Migration Checklist</div>
     <h2>How to evaluate 3.5 Flash for your stack this week</h2>
     <div class="prose">
@@ -1154,7 +1228,7 @@
   </div>
 
   <!-- CLOSING -->
-  <div class="section" id="closing">
+  <div class="section" id="short-version">
     <div class="section-label">12 / The Short Version</div>
     <h2>If you only remember three things</h2>
     <ul class="dl">
