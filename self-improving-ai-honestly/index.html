@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Improving AI, Honestly — Where the Loop Actually Closes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #F5F1EB;
+    --bg-alt:       #EDEAE3;
+    --surface:      #FFFFFF;
+    --surface-tint: #FAF8F5;
+    --border:       #DDD9D0;
+    --border-light: #EAE7E0;
+    --text:         #1A1714;
+    --text-body:    #3D3A35;
+    --text-muted:   #6B6760;
+    --text-subtle:  #9B9892;
+    --accent:       #C85C2D;
+    --accent-light: #E8895D;
+    --accent-bg:    #FDF1EB;
+    --accent-border:#F0C4A8;
+    --green:        #2A7A4B;
+    --green-bg:     #EAF5EF;
+    --green-border: #A8D9BC;
+    --blue:         #2563A8;
+    --blue-bg:      #EAF1FA;
+    --blue-border:  #A8C5E8;
+    --red:          #B83535;
+    --red-bg:       #FAEBEB;
+    --red-border:   #E8AAAA;
+    --serif:        'Newsreader', Georgia, serif;
+    --sans:         'Inter', system-ui, sans-serif;
+    --mono:         'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-body);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .nav-tag {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── LAYOUT ──────────────────────────────────────────── */
+  .page-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-deck {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 640px;
+    font-weight: 300;
+  }
+  .hero-meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-family: var(--mono);
+  }
+  .hero-meta-sep { color: var(--border); }
+
+  /* ─── BODY TEXT ───────────────────────────────────────── */
+  .prose p {
+    color: var(--text-body);
+    margin-bottom: 20px;
+    font-size: 17px;
+    line-height: 1.78;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+  .prose ul.bullets {
+    list-style: none;
+    margin: 0 0 20px;
+    padding: 0;
+  }
+  .prose ul.bullets li {
+    padding: 6px 0 6px 20px;
+    position: relative;
+    color: var(--text-body);
+    font-size: 16.5px;
+    line-height: 1.7;
+  }
+  .prose ul.bullets li::before {
+    content: '→';
+    color: var(--accent);
+    position: absolute;
+    left: 0;
+    top: 6px;
+  }
+  strong { color: var(--text); font-weight: 600; }
+  em { font-style: italic; color: var(--text-body); }
+  .prose a, .banner a, .ref-list a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+  .prose a:hover { color: var(--accent-light); }
+  code.inline {
+    font-family: var(--mono);
+    font-size: 13.5px;
+    background: var(--bg-alt);
+    color: var(--accent);
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+
+  /* ─── SECTION HEADING ─────────────────────────────────── */
+  .section { margin-top: 56px; scroll-margin-top: 72px; }
+  .section-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section-label a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .section-label a:hover { color: var(--accent-light); }
+  .section-label a::before {
+    content: '#';
+    opacity: 0;
+    margin-right: 4px;
+    color: var(--accent-light);
+    transition: opacity 0.15s;
+  }
+  .section-label a:hover::before { opacity: 1; }
+
+  .section h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 32px 0 14px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── BANNER ──────────────────────────────────────────── */
+  .banner {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .banner-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .banner p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+
+  /* ─── PLAIN ENGLISH ───────────────────────────────────── */
+  .plain-english {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 8px 8px;
+    padding: 28px 32px;
+    margin: 0 0 56px;
+  }
+  .plain-english .pe-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .pe-list { list-style: none; padding: 0; }
+  .pe-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 16px;
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+  .pe-list li:last-child { border-bottom: none; }
+  .pe-num {
+    width: 26px;
+    height: 26px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-family: var(--mono);
+  }
+
+  /* ─── CARDS GRID ──────────────────────────────────────── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 24px 0;
+  }
+  .cards-grid.two-col { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 560px) {
+    .cards-grid.two-col { grid-template-columns: 1fr; }
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    border-color: var(--accent-border);
+    box-shadow: 0 2px 8px rgba(200,92,45,0.08);
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+  .card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .card.card-red { border-color: var(--red-border); }
+  .card.card-red:hover { border-color: var(--red); box-shadow: 0 2px 8px rgba(184,53,53,0.08); }
+  .card.card-red .card-icon-badge {
+    display: inline-block;
+    background: var(--red-bg);
+    color: var(--red);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-green { border-color: var(--green-border); }
+  .card.card-green:hover { border-color: var(--green); box-shadow: 0 2px 8px rgba(42,122,75,0.08); }
+  .card.card-green .card-icon-badge {
+    display: inline-block;
+    background: var(--green-bg);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-blue { border-color: var(--blue-border); }
+  .card.card-blue:hover { border-color: var(--blue); box-shadow: 0 2px 8px rgba(37,99,168,0.08); }
+  .card.card-blue .card-icon-badge {
+    display: inline-block;
+    background: var(--blue-bg);
+    color: var(--blue);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  /* ─── CALLOUT ─────────────────────────────────────────── */
+  .callout {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+  .callout .callout-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout p { font-size: 15px; color: var(--text-muted); margin: 0; line-height: 1.7; }
+  .callout p + p { margin-top: 10px; }
+  .callout p.quote { font-style: italic; color: var(--text-body); }
+
+  /* ─── DETAIL LIST ─────────────────────────────────────── */
+  ul.dl {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  ul.dl li {
+    padding: 13px 18px 13px 14px;
+    font-size: 15px;
+    color: var(--text-body);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.65;
+  }
+  ul.dl li:last-child { border-bottom: none; }
+  ul.dl li::before {
+    content: '→';
+    color: var(--accent);
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ─── TABLE ───────────────────────────────────────────── */
+  .data-table {
+    overflow-x: auto;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .data-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .data-table thead th {
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .data-table tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-body);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:hover td { background: var(--surface-tint); }
+  .data-table a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent-border);
+    transition: border-color 0.15s;
+  }
+  .data-table a:hover { border-bottom-color: var(--accent); }
+  .td-yes { color: var(--green); font-weight: 600; }
+  .td-no  { color: var(--red);   font-weight: 600; }
+  .td-mono { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+
+  /* ─── REFERENCES ──────────────────────────────────────── */
+  .ref-list { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+  .ref-list li { padding: 8px 18px 8px 14px; font-size: 13px; }
+
+  /* ─── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-refs { font-size: 12px; color: var(--text-subtle); }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 40px 0 36px; }
+    .page-wrap { padding: 0 16px 60px; }
+    footer { padding: 16px 20px; }
+    .plain-english { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">asadani.tech</a>
+  <div class="nav-right">
+    <span>Agents &amp; Self-Improvement</span>
+    <span class="nav-tag">MAY 2026</span>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">Self-Improving AI · Landscape Read</div>
+    <h1>Self-Improving AI, Honestly</h1>
+    <p class="hero-deck">Agents that rewrite their own scaffolds. Models that train themselves at test time. Loops that do both. The map is real. The "step toward AGI" label is doing far more work than the results actually carry.</p>
+    <div class="hero-meta">
+      <span>asadani.tech</span>
+      <span class="hero-meta-sep">/</span>
+      <span>May 2026</span>
+      <span class="hero-meta-sep">/</span>
+      <span>11 min read</span>
+      <span class="hero-meta-sep">/</span>
+      <span>Agents, Inference, AGI</span>
+    </div>
+  </header>
+
+  <!-- BANNER -->
+  <div class="banner">
+    <span class="banner-badge">CONTEXT</span>
+    <p>This is a landscape read, not a paper review. It draws on a decade of self-improvement research, from Reflexion and STaR through Voyager, AI Scientist, the Darwin Gödel Machine, TTT/TTRL, and 2026 entries like Meta-Harness, Hyperagents, and the SIA paper that unified harness and weight updates in one loop. Full reference list at the bottom.</p>
+  </div>
+
+  <!-- PLAIN ENGLISH SUMMARY -->
+  <div class="plain-english">
+    <div class="pe-label">Where self-improvement actually shows up</div>
+    <ul class="pe-list">
+      <li>
+        <span class="pe-num">1</span>
+        <div><strong>At inference.</strong> The model critiques its own output and retries with verbal feedback. Nothing in the model changes. Reflexion, Self-Refine, ReAct sit here.</div>
+      </li>
+      <li>
+        <span class="pe-num">2</span>
+        <div><strong>In the scaffold.</strong> An outer agent rewrites the inner agent's code: prompts, tools, retry logic, parsers. Darwin Gödel Machine, AI Scientist, Meta-Harness, Voyager, AutoResearcher, Hyperagents.</div>
+      </li>
+      <li>
+        <span class="pe-num">3</span>
+        <div><strong>In the weights.</strong> The model updates itself on task feedback at test time. STaR, Self-Play FT, TTT, TTRL, Discover. SIA combines (2) and (3) in a single feedback loop and posts the strongest 2026 numbers to date.</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="section" id="shift">
+    <div class="section-label"><a href="#shift">01 / The shift</a></div>
+    <h2>The model stopped being the deliverable</h2>
+    <div class="prose">
+      <p>For most of the last decade, the answer to "what is the AI product?" was a checkpoint. You train a model, you ship it, you monitor it, you retrain on some cadence. The model was the thing.</p>
+      <p>That mental model is fraying. The thing producing useful work is no longer just the model. It is the agent that wraps the model, the harness that runs the agent, the verifier that scores its output, and the feedback signal that updates either the harness, the weights, or both.</p>
+      <p>Self-improvement is the load-bearing concept under any honest argument for where this field is going. If the system can improve itself, the trajectory bends sharply. If it cannot, scaling laws and human researchers stay on the critical path.</p>
+      <p>The question worth asking is not <em>"is self-improvement working?"</em> The answer is yes, in narrow places. The question is: <em>how close to the kind of self-improvement the AGI framing implies?</em></p>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section" id="taxonomy">
+    <div class="section-label"><a href="#taxonomy">02 / Taxonomy</a></div>
+    <h2>The five shapes of self-improvement</h2>
+    <div class="prose">
+      <p>Self-improvement in current research has five distinct shapes. They differ in what changes and on what timescale.</p>
+    </div>
+
+    <div class="data-table">
+      <table style="table-layout: fixed; width: 100%;">
+        <colgroup>
+          <col style="width: 24%;">
+          <col style="width: 32%;">
+          <col style="width: 44%;">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Shape</th>
+            <th>What changes</th>
+            <th>Representative work</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Verbal<br>self-correction</strong></td>
+            <td>The next attempt's prompt</td>
+            <td>Reflexion, Self-Refine, ReAct</td>
+          </tr>
+          <tr>
+            <td><strong>Reasoning<br>bootstrap</strong></td>
+            <td>Weights, via self-generated rationales</td>
+            <td>STaR, Self-Play FT</td>
+          </tr>
+          <tr>
+            <td><strong>Scaffold<br>evolution</strong></td>
+            <td>Agent code: prompts, tools, retries</td>
+            <td>Darwin Gödel Machine, AI Scientist, Meta-Harness, Voyager, AutoResearcher, Hyperagents</td>
+          </tr>
+          <tr>
+            <td><strong>Weight<br>evolution</strong></td>
+            <td>Model weights, RL on task feedback</td>
+            <td>TTT (Akyürek), TTRL, Discover-TTT</td>
+          </tr>
+          <tr>
+            <td><strong>Co-evolution</strong></td>
+            <td>Scaffold <em>and</em> weights, in one loop</td>
+            <td>SIA, EUREKA (partial)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>Each shape answers a different question. <em>Verbal</em>: can the model fix its own output without changing itself? <em>Bootstrap</em>: can the model train on its own better outputs? <em>Scaffold</em>: can an outer agent rewrite the inner agent's code? <em>Weight</em>: can the model train at test time on feedback? <em>Co-evolution</em>: can both happen at once?</p>
+      <p>The 2026 SIA paper is the strongest evidence to date that co-evolution actually beats either lever alone. It posts a 36.5 percentage-point gain from harness-only to harness-plus-weights on Chinese legal classification, and a 14× CUDA-kernel speedup the harness search never reached. That is real engineering progress. It is also the moment to ask what "self-improving" actually means once the dust settles.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section" id="meaning">
+    <div class="section-label"><a href="#meaning">03 / What "self" means here</a></div>
+    <h2>What "self-improving" actually means today</h2>
+    <div class="prose">
+      <p>Read across all five categories and one thing is constant. The system improves itself with respect to a target someone else defined.</p>
+      <p>That someone is almost always a paper author. The verifier (the function that tells the system what's good) is hand-written. The dataset is hand-picked. The success metric is hand-chosen. The reward signal is engineered by a human.</p>
+      <p>The system is not figuring out <em>what</em> to improve. It is figuring out <em>how</em> to improve a thing humans pointed it at.</p>
+      <p>That distinction is the whole gap between "self-improving in a technical sense" and "self-improving in the AGI sense." The phrase is doing very different work in each. Engineers reading the research and executives reading the press release are usually working with the second interpretation while the paper is delivering the first.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section" id="rewards">
+    <div class="section-label"><a href="#rewards">04 / The clean-reward problem</a></div>
+    <h2>Self-improvement runs on clean rewards</h2>
+    <div class="prose">
+      <p>Look at where these systems work. Then look at where they don't.</p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card card-green">
+        <div class="card-icon-badge">Works Today</div>
+        <h4>Clean rewards</h4>
+        <p>Math with checkable answers. Code with passing tests. Kernel runtime in microseconds. Classification labels. Games with explicit win/lose. Schema validation with explicit grammar.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Not Yet</div>
+        <h4>Contested rewards</h4>
+        <p>Open-ended writing quality. Customer-support response judgment. Document extraction where reviewers disagree. Sales-call analysis. Anything where the grader is itself a model whose disagreement with humans isn't measured.</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">In Between</div>
+        <h4>Soft-verifiable</h4>
+        <p>Long-horizon coding agents where some tests pass and some require judgment. Research-style tasks where partial credit exists but isn't standardised. The interesting frontier; mostly unsolved.</p>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>The pattern is clean. Self-improvement works where reward is cheap, fast, and unambiguous. It does not yet work where reward is the thing being argued about.</p>
+      <p>For an enterprise builder this is the single most important load-bearing fact. Almost every business problem worth solving lives in the second category. Customer support quality, document extraction agreement, dispute resolution, sales-call analysis, all of these have soft, contested rewards. Self-improving systems do not ship safely into that domain yet. They will sometimes look like they do, until the verifier and the underlying reality drift apart.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="section" id="meta-improver">
+    <div class="section-label"><a href="#meta-improver">05 / The meta-improver</a></div>
+    <h2>The thing that improves the system doesn't improve</h2>
+    <div class="prose">
+      <p>Across SIA, the Darwin Gödel Machine, AI Scientist, Meta-Harness, Hyperagents, the improvement mechanism itself is a frozen large language model. An LLM is choosing what to change next.</p>
+      <p>That LLM does not get better at choosing. It is the same Claude or GPT call, run again with new context. Its prior over "what to try" is whatever the foundation lab last shipped.</p>
+      <p>For genuine recursive self-improvement, the thing that decides "what to improve" has to itself be on a learning curve. None of the public systems do that. The SIA authors say so directly in their future-work section: the selection policy itself should be the object of training, not a frozen prior.</p>
+      <p>Until that exists, every "self-improving AI" system in the literature is two-level. A learnable inner loop. A frozen outer loop. The recursive open-ended improvement that the phrase culturally implies, the version that suggests an exponential trajectory, needs at least three levels with the outer one moving. Possibly more.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 6 -->
+  <div class="section" id="goodhart">
+    <div class="section-label"><a href="#goodhart">06 / Goodhart</a></div>
+    <h2>Co-evolution against a fixed verifier is fragile</h2>
+    <div class="prose">
+      <p>When two optimizers chase the same fixed reward, they don't optimize toward truth. They optimize toward whatever joint configuration maximizes the reward on the seen distribution. The SIA paper formalises this in its limitations section, and the framing applies to the whole co-evolution class.</p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">The coupled Goodhart trap</div>
+      <p class="quote">"The harness finds scaffolds that are easy for the current policy to exploit; the weights train on data collected through a scaffold that will subsequently change. The joint fixed point is a Nash equilibrium between two optimisers blind to each other's update history, not a point that maximises V on out-of-distribution scaffolds or novel policies."</p>
+      <p>Paraphrased: the equilibrium can look strong on the training verifier and collapse under any meaningful perturbation.</p>
+    </div>
+
+    <div class="prose">
+      <p>This is not abstract. It is why a 14× speedup on a specific kernel shape can produce a 2× speedup or a regression on a slightly different shape. The system found a fixed point of a particular game. Change the game and the fixed point isn't there.</p>
+      <p>Every "self-improving" demo should be read against the question: how well does this hold up out of distribution? Most papers do not answer that question. The ones that do answer it find the fall-off is steep.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 7 -->
+  <div class="section" id="missing">
+    <div class="section-label"><a href="#missing">07 / What's missing</a></div>
+    <h2>What separates "self-improving" from the AGI framing</h2>
+    <div class="prose">
+      <p>Four pieces stand between today's research and the version of self-improvement that justifies the "step toward AGI" language. None are solved.</p>
+    </div>
+
+    <div class="cards-grid two-col">
+      <div class="card card-red">
+        <div class="card-icon-badge">Missing</div>
+        <h4>Self-generated objectives</h4>
+        <p>The system has to decide what is worth improving, not just how. No current system chooses its own problem; humans pick the dataset, the verifier, the success metric.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Missing</div>
+        <h4>A trainable improver</h4>
+        <p>The meta-agent driving the loop has to itself sit on a learning curve. Today it is a frozen LLM prior. The thing that selects "what to try next" doesn't get better at selecting.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Missing</div>
+        <h4>Cross-task transfer</h4>
+        <p>Improvements have to generalise. Today's systems specialise: a LoRA adapter per task, a scaffold per benchmark. Wins on TriMul don't help LawBench. The compounding flywheel is absent.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Missing</div>
+        <h4>Open-ended evaluation</h4>
+        <p>The system has to improve in domains where reward isn't pre-specified. Every working result lives in domains where some authority can score the output cheaply. Most of real life does not work that way.</p>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>Each of these is an active research direction. None are within striking distance of being closed. Pretending otherwise sells expectations the field cannot deliver this year, probably not next year either.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 8 -->
+  <div class="section" id="production">
+    <div class="section-label"><a href="#production">08 / Production take</a></div>
+    <h2>What this means for engineers shipping in 2026</h2>
+    <div class="prose">
+      <p>Four pieces of practical advice for anyone building agentic systems this year.</p>
+    </div>
+
+    <ul class="dl">
+      <li><strong>Build self-improvement loops where you have a clean verifier.</strong> Code agents with passing tests. Schema-validation with explicit grammar. Numeric optimization with measurable outputs. These ship safely.</li>
+      <li><strong>Do not ship self-improvement where reward is contested.</strong> Customer-facing summarization. Open-ended chat quality. Anything where the grader is itself a model whose disagreement rate with humans isn't measured. The loop will look like it works, then drift.</li>
+      <li><strong>Treat scaffold versioning as first-class infrastructure.</strong> If your harness is changing autonomously, you need diffable history per generation, attribution between harness and weight gains, and independent rollback of each lever. Without that, a regression three generations in is functionally unrecoverable.</li>
+      <li><strong>Run a frozen out-of-distribution eval every generation.</strong> A held-out, perturbation-rich evaluation set you do not optimize against. This is your early warning that the coupled Goodhart equilibrium is drifting away from V.</li>
+    </ul>
+
+    <div class="prose">
+      <p>None of this is AGI strategy. It is engineering advice that maps to what the field can actually deliver in 2026, not to what the phrase "self-improving AI" tends to promise on a slide.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 9 -->
+  <div class="section" id="frame">
+    <div class="section-label"><a href="#frame">09 / The frame</a></div>
+    <h2>The frame to leave on</h2>
+    <div class="prose">
+      <p>Self-improvement is real. Across math, code, kernels, classification, and games, the loops measurably work, sometimes spectacularly. 14× kernel speedups. Tens of percentage points on hard benchmarks. Whole categories of human iteration replaced by an outer-loop agent.</p>
+      <p>The "step toward AGI" framing is the part to push back on. The systems improving themselves today do so in narrow, well-instrumented domains, against fixed human-defined objectives, with a frozen improvement mechanism, and the resulting equilibria are fragile out of distribution.</p>
+      <p>That is engineering progress at the frontier. It is not the recursive, open-ended, self-directed improvement the AGI label calls to mind. Treat the gap between those two as load-bearing. The label travels fast. The result moves at the speed of clean verifiers and bounded outer loops.</p>
+      <p>Self-improving AI is here. Self-improving AI in the sense the phrase culturally implies is not. Both can be true at once. Pretending the gap is closing faster than it is, is the failure mode I'd watch this year.</p>
+    </div>
+  </div>
+
+  <!-- REFERENCES -->
+  <div class="section" id="references">
+    <div class="section-label"><a href="#references">References</a></div>
+    <h2>Papers cited</h2>
+
+    <div class="data-table">
+      <table style="table-layout: fixed; width: 100%;">
+        <colgroup>
+          <col style="width: 28%;">
+          <col style="width: 22%;">
+          <col style="width: 50%;">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Work</th>
+            <th>Authors / Year</th>
+            <th>What it does</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href="https://arxiv.org/abs/2303.11366">Reflexion</a></strong></td>
+            <td>Shinn et al., 2023</td>
+            <td>Verbal feedback loop without weight updates.</td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://arxiv.org/abs/2303.17651">Self-Refine</a></strong></td>
+            <td>Madaan et al., 2023</td>
+            <td>Iterative self-critique at inference.</td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://arxiv.org/abs/2210.03629">ReAct</a></strong></td>
+            <td>Yao et al., 2022</td>
+            <td>Interleaved reasoning and action with no scaffold mutation.</td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://arxiv.org/abs/2203.14465">STaR</a></strong></td>
+            <td>Zelikman et al., 2022</td>
+            <td>Bootstrapping reasoning by fine-tuning on self-generated rationales.</td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://arxiv.org/abs/2401.01335">Self-play fine-tuning</a></strong></td>
+            <td>Chen et al., 2024</td>
+            <td>Model trains on its own outputs as supervision.</td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://arxiv.org/abs/2305.16291">Voyager</a></strong></td>
+            <td>Wang et al., 2023</td>
+            <td>Open-ended embodied agent with skill-library growth in Minecraft.</td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://arxiv.org/abs/2310.12931">EUREKA</a></strong></td>
+            <td>Ma et al., 2023</td>
+            <td>LLM-generated reward functions for downstream RL.</td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://arxiv.org/abs/2408.06292">AI Scientist</a></strong></td>
+            <td>Lu et al., 2024</td>
+            <td>Full research-pipeline agent producing papers as artefacts.</td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://arxiv.org/abs/2408.08435">Automated Design of<br>Agentic Systems</a></strong></td>
+            <td>Hu et al., 2024</td>
+            <td>Meta-search over compositions of agent building blocks.</td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://arxiv.org/abs/2411.07279">Surprising<br>Effectiveness of TTT</a></strong></td>
+            <td>Akyürek et al., 2024</td>
+            <td>Per-task gradient adaptation at test time.</td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://arxiv.org/search/?searchtype=all&amp;query=Darwin+Godel+Machine+Zhang+Clune">Darwin Gödel Machine</a></strong></td>
+            <td>Zhang et al., 2025</td>
+            <td>Evolutionary search over agent source code.</td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://arxiv.org/search/?searchtype=all&amp;query=TTRL+test-time+reinforcement+learning+Zuo">TTRL</a></strong></td>
+            <td>Zuo et al., 2025</td>
+            <td>Test-time RL on unlabelled data via pseudo-rewards.</td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://arxiv.org/search/?searchtype=all&amp;query=Meta-Harness+Lee+Khattab+Finn">Meta-Harness</a></strong></td>
+            <td>Lee et al., 2026</td>
+            <td>End-to-end optimization of model harnesses.</td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://arxiv.org/search/?searchtype=all&amp;query=Hyperagents+meta-mechanism+agent+improvement">Hyperagents</a></strong></td>
+            <td>Zhang et al., 2026</td>
+            <td>Meta-mechanism that edits the rules of editing.</td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://arxiv.org/search/?searchtype=all&amp;query=Learning+to+discover+at+test+time+Yuksekgonul">Discover (TTT)</a></strong></td>
+            <td>Yuksekgonul et al., 2026</td>
+            <td>Test-time training under entropic-utility objectives.</td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://arxiv.org/search/?searchtype=all&amp;query=Karpathy+autoresearch+nanochat">AutoResearcher</a></strong></td>
+            <td>Karpathy, 2026</td>
+            <td>Autonomous ML experimentation with static scaffold.</td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://arxiv.org/abs/2605.27276">SIA</a></strong><br><span style="font-size:12px;color:var(--text-muted);font-weight:400;">Self Improving AI with Harness &amp; Weight Updates</span></td>
+            <td>Hebbar et al., 2026<br><span style="font-size:12px;color:var(--text-muted);">Hexo Labs / Oxford</span></td>
+            <td>The first system to close both scaffold and weight updates into one feedback loop.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <span>asadani.tech &middot; May 2026</span>
+  <div class="footer-refs">
+    <a href="/">← Back to index</a>
+  </div>
+</footer>
+
+</body>
+</html>
