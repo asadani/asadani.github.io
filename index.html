@@ -391,34 +391,35 @@
     color: inherit;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 6px;
     overflow: hidden;
+    margin-bottom: 8px;
     transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s;
   }
+  .pub-card:last-of-type { margin-bottom: 0; }
   .pub-card:hover { box-shadow: 0 4px 22px rgba(0,0,0,0.09); transform: translateY(-2px); border-color: var(--accent-border); }
-  .pub-strip { width: 4px; flex-shrink: 0; background: var(--blue); }
-  .pub-body { flex: 1; padding: 22px 26px; min-width: 0; }
-  .pub-top { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .pub-strip { width: 3px; flex-shrink: 0; background: var(--blue); }
+  .pub-body { flex: 1; padding: 10px 16px 11px; min-width: 0; }
+  .pub-top { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; flex-wrap: wrap; }
   .pub-badge {
-    display: inline-flex; align-items: center; gap: 5px;
-    font-family: var(--mono); font-size: 10px; font-weight: 600;
-    padding: 3px 9px; border-radius: 4px; letter-spacing: 0.06em;
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--mono); font-size: 9px; font-weight: 600;
+    padding: 1px 6px; border-radius: 3px; letter-spacing: 0.05em;
     background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border);
     text-transform: uppercase;
   }
   .pub-cat {
-    font-family: var(--mono); font-size: 10px; font-weight: 500;
-    padding: 3px 8px; border-radius: 4px; letter-spacing: 0.04em;
+    font-family: var(--mono); font-size: 9px; font-weight: 500;
+    padding: 1px 6px; border-radius: 3px; letter-spacing: 0.04em;
     background: var(--bg-alt); color: var(--text-muted); border: 1px solid var(--border);
   }
-  .pub-id { font-family: var(--mono); font-size: 10px; color: var(--text-subtle); letter-spacing: 0.03em; }
-  .pub-title { font-family: var(--serif); font-size: 22px; font-weight: 600; line-height: 1.3; color: var(--text); letter-spacing: -0.01em; margin-bottom: 8px; }
-  .pub-authors { font-family: var(--sans); font-size: 13px; color: var(--text-muted); margin-bottom: 14px; }
+  .pub-id { font-family: var(--mono); font-size: 9.5px; color: var(--text-subtle); letter-spacing: 0.03em; }
+  .pub-title { font-family: var(--serif); font-size: 15.5px; font-weight: 600; line-height: 1.3; color: var(--text); letter-spacing: -0.01em; margin-bottom: 3px; }
+  .pub-authors { font-family: var(--sans); font-size: 12px; color: var(--text-muted); margin-bottom: 3px; }
   .pub-authors .pub-self { color: var(--accent); font-weight: 600; }
-  .pub-abstract { font-family: var(--serif); font-size: 15px; line-height: 1.7; color: var(--text-body); margin-bottom: 18px; }
-  .pub-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid var(--border-light); flex-wrap: wrap; gap: 8px; }
-  .pub-date { font-family: var(--mono); font-size: 11px; color: var(--text-subtle); }
-  .pub-link { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--accent); }
+  .pub-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .pub-date { font-family: var(--mono); font-size: 10.5px; color: var(--text-subtle); }
+  .pub-link { font-family: var(--sans); font-size: 11.5px; font-weight: 600; color: var(--accent); }
 
   /* ─── PAGINATION ─────────────────────────────────────── */
   .pagination { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-light); flex-wrap: wrap; gap: 10px; }
@@ -509,9 +510,8 @@
     .pagination      { flex-direction: column; align-items: flex-start; }
     .tech-map-frame  { display: none; }
     .tech-map-mobile-cta { display: inline-flex; }
-    .pub-body        { padding: 18px; }
-    .pub-title       { font-size: 18px; }
-    .pub-abstract    { font-size: 14px; }
+    .pub-body        { padding: 10px 14px 11px; }
+    .pub-title       { font-size: 14.5px; }
   }
 </style>
 </head>
@@ -792,7 +792,6 @@
         </div>
         <div class="pub-title">Locale-Conditioned Few-Shot Prompting Mitigates Demonstration Regurgitation in On-Device PII Substitution with Small Language Models</div>
         <div class="pub-authors"><span class="pub-self">Anuj Sadani</span>, Deepak Kumar</div>
-        <p class="pub-abstract">An on-device PII substitution pipeline pairing a 1.5B mixture-of-experts token classifier with a 1-bit quantised small language model and a rule-based generator. Standard few-shot prompting caused demonstration regurgitation — the model echoing example outputs verbatim. The fix: locale-conditioned rotating few-shot demonstrations driven by character-range heuristics and MD5-hash sampling. An honest negative finding follows from downstream NER evaluation — for utility preservation, data variety beats naturalness.</p>
         <div class="pub-footer">
           <span class="pub-date">May 13, 2026</span>
           <span class="pub-link">Read on arXiv ↗</span>
@@ -810,7 +809,6 @@
         </div>
         <div class="pub-title">Tool Attention Is All You Need: Dynamic Tool Gating and Lazy Schema Loading for Eliminating the MCP/Tools Tax in Scalable Agentic Workflows</div>
         <div class="pub-authors"><span class="pub-self">Anuj Sadani</span>, Deepak Kumar</div>
-        <p class="pub-abstract">Introduces <em>Tool Attention</em> — gated attention over tool schemas combined with a two-phase lazy loader that keeps compact summaries in context and promotes full schemas only when needed. On a simulated 120-tool, six-server benchmark, per-turn tool tokens drop 95% (47.3k → 2.4k) and effective context utilisation rises from 24% to 91%. The argument: protocol-level efficiency, not raw context length, is the binding constraint for scalable agentic systems.</p>
         <div class="pub-footer">
           <span class="pub-date">Apr 23, 2026</span>
           <span class="pub-link">Read on arXiv ↗</span>
