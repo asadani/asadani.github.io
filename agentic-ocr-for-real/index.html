@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What is agentic OCR, really? — A field guide to the debate</title>
+<meta name="description" content="Agentic OCR: feedback loop or marketing gloss? Three metaphors, a decision table, and an honest answer for when 'agentic document extraction' actually earns the name.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #F5F1EB;
+    --bg-alt:       #EDEAE3;
+    --surface:      #FFFFFF;
+    --surface-tint: #FAF8F5;
+    --border:       #DDD9D0;
+    --border-light: #EAE7E0;
+    --text:         #1A1714;
+    --text-body:    #3D3A35;
+    --text-muted:   #6B6760;
+    --text-subtle:  #9B9892;
+    --accent:       #C85C2D;
+    --accent-light: #E8895D;
+    --accent-bg:    #FDF1EB;
+    --accent-border:#F0C4A8;
+    --green:        #2A7A4B;
+    --green-bg:     #EAF5EF;
+    --green-border: #A8D9BC;
+    --blue:         #2563A8;
+    --blue-bg:      #EAF1FA;
+    --blue-border:  #A8C5E8;
+    --red:          #B83535;
+    --red-bg:       #FAEBEB;
+    --red-border:   #E8AAAA;
+    --serif:        'Newsreader', Georgia, serif;
+    --sans:         'Inter', system-ui, sans-serif;
+    --mono:         'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-body);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  nav.site {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .nav-tag {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── LAYOUT ──────────────────────────────────────────── */
+  .page-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-deck {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 640px;
+    font-weight: 300;
+  }
+  .hero-meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-family: var(--mono);
+  }
+  .hero-meta-sep { color: var(--border); }
+
+  /* ─── BODY TEXT ───────────────────────────────────────── */
+  .prose p {
+    color: var(--text-body);
+    margin-bottom: 20px;
+    font-size: 17px;
+    line-height: 1.78;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+  .prose ul {
+    margin: 0 0 22px 22px;
+    color: var(--text-body);
+  }
+  .prose ul li {
+    margin-bottom: 8px;
+    line-height: 1.7;
+  }
+  strong { color: var(--text); font-weight: 600; }
+  em { font-style: italic; color: var(--text-body); }
+  a.inline-link {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+  }
+
+  /* ─── SECTION HEADING ─────────────────────────────────── */
+  .section { margin-top: 64px; scroll-margin-top: 72px; }
+  .section-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section-label a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .section-label a:hover { color: var(--text); }
+  .section h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+  .section h2 a.anchor {
+    color: inherit;
+    text-decoration: none;
+    position: relative;
+  }
+  .section h2 a.anchor:hover::before {
+    content: '#';
+    position: absolute;
+    left: -22px;
+    color: var(--accent);
+    font-weight: 400;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 32px 0 14px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── BANNER ──────────────────────────────────────────── */
+  .banner {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .banner-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .banner p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .banner a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ─── PLAIN ENGLISH ───────────────────────────────────── */
+  .plain-english {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 8px 8px;
+    padding: 28px 32px;
+    margin: 0 0 12px;
+  }
+  .plain-english .pe-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .plain-english .pe-intro {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+  .pe-list { list-style: none; padding: 0; }
+  .pe-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 16px;
+    color: var(--text-body);
+    line-height: 1.65;
+  }
+  .pe-list li:last-child { border-bottom: none; }
+  .pe-num {
+    width: 26px;
+    height: 26px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-family: var(--mono);
+  }
+
+  /* ─── CARDS GRID ──────────────────────────────────────── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 24px 0;
+  }
+  /* Force 2-per-row layout when card count is 4 (or any even pair set) */
+  .cards-grid.cards-2col {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (max-width: 520px) {
+    .cards-grid.cards-2col { grid-template-columns: 1fr; }
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+  .card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .card .card-icon-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-red { border-color: var(--red-border); }
+  .card.card-red:hover { border-color: var(--red); box-shadow: 0 2px 8px rgba(184,53,53,0.08); }
+  .card.card-red .card-icon-badge { background: var(--red-bg); color: var(--red); }
+  .card.card-green { border-color: var(--green-border); }
+  .card.card-green:hover { border-color: var(--green); box-shadow: 0 2px 8px rgba(42,122,75,0.08); }
+  .card.card-green .card-icon-badge { background: var(--green-bg); color: var(--green); }
+  .card.card-blue { border-color: var(--blue-border); }
+  .card.card-blue:hover { border-color: var(--blue); box-shadow: 0 2px 8px rgba(37,99,168,0.08); }
+  .card.card-blue .card-icon-badge { background: var(--blue-bg); color: var(--blue); }
+
+  /* ─── CODE BLOCK ──────────────────────────────────────── */
+  .code-block {
+    background: var(--text);
+    border-radius: 7px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .code-block .cb-label {
+    padding: 9px 16px;
+    background: rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .code-block pre {
+    padding: 20px;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #e8e8e8;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-block .tok-key  { color: #fdba74; }
+  .code-block .tok-val  { color: #86efac; }
+  .code-block .tok-cmt  { color: #6b7280; font-style: italic; }
+  .code-block .tok-str  { color: #93c5fd; }
+  .code-block .tok-acc  { color: #fde047; }
+
+  /* ─── CALLOUT ─────────────────────────────────────────── */
+  .callout {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+  .callout .callout-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout p { font-size: 15px; color: var(--text-muted); margin: 0; line-height: 1.7; }
+
+  /* ─── DETAIL LIST ─────────────────────────────────────── */
+  ul.dl {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  ul.dl li {
+    padding: 13px 18px 13px 14px;
+    font-size: 15px;
+    color: var(--text-body);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.65;
+  }
+  ul.dl li:last-child { border-bottom: none; }
+  ul.dl li::before {
+    content: '→';
+    color: var(--accent);
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ─── TABLE ───────────────────────────────────────────── */
+  .data-table {
+    overflow-x: auto;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .data-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    table-layout: fixed;
+  }
+  .data-table thead th {
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    vertical-align: middle;
+  }
+  .data-table tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-body);
+    vertical-align: top;
+    line-height: 1.55;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:hover td { background: var(--surface-tint); }
+  .td-yes { color: var(--green); font-weight: 600; }
+  .td-no  { color: var(--red);   font-weight: 600; }
+  .td-maybe { color: #B85C00; font-weight: 600; }
+  .td-mono { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+  .td-strong { color: var(--text); font-weight: 600; }
+  .col-narrow { width: 22%; }
+  .col-mid    { width: 30%; }
+  .col-wide   { width: 56%; }
+
+  /* ─── QUOTE ───────────────────────────────────────────── */
+  .quote {
+    border-left: 3px solid var(--accent-border);
+    padding: 4px 0 4px 20px;
+    margin: 22px 0;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--text-body);
+  }
+  .quote-attr {
+    display: block;
+    font-family: var(--sans);
+    font-style: normal;
+    font-size: 12px;
+    color: var(--text-subtle);
+    margin-top: 8px;
+    letter-spacing: 0.02em;
+  }
+
+  /* ─── COMPANION GUIDE CARD ────────────────────────────── */
+  a.companion {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    text-decoration: none;
+    background: var(--surface);
+    border: 1px solid var(--accent-border);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    margin: 28px 0;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+    color: inherit;
+  }
+  a.companion:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 14px rgba(200,92,45,0.12);
+    transform: translateY(-1px);
+  }
+  a.companion:hover .companion-arrow { transform: translateX(4px); color: var(--accent); }
+  .companion-spine {
+    background: var(--accent-bg);
+    border-right: 1px solid var(--accent-border);
+    padding: 16px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 78px;
+  }
+  .companion-icon {
+    font-family: var(--serif);
+    font-size: 26px;
+    color: var(--accent);
+    line-height: 1;
+    font-weight: 600;
+  }
+  .companion-kind {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    color: var(--accent);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .companion-body {
+    padding: 16px 18px 16px 20px;
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+  }
+  .companion-eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-subtle);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .companion-title {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+  .companion-sub {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.55;
+    margin-top: 2px;
+  }
+  .companion-arrow {
+    align-self: center;
+    padding: 0 18px 0 8px;
+    font-family: var(--serif);
+    font-size: 24px;
+    color: var(--text-subtle);
+    transition: transform 0.2s, color 0.2s;
+    flex-shrink: 0;
+  }
+  @media (max-width: 520px) {
+    .companion-spine { min-width: 64px; padding: 14px 10px; }
+    .companion-icon { font-size: 22px; }
+    .companion-title { font-size: 16px; }
+    .companion-arrow { padding: 0 14px 0 6px; font-size: 20px; }
+  }
+
+  /* ─── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-refs { font-size: 12px; color: var(--text-subtle); }
+
+  @media (max-width: 600px) {
+    nav.site { padding: 0 20px; }
+    .hero { padding: 40px 0 36px; }
+    .page-wrap { padding: 0 16px 60px; }
+    footer { padding: 16px 20px; }
+    .plain-english { padding: 22px; }
+    .data-table table { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="site">
+  <a class="nav-brand" href="/">asadani.tech</a>
+  <div class="nav-right">
+    <span>AI &amp; Documents</span>
+    <span class="nav-tag">MAY 2026</span>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">Agentic OCR &mdash; Field Read</div>
+    <h1>What is &ldquo;agentic OCR,&rdquo; really?</h1>
+    <p class="hero-deck">Vendors keep renaming document extraction <em>agentic</em>. Engineers keep asking if it&rsquo;s just LLM orchestration in a trench coat. Both camps are partly right. Here&rsquo;s the honest definition, three metaphors that actually fit, and a decision table for when the word earns its keep.</p>
+    <div class="hero-meta">
+      <span>May 2026</span>
+      <span class="hero-meta-sep">/</span>
+      <span>Opinionated synthesis</span>
+      <span class="hero-meta-sep">/</span>
+      <span>~3,200 words</span>
+    </div>
+  </header>
+
+  <!-- BANNER -->
+  <div class="banner">
+    <span class="banner-badge">TL;DR</span>
+    <p>Agentic OCR is what you get when you replace a fixed extraction pipeline with a <strong>vision-language model in a feedback loop</strong> that can re-look at the page, call tools (crop, zoom, table parser, signature detector), and cite the bounding box every answer came from. It&rsquo;s a meaningful upgrade for forms, checkboxes, flowcharts, and signature presence. It&rsquo;s a token-burning buzzword when your documents are clean and your schema is fixed &mdash; in that world, two prompts and structured output still win.</p>
+  </div>
+
+  <!-- PLAIN ENGLISH — metaphor-first, no persona labels -->
+  <div class="plain-english">
+    <div class="pe-label">Three metaphors</div>
+    <p class="pe-intro">Before the technical part, here is the same idea pictured three different ways. Whichever one clicks first is the one to keep.</p>
+    <ul class="pe-list">
+      <li>
+        <span class="pe-num">1</span>
+        <div><strong>OCR is a typist. Agentic OCR is a paralegal.</strong> The typist copies whatever letters they see. The paralegal reads the form, notices the signature box is empty, flips back to the appendix to confirm the policy number, and tells you which page each answer came from. You only pay paralegal rates when the documents are messy enough to need one.</div>
+      </li>
+      <li>
+        <span class="pe-num">2</span>
+        <div><strong>A pipeline is a checklist. An agent is a REPL.</strong> A pipeline makes its decisions at design time: detect &rarr; OCR &rarr; layout &rarr; extract. An agent makes them at run time: look, decide what&rsquo;s confusing, crop that region, re-look, ground the answer to coordinates. Higher latency, more tokens, fewer silent failures on documents that don&rsquo;t match the happy path.</div>
+      </li>
+      <li>
+        <span class="pe-num">3</span>
+        <div><strong>Old OCR is autopilot reading. Agentic OCR is study mode.</strong> Autopilot reads every word in order and hopes the answer was in there. Study mode pulls out a highlighter, zooms in on the chart, takes a screenshot of the messy diagram, flips back to double-check the date, and writes &ldquo;source: page 14&rdquo; next to the answer. Same eyes, very different process.</div>
+      </li>
+    </ul>
+  </div>
+
+  <a class="companion" href="https://asadani.github.io/agentic-ocr/" rel="noopener">
+    <div class="companion-spine">
+      <span class="companion-icon">&#x2766;</span>
+      <span class="companion-kind">Book</span>
+    </div>
+    <div class="companion-body">
+      <div class="companion-eyebrow">Companion guide on this site</div>
+      <div class="companion-title">Agentic OCR &mdash; the practitioner&rsquo;s book</div>
+      <div class="companion-sub">The hands-on walkthrough that pairs with this post: how the harness is wired up in practice, with code and examples.</div>
+    </div>
+    <span class="companion-arrow" aria-hidden="true">&rarr;</span>
+  </a>
+
+  <!-- ─── 01 — VENDOR PITCH ─────────────────────────────── -->
+  <div class="section" id="pitch">
+    <div class="section-label"><a href="#pitch">01 &middot; The Pitch</a></div>
+    <h2><a class="anchor" href="#pitch">What vendors are actually selling.</a></h2>
+    <div class="prose">
+      <p>Landing AI, LlamaIndex, Extend, Reducto, Docugami, and a dozen others rolled out roughly the same product in the last twelve months and gave it roughly the same name: <strong>agentic document extraction</strong>. The pitch &mdash; once you strip the branding &mdash; is consistent across all of them.</p>
+      <p>Traditional OCR was built on a premise that no longer holds: that a document is a <em>string of text with formatting on top</em>. Andrew Ng made the inverse point at the Landing AI launch:</p>
+      <div class="quote">
+        Documents are fundamentally a visual representation of information. If you upload a medical form, most OCR-based approaches won&rsquo;t recognize the checkboxes or the document layout.
+        <span class="quote-attr">&mdash; Andrew Ng, announcing Agentic Document Extraction</span>
+      </div>
+      <p>The argument is that text-first OCR plateaus around 70&ndash;80% on real-world documents because the remaining 20% lives in things OCR was never designed to see: a checked box, an arrow connecting two flowchart nodes, a signature that&rsquo;s technically an image, a number that only makes sense because of where it sits in a table column.</p>
+      <p>Strip the marketing and the pitch has three load-bearing pieces. The table below is how vendors actually justify the &ldquo;agentic&rdquo; word, with the part that is genuinely new called out.</p>
+    </div>
+
+    <div class="data-table">
+      <table>
+        <colgroup>
+          <col class="col-narrow">
+          <col class="col-wide">
+          <col class="col-mid">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Pillar</th>
+            <th>What it actually means</th>
+            <th>New or repackaged?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-strong">Visual semantics</td>
+            <td>A vision-language model reads the page as a layout &mdash; checkboxes, form fields, table cells, arrows, stamps &mdash; not as a flattened text stream.</td>
+            <td class="td-maybe">Partly new (multimodal models)</td>
+          </tr>
+          <tr>
+            <td class="td-strong">Reasoning over parts</td>
+            <td>The model breaks the page into pieces, decides how they connect, and reassembles an answer. Flowchart boxes plus arrows become a graph, not three disconnected paragraphs.</td>
+            <td class="td-maybe">Mostly repackaged (long-context VLMs)</td>
+          </tr>
+          <tr>
+            <td class="td-strong">Visual grounding</td>
+            <td>Every extracted value comes back with a bounding box on the source page. You can verify the answer by looking exactly where the number came from.</td>
+            <td class="td-yes">Genuinely new at this maturity level</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="prose" style="margin-top:8px">None of that is wrong. The interesting question is whether you needed to call the bundle <em>agentic</em> to ship it.</p>
+  </div>
+
+  <!-- ─── 02 — SKEPTICS ─────────────────────────────────── -->
+  <div class="section" id="skeptics">
+    <div class="section-label"><a href="#skeptics">02 &middot; The Skeptics' Reply</a></div>
+    <h2><a class="anchor" href="#skeptics">&ldquo;Two prompts and a SOTA model are enough.&rdquo;</a></h2>
+    <div class="prose">
+      <p>Many practitioners ask the same question under these announcements, written twenty different ways:</p>
+      <div class="quote">
+        Why does this need to be agentic? I have yet to come across a case where more than two prompts plus structured output plus a SOTA model weren&rsquo;t enough to extract the right information from a document.
+        <span class="quote-attr">&mdash; senior ML engineer, in a public thread</span>
+      </div>
+      <p>The skeptical case is worth taking seriously. It has four planks.</p>
+    </div>
+    <div class="data-table">
+      <table>
+        <colgroup>
+          <col style="width:28%">
+          <col style="width:72%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Plank</th>
+            <th>The argument</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-strong">Agent frameworks burn tokens</td>
+            <td>A loop that re-reads the page three to five times is several multiples of the cost of a single pass. On a million documents a day, that gap becomes real money.</td>
+          </tr>
+          <tr>
+            <td class="td-strong">Degrees of freedom invite weirdness</td>
+            <td>Anything that decides for itself when to stop is something that sometimes decides wrong. A fixed pipeline fails predictably; an agent fails creatively.</td>
+          </tr>
+          <tr>
+            <td class="td-strong">Pipelines are easier to debug</td>
+            <td>A four-stage pipeline gives you four breakpoints. An agent gives you a transcript. Root-causing a regression in a transcript takes a different kind of patience.</td>
+          </tr>
+          <tr>
+            <td class="td-strong">The 80% case doesn&rsquo;t need it</td>
+            <td>If your input is a clean invoice with twelve fields and a fixed schema, two prompts and a Pydantic model is the better tool. The agent loop is overhead.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="prose">The strongest version of the skeptical case is the regularization one: doing less actually improves performance, because we are still bad at managing the complexity of LLM outputs. It&rsquo;s not that agents don&rsquo;t work &mdash; it&rsquo;s that the simpler tool generalizes better at the scale most teams operate at.</p>
+  </div>
+
+  <!-- ─── 03 — DEFINITION ───────────────────────────────── -->
+  <div class="section" id="definition">
+    <div class="section-label"><a href="#definition">03 &middot; The Definition Problem</a></div>
+    <h2><a class="anchor" href="#definition">What does &ldquo;agentic&rdquo; even mean?</a></h2>
+    <div class="prose">
+      <p>Half the disagreement about agentic OCR is downstream of a deeper problem: the word <em>agent</em> means four different things to four different people. The replies under any &ldquo;what is agentic&rdquo; thread land in roughly these camps.</p>
+    </div>
+    <div class="cards-grid cards-2col">
+      <div class="card card-blue">
+        <div class="card-icon-badge">Camp A</div>
+        <h4>Agent = role prompt</h4>
+        <p>Unless the base model is fine-tuned, &ldquo;agent&rdquo; just means a system prompt and some hyperparameters. Honest, but deflationary &mdash; it makes the word do almost no work.</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Camp B</div>
+        <h4>Agent = tool use + routing</h4>
+        <p>A model has agency when it can decide which tool or endpoint to call given the input. The dynamic-dispatch definition; closest to how Anthropic and OpenAI describe their own &ldquo;agents.&rdquo;</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Camp C</div>
+        <h4>Agent = feedback loop</h4>
+        <p>An agent evaluates its own outputs, catches errors, and refines before responding. The self-critique definition; this is the one that requires something a fixed pipeline structurally cannot do.</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Camp D</div>
+        <h4>Agent = microservice</h4>
+        <p>Each agent is an expert in its domain; the multi-agent setup is just clean architecture for LLM systems. Single-responsibility, but for prompts.</p>
+      </div>
+    </div>
+    <p class="prose">All four are real definitions in active use. The interesting move is figuring out which one document extraction actually needs &mdash; because the answer is not all of them. Camp B and Camp C are doing the technical work. Camps A and D are mostly doing the marketing work.</p>
+  </div>
+
+  <!-- ─── 04 — ORCHESTRATION OR HARNESS ─────────────────── -->
+  <div class="section" id="harness">
+    <div class="section-label"><a href="#harness">04 &middot; The Frame</a></div>
+    <h2><a class="anchor" href="#harness">Orchestration, or LLM-with-harness?</a></h2>
+    <div class="prose">
+      <p>Here is where I land after reading the vendor announcements and the practitioner threads back-to-back. Most things being sold as <em>agentic OCR</em> are not multi-LLM orchestration. They are one vision-language model &mdash; usually a Gemini, Claude, or GPT variant &mdash; running inside a <strong>harness</strong>. The harness is the part that earns the word:</p>
+    </div>
+    <div class="code-block">
+      <div class="cb-label">Pipeline vs harness &mdash; the structural difference</div>
+<pre><span class="tok-cmt"># Pipeline (not agentic): decisions made at design time</span>
+detect_layout(pdf) <span class="tok-acc">&rarr;</span> ocr_text(regions) <span class="tok-acc">&rarr;</span> extract(schema) <span class="tok-acc">&rarr;</span> return
+
+<span class="tok-cmt"># Agentic harness: decisions made at run time</span>
+<span class="tok-key">loop</span>:
+    obs   = <span class="tok-val">model.look</span>(page, hint=current_question)
+    plan  = <span class="tok-val">model.decide</span>(<span class="tok-str">"what's still unclear?"</span>)
+    <span class="tok-key">if</span>   plan == <span class="tok-str">"done"</span>:           <span class="tok-key">break</span>
+    <span class="tok-key">elif</span> plan == <span class="tok-str">"zoom"</span>:           page = <span class="tok-val">crop</span>(page, plan.region)
+    <span class="tok-key">elif</span> plan == <span class="tok-str">"parse_table"</span>:    obs += <span class="tok-val">table_tool</span>(plan.region)
+    <span class="tok-key">elif</span> plan == <span class="tok-str">"check_signature"</span>: obs += <span class="tok-val">sig_tool</span>(plan.region)
+
+answer = <span class="tok-val">model.synthesize</span>(obs, grounded=<span class="tok-acc">True</span>)  <span class="tok-cmt"># returns bboxes</span></pre>
+    </div>
+    <p class="prose">There is no team of agents in there. There is one model, a small set of tools, and a control loop that lets the model decide what to do next based on what it just saw. That is the agentic part &mdash; not the number of LLMs, not the role prompts, but <strong>the run-time decision about what to do next</strong>.</p>
+    <p class="prose">By that definition, &ldquo;LLM orchestration&rdquo; and &ldquo;LLM with a harness&rdquo; are the two honest names. <em>Orchestration</em> implies multiple things being coordinated, which oversells it. <em>Harness</em> is what is actually new &mdash; and harnesses don&rsquo;t market as well as <em>agents</em>.</p>
+    <div class="callout">
+      <div class="callout-lbl">The line that matters</div>
+      <p>A pipeline that is allowed to loop and call tools based on what it sees is agentic. A pipeline that runs three prompts in a fixed order is not, no matter how many of those prompts are labelled &ldquo;extractor agent&rdquo; or &ldquo;validator agent.&rdquo;</p>
+    </div>
+  </div>
+
+  <!-- ─── 05 — HOW THE HARNESS WORKS ────────────────────── -->
+  <div class="section" id="mechanics">
+    <div class="section-label"><a href="#mechanics">05 &middot; Under the Hood</a></div>
+    <h2><a class="anchor" href="#mechanics">What the harness actually does, step by step.</a></h2>
+    <div class="prose">
+      <p>The agentic OCR systems shipping in 2026 mostly share a four-stage internal pattern. The branding differs; the loop does not.</p>
+    </div>
+    <div class="data-table">
+      <table>
+        <colgroup>
+          <col style="width:18%">
+          <col style="width:82%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Stage</th>
+            <th>What happens</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-strong">1 &middot; Look</td>
+            <td>The page is rendered to an image (usually 1024&ndash;2048&#8239;px on the long side) and passed to a vision-language model along with a goal &mdash; either a free-text question or a target JSON schema.</td>
+          </tr>
+          <tr>
+            <td class="td-strong">2 &middot; Decide</td>
+            <td>The model emits a structured plan: which fields it is confident in, which regions are still ambiguous, and which tool it wants next. This is the step a fixed pipeline cannot do, because it requires the model to reason about its own output.</td>
+          </tr>
+          <tr>
+            <td class="td-strong">3 &middot; Act</td>
+            <td>The harness executes the requested tool &mdash; crop and re-look, run a dedicated table parser, run a signature detector, fetch a related page, query a known-templates index. These tools are the &ldquo;harness&rdquo; in <em>LLM-with-harness</em>.</td>
+          </tr>
+          <tr>
+            <td class="td-strong">4 &middot; Ground</td>
+            <td>When the model finalizes an answer, it returns bounding boxes (or polygon coordinates) for every extracted field. The system can show a reviewer exactly where each value came from on the page.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="prose">If you have used a reasoning model like a thinking-mode Gemini or a Claude with extended thinking, you have seen a degenerate version of this loop. The model talks to itself, decides what to look at next, and answers. Agentic OCR makes that loop external and tool-augmented &mdash; the &ldquo;thinking&rdquo; can actually crop the image, call a table parser, or zoom into a stamp, instead of just rereading the same context.</p>
+  </div>
+
+  <!-- ─── 06 — THE METAPHOR THAT FITS ───────────────────── -->
+  <div class="section" id="metaphor">
+    <div class="section-label"><a href="#metaphor">06 &middot; The Metaphor</a></div>
+    <h2><a class="anchor" href="#metaphor">An actor with a script that allows ad-libs.</a></h2>
+    <div class="prose">
+      <p>The most common metaphor for agentic AI is theatrical: the language model is the <em>actor</em>, each agent is a <em>character</em> with its own script, and the multi-agent system is the <em>play</em>. It&rsquo;s a fine way to picture multi-agent collaboration in general. It is the wrong way to picture agentic OCR.</p>
+      <p>For OCR there is no cast. There is one actor and one script &mdash; but the script ends with the line: <em>&ldquo;keep going until you understand what you are looking at.&rdquo;</em> The novelty isn&rsquo;t the troupe, it is the actor being allowed to step off the page, ask for a closer angle, and verify the answer against the source before walking off stage.</p>
+      <p>A better framing for OCR specifically:</p>
+      <div class="quote">
+        Traditional OCR is a camera. Agentic OCR is a cinematographer. The camera captures what is in frame; the cinematographer decides which frame to capture, when to zoom, and when to cut back.
+        <span class="quote-attr">The cinematographer metaphor &mdash; same model, different agency</span>
+      </div>
+      <p>That is closer to the truth, because it preserves the thing that actually changed: not the number of operators, but the level of <em>agency</em> the single operator has over the process. The cinematographer can stop, re-light, and re-shoot. The camera cannot.</p>
+      <p>If you must use the play metaphor, refine it this way: there is one actor, but the director hands them a script with stage directions like <em>&ldquo;if you can&rsquo;t read the prop from here, walk closer.&rdquo;</em> That stage direction is the harness.</p>
+    </div>
+  </div>
+
+  <!-- ─── 07 — WHEN IT EARNS THE NAME ───────────────────── -->
+  <div class="section" id="earns">
+    <div class="section-label"><a href="#earns">07 &middot; When It Earns It</a></div>
+    <h2><a class="anchor" href="#earns">The cases where agentic OCR pays for itself.</a></h2>
+    <div class="prose">
+      <p>There are document types where a fixed pipeline tops out around 80% and the next 15 points require looking again. These are the cases where the agentic harness earns its tokens.</p>
+    </div>
+    <div class="cards-grid cards-2col">
+      <div class="card card-green">
+        <div class="card-icon-badge">Earns It</div>
+        <h4>Forms with checkboxes</h4>
+        <p>Insurance, medical intake, government. The answer is often the <em>shape</em> of a mark, not text. Vision-LM plus grounding wins here cleanly.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Earns It</div>
+        <h4>Signature presence</h4>
+        <p>Financial documents where &ldquo;is this signed?&rdquo; spans images, form fields, and annotation objects. Multiple looks, multiple modalities &mdash; pipelines miss this constantly.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Earns It</div>
+        <h4>Flowcharts and diagrams</h4>
+        <p>The arrows carry as much meaning as the boxes. Text-first OCR returns disconnected labels. An agent can reconstruct the graph.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Earns It</div>
+        <h4>Long, varied documents</h4>
+        <p>Annual reports where a number in a chart references a footnote on page 47. The loop &ldquo;find the chart, find the footnote, reconcile&rdquo; is exactly the agent shape.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Earns It</div>
+        <h4>Audit-grade extraction</h4>
+        <p>Anywhere a human needs to verify the answer came from a specific place. Visual grounding (bounding boxes per field) is the actual product here, not the OCR.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Earns It</div>
+        <h4>Unknown schema</h4>
+        <p>When you don&rsquo;t know in advance what fields a document has, the agent can explore. A pipeline needs to be told.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 08 — WHEN IT'S OVERKILL ───────────────────────── -->
+  <div class="section" id="overkill">
+    <div class="section-label"><a href="#overkill">08 &middot; When It Isn&rsquo;t</a></div>
+    <h2><a class="anchor" href="#overkill">When two prompts beat the loop.</a></h2>
+    <div class="prose">
+      <p>The skeptics are right about a much bigger slice of the market than vendors admit. If your problem looks like any of these, the simpler tool wins on cost, latency, and predictability.</p>
+    </div>
+    <div class="cards-grid cards-2col">
+      <div class="card card-red">
+        <div class="card-icon-badge">Overkill</div>
+        <h4>Clean, born-digital PDFs</h4>
+        <p>Generated invoices, exported statements, anything where the text layer is already correct. OCR isn&rsquo;t even the bottleneck.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Overkill</div>
+        <h4>Fixed schema, narrow domain</h4>
+        <p>&ldquo;Extract these twelve fields from this template.&rdquo; A vision-LM call with structured output and a regex backup is faster, cheaper, and more debuggable.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Overkill</div>
+        <h4>High volume, low ambiguity</h4>
+        <p>Receipts at scale. The marginal token cost of an agent loop becomes real money at a million documents a day.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">Overkill</div>
+        <h4>Latency-sensitive UX</h4>
+        <p>Anywhere a user is waiting. A 3-step loop is roughly 3&times; the time-to-first-answer of a single call.</p>
+      </div>
+    </div>
+    <p class="prose">There is a third category worth naming: <strong>agentic theater</strong>. Pipelines that <em>are</em> three prompts in a fixed order, marketed as multi-agent. If the &ldquo;agents&rdquo; can&rsquo;t decide at run time to call a different tool, ask for a different region, or stop early &mdash; they are functions wearing a costume. The product can still be good. It is the noun that is wrong.</p>
+  </div>
+
+  <!-- ─── 09 — DECISION TABLE ───────────────────────────── -->
+  <div class="section" id="decision">
+    <div class="section-label"><a href="#decision">09 &middot; Decision Table</a></div>
+    <h2><a class="anchor" href="#decision">Pick a tool, not a buzzword.</a></h2>
+    <div class="data-table">
+      <table>
+        <colgroup>
+          <col style="width:48%">
+          <col style="width:26%">
+          <col style="width:26%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>If your situation is&hellip;</th>
+            <th>Pipeline<br>(2 prompts + schema)</th>
+            <th>Agentic harness</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Clean PDFs, fixed schema, known fields</td>
+            <td class="td-yes">Yes</td>
+            <td class="td-no">Overkill</td>
+          </tr>
+          <tr>
+            <td>Forms with checkboxes, signatures, stamps</td>
+            <td class="td-no">Misses ~20%</td>
+            <td class="td-yes">Yes</td>
+          </tr>
+          <tr>
+            <td>Flowcharts, diagrams, structural visuals</td>
+            <td class="td-no">No</td>
+            <td class="td-yes">Yes</td>
+          </tr>
+          <tr>
+            <td>Financial docs where a chart refers to a footnote</td>
+            <td class="td-maybe">Fragile</td>
+            <td class="td-yes">Yes</td>
+          </tr>
+          <tr>
+            <td>Compliance: cite the exact page region</td>
+            <td class="td-no">No grounding</td>
+            <td class="td-yes">Visual grounding</td>
+          </tr>
+          <tr>
+            <td>Million-doc/day batch, latency-sensitive</td>
+            <td class="td-yes">Yes</td>
+            <td class="td-no">Token cost stings</td>
+          </tr>
+          <tr>
+            <td>Unknown or variable schema across documents</td>
+            <td class="td-no">No</td>
+            <td class="td-yes">Yes</td>
+          </tr>
+          <tr>
+            <td>You can&rsquo;t accept silent 80% accuracy</td>
+            <td class="td-no">No</td>
+            <td class="td-yes">Yes</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="prose">Honest split: roughly 60&ndash;70% of document-extraction problems are still the pipeline&rsquo;s job. The remaining 30&ndash;40% &mdash; the ones where the document itself is doing something visual &mdash; are where agentic OCR is a real upgrade and not a buzzword.</p>
+  </div>
+
+  <!-- ─── 10 — COST & LATENCY ───────────────────────────── -->
+  <div class="section" id="cost">
+    <div class="section-label"><a href="#cost">10 &middot; Cost &amp; Latency Reality</a></div>
+    <h2><a class="anchor" href="#cost">The tax you pay for an agent loop.</a></h2>
+    <div class="prose">
+      <p>The numbers below are illustrative public-API prices in mid-2026 for an A4-sized page of moderate complexity. Specific vendors will quote you differently, especially at volume. The point is the <em>shape</em> of the curve.</p>
+    </div>
+    <div class="data-table">
+      <table>
+        <colgroup>
+          <col style="width:38%">
+          <col style="width:22%">
+          <col style="width:22%">
+          <col style="width:18%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Approach</th>
+            <th>Cost / page</th>
+            <th>Latency</th>
+            <th>Grounding</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-strong">Classical OCR (Tesseract)</td>
+            <td>~$0.0001</td>
+            <td>50&ndash;500&#8239;ms</td>
+            <td class="td-no">No</td>
+          </tr>
+          <tr>
+            <td class="td-strong">Cloud OCR (Textract / DocAI)</td>
+            <td>~$0.0015&ndash;$0.05</td>
+            <td>1&ndash;3&#8239;s</td>
+            <td class="td-maybe">Boxes, no reasoning</td>
+          </tr>
+          <tr>
+            <td class="td-strong">Single VLM call (Flash/Haiku tier)</td>
+            <td>~$0.001&ndash;$0.005</td>
+            <td>1&ndash;3&#8239;s</td>
+            <td class="td-maybe">Optional</td>
+          </tr>
+          <tr>
+            <td class="td-strong">Single VLM call (frontier tier)</td>
+            <td>~$0.005&ndash;$0.02</td>
+            <td>2&ndash;6&#8239;s</td>
+            <td class="td-maybe">Optional</td>
+          </tr>
+          <tr>
+            <td class="td-strong">Agentic harness (3&ndash;5 iterations + tools)</td>
+            <td>~$0.02&ndash;$0.08</td>
+            <td>8&ndash;30&#8239;s</td>
+            <td class="td-yes">Native, per field</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="prose">Two things to read off the table. First, the agentic harness is roughly an order of magnitude more expensive than a single VLM call. Second, that gap is the price of <em>verifiability</em> &mdash; not of accuracy alone. If you do not need to defend each extracted value to an auditor or a regulator, a single frontier-tier VLM call gets you most of the way there at a fraction of the cost.</p>
+  </div>
+
+  <!-- ─── 11 — PITFALLS ─────────────────────────────────── -->
+  <div class="section" id="pitfalls">
+    <div class="section-label"><a href="#pitfalls">11 &middot; Pitfalls</a></div>
+    <h2><a class="anchor" href="#pitfalls">Five things to watch when you adopt it.</a></h2>
+    <div class="data-table">
+      <table>
+        <colgroup>
+          <col style="width:28%">
+          <col style="width:72%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Pitfall</th>
+            <th>What to do about it</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-strong">The token bill is not optional</td>
+            <td>Loops re-read pages. Budget for an order-of-magnitude jump over a single VLM call, or cap the loop count and accept early stops.</td>
+          </tr>
+          <tr>
+            <td class="td-strong">Determinism drops</td>
+            <td>Two runs on the same document can pick different paths and reach slightly different intermediate states. For regulated outputs, pin the model version, fix the seed where possible, and bound max iterations. Log the trace.</td>
+          </tr>
+          <tr>
+            <td class="td-strong">Visual grounding is the actual differentiator</td>
+            <td>If the API does not return bounding boxes per extracted field, you are paying agentic prices for non-agentic verifiability. Make grounding a buying criterion.</td>
+          </tr>
+          <tr>
+            <td class="td-strong">Evaluation gets harder</td>
+            <td>Pipelines fail per stage; agents fail per trajectory. Build an eval harness that scores both the final extraction and whether the loop made reasonable intermediate decisions. Trajectory metrics are still an underdeveloped art.</td>
+          </tr>
+          <tr>
+            <td class="td-strong">&ldquo;Multi-agent&rdquo; often means &ldquo;multi-prompt&rdquo;</td>
+            <td>Ask the vendor a single question: can the model decide at run time to call a different tool? If no, it is a pipeline with branding.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ─── 12 — HONEST DEFINITION ────────────────────────── -->
+  <div class="section" id="honest">
+    <div class="section-label"><a href="#honest">12 &middot; The Honest Definition</a></div>
+    <h2><a class="anchor" href="#honest">So &mdash; is it just LLM orchestration?</a></h2>
+    <div class="prose">
+      <p>Yes and no, and the &ldquo;no&rdquo; is the only part that matters.</p>
+      <p>It is <strong>not</strong> orchestration in the &ldquo;many agents passing notes&rdquo; sense. The product is almost always one vision-language model. The role prompts and the &ldquo;extractor agent / validator agent&rdquo; framing is mostly marketing scaffolding around what is, in code, a single model call inside a loop.</p>
+      <p>It <strong>is</strong> an LLM with a harness, where the harness can:</p>
+      <ul>
+        <li>read the page as a visual layout, not a text stream;</li>
+        <li>decide at run time what to look at next;</li>
+        <li>call tools (crop, table parser, signature detector, template index) selectively;</li>
+        <li>and ground every answer to a coordinate on the source page.</li>
+      </ul>
+      <p>That harness is a real, useful thing. It earns the word <em>agentic</em> &mdash; if we adopt the feedback-loop definition from Camp C, which is the only one of the four definitions that requires the system to do something a fixed pipeline structurally cannot.</p>
+      <p>The mistake the field keeps making is using <em>agentic</em> as a marketing label for any LLM workflow with more than one step. The right use of the word is narrower and harder to fake: <strong>a system that decides what to do next based on what it just observed</strong>. If your document extractor does that, and the documents you handle actually need it, you have an agentic system. If it doesn&rsquo;t, you have a pipeline, and that&rsquo;s fine &mdash; sometimes a pipeline is the better answer.</p>
+      <div class="callout">
+        <div class="callout-lbl">The take</div>
+        <p>Agentic OCR isn&rsquo;t a buzzword and it isn&rsquo;t a revolution. It&rsquo;s a vision-language model in a feedback loop with grounded outputs &mdash; sold as a category because &ldquo;LLM with a harness&rdquo; doesn&rsquo;t fit on a slide. Use it where documents are visual and answers need citing. Stick with the pipeline where they aren&rsquo;t.</p>
+      </div>
+    </div>
+
+    <a class="companion" href="https://asadani.github.io/agentic-ocr/" rel="noopener">
+      <div class="companion-spine">
+        <span class="companion-icon">&#x2766;</span>
+        <span class="companion-kind">Book</span>
+      </div>
+      <div class="companion-body">
+        <div class="companion-eyebrow">Keep reading</div>
+        <div class="companion-title">Agentic OCR &mdash; the practitioner&rsquo;s book</div>
+        <div class="companion-sub">Now that the concept is clear, the companion book shows what the harness looks like when you actually wire it up &mdash; tools, prompts, and grounding in practice.</div>
+      </div>
+      <span class="companion-arrow" aria-hidden="true">&rarr;</span>
+    </a>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <span>asadani.tech &middot; May 2026</span>
+  <div class="footer-refs">
+    Sources: Landing AI, LlamaIndex, Extend &middot; practitioner threads
+  </div>
+</footer>
+
+</body>
+</html>
