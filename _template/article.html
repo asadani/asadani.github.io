@@ -511,23 +511,25 @@
     overflow: hidden;
     background: var(--surface);
   }
+  /* Not flex: a <strong> lead-in + body text must flow inline as one
+     paragraph. Flex would split the →, the <strong>, and the body into
+     three separate columns. So: left gutter + absolutely positioned →. */
   ul.dl li {
-    padding: 13px 18px 13px 14px;
+    position: relative;
+    padding: 13px 18px 13px 34px;
     font-size: 15px;
     color: var(--text-body);
     border-bottom: 1px solid var(--border-light);
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
     line-height: 1.65;
   }
   ul.dl li:last-child { border-bottom: none; }
   ul.dl li::before {
     content: '→';
+    position: absolute;
+    left: 14px;
+    top: 13px;
     color: var(--accent);
     font-size: 14px;
-    flex-shrink: 0;
-    margin-top: 1px;
   }
 
   /* ─── TABLE ───────────────────────────────────────────── */
