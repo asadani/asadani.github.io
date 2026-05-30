@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{TITLE}} — {{SUBTITLE}}</title>
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -32,9 +42,45 @@
     --red:          #B83535;
     --red-bg:       #FAEBEB;
     --red-border:   #E8AAAA;
+    --code-bg:      #1A1714;  /* code blocks stay dark in BOTH modes */
+    --shadow:       rgba(200,92,45,0.08);
     --serif:        'Newsreader', Georgia, serif;
     --sans:         'Inter', system-ui, sans-serif;
     --mono:         'JetBrains Mono', 'Courier New', monospace;
+    color-scheme: light;
+  }
+
+  /* ─── DARK MODE ───────────────────────────────────────── */
+  /* Same design, dark palette. Toggled via [data-theme] on <html>
+     (nav button + OS default + localStorage — see scripts). Warm dark,
+     not pure black; the terracotta accent brightens so it reads on dark. */
+  [data-theme="dark"] {
+    --bg:           #14110D;
+    --bg-alt:       #1E1A14;
+    --surface:      #1A1611;
+    --surface-tint: #211C16;
+    --border:       #332C24;
+    --border-light: #2A241D;
+    --text:         #F2EEE7;
+    --text-body:    #D8D2C8;
+    --text-muted:   #A39C90;
+    --text-subtle:  #7A7468;
+    --accent:       #E8895D;
+    --accent-light: #F0A079;
+    --accent-bg:    #2C1E14;
+    --accent-border:#5A3826;
+    --green:        #5FD699;
+    --green-bg:     #14241B;
+    --green-border: #2E5640;
+    --blue:         #6FB0F0;
+    --blue-bg:      #142233;
+    --blue-border:  #2C4A6E;
+    --red:          #F08585;
+    --red-bg:       #2E1717;
+    --red-border:   #663434;
+    --code-bg:      #0E0B08;
+    --shadow:       rgba(0,0,0,0.45);
+    color-scheme: dark;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -86,6 +132,29 @@
     border-radius: 3px;
     letter-spacing: 0.04em;
   }
+  /* Light/dark toggle — shows the moon in light mode (click → dark) and
+     the sun in dark mode (click → light). */
+  .theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .theme-toggle:hover { color: var(--accent); border-color: var(--accent-border); }
+  .theme-icon-sun { display: none; }
+  [data-theme="dark"] .theme-icon-sun  { display: inline; }
+  [data-theme="dark"] .theme-icon-moon { display: none; }
 
   /* ─── LAYOUT ──────────────────────────────────────────── */
   .page-wrap {
@@ -149,7 +218,9 @@
   em { font-style: italic; color: var(--text-body); }
 
   /* ─── SECTION HEADING ─────────────────────────────────── */
-  .section { margin-top: 56px; }
+  /* scroll-margin-top keeps the sticky 52px nav from covering the heading
+     when you jump to a #anchor. */
+  .section { margin-top: 56px; scroll-margin-top: 72px; }
   .section-label {
     font-family: var(--sans);
     font-size: 11px;
@@ -159,6 +230,8 @@
     text-transform: uppercase;
     margin-bottom: 8px;
   }
+  .section-label a { color: inherit; text-decoration: none; transition: color 0.15s; }
+  .section-label a:hover { color: var(--text); }
   .section h2 {
     font-family: var(--serif);
     font-size: 28px;
@@ -167,6 +240,16 @@
     letter-spacing: -0.01em;
     color: var(--text);
     margin-bottom: 24px;
+  }
+  /* Self-linking heading: the whole H2 is an anchor to its own section,
+     and a '#' affordance appears on hover. */
+  .section h2 a.anchor { color: inherit; text-decoration: none; position: relative; }
+  .section h2 a.anchor:hover::before {
+    content: '#';
+    position: absolute;
+    left: -22px;
+    color: var(--accent);
+    font-weight: 400;
   }
   h3 {
     font-family: var(--serif);
@@ -250,13 +333,57 @@
     font-family: var(--mono);
   }
 
+  /* ─── TOC (jump links) ────────────────────────────────── */
+  /* Optional. Hrefs point at the section ids; pairs with the
+     self-linking H2 anchors below. 2-up grid, single column on mobile. */
+  .toc {
+    background: var(--surface-tint);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px 22px;
+    margin: 0 0 56px;
+  }
+  .toc-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 28px;
+  }
+  .toc-list li { display: flex; align-items: baseline; gap: 10px; font-size: 14px; line-height: 1.5; }
+  .toc-num { font-family: var(--mono); font-size: 11px; color: var(--text-subtle); flex-shrink: 0; width: 18px; }
+  .toc-list a {
+    color: var(--text-body);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .toc-list a:hover { color: var(--accent); border-bottom-color: var(--accent-border); }
+
   /* ─── CARDS GRID ──────────────────────────────────────── */
+  /* Auto-balancing so you never get an orphan row:
+       default 3-up → 3 cards = 1×3, 6 cards = 3×2
+       exactly 2 or 4 cards drop to 2 columns → 2 = 1×2, 4 = 2×2
+     Force a count with .cols-2 / .cols-3 if you ever need to. */
   .cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 14px;
     margin: 24px 0;
   }
+  .cards-grid:has(> .card:nth-child(2):last-child),
+  .cards-grid:has(> .card:nth-child(4):last-child),
+  .cards-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .cards-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -266,7 +393,7 @@
   }
   .card:hover {
     border-color: var(--accent-border);
-    box-shadow: 0 2px 8px rgba(200,92,45,0.08);
+    box-shadow: 0 2px 8px var(--shadow);
   }
   .card-icon { font-size: 20px; margin-bottom: 10px; }
   .card h4 {
@@ -322,7 +449,7 @@
 
   /* ─── CODE BLOCK ──────────────────────────────────────── */
   .code-block {
-    background: var(--text);
+    background: var(--code-bg);
     border-radius: 7px;
     overflow: hidden;
     margin: 20px 0;
@@ -404,6 +531,13 @@
   }
 
   /* ─── TABLE ───────────────────────────────────────────── */
+  /* Default column sizing is content-driven (table-layout: auto) — best
+     for prose tables. To CONTROL column widths, add class="fixed" to the
+     <table> AND a <colgroup> of <col style="width:..%"> — fixed layout is
+     what actually makes those widths stick (auto layout treats colgroup
+     widths as hints and routinely ignores them, the usual "table looks
+     off" cause). Long unbroken strings wrap rather than blow a column out;
+     on narrow screens the wrapper scrolls horizontally. */
   .data-table {
     overflow-x: auto;
     margin: 24px 0;
@@ -412,6 +546,7 @@
     background: var(--surface);
   }
   .data-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .data-table table.fixed { table-layout: fixed; }
   .data-table thead th {
     padding: 11px 16px;
     text-align: left;
@@ -422,6 +557,8 @@
     background: var(--bg-alt);
     border-bottom: 1px solid var(--border);
     color: var(--text-muted);
+    white-space: nowrap;      /* short header labels stay on one line */
+    vertical-align: bottom;
   }
   .data-table tbody td {
     padding: 11px 16px;
@@ -429,11 +566,17 @@
     color: var(--text-body);
     vertical-align: top;
     line-height: 1.55;
+    overflow-wrap: anywhere;  /* long tokens/URLs wrap, never overflow */
   }
   .data-table tbody tr:last-child td { border-bottom: none; }
   .data-table tbody tr:hover td { background: var(--surface-tint); }
-  .td-yes { color: var(--green); font-weight: 600; }
-  .td-no  { color: var(--red);   font-weight: 600; }
+  .data-table tbody td:first-child { font-weight: 600; color: var(--text); }  /* row label */
+  /* Alignment helpers — apply to the <th> AND every <td> in that column */
+  .data-table th.center, .data-table td.center { text-align: center; }
+  .data-table th.num,    .data-table td.num    { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .data-table th.nowrap, .data-table td.nowrap { white-space: nowrap; }
+  .td-yes  { color: var(--green); font-weight: 600; }
+  .td-no   { color: var(--red);   font-weight: 600; }
   .td-mono { font-family: var(--mono); font-size: 12px; color: var(--accent); }
 
   /* ─── FOOTER ──────────────────────────────────────────── */
@@ -459,6 +602,13 @@
     .page-wrap { padding: 0 16px 60px; }
     footer { padding: 16px 20px; }
     .plain-english { padding: 20px; }
+    .toc-list { grid-template-columns: 1fr; }
+    /* All card grids collapse to a single column on phones. */
+    .cards-grid,
+    .cards-grid.cols-2,
+    .cards-grid.cols-3,
+    .cards-grid:has(> .card:nth-child(2):last-child),
+    .cards-grid:has(> .card:nth-child(4):last-child) { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -470,6 +620,10 @@
   <div class="nav-right">
     <span>{{NAV_TOPIC}}</span>
     <span class="nav-tag">{{NAV_DATE}}</span><!-- e.g. APR 2026 -->
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <span class="theme-icon-moon" aria-hidden="true">&#9790;</span><!-- ☾ shown in light mode -->
+      <span class="theme-icon-sun" aria-hidden="true">&#9728;</span><!-- ☀ shown in dark mode -->
+    </button>
   </div>
 </nav>
 
@@ -512,15 +666,31 @@
     </ul>
   </div>
 
+  <!-- OPTIONAL: TABLE OF CONTENTS (jump links) -->
+  <!-- Each href must match a section id below. Drop this block if the post is short. -->
+  <nav class="toc" aria-label="Jump to section">
+    <div class="toc-label">Jump to</div>
+    <ol class="toc-list">
+      <li><span class="toc-num">01</span><a href="#{{SECTION_ID}}">{{TOC_ITEM_1}}</a></li>
+      <li><span class="toc-num">02</span><a href="#section-2">{{TOC_ITEM_2}}</a></li>
+      <li><span class="toc-num">03</span><a href="#section-3">{{TOC_ITEM_3}}</a></li>
+    </ol>
+  </nav>
+
   <!-- SECTION EXAMPLE -->
-  <div class="section">
+  <!-- id makes the section a jump/anchor target; the H2 self-links to it
+       (a '#' appears on hover). Give every section a unique kebab-case id. -->
+  <div class="section" id="{{SECTION_ID}}">
     <div class="section-label">{{SECTION_LABEL}}</div>
-    <h2>{{SECTION_HEADING}}</h2>
+    <h2><a class="anchor" href="#{{SECTION_ID}}">{{SECTION_HEADING}}</a></h2>
     <div class="prose">
       <p>{{PARAGRAPH}}</p>
     </div>
 
     <!-- OPTIONAL: CARDS GRID -->
+    <!-- Columns auto-balance by count: 3 or 6 cards → 3-up (3×2 for six),
+         2 or 4 cards → 2-up (2×2 for four). No modifier needed. Force with
+         class="cards-grid cols-2" / "cols-3" only if you want to override. -->
     <div class="cards-grid">
       <div class="card card-red">
         <div class="card-icon-badge">{{CARD_LABEL}}</div><!-- e.g. Prohibited -->
@@ -554,20 +724,37 @@
   </ul>
 
   <!-- OPTIONAL: DATA TABLE -->
+  <!-- class="fixed" + <colgroup> = column widths that actually hold.
+       First <td> in each row auto-bolds as the row label.
+       Alignment helpers go on BOTH the <th> and its <td>s: .center, .num, .nowrap. -->
   <div class="data-table">
-    <table>
+    <table class="fixed">
+      <colgroup>
+        <col style="width:34%">
+        <col style="width:24%">
+        <col style="width:18%">
+        <col style="width:24%">
+      </colgroup>
       <thead>
         <tr>
           <th>{{COL_1}}</th>
           <th>{{COL_2}}</th>
-          <th>{{COL_3}}</th>
+          <th class="center">{{COL_3}}</th>
+          <th class="num">{{COL_4}}</th>
         </tr>
       </thead>
       <tbody>
         <tr>
+          <td>{{ROW_LABEL}}</td>
           <td>{{VAL}}</td>
-          <td class="td-yes">Yes</td>
-          <td class="td-no">No</td>
+          <td class="td-yes center">Yes</td>
+          <td class="num">1,250</td>
+        </tr>
+        <tr>
+          <td>{{ROW_LABEL}}</td>
+          <td>{{VAL}}</td>
+          <td class="td-no center">No</td>
+          <td class="num">98</td>
         </tr>
       </tbody>
     </table>
@@ -588,6 +775,20 @@
     <a href="{{URL}}">{{LINK_TEXT}}</a>
   </div>
 </footer>
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
 
 </body>
 </html>
