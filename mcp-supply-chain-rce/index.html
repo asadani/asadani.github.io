@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Mother of All AI Supply Chains — MCP's By-Design RCE</title>
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
 <meta name="description" content="A systemic, by-design vulnerability in Anthropic's Model Context Protocol SDKs exposes 150M+ downloads and ~200K servers to arbitrary command execution. An interactive walkthrough of the mechanism, the 10 CVEs, and the six-month disclosure timeline.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -42,7 +52,53 @@
     --serif:        'Newsreader', Georgia, serif;
     --sans:         'Inter', system-ui, sans-serif;
     --mono:         'JetBrains Mono', 'Courier New', monospace;
+      --code-bg:      #1A1714;
+    --shadow:       rgba(200,92,45,0.08);
+    color-scheme: light;
+}
+
+  /* ─── DARK MODE (unified-theme migration) ─────────────── */
+  [data-theme="dark"] {
+    --bg:           #14110D;
+    --bg-alt:       #1E1A14;
+    --surface:      #1A1611;
+    --surface-tint: #211C16;
+    --border:       #332C24;
+    --border-light: #2A241D;
+    --text:         #F2EEE7;
+    --text-body:    #D8D2C8;
+    --text-muted:   #A39C90;
+    --text-subtle:  #7A7468;
+    --accent:       #E8895D;
+    --accent-light: #F0A079;
+    --accent-bg:    #2C1E14;
+    --accent-border:#5A3826;
+    --green:        #5FD699;
+    --green-bg:     #14241B;
+    --green-border: #2E5640;
+    --blue:         #6FB0F0;
+    --blue-bg:      #142233;
+    --blue-border:  #2C4A6E;
+    --red:          #F08585;
+    --red-bg:       #2E1717;
+    --red-border:   #663434;
+    --code-bg:      #0E0B08;
+    --shadow:       rgba(0,0,0,0.45);
+    color-scheme: dark;
   }
+  /* theme toggle button (shows moon in light, sun in dark) */
+  .theme-toggle { background:none; border:1px solid var(--border); border-radius:6px; width:30px; height:30px; flex-shrink:0; cursor:pointer; color:var(--text-muted); font-family:var(--sans); font-size:14px; line-height:1; display:inline-flex; align-items:center; justify-content:center; transition:color .15s,border-color .15s; }
+  .theme-toggle:hover { color:var(--accent); border-color:var(--accent-border); }
+  .theme-icon-sun { display:none; }
+  [data-theme="dark"] .theme-icon-sun { display:inline; }
+  [data-theme="dark"] .theme-icon-moon { display:none; }
+  /* links + self-linking section anchors */
+  .prose a { color:var(--accent); text-decoration:underline; text-underline-offset:2px; }
+  .prose a:hover { color:var(--accent-light); }
+  .section { scroll-margin-top: 72px; }
+  .section h2 a.anchor { color:inherit; text-decoration:none; position:relative; }
+  .section h2 a.anchor:hover::before { content:'#'; position:absolute; left:-22px; color:var(--accent); font-weight:400; }
+
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -375,7 +431,7 @@
 
   /* ─── CODE BLOCK ──────────────────────────────────────── */
   .code-block {
-    background: var(--text);
+    background: var(--code-bg);
     border-radius: 7px;
     overflow: hidden;
     margin: 20px 0;
@@ -843,6 +899,8 @@
   <div class="nav-right">
     <span>Security · Supply Chain</span>
     <span class="nav-tag">APR 2026</span>
+  
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><span class="theme-icon-moon" aria-hidden="true">&#9790;</span><span class="theme-icon-sun" aria-hidden="true">&#9728;</span></button>
   </div>
 </nav>
 
@@ -912,9 +970,9 @@
   </div>
 
   <!-- SECTION 1 -->
-  <div class="section">
+  <div class="section" id="one-design-decision-every-language-every-downstream-library">
     <div class="section-label">01 · The Disclosure</div>
-    <h2>One Design Decision, Every Language, Every Downstream Library</h2>
+    <h2><a class="anchor" href="#one-design-decision-every-language-every-downstream-library">One Design Decision, Every Language, Every Downstream Library</a></h2>
     <div class="prose">
       <p>On <strong>April 15, 2026</strong>, OX Security Research published what they called <em>"the mother of all AI supply chains"</em> — a class of vulnerability baked into the reference implementation of the <a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener">Model Context Protocol</a> across every supported language. It is not a coding bug. It is the STDIO transport working exactly as specified.</p>
 
@@ -932,9 +990,9 @@
   </div>
 
   <!-- SECTION 2: INTERACTIVE FLOW -->
-  <div class="section">
+  <div class="section" id="how-an-error-return-is-actually-a-shell-execution">
     <div class="section-label">02 · Mechanism</div>
-    <h2>How an Error Return Is Actually a Shell Execution</h2>
+    <h2><a class="anchor" href="#how-an-error-return-is-actually-a-shell-execution">How an Error Return Is Actually a Shell Execution</a></h2>
     <div class="prose">
       <p>The failure mode is counterintuitive: the error path is the attack path. Walk the flow node by node — each click reveals what happens at that step and why error-handling doesn't save you.</p>
     </div>
@@ -1003,9 +1061,9 @@ params = <span class="tok-val">StdioServerParameters</span>(
   </div>
 
   <!-- SECTION 3: ATTACK FAMILIES -->
-  <div class="section">
+  <div class="section" id="four-families-one-root-cause">
     <div class="section-label">03 · Attack Surface</div>
-    <h2>Four Families, One Root Cause</h2>
+    <h2><a class="anchor" href="#four-families-one-root-cause">Four Families, One Root Cause</a></h2>
     <div class="prose">
       <p>The same underlying pattern manifests in four distinct exploitation classes, each targeting a different layer of the stack. What makes this a <em>supply chain</em> event rather than a single CVE is that none of these vendors wrote the bug — they inherited the default.</p>
     </div>
@@ -1035,9 +1093,9 @@ params = <span class="tok-val">StdioServerParameters</span>(
   </div>
 
   <!-- SECTION 4: TIMELINE -->
-  <div class="section">
+  <div class="section" id="six-months-of-disclosure-three-layers-of-silence">
     <div class="section-label">04 · Disclosure Timeline</div>
-    <h2>Six Months of Disclosure, Three Layers of Silence</h2>
+    <h2><a class="anchor" href="#six-months-of-disclosure-three-layers-of-silence">Six Months of Disclosure, Three Layers of Silence</a></h2>
     <div class="prose">
       <p>Below is an interactive version of the disclosure timeline. Three horizontal swim lanes: the <strong style="color:var(--accent)">Root Layer</strong> (Anthropic itself), the <strong style="color:var(--yellow)">Transport Layer</strong> (frameworks like LangChain, LiteLLM, FastMCP), and the <strong style="color:var(--purple)">Application Layer</strong> (end tools like Cursor, Windsurf, DocsGPT). Filter a layer to isolate it — the pattern across the stack is the whole story.</p>
     </div>
@@ -1201,9 +1259,9 @@ params = <span class="tok-val">StdioServerParameters</span>(
   </div>
 
   <!-- SECTION 5: CVE TABLE -->
-  <div class="section">
+  <div class="section" id="the-10-cves-that-came-from-one-protocol">
     <div class="section-label">05 · The CVEs</div>
-    <h2>The 10 CVEs That Came From One Protocol</h2>
+    <h2><a class="anchor" href="#the-10-cves-that-came-from-one-protocol">The 10 CVEs That Came From One Protocol</a></h2>
     <div class="prose">
       <p>Filter by status to see which projects moved and which are still sitting on a reported advisory. Every row traces back to the same STDIO pattern.</p>
     </div>
@@ -1315,9 +1373,9 @@ params = <span class="tok-val">StdioServerParameters</span>(
   </div>
 
   <!-- SECTION 6: ANTHROPIC'S POSITION -->
-  <div class="section">
+  <div class="section" id="expected-behavior-vs-secure-by-design">
     <div class="section-label">06 · The Argument</div>
-    <h2>"Expected Behavior" vs. Secure by Design</h2>
+    <h2><a class="anchor" href="#expected-behavior-vs-secure-by-design">"Expected Behavior" vs. Secure by Design</a></h2>
     <div class="prose">
       <p>Anthropic's position is defensible on narrow technical grounds: STDIO MCP is a local transport, and a local transport that runs a binary you passed it is, in one sense, doing what it says on the tin. The problem is what happens when that transport's configuration format becomes reachable by untrusted inputs — model outputs, web UIs, marketplace payloads, repo files an IDE agent reads.</p>
 
@@ -1335,9 +1393,9 @@ params = <span class="tok-val">StdioServerParameters</span>(
   </div>
 
   <!-- SECTION 7: REMEDIATION -->
-  <div class="section">
+  <div class="section" id="remediation-until-the-protocol-moves">
     <div class="section-label">07 · What You Can Do</div>
-    <h2>Remediation — Until the Protocol Moves</h2>
+    <h2><a class="anchor" href="#remediation-until-the-protocol-moves">Remediation — Until the Protocol Moves</a></h2>
     <div class="prose">
       <p>Because the vulnerability is architectural, there is no patch you can pull. Defense is about shrinking the distance between untrusted input and <code class="inline">StdioServerParameters</code>, and limiting blast radius when that boundary fails.</p>
     </div>
@@ -1394,9 +1452,9 @@ params = <span class="tok-val">StdioServerParameters</span>(
   </div>
 
   <!-- SECTION 8: CLOSING -->
-  <div class="section">
+  <div class="section" id="the-protocol-owns-the-ecosystem-it-enables">
     <div class="section-label">08 · Closing Thoughts</div>
-    <h2>The Protocol Owns the Ecosystem It Enables</h2>
+    <h2><a class="anchor" href="#the-protocol-owns-the-ecosystem-it-enables">The Protocol Owns the Ecosystem It Enables</a></h2>
     <div class="prose">
       <p>Individual CVEs are footguns. A hundred CVEs tracing back to one line in one reference SDK is a <em>policy choice</em>. Anthropic's position — that implementers are responsible for the consequences of the default they inherit — is structurally similar to how every other insecure-by-default protocol in history was defended, right up until it wasn't.</p>
 
@@ -1494,6 +1552,21 @@ params = <span class="tok-val">StdioServerParameters</span>(
       });
     });
   });
+</script>
+
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
 </script>
 
 </body>

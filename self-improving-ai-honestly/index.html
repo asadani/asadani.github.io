@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Self-Improving AI, Honestly — Where the Loop Actually Closes</title>
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -35,7 +45,53 @@
     --serif:        'Newsreader', Georgia, serif;
     --sans:         'Inter', system-ui, sans-serif;
     --mono:         'JetBrains Mono', 'Courier New', monospace;
+      --code-bg:      #1A1714;
+    --shadow:       rgba(200,92,45,0.08);
+    color-scheme: light;
+}
+
+  /* ─── DARK MODE (unified-theme migration) ─────────────── */
+  [data-theme="dark"] {
+    --bg:           #14110D;
+    --bg-alt:       #1E1A14;
+    --surface:      #1A1611;
+    --surface-tint: #211C16;
+    --border:       #332C24;
+    --border-light: #2A241D;
+    --text:         #F2EEE7;
+    --text-body:    #D8D2C8;
+    --text-muted:   #A39C90;
+    --text-subtle:  #7A7468;
+    --accent:       #E8895D;
+    --accent-light: #F0A079;
+    --accent-bg:    #2C1E14;
+    --accent-border:#5A3826;
+    --green:        #5FD699;
+    --green-bg:     #14241B;
+    --green-border: #2E5640;
+    --blue:         #6FB0F0;
+    --blue-bg:      #142233;
+    --blue-border:  #2C4A6E;
+    --red:          #F08585;
+    --red-bg:       #2E1717;
+    --red-border:   #663434;
+    --code-bg:      #0E0B08;
+    --shadow:       rgba(0,0,0,0.45);
+    color-scheme: dark;
   }
+  /* theme toggle button (shows moon in light, sun in dark) */
+  .theme-toggle { background:none; border:1px solid var(--border); border-radius:6px; width:30px; height:30px; flex-shrink:0; cursor:pointer; color:var(--text-muted); font-family:var(--sans); font-size:14px; line-height:1; display:inline-flex; align-items:center; justify-content:center; transition:color .15s,border-color .15s; }
+  .theme-toggle:hover { color:var(--accent); border-color:var(--accent-border); }
+  .theme-icon-sun { display:none; }
+  [data-theme="dark"] .theme-icon-sun { display:inline; }
+  [data-theme="dark"] .theme-icon-moon { display:none; }
+  /* links + self-linking section anchors */
+  .prose a { color:var(--accent); text-decoration:underline; text-underline-offset:2px; }
+  .prose a:hover { color:var(--accent-light); }
+  .section { scroll-margin-top: 72px; }
+  .section h2 a.anchor { color:inherit; text-decoration:none; position:relative; }
+  .section h2 a.anchor:hover::before { content:'#'; position:absolute; left:-22px; color:var(--accent); font-weight:400; }
+
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -493,6 +549,8 @@
   <div class="nav-right">
     <span>Agents &amp; Self-Improvement</span>
     <span class="nav-tag">MAY 2026</span>
+  
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><span class="theme-icon-moon" aria-hidden="true">&#9790;</span><span class="theme-icon-sun" aria-hidden="true">&#9728;</span></button>
   </div>
 </nav>
 
@@ -542,7 +600,7 @@
   <!-- SECTION 1 -->
   <div class="section" id="shift">
     <div class="section-label"><a href="#shift">01 / The shift</a></div>
-    <h2>The model stopped being the deliverable</h2>
+    <h2><a class="anchor" href="#shift">The model stopped being the deliverable</a></h2>
     <div class="prose">
       <p>For most of the last decade, the answer to "what is the AI product?" was a checkpoint. You train a model, you ship it, you monitor it, you retrain on some cadence. The model was the thing.</p>
       <p>That mental model is fraying. The thing producing useful work is no longer just the model. It is the agent that wraps the model, the harness that runs the agent, the verifier that scores its output, and the feedback signal that updates either the harness, the weights, or both.</p>
@@ -554,7 +612,7 @@
   <!-- SECTION 2 -->
   <div class="section" id="taxonomy">
     <div class="section-label"><a href="#taxonomy">02 / Taxonomy</a></div>
-    <h2>The five shapes of self-improvement</h2>
+    <h2><a class="anchor" href="#taxonomy">The five shapes of self-improvement</a></h2>
     <div class="prose">
       <p>Self-improvement in current research has five distinct shapes. They differ in what changes and on what timescale.</p>
     </div>
@@ -612,7 +670,7 @@
   <!-- SECTION 3 -->
   <div class="section" id="meaning">
     <div class="section-label"><a href="#meaning">03 / What "self" means here</a></div>
-    <h2>What "self-improving" actually means today</h2>
+    <h2><a class="anchor" href="#meaning">What "self-improving" actually means today</a></h2>
     <div class="prose">
       <p>Read across all five categories and one thing is constant. The system improves itself with respect to a target someone else defined.</p>
       <p>That someone is almost always a paper author. The verifier (the function that tells the system what's good) is hand-written. The dataset is hand-picked. The success metric is hand-chosen. The reward signal is engineered by a human.</p>
@@ -624,7 +682,7 @@
   <!-- SECTION 4 -->
   <div class="section" id="rewards">
     <div class="section-label"><a href="#rewards">04 / The clean-reward problem</a></div>
-    <h2>Self-improvement runs on clean rewards</h2>
+    <h2><a class="anchor" href="#rewards">Self-improvement runs on clean rewards</a></h2>
     <div class="prose">
       <p>Look at where these systems work. Then look at where they don't.</p>
     </div>
@@ -656,7 +714,7 @@
   <!-- SECTION 5 -->
   <div class="section" id="meta-improver">
     <div class="section-label"><a href="#meta-improver">05 / The meta-improver</a></div>
-    <h2>The thing that improves the system doesn't improve</h2>
+    <h2><a class="anchor" href="#meta-improver">The thing that improves the system doesn't improve</a></h2>
     <div class="prose">
       <p>Across SIA, the Darwin Gödel Machine, AI Scientist, Meta-Harness, Hyperagents, the improvement mechanism itself is a frozen large language model. An LLM is choosing what to change next.</p>
       <p>That LLM does not get better at choosing. It is the same Claude or GPT call, run again with new context. Its prior over "what to try" is whatever the foundation lab last shipped.</p>
@@ -668,7 +726,7 @@
   <!-- SECTION 6 -->
   <div class="section" id="goodhart">
     <div class="section-label"><a href="#goodhart">06 / Goodhart</a></div>
-    <h2>Co-evolution against a fixed verifier is fragile</h2>
+    <h2><a class="anchor" href="#goodhart">Co-evolution against a fixed verifier is fragile</a></h2>
     <div class="prose">
       <p>When two optimizers chase the same fixed reward, they don't optimize toward truth. They optimize toward whatever joint configuration maximizes the reward on the seen distribution. The SIA paper formalises this in its limitations section, and the framing applies to the whole co-evolution class.</p>
     </div>
@@ -688,7 +746,7 @@
   <!-- SECTION 7 -->
   <div class="section" id="missing">
     <div class="section-label"><a href="#missing">07 / What's missing</a></div>
-    <h2>What separates "self-improving" from the AGI framing</h2>
+    <h2><a class="anchor" href="#missing">What separates "self-improving" from the AGI framing</a></h2>
     <div class="prose">
       <p>Four pieces stand between today's research and the version of self-improvement that justifies the "step toward AGI" language. None are solved.</p>
     </div>
@@ -724,7 +782,7 @@
   <!-- SECTION 8 -->
   <div class="section" id="production">
     <div class="section-label"><a href="#production">08 / Production take</a></div>
-    <h2>What this means for engineers shipping in 2026</h2>
+    <h2><a class="anchor" href="#production">What this means for engineers shipping in 2026</a></h2>
     <div class="prose">
       <p>Four pieces of practical advice for anyone building agentic systems this year.</p>
     </div>
@@ -744,7 +802,7 @@
   <!-- SECTION 9 -->
   <div class="section" id="frame">
     <div class="section-label"><a href="#frame">09 / The frame</a></div>
-    <h2>The frame to leave on</h2>
+    <h2><a class="anchor" href="#frame">The frame to leave on</a></h2>
     <div class="prose">
       <p>Self-improvement is real. Across math, code, kernels, classification, and games, the loops measurably work, sometimes spectacularly. 14× kernel speedups. Tens of percentage points on hard benchmarks. Whole categories of human iteration replaced by an outer-loop agent.</p>
       <p>The "step toward AGI" framing is the part to push back on. The systems improving themselves today do so in narrow, well-instrumented domains, against fixed human-defined objectives, with a frozen improvement mechanism, and the resulting equilibria are fragile out of distribution.</p>
@@ -756,7 +814,7 @@
   <!-- REFERENCES -->
   <div class="section" id="references">
     <div class="section-label"><a href="#references">References</a></div>
-    <h2>Papers cited</h2>
+    <h2><a class="anchor" href="#references">Papers cited</a></h2>
 
     <div class="data-table">
       <table style="table-layout: fixed; width: 100%;">
@@ -872,6 +930,21 @@
     <a href="/">← Back to index</a>
   </div>
 </footer>
+
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
 
 </body>
 </html>

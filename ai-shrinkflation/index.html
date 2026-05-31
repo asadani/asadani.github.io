@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Shrinkflation — The Silent Regression Your Team Won't See Coming</title>
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -35,7 +45,53 @@
     --serif:        'Newsreader', Georgia, serif;
     --sans:         'Inter', system-ui, sans-serif;
     --mono:         'JetBrains Mono', 'Courier New', monospace;
+      --code-bg:      #1A1714;
+    --shadow:       rgba(200,92,45,0.08);
+    color-scheme: light;
+}
+
+  /* ─── DARK MODE (unified-theme migration) ─────────────── */
+  [data-theme="dark"] {
+    --bg:           #14110D;
+    --bg-alt:       #1E1A14;
+    --surface:      #1A1611;
+    --surface-tint: #211C16;
+    --border:       #332C24;
+    --border-light: #2A241D;
+    --text:         #F2EEE7;
+    --text-body:    #D8D2C8;
+    --text-muted:   #A39C90;
+    --text-subtle:  #7A7468;
+    --accent:       #E8895D;
+    --accent-light: #F0A079;
+    --accent-bg:    #2C1E14;
+    --accent-border:#5A3826;
+    --green:        #5FD699;
+    --green-bg:     #14241B;
+    --green-border: #2E5640;
+    --blue:         #6FB0F0;
+    --blue-bg:      #142233;
+    --blue-border:  #2C4A6E;
+    --red:          #F08585;
+    --red-bg:       #2E1717;
+    --red-border:   #663434;
+    --code-bg:      #0E0B08;
+    --shadow:       rgba(0,0,0,0.45);
+    color-scheme: dark;
   }
+  /* theme toggle button (shows moon in light, sun in dark) */
+  .theme-toggle { background:none; border:1px solid var(--border); border-radius:6px; width:30px; height:30px; flex-shrink:0; cursor:pointer; color:var(--text-muted); font-family:var(--sans); font-size:14px; line-height:1; display:inline-flex; align-items:center; justify-content:center; transition:color .15s,border-color .15s; }
+  .theme-toggle:hover { color:var(--accent); border-color:var(--accent-border); }
+  .theme-icon-sun { display:none; }
+  [data-theme="dark"] .theme-icon-sun { display:inline; }
+  [data-theme="dark"] .theme-icon-moon { display:none; }
+  /* links + self-linking section anchors */
+  .prose a { color:var(--accent); text-decoration:underline; text-underline-offset:2px; }
+  .prose a:hover { color:var(--accent-light); }
+  .section { scroll-margin-top: 72px; }
+  .section h2 a.anchor { color:inherit; text-decoration:none; position:relative; }
+  .section h2 a.anchor:hover::before { content:'#'; position:absolute; left:-22px; color:var(--accent); font-weight:400; }
+
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -351,7 +407,7 @@
 
   /* ─── CODE BLOCK ──────────────────────────────────────── */
   .code-block {
-    background: var(--text);
+    background: var(--code-bg);
     border-radius: 7px;
     overflow: hidden;
     margin: 20px 0;
@@ -582,6 +638,8 @@
   <div class="nav-right">
     <span>AI Engineering · Production LLMs</span>
     <span class="nav-tag">APR 2026</span>
+  
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><span class="theme-icon-moon" aria-hidden="true">&#9790;</span><span class="theme-icon-sun" aria-hidden="true">&#9728;</span></button>
   </div>
 </nav>
 
@@ -650,9 +708,9 @@
   </div>
 
   <!-- SECTION 1: WHAT IS AI SHRINKFLATION -->
-  <div class="section">
+  <div class="section" id="what-is-ai-shrinkflation">
     <div class="section-label">The Concept</div>
-    <h2>What Is AI Shrinkflation?</h2>
+    <h2><a class="anchor" href="#what-is-ai-shrinkflation">What Is AI Shrinkflation?</a></h2>
     <div class="prose">
       <p>
         Shrinkflation is a term borrowed from consumer goods: the practice of reducing product quantity or
@@ -707,9 +765,9 @@
   </div>
 
   <!-- SECTION 2: THE HARD NUMBERS -->
-  <div class="section">
+  <div class="section" id="what-quantified-regression-actually-looks-like">
     <div class="section-label">Case Study — Claude Code, Feb–Apr 2026</div>
-    <h2>What Quantified Regression Actually Looks Like</h2>
+    <h2><a class="anchor" href="#what-quantified-regression-actually-looks-like">What Quantified Regression Actually Looks Like</a></h2>
     <div class="prose">
       <p>
         AMD's Stella Laurenzo didn't file a complaint based on vibes. She used Claude Opus 4.6 itself to
@@ -815,9 +873,9 @@
   </div>
 
   <!-- SECTION 3: WHY IT'S SILENT -->
-  <div class="section">
+  <div class="section" id="why-quality-degrades-before-anyone-notices">
     <div class="section-label">The Detection Problem</div>
-    <h2>Why Quality Degrades Before Anyone Notices</h2>
+    <h2><a class="anchor" href="#why-quality-degrades-before-anyone-notices">Why Quality Degrades Before Anyone Notices</a></h2>
     <div class="prose">
       <p>
         AI shrinkflation is uniquely difficult to detect because the failure modes don't map to
@@ -871,9 +929,9 @@
   </div>
 
   <!-- SECTION 4: WHAT IT MEANS FOR AI ENGINEERS -->
-  <div class="section">
+  <div class="section" id="what-this-changes-about-your-job">
     <div class="section-label">For AI Engineers &amp; Developers</div>
-    <h2>What This Changes About Your Job</h2>
+    <h2><a class="anchor" href="#what-this-changes-about-your-job">What This Changes About Your Job</a></h2>
     <div class="prose">
       <p>
         If you're building production systems on LLMs, AI shrinkflation reframes the problem.
@@ -941,9 +999,9 @@
   </div>
 
   <!-- SECTION 5: ARCHITECTURE GUIDELINES -->
-  <div class="section">
+  <div class="section" id="how-to-architect-for-model-drift">
     <div class="section-label">Engineering Guidelines</div>
-    <h2>How to Architect for Model Drift</h2>
+    <h2><a class="anchor" href="#how-to-architect-for-model-drift">How to Architect for Model Drift</a></h2>
     <div class="prose">
       <p>
         The goal is not to eliminate LLM dependency — it is to make it a <em>swappable</em> dependency.
@@ -1096,9 +1154,9 @@ response = anthropic.messages.create(
   </div>
 
   <!-- SECTION 6: FUTURE ENGINEERING TEAM GUIDELINES -->
-  <div class="section">
+  <div class="section" id="the-production-llm-engineering-checklist">
     <div class="section-label">Guidelines for Future Teams</div>
-    <h2>The Production LLM Engineering Checklist</h2>
+    <h2><a class="anchor" href="#the-production-llm-engineering-checklist">The Production LLM Engineering Checklist</a></h2>
     <div class="prose">
       <p>
         This is the minimum bar for any team running LLMs in a production system where quality matters.
@@ -1167,9 +1225,9 @@ response = anthropic.messages.create(
   </div>
 
   <!-- SECTION 7: TAKEAWAY -->
-  <div class="section">
+  <div class="section" id="the-model-is-a-dependency-treat-it-like-one">
     <div class="section-label">Bottom Line</div>
-    <h2>The Model Is a Dependency. Treat It Like One.</h2>
+    <h2><a class="anchor" href="#the-model-is-a-dependency-treat-it-like-one">The Model Is a Dependency. Treat It Like One.</a></h2>
     <div class="prose">
       <p>
         "AI shrinkflation" is not a meme or a conspiracy theory. It is a structural consequence of how
@@ -1215,6 +1273,21 @@ response = anthropic.messages.create(
     <a href="https://fortune.com/2025/08/12/openai-gpt-5-model-router-backlash-ai-future/" target="_blank" rel="noopener">Fortune: GPT-5 Router</a>
   </div>
 </footer>
+
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
 
 </body>
 </html>

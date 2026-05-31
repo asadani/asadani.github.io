@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DeepSeek V4: The Complaints Are Valid. The Leap Is Real.</title>
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -35,7 +45,53 @@
     --serif:        'Newsreader', Georgia, serif;
     --sans:         'Inter', system-ui, sans-serif;
     --mono:         'JetBrains Mono', 'Courier New', monospace;
+      --code-bg:      #1A1714;
+    --shadow:       rgba(200,92,45,0.08);
+    color-scheme: light;
+}
+
+  /* ─── DARK MODE (unified-theme migration) ─────────────── */
+  [data-theme="dark"] {
+    --bg:           #14110D;
+    --bg-alt:       #1E1A14;
+    --surface:      #1A1611;
+    --surface-tint: #211C16;
+    --border:       #332C24;
+    --border-light: #2A241D;
+    --text:         #F2EEE7;
+    --text-body:    #D8D2C8;
+    --text-muted:   #A39C90;
+    --text-subtle:  #7A7468;
+    --accent:       #E8895D;
+    --accent-light: #F0A079;
+    --accent-bg:    #2C1E14;
+    --accent-border:#5A3826;
+    --green:        #5FD699;
+    --green-bg:     #14241B;
+    --green-border: #2E5640;
+    --blue:         #6FB0F0;
+    --blue-bg:      #142233;
+    --blue-border:  #2C4A6E;
+    --red:          #F08585;
+    --red-bg:       #2E1717;
+    --red-border:   #663434;
+    --code-bg:      #0E0B08;
+    --shadow:       rgba(0,0,0,0.45);
+    color-scheme: dark;
   }
+  /* theme toggle button (shows moon in light, sun in dark) */
+  .theme-toggle { background:none; border:1px solid var(--border); border-radius:6px; width:30px; height:30px; flex-shrink:0; cursor:pointer; color:var(--text-muted); font-family:var(--sans); font-size:14px; line-height:1; display:inline-flex; align-items:center; justify-content:center; transition:color .15s,border-color .15s; }
+  .theme-toggle:hover { color:var(--accent); border-color:var(--accent-border); }
+  .theme-icon-sun { display:none; }
+  [data-theme="dark"] .theme-icon-sun { display:inline; }
+  [data-theme="dark"] .theme-icon-moon { display:none; }
+  /* links + self-linking section anchors */
+  .prose a { color:var(--accent); text-decoration:underline; text-underline-offset:2px; }
+  .prose a:hover { color:var(--accent-light); }
+  .section { scroll-margin-top: 72px; }
+  .section h2 a.anchor { color:inherit; text-decoration:none; position:relative; }
+  .section h2 a.anchor:hover::before { content:'#'; position:absolute; left:-22px; color:var(--accent); font-weight:400; }
+
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -321,7 +377,7 @@
 
   /* ─── CODE BLOCK ──────────────────────────────────────── */
   .code-block {
-    background: var(--text);
+    background: var(--code-bg);
     border-radius: 7px;
     overflow: hidden;
     margin: 20px 0;
@@ -528,6 +584,8 @@
   <div class="nav-right">
     <span>Model Analysis</span>
     <span class="nav-tag">APR 2026</span>
+  
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><span class="theme-icon-moon" aria-hidden="true">&#9790;</span><span class="theme-icon-sun" aria-hidden="true">&#9728;</span></button>
   </div>
 </nav>
 
@@ -571,9 +629,9 @@
   </div>
 
   <!-- SECTION 1: THE DISAPPOINTMENT -->
-  <div class="section">
+  <div class="section" id="what-the-critics-got-right">
     <div class="section-label">Honest Assessment</div>
-    <h2>What the Critics Got Right</h2>
+    <h2><a class="anchor" href="#what-the-critics-got-right">What the Critics Got Right</a></h2>
     <div class="prose">
       <p>The criticism isn't just deflated hype. Several gaps are specific and well-founded — the kind that don't get better with more benchmark slides.</p>
     </div>
@@ -603,9 +661,9 @@
   </div>
 
   <!-- SECTION: THE ENGRAM MYSTERY -->
-  <div class="section">
+  <div class="section" id="engram-the-research-that-didn-t-make-it-in">
     <div class="section-label">The Missing Paper</div>
-    <h2>Engram: The Research That Didn't Make It In</h2>
+    <h2><a class="anchor" href="#engram-the-research-that-didn-t-make-it-in">Engram: The Research That Didn't Make It In</a></h2>
     <div class="prose">
       <p>In January 2026 — three months before V4's release — DeepSeek and Peking University published <em>Conditional Memory via Scalable Lookup: A New Axis of Sparsity for Large Language Models</em>, introducing a module called <strong>Engram</strong>. The community immediately read it as V4's secret sauce. The V4 technical report makes no mention of Engram whatsoever.</p>
       <p>That absence is worth unpacking.</p>
@@ -705,9 +763,9 @@
   </div>
 
   <!-- SECTION 2: BENCHMARK SKEPTICISM -->
-  <div class="section">
+  <div class="section" id="why-the-numbers-deserve-skepticism">
     <div class="section-label">Benchmark Hygiene</div>
-    <h2>Why the Numbers Deserve Skepticism</h2>
+    <h2><a class="anchor" href="#why-the-numbers-deserve-skepticism">Why the Numbers Deserve Skepticism</a></h2>
     <div class="prose">
       <p>The AI benchmark ecosystem has a saturation problem. HumanEval — the de facto coding eval for years — now clusters every frontier model between 88–92%. At that level, the differences are within noise, and the comparisons become marketing rather than measurement.</p>
       <p>DeepSeek's benchmark comparisons are curated. They foreground wins (coding, agentic, long context) and omit losses (SimpleQA, MMLU-Pro, factual recall). That's not deception — every lab does this — but reading the headline numbers without the full table gives you a distorted picture.</p>
@@ -721,9 +779,9 @@
   </div>
 
   <!-- SECTION 3: THE REAL LEAP -->
-  <div class="section">
+  <div class="section" id="why-the-kv-cache-numbers-change-everything">
     <div class="section-label">Architecture — The Actual Story</div>
-    <h2>Why the KV Cache Numbers Change Everything</h2>
+    <h2><a class="anchor" href="#why-the-kv-cache-numbers-change-everything">Why the KV Cache Numbers Change Everything</a></h2>
     <div class="prose">
       <p>V4's genuine breakthrough isn't in a benchmark cell. It's in how the model computes attention at long contexts — and what that does to the cost of serving it.</p>
       <p>Traditional transformer attention scales quadratically with context length. At 1M tokens, the KV cache becomes the bottleneck: it grows so large that you either run one user at a time or you can't serve the context at all. This is why "1M context" in most models is a theoretical claim, not a practical one.</p>
@@ -776,9 +834,9 @@ Real-world impact: V3.2 → 4 concurrent requests
   </div>
 
   <!-- SECTION 4: WHERE V4 ACTUALLY WINS -->
-  <div class="section">
+  <div class="section" id="where-v4-leads-where-it-doesn-t">
     <div class="section-label">Performance — The Honest Picture</div>
-    <h2>Where V4 Leads, Where It Doesn't</h2>
+    <h2><a class="anchor" href="#where-v4-leads-where-it-doesn-t">Where V4 Leads, Where It Doesn't</a></h2>
     <div class="prose">
       <p>With the benchmark hygiene caveat applied, here's the honest performance picture. V4 dominates on coding and agentic evals — the categories where the evals are hardest to game. It trails on general knowledge and factual recall, where Gemini is the clear leader.</p>
     </div>
@@ -862,9 +920,9 @@ Real-world impact: V3.2 → 4 concurrent requests
   </div>
 
   <!-- SECTION: COST REALITY CHECK -->
-  <div class="section">
+  <div class="section" id="how-the-economics-stack-up">
     <div class="section-label">Cost Reality Check</div>
-    <h2>How the Economics Stack Up</h2>
+    <h2><a class="anchor" href="#how-the-economics-stack-up">How the Economics Stack Up</a></h2>
     <div class="prose">
       <p>At $1.74 per million input tokens, V4-Pro costs roughly 35% of Claude Opus 4.6's standard rate and less than half of Gemini 2.5 Pro's output cost. For output tokens — where most of the billing accrues in agentic workloads — the gap is even starker: Opus charges $25 per million output tokens versus V4's $3.48, a 7× difference.</p>
     </div>
@@ -926,9 +984,9 @@ Real-world impact: V3.2 → 4 concurrent requests
   </div>
 
   <!-- SECTION 5: AGENT-FIRST DESIGN -->
-  <div class="section">
+  <div class="section" id="the-agent-first-design-is-a-real-bet">
     <div class="section-label">Strategic Positioning</div>
-    <h2>The Agent-First Design Is a Real Bet</h2>
+    <h2><a class="anchor" href="#the-agent-first-design-is-a-real-bet">The Agent-First Design Is a Real Bet</a></h2>
     <div class="prose">
       <p>V4 is the first open model that was explicitly designed for agentic workflows from the architecture level up — not retrofitted with an agent wrapper afterward. The 1M context default, the hybrid attention that makes that context cheap to serve, the native integration with Claude Code and OpenClaw, the built-in thinking modes: these are coherent choices, not a feature checklist.</p>
       <p>The <strong>Think / Think-High / Think-Max</strong> triad gives developers explicit control over reasoning depth at inference time. Non-Think mode returns fast results for routine tasks; Think-Max enables extended chain-of-thought for problems at the model's reasoning boundary (requiring at least a 384K token context window). That's a practical API design, not a marketing tier.</p>
@@ -960,9 +1018,9 @@ Real-world impact: V3.2 → 4 concurrent requests
   </div>
 
   <!-- SECTION 6: OPEN SOURCE HARDWARE IMPLICATIONS -->
-  <div class="section">
+  <div class="section" id="open-weight-hardware-sovereignty">
     <div class="section-label">Broader Implications</div>
-    <h2>Open Weight + Hardware Sovereignty</h2>
+    <h2><a class="anchor" href="#open-weight-hardware-sovereignty">Open Weight + Hardware Sovereignty</a></h2>
     <div class="prose">
       <p>The geopolitical subtext of V4 is impossible to ignore. Huawei confirmed its Ascend AI processors can run V4 natively — and Beijing has been actively pushing Chinese companies toward domestic chips to reduce Nvidia dependence. A model this capable, running on domestically-produced hardware, changes the calculus around AI sovereignty.</p>
       <p>For the global open-source ecosystem, the implications are different but also significant. V4 with an MIT license means it can be fine-tuned, distilled, and deployed without restriction. The gap between "open" and "closed" keeps narrowing: V4 beats Opus on LiveCodeBench, matches it on SWE-Verified, and does so with a weight file anyone can download.</p>
@@ -977,9 +1035,9 @@ Real-world impact: V3.2 → 4 concurrent requests
   </div>
 
   <!-- CLOSING -->
-  <div class="section">
+  <div class="section" id="who-should-care-and-why">
     <div class="section-label">Bottom Line</div>
-    <h2>Who Should Care and Why</h2>
+    <h2><a class="anchor" href="#who-should-care-and-why">Who Should Care and Why</a></h2>
     <div class="prose">
       <p>If you were building a multimodal application or hoping to run a local LLM on a gaming rig, V4 is not your answer — and your disappointment is legitimate. DeepSeek made a choice to go deep on coding and agentic efficiency rather than broad on modalities and accessibility. That's a valid strategy, but they should have communicated it instead of letting expectations run ahead.</p>
       <p>If you're deploying coding agents or long-context document pipelines at scale, V4 is the most interesting infrastructure development in months. Not because of benchmark numbers, but because the KV cache math changes what's economically feasible. Going from 4 to 40 concurrent users on the same hardware isn't a talking point — it's the difference between a pilot and a production deployment.</p>
@@ -988,9 +1046,9 @@ Real-world impact: V3.2 → 4 concurrent requests
   </div>
 
   <!-- MIGRATION CODE -->
-  <div class="section">
+  <div class="section" id="migrating-to-v4">
     <div class="section-label">Practical</div>
-    <h2>Migrating to V4</h2>
+    <h2><a class="anchor" href="#migrating-to-v4">Migrating to V4</a></h2>
     <div class="prose">
       <p>The API is a model-name swap with one new parameter for thinking mode control. If you're using the OpenAI-compatible endpoint, the change is minimal.</p>
     </div>
@@ -1036,6 +1094,21 @@ response = client.chat.completions.create(
     <a href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro">DeepSeek-V4-Pro on HuggingFace</a>
   </div>
 </footer>
+
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
 
 </body>
 </html>

@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contextual Retrieval, Honestly — Real Gains, Real Costs, Real Blind Spots</title>
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
 <meta name="description" content="A grounded read on Anthropic's contextual retrieval: a solid evolution of contextualized embeddings, hybrid search, and reranking — not magic. Real gains, real preprocessing costs, and real limits around long-horizon reasoning and governance.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,7 +46,53 @@
     --serif:        'Newsreader', Georgia, serif;
     --sans:         'Inter', system-ui, sans-serif;
     --mono:         'JetBrains Mono', 'Courier New', monospace;
+      --code-bg:      #1A1714;
+    --shadow:       rgba(200,92,45,0.08);
+    color-scheme: light;
+}
+
+  /* ─── DARK MODE (unified-theme migration) ─────────────── */
+  [data-theme="dark"] {
+    --bg:           #14110D;
+    --bg-alt:       #1E1A14;
+    --surface:      #1A1611;
+    --surface-tint: #211C16;
+    --border:       #332C24;
+    --border-light: #2A241D;
+    --text:         #F2EEE7;
+    --text-body:    #D8D2C8;
+    --text-muted:   #A39C90;
+    --text-subtle:  #7A7468;
+    --accent:       #E8895D;
+    --accent-light: #F0A079;
+    --accent-bg:    #2C1E14;
+    --accent-border:#5A3826;
+    --green:        #5FD699;
+    --green-bg:     #14241B;
+    --green-border: #2E5640;
+    --blue:         #6FB0F0;
+    --blue-bg:      #142233;
+    --blue-border:  #2C4A6E;
+    --red:          #F08585;
+    --red-bg:       #2E1717;
+    --red-border:   #663434;
+    --code-bg:      #0E0B08;
+    --shadow:       rgba(0,0,0,0.45);
+    color-scheme: dark;
   }
+  /* theme toggle button (shows moon in light, sun in dark) */
+  .theme-toggle { background:none; border:1px solid var(--border); border-radius:6px; width:30px; height:30px; flex-shrink:0; cursor:pointer; color:var(--text-muted); font-family:var(--sans); font-size:14px; line-height:1; display:inline-flex; align-items:center; justify-content:center; transition:color .15s,border-color .15s; }
+  .theme-toggle:hover { color:var(--accent); border-color:var(--accent-border); }
+  .theme-icon-sun { display:none; }
+  [data-theme="dark"] .theme-icon-sun { display:inline; }
+  [data-theme="dark"] .theme-icon-moon { display:none; }
+  /* links + self-linking section anchors */
+  .prose a { color:var(--accent); text-decoration:underline; text-underline-offset:2px; }
+  .prose a:hover { color:var(--accent-light); }
+  .section { scroll-margin-top: 72px; }
+  .section h2 a.anchor { color:inherit; text-decoration:none; position:relative; }
+  .section h2 a.anchor:hover::before { content:'#'; position:absolute; left:-22px; color:var(--accent); font-weight:400; }
+
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -331,7 +387,7 @@
 
   /* ─── CODE BLOCK ──────────────────────────────────────── */
   .code-block {
-    background: var(--text);
+    background: var(--code-bg);
     border-radius: 7px;
     overflow: hidden;
     margin: 20px 0;
@@ -479,6 +535,8 @@
   <div class="nav-right">
     <span>Contextual Retrieval</span>
     <span class="nav-tag">MAY 2026</span>
+  
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><span class="theme-icon-moon" aria-hidden="true">&#9790;</span><span class="theme-icon-sun" aria-hidden="true">&#9728;</span></button>
   </div>
 </nav>
 
@@ -532,7 +590,7 @@
   <!-- ─── SECTION 1: WHAT IT IS ─── -->
   <div class="section" id="what-it-is">
     <div class="section-label">01 / The Method</div>
-    <h2>What contextual retrieval actually is</h2>
+    <h2><a class="anchor" href="#what-it-is">What contextual retrieval actually is</a></h2>
     <div class="prose">
       <p>Stripped of marketing, the recipe has four moving parts. Three are common knowledge in the RAG community. The fourth is where Anthropic adds something distinctive.</p>
     </div>
@@ -574,7 +632,7 @@ top_k    = reranker.<span class="tok-acc">rerank</span>(query, fused, k=<span cl
   <!-- ─── SECTION 2: PRIOR ART ─── -->
   <div class="section" id="prior-art">
     <div class="section-label">02 / Prior Art</div>
-    <h2>None of the parts are new</h2>
+    <h2><a class="anchor" href="#prior-art">None of the parts are new</a></h2>
     <div class="prose">
       <p>If you already run hybrid retrieval with LLM-augmented chunks, you have most of this. Anthropic&rsquo;s contribution is taking three known ideas, prescribing a specific composition, and pricing it down. That is genuinely useful &mdash; but it is packaging, not invention.</p>
     </div>
@@ -611,7 +669,7 @@ top_k    = reranker.<span class="tok-acc">rerank</span>(query, fused, k=<span cl
   <!-- ─── SECTION 3: WHAT'S REAL ─── -->
   <div class="section" id="real-gains">
     <div class="section-label">03 / Real Gains</div>
-    <h2>What the numbers actually say</h2>
+    <h2><a class="anchor" href="#real-gains">What the numbers actually say</a></h2>
     <div class="prose">
       <p>The benchmark numbers are real but narrow. They come from Anthropic&rsquo;s internal evals with Anthropic&rsquo;s definitions of &ldquo;failure.&rdquo; Read them as evidence of strong relative lift on document-style corpora, not as a generic ranking improvement that ports to every workload.</p>
     </div>
@@ -661,7 +719,7 @@ top_k    = reranker.<span class="tok-acc">rerank</span>(query, fused, k=<span cl
   <!-- ─── SECTION 4: BLIND SPOTS ─── -->
   <div class="section" id="blind-spots">
     <div class="section-label">04 / Blind Spots</div>
-    <h2>What it doesn&rsquo;t fix</h2>
+    <h2><a class="anchor" href="#blind-spots">What it doesn&rsquo;t fix</a></h2>
     <div class="prose">
       <p>The marketing framing flattens trade-offs that are still very much present. Five worth naming explicitly.</p>
     </div>
@@ -713,7 +771,7 @@ top_k    = reranker.<span class="tok-acc">rerank</span>(query, fused, k=<span cl
   <!-- ─── SECTION 5: TRADE-OFFS ─── -->
   <div class="section" id="tradeoffs">
     <div class="section-label">05 / Engineering Trade-offs</div>
-    <h2>What you sign up for if you adopt it</h2>
+    <h2><a class="anchor" href="#tradeoffs">What you sign up for if you adopt it</a></h2>
     <div class="prose">
       <p>Four trade-offs are load-bearing once you go beyond a demo. None are dealbreakers; all of them deserve explicit budget.</p>
     </div>
@@ -786,7 +844,7 @@ top_k    = reranker.<span class="tok-acc">rerank</span>(query, fused, k=<span cl
   <!-- ─── SECTION 6: PRIORITIZATION ─── -->
   <div class="section" id="priorities">
     <div class="section-label">06 / The Priority Question</div>
-    <h2>Where it ranks against the alternatives</h2>
+    <h2><a class="anchor" href="#priorities">Where it ranks against the alternatives</a></h2>
     <div class="prose">
       <p>If you&rsquo;re refactoring a RAG stack today, the honest order of priority looks like this. Contextual retrieval is in there &mdash; but it is not first.</p>
     </div>
@@ -809,7 +867,7 @@ top_k    = reranker.<span class="tok-acc">rerank</span>(query, fused, k=<span cl
   <!-- ─── CLOSING ─── -->
   <div class="section" id="closing">
     <div class="section-label">07 / Bottom Line</div>
-    <h2>If you only remember three things</h2>
+    <h2><a class="anchor" href="#closing">If you only remember three things</a></h2>
     <ul class="dl">
       <li><div>Contextual retrieval is <strong>good packaging of known parts</strong>: contextualized embeddings + hybrid search + rerank, made cheap by prompt caching. The packaging is real value; it is not a research breakthrough.</div></li>
       <li><div>The reported gains are <strong>real but bounded</strong>. Up to ~67% fewer failed retrievals on Anthropic&rsquo;s evals. Your corpus, query distribution, and evaluation method decide whether you see anywhere near that.</div></li>
@@ -826,6 +884,21 @@ top_k    = reranker.<span class="tok-acc">rerank</span>(query, fused, k=<span cl
     <a href="/">&larr; back to index</a>
   </div>
 </footer>
+
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
 
 </body>
 </html>

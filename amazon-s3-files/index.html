@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Amazon S3 Files: Breaking the Object-File Barrier</title>
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -34,7 +44,53 @@
     --serif:        'Newsreader', Georgia, serif;
     --sans:         'Inter', system-ui, sans-serif;
     --mono:         'JetBrains Mono', 'Courier New', monospace;
+      --code-bg:      #1A1714;
+    --shadow:       rgba(200,92,45,0.08);
+    color-scheme: light;
+}
+
+  /* ─── DARK MODE (unified-theme migration) ─────────────── */
+  [data-theme="dark"] {
+    --bg:           #14110D;
+    --bg-alt:       #1E1A14;
+    --surface:      #1A1611;
+    --surface-tint: #211C16;
+    --border:       #332C24;
+    --border-light: #2A241D;
+    --text:         #F2EEE7;
+    --text-body:    #D8D2C8;
+    --text-muted:   #A39C90;
+    --text-subtle:  #7A7468;
+    --accent:       #E8895D;
+    --accent-light: #F0A079;
+    --accent-bg:    #2C1E14;
+    --accent-border:#5A3826;
+    --green:        #5FD699;
+    --green-bg:     #14241B;
+    --green-border: #2E5640;
+    --blue:         #6FB0F0;
+    --blue-bg:      #142233;
+    --blue-border:  #2C4A6E;
+    --red:          #F08585;
+    --red-bg:       #2E1717;
+    --red-border:   #663434;
+    --code-bg:      #0E0B08;
+    --shadow:       rgba(0,0,0,0.45);
+    color-scheme: dark;
   }
+  /* theme toggle button (shows moon in light, sun in dark) */
+  .theme-toggle { background:none; border:1px solid var(--border); border-radius:6px; width:30px; height:30px; flex-shrink:0; cursor:pointer; color:var(--text-muted); font-family:var(--sans); font-size:14px; line-height:1; display:inline-flex; align-items:center; justify-content:center; transition:color .15s,border-color .15s; }
+  .theme-toggle:hover { color:var(--accent); border-color:var(--accent-border); }
+  .theme-icon-sun { display:none; }
+  [data-theme="dark"] .theme-icon-sun { display:inline; }
+  [data-theme="dark"] .theme-icon-moon { display:none; }
+  /* links + self-linking section anchors */
+  .prose a { color:var(--accent); text-decoration:underline; text-underline-offset:2px; }
+  .prose a:hover { color:var(--accent-light); }
+  .section { scroll-margin-top: 72px; }
+  .section h2 a.anchor { color:inherit; text-decoration:none; position:relative; }
+  .section h2 a.anchor:hover::before { content:'#'; position:absolute; left:-22px; color:var(--accent); font-weight:400; }
+
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -236,7 +292,7 @@
     box-shadow: 0 2px 12px rgba(0,0,0,0.06);
   }
   .estimator-head {
-    background: var(--text);
+    background: var(--code-bg);
     padding: 18px 28px;
     display: flex;
     align-items: center;
@@ -505,7 +561,7 @@
 
   /* ─── ARCH DIAGRAM ────────────────────────────────────── */
   .arch {
-    background: var(--text);
+    background: var(--code-bg);
     border-radius: 8px;
     padding: 28px;
     margin: 24px 0;
@@ -703,6 +759,8 @@
   <div class="nav-right">
     <span>AWS Deep Dive</span>
     <span class="nav-tag">NEW · APR 7 2026</span>
+  
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><span class="theme-icon-moon" aria-hidden="true">&#9790;</span><span class="theme-icon-sun" aria-hidden="true">&#9728;</span></button>
   </div>
 </nav>
 
@@ -751,9 +809,9 @@
   </div>
 
   <!-- ─── SECTION: ESTIMATOR (NEAR TOP) ─────────────────── -->
-  <div class="section">
+  <div class="section" id="cost-estimator-mdash-s3-vs-efs-vs-s3-files">
     <div class="section-label">Interactive Tool</div>
-    <h2>Cost Estimator &mdash; S3 vs EFS vs S3 Files</h2>
+    <h2><a class="anchor" href="#cost-estimator-mdash-s3-vs-efs-vs-s3-files">Cost Estimator &mdash; S3 vs EFS vs S3 Files</a></h2>
     <p class="prose" style="margin-bottom:0;">
       Adjust the sliders to match your workload. Costs update instantly and the lowest-cost option is highlighted automatically.
     </p>
@@ -856,9 +914,9 @@
   </div>
 
   <!-- ─── SECTION: ARCHITECTURE SHIFT ───────────────────── -->
-  <div class="section">
+  <div class="section" id="the-unified-storage-layer">
     <div class="section-label">Architecture</div>
-    <h2>The Unified Storage Layer</h2>
+    <h2><a class="anchor" href="#the-unified-storage-layer">The Unified Storage Layer</a></h2>
 
     <div class="prose">
       <p>
@@ -915,9 +973,9 @@
   </div>
 
   <!-- ─── SECTION: USE CASES ────────────────────────────── -->
-  <div class="section">
+  <div class="section" id="who-benefits-most">
     <div class="section-label">Use Cases</div>
-    <h2>Who Benefits Most</h2>
+    <h2><a class="anchor" href="#who-benefits-most">Who Benefits Most</a></h2>
 
     <div class="cards-grid">
       <div class="card">
@@ -964,9 +1022,9 @@
   </div>
 
   <!-- ─── SECTION: TECHNICAL DETAIL ────────────────────── -->
-  <div class="section">
+  <div class="section" id="how-it-works-under-the-hood">
     <div class="section-label">Technical Deep-Dive</div>
-    <h2>How It Works Under the Hood</h2>
+    <h2><a class="anchor" href="#how-it-works-under-the-hood">How It Works Under the Hood</a></h2>
 
     <ul class="dl">
       <li><div><strong>Protocol: NFSv4.1</strong> — not v3 or v4.0. v4.1 provides compound operations, better caching semantics, and pNFS support for parallel file access across multiple servers.</div></li>
@@ -981,9 +1039,9 @@
   </div>
 
   <!-- ─── SECTION: PRICING ──────────────────────────────── -->
-  <div class="section">
+  <div class="section" id="understanding-the-cost-model">
     <div class="section-label">Pricing</div>
-    <h2>Understanding the Cost Model</h2>
+    <h2><a class="anchor" href="#understanding-the-cost-model">Understanding the Cost Model</a></h2>
 
     <div class="prose">
       <p>
@@ -1052,9 +1110,9 @@
   </div>
 
   <!-- ─── SECTION: COMPARISON TABLE ────────────────────── -->
-  <div class="section">
+  <div class="section" id="s3-vs-efs-vs-s3-files">
     <div class="section-label">Comparison</div>
-    <h2>S3 vs. EFS vs. S3 Files</h2>
+    <h2><a class="anchor" href="#s3-vs-efs-vs-s3-files">S3 vs. EFS vs. S3 Files</a></h2>
 
     <div class="cmp-table">
       <table>
@@ -1133,9 +1191,9 @@
   </div>
 
   <!-- ─── SECTION: TRADE-OFFS ───────────────────────────── -->
-  <div class="section">
+  <div class="section" id="honest-pros-amp-cons">
     <div class="section-label">Trade-offs</div>
-    <h2>Honest Pros &amp; Cons</h2>
+    <h2><a class="anchor" href="#honest-pros-amp-cons">Honest Pros &amp; Cons</a></h2>
 
     <div class="to-grid">
       <div class="to-card pro">
@@ -1288,6 +1346,21 @@
 
   document.querySelectorAll('input[type="range"]').forEach(el => el.addEventListener('input', recalc));
   recalc();
+</script>
+
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
 </script>
 
 </body>

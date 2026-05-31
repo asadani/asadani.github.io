@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Google Is Quietly Changing What "Flash" Means — Gemini 3.5 Flash</title>
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
 <meta name="description" content="Gemini 3.5 Flash beats Gemini 3.1 Pro on agentic and coding benchmarks, ships straight to GA, and triples the per-token cost of 3 Flash. An opinionated read on what Google's first agent-first model actually means for builders.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,7 +46,53 @@
     --serif:        'Newsreader', Georgia, serif;
     --sans:         'Inter', system-ui, sans-serif;
     --mono:         'JetBrains Mono', 'Courier New', monospace;
+      --code-bg:      #1A1714;
+    --shadow:       rgba(200,92,45,0.08);
+    color-scheme: light;
+}
+
+  /* ─── DARK MODE (unified-theme migration) ─────────────── */
+  [data-theme="dark"] {
+    --bg:           #14110D;
+    --bg-alt:       #1E1A14;
+    --surface:      #1A1611;
+    --surface-tint: #211C16;
+    --border:       #332C24;
+    --border-light: #2A241D;
+    --text:         #F2EEE7;
+    --text-body:    #D8D2C8;
+    --text-muted:   #A39C90;
+    --text-subtle:  #7A7468;
+    --accent:       #E8895D;
+    --accent-light: #F0A079;
+    --accent-bg:    #2C1E14;
+    --accent-border:#5A3826;
+    --green:        #5FD699;
+    --green-bg:     #14241B;
+    --green-border: #2E5640;
+    --blue:         #6FB0F0;
+    --blue-bg:      #142233;
+    --blue-border:  #2C4A6E;
+    --red:          #F08585;
+    --red-bg:       #2E1717;
+    --red-border:   #663434;
+    --code-bg:      #0E0B08;
+    --shadow:       rgba(0,0,0,0.45);
+    color-scheme: dark;
   }
+  /* theme toggle button (shows moon in light, sun in dark) */
+  .theme-toggle { background:none; border:1px solid var(--border); border-radius:6px; width:30px; height:30px; flex-shrink:0; cursor:pointer; color:var(--text-muted); font-family:var(--sans); font-size:14px; line-height:1; display:inline-flex; align-items:center; justify-content:center; transition:color .15s,border-color .15s; }
+  .theme-toggle:hover { color:var(--accent); border-color:var(--accent-border); }
+  .theme-icon-sun { display:none; }
+  [data-theme="dark"] .theme-icon-sun { display:inline; }
+  [data-theme="dark"] .theme-icon-moon { display:none; }
+  /* links + self-linking section anchors */
+  .prose a { color:var(--accent); text-decoration:underline; text-underline-offset:2px; }
+  .prose a:hover { color:var(--accent-light); }
+  .section { scroll-margin-top: 72px; }
+  .section h2 a.anchor { color:inherit; text-decoration:none; position:relative; }
+  .section h2 a.anchor:hover::before { content:'#'; position:absolute; left:-22px; color:var(--accent); font-weight:400; }
+
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -339,7 +395,7 @@
 
   /* ─── CODE BLOCK ──────────────────────────────────────── */
   .code-block {
-    background: var(--text);
+    background: var(--code-bg);
     border-radius: 7px;
     overflow: hidden;
     margin: 20px 0;
@@ -584,6 +640,8 @@
   <div class="nav-right">
     <span>Models &amp; Roadmap</span>
     <span class="nav-tag">MAY 2026</span>
+  
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><span class="theme-icon-moon" aria-hidden="true">&#9790;</span><span class="theme-icon-sun" aria-hidden="true">&#9728;</span></button>
   </div>
 </nav>
 
@@ -650,7 +708,7 @@
   <!-- SECTION 1 -->
   <div class="section" id="headline">
     <div class="section-label">01 / The Headline</div>
-    <h2>What 3.5 Flash actually is</h2>
+    <h2><a class="anchor" href="#headline">What 3.5 Flash actually is</a></h2>
     <div class="prose">
       <p>Gemini 3.5 Flash is the first model in the 3.5 family, and Google has not been subtle about the framing. It is positioned as "frontier intelligence with action" — in practice, the strongest agentic and coding model Google has shipped, at output speeds <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-5/">around 4× other frontier-class models</a>. It is already the default in the Gemini app and in AI Mode in Search, and it is the engine behind Antigravity, the Gemini Enterprise Agent Platform, and the upcoming personal agent ("Gemini Spark").</p>
       <p>Two things make this release a real reset rather than a routine point update. First, the model card and independent measurements both show Flash <em>beating</em> the previous-generation Pro on the benchmarks that map to real builder workflows — Terminal-Bench 2.1, MCP Atlas, OSWorld-Verified, GDPval-AA, SWE-Bench Pro. Second, every product announcement around it talks about agents and long-horizon workflows, not chatbots. Google's own demos pitch 3.5 Flash as something that can refactor an entire legacy codebase to Next.js or stand up an OS inside Antigravity, with sub-agents fanning out underneath it.</p>
@@ -661,7 +719,7 @@
   <!-- SECTION 2 -->
   <div class="section" id="surprise">
     <div class="section-label">02 / Surprise</div>
-    <h2>Four things that are genuinely new</h2>
+    <h2><a class="anchor" href="#surprise">Four things that are genuinely new</a></h2>
     <div class="prose">
       <p>Strip out the marketing and there are four substantive shifts in this release.</p>
     </div>
@@ -697,7 +755,7 @@
   <!-- SECTION 3 -->
   <div class="section" id="benchmarks">
     <div class="section-label">03 / Benchmarks</div>
-    <h2>Where 3.5 Flash actually wins</h2>
+    <h2><a class="anchor" href="#benchmarks">Where 3.5 Flash actually wins</a></h2>
     <div class="prose">
       <p>The headline numbers are clustered in agentic and tool-use evals. Pulling the four most-cited rows together makes the pattern obvious: 3.5 Flash beats 3 Flash by a large margin, and it beats 3.1 Pro by a smaller but consistent one on these axes.</p>
     </div>
@@ -772,7 +830,7 @@
   <!-- SECTION 4 -->
   <div class="section" id="the-good">
     <div class="section-label">04 / The Good</div>
-    <h2>Where 3.5 Flash genuinely shines</h2>
+    <h2><a class="anchor" href="#the-good">Where 3.5 Flash genuinely shines</a></h2>
 
     <h3>Coding and dev workflows are the obvious sweet spot</h3>
     <div class="prose">
@@ -795,7 +853,7 @@
   <!-- SECTION 5 -->
   <div class="section" id="the-bad">
     <div class="section-label">05 / The Bad</div>
-    <h2>"Buyer beware" — four trade-offs that matter</h2>
+    <h2><a class="anchor" href="#the-bad">"Buyer beware" — four trade-offs that matter</a></h2>
 
     <h3>Cost: Flash in name, not in price</h3>
     <div class="prose">
@@ -836,7 +894,7 @@
   <!-- SECTION 6 -->
   <div class="section" id="deprecations">
     <div class="section-label">06 / Deprecations</div>
-    <h2>The 2.5 line is on a clock</h2>
+    <h2><a class="anchor" href="#deprecations">The 2.5 line is on a clock</a></h2>
     <div class="prose">
       <p>The 3.5 Flash launch is paired with explicit deprecation timelines in the Gemini API docs and a parallel notice for Vertex AI. The earliest shutdown date for the 2.5 family is <strong>October 16, 2026</strong>, with at least six months of notice once the Gemini 3 migration path is fully GA.</p>
     </div>
@@ -894,7 +952,7 @@
   <!-- SECTION 7 -->
   <div class="section" id="roadmap">
     <div class="section-label">07 / Roadmap</div>
-    <h2>What 3.5 Pro and 3.5 Lite are likely to be</h2>
+    <h2><a class="anchor" href="#roadmap">What 3.5 Pro and 3.5 Lite are likely to be</a></h2>
     <div class="prose">
       <p>Google has said the 3.5 family will fill out — Pro is being used internally and is the next public drop, and there is no 3.5 Lite model card yet. We can say plausible things about each without inventing numbers.</p>
     </div>
@@ -938,7 +996,7 @@
   <!-- SECTION 8 -->
   <div class="section" id="live-vs-long-running">
     <div class="section-label">08 / Live vs Long-Running</div>
-    <h2>From streaming chat to multi-hour sessions</h2>
+    <h2><a class="anchor" href="#live-vs-long-running">From streaming chat to multi-hour sessions</a></h2>
     <div class="prose">
       <p>One underdiscussed shift between 2.5 and 3.5: Google has effectively split "live" into two product lines. The streaming, voice-and-video <code class="inline">flash-live</code> endpoints are being routed to <code class="inline">gemini-3.1-flash-live-preview</code> — that remains an explicitly low-latency, conversational mode. Separately, 3.5 Flash is designed for <strong>multi-hour autonomous sessions</strong>, with pauses for human confirmation at decision points, and is positioned as the core engine for Antigravity-style harnesses and the Gemini Enterprise Agent Platform.</p>
       <p>In 2.5, long-running and live felt like preview features grafted onto a chat model. In 3.5, the long-running case is a first-class product surface — that is the actual productization step here, not just "we added streaming."</p>
@@ -948,7 +1006,7 @@
   <!-- SECTION 9 -->
   <div class="section" id="counterpoint">
     <div class="section-label">09 / Counterpoint</div>
-    <h2>Not everyone wants an agent — and that's okay</h2>
+    <h2><a class="anchor" href="#counterpoint">Not everyone wants an agent — and that's okay</a></h2>
     <div class="prose">
       <p>The honest version of this story is that "agent &gt; chat" is not obviously true for everyone. A large share of real workloads are still fundamentally single-pass: RAG-style Q&amp;A over docs, customer support, simple summarization, unit tests, small refactors, lightweight code suggestions. For those, the model gets called once, returns a string or JSON, and the workflow moves on.</p>
       <p>Agentic stacks add failure modes that simply do not exist in a single-pass call: tool misconfiguration, environment drift, brittle DOMs or terminals, race conditions between sub-agents, and a much larger surface for prompt-injection. Buying a model that is optimized for those workflows when you do not run them means paying for headroom you cannot use, and inheriting risks you do not have to take.</p>
@@ -977,7 +1035,7 @@
   <!-- SECTION 10 -->
   <div class="section" id="off-ramps">
     <div class="section-label">10 / Off-Ramps</div>
-    <h2>If 3.5 Flash is a dead end for you, where do 2.5 Flash teams actually go?</h2>
+    <h2><a class="anchor" href="#off-ramps">If 3.5 Flash is a dead end for you, where do 2.5 Flash teams actually go?</a></h2>
     <div class="prose">
       <p>One question I keep getting from people on Gemini 2.5 Flash: the recommended migration target is 3.5 Flash, but the new model is 3× the per-token cost, optimized for agents you do not run, and verbose in ways that inflate real bills further. What does the cross-vendor landscape look like if you treat the 2.5 Flash price/feature profile as the actual constraint, not "stay on Google"?</p>
       <p>The anchor: 2.5 Flash sits at <strong>$0.30 in&#160;/&#160;$2.50 out per million tokens, 1M context, 65K output</strong>, multimodal (text&#160;+&#160;image in&#160;→ text out), prompt caching, GA on Vertex AI. Below is the full landscape — every serious cross-vendor option in the same price-and-capability neighborhood — with 2.5 Flash at the top and 3.5 Flash at the bottom as bookends. Each row is tagged with the single biggest reason it fits or does not.</p>
@@ -1212,7 +1270,7 @@
   <!-- SECTION 11 -->
   <div class="section" id="migration-checklist">
     <div class="section-label">11 / Migration Checklist</div>
-    <h2>How to evaluate 3.5 Flash for your stack this week</h2>
+    <h2><a class="anchor" href="#migration-checklist">How to evaluate 3.5 Flash for your stack this week</a></h2>
     <div class="prose">
       <p>If you are on 2.5 Flash today and the migration target is 3.5 Flash, do not change the model string in your config and call it done. The deprecation is real, but the new model has a different cost profile, different output verbosity, and a different design target. Treat the cutover as a real re-eval.</p>
     </div>
@@ -1230,7 +1288,7 @@
   <!-- CLOSING -->
   <div class="section" id="short-version">
     <div class="section-label">12 / The Short Version</div>
-    <h2>If you only remember three things</h2>
+    <h2><a class="anchor" href="#short-version">If you only remember three things</a></h2>
     <ul class="dl">
       <li><div><strong>Flash is the new product floor, not the cheap tier.</strong> Google reshuffled which tier <em>does</em> what. 3.5 Flash beats 3.1 Pro on agentic and coding work, and the next surprise will be 3.5 Pro reclaiming the top of the reasoning ladder.</div></li>
       <li><div><strong>The roadmap is agents, and the price reflects it.</strong> 3× input and 3× output cost vs 3 Flash, multi-hour sessions as a first-class mode, an explicit Pro-orchestrates / Flash-executes / Lite-fans-out topology. If you are not running agents, you are subsidizing the people who are.</div></li>
@@ -1247,6 +1305,21 @@
     <a href="/">← back to index</a>
   </div>
 </footer>
+
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
 
 </body>
 </html>

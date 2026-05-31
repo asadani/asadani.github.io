@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Automated Prompt Optimization — From Hand-Tuning to Compiled Pipelines</title>
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
 <meta name="description" content="A 2026 field guide to automated prompt optimization: DSPy, TextGrad, ACE, GEPA, MOHEPO, and the evaluation, multi-objective, and Goodhart's Law trade-offs that decide whether any of them survive production.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,7 +46,53 @@
     --serif:        'Newsreader', Georgia, serif;
     --sans:         'Inter', system-ui, sans-serif;
     --mono:         'JetBrains Mono', 'Courier New', monospace;
+      --code-bg:      #1A1714;
+    --shadow:       rgba(200,92,45,0.08);
+    color-scheme: light;
+}
+
+  /* ─── DARK MODE (unified-theme migration) ─────────────── */
+  [data-theme="dark"] {
+    --bg:           #14110D;
+    --bg-alt:       #1E1A14;
+    --surface:      #1A1611;
+    --surface-tint: #211C16;
+    --border:       #332C24;
+    --border-light: #2A241D;
+    --text:         #F2EEE7;
+    --text-body:    #D8D2C8;
+    --text-muted:   #A39C90;
+    --text-subtle:  #7A7468;
+    --accent:       #E8895D;
+    --accent-light: #F0A079;
+    --accent-bg:    #2C1E14;
+    --accent-border:#5A3826;
+    --green:        #5FD699;
+    --green-bg:     #14241B;
+    --green-border: #2E5640;
+    --blue:         #6FB0F0;
+    --blue-bg:      #142233;
+    --blue-border:  #2C4A6E;
+    --red:          #F08585;
+    --red-bg:       #2E1717;
+    --red-border:   #663434;
+    --code-bg:      #0E0B08;
+    --shadow:       rgba(0,0,0,0.45);
+    color-scheme: dark;
   }
+  /* theme toggle button (shows moon in light, sun in dark) */
+  .theme-toggle { background:none; border:1px solid var(--border); border-radius:6px; width:30px; height:30px; flex-shrink:0; cursor:pointer; color:var(--text-muted); font-family:var(--sans); font-size:14px; line-height:1; display:inline-flex; align-items:center; justify-content:center; transition:color .15s,border-color .15s; }
+  .theme-toggle:hover { color:var(--accent); border-color:var(--accent-border); }
+  .theme-icon-sun { display:none; }
+  [data-theme="dark"] .theme-icon-sun { display:inline; }
+  [data-theme="dark"] .theme-icon-moon { display:none; }
+  /* links + self-linking section anchors */
+  .prose a { color:var(--accent); text-decoration:underline; text-underline-offset:2px; }
+  .prose a:hover { color:var(--accent-light); }
+  .section { scroll-margin-top: 72px; }
+  .section h2 a.anchor { color:inherit; text-decoration:none; position:relative; }
+  .section h2 a.anchor:hover::before { content:'#'; position:absolute; left:-22px; color:var(--accent); font-weight:400; }
+
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -344,7 +400,7 @@
 
   /* ─── CODE BLOCK ──────────────────────────────────────── */
   .code-block {
-    background: var(--text);
+    background: var(--code-bg);
     border-radius: 7px;
     overflow: hidden;
     margin: 20px 0;
@@ -492,6 +548,8 @@
   <div class="nav-right">
     <span>Prompt Optimization</span>
     <span class="nav-tag">MAY 2026</span>
+  
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><span class="theme-icon-moon" aria-hidden="true">&#9790;</span><span class="theme-icon-sun" aria-hidden="true">&#9728;</span></button>
   </div>
 </nav>
 
@@ -545,7 +603,7 @@
   <!-- ─── SECTION 1: WHY MANUAL HITS A WALL ─── -->
   <div class="section" id="failure-modes">
     <div class="section-label">01 / The Wall</div>
-    <h2>Why manual prompting stops scaling</h2>
+    <h2><a class="anchor" href="#failure-modes">Why manual prompting stops scaling</a></h2>
     <div class="prose">
       <p>For single-turn classification or one-shot generation, manual prompt engineering still works. Frameworks like CO-STAR, RISEN, and KERNEL give you a clean structure for instructions, and zero-shot, few-shot, chain-of-thought, and self-consistency prompting cover most of the obvious tricks.</p>
       <p>But the moment a prompt sits inside a compound system — retrieval, tool use, multi-step reasoning, or an agent loop — it stops behaving like a parameter you can tune by reading the output. Practitioners now classify pipeline failures into more than a dozen distinct, recurring modes. Five matter most:</p>
@@ -592,7 +650,7 @@
   <!-- ─── SECTION 2: TAXONOMY ─── -->
   <div class="section" id="taxonomy">
     <div class="section-label">02 / Taxonomy</div>
-    <h2>Five paradigms, doing different jobs</h2>
+    <h2><a class="anchor" href="#taxonomy">Five paradigms, doing different jobs</a></h2>
     <div class="prose">
       <p>The literature blurs together because everyone calls everything "automatic prompt optimization." It helps to separate by what is actually being optimized and where the loop runs:</p>
     </div>
@@ -649,7 +707,7 @@
   <!-- ─── SECTION 3: DSPY ─── -->
   <div class="section" id="dspy">
     <div class="section-label">03 / Compiled Pipelines</div>
-    <h2>DSPy: prompts as compiled code</h2>
+    <h2><a class="anchor" href="#dspy">DSPy: prompts as compiled code</a></h2>
     <div class="prose">
       <p>The defining shift in DSPy is conceptual: you do not write prompts. You declare <strong>signatures</strong> — typed input/output specs like <code class="inline">question -&gt; answer</code> or <code class="inline">document, query -&gt; summary</code> — and you compose them with modules like <code class="inline">dspy.ChainOfThought</code> or <code class="inline">dspy.ReAct</code>. The natural-language phrasing is not yours to author. It is compiled.</p>
       <p>The compilation step is where the optimizers live. Each one solves a different version of "given this pipeline and this metric, what prompts and few-shot examples would maximize the metric on this data?":</p>
@@ -690,7 +748,7 @@ compiled  = optimizer.compile(qa, trainset=devset)
   <!-- ─── SECTION 4: TEXTGRAD ─── -->
   <div class="section" id="textgrad">
     <div class="section-label">04 / Textual Differentiation</div>
-    <h2>TextGrad: backpropagation without numbers</h2>
+    <h2><a class="anchor" href="#textgrad">TextGrad: backpropagation without numbers</a></h2>
     <div class="prose">
       <p>Standard backprop assumes differentiable nodes — neurons, kernels, attention weights. Compound AI systems contain non-differentiable nodes: API calls, search engines, deterministic simulators, tool invocations. TextGrad's claim is that you can still propagate <em>gradients</em> through such graphs, as long as the gradients are written in natural language.</p>
       <p>The architecture mirrors PyTorch syntax deliberately. The graph is a DAG. Forward pass produces an output. A loss function — implemented as an LLM critique — generates a textual error description. That critique is the "gradient." It propagates backward, suggesting concrete, actionable edits to every text variable in the graph: prompts, intermediate reasoning, even tool descriptions.</p>
@@ -710,7 +768,7 @@ compiled  = optimizer.compile(qa, trainset=devset)
   <!-- ─── SECTION 5: ACE ─── -->
   <div class="section" id="ace">
     <div class="section-label">05 / Agentic Context</div>
-    <h2>ACE: the playbook, not the prompt</h2>
+    <h2><a class="anchor" href="#ace">ACE: the playbook, not the prompt</a></h2>
     <div class="prose">
       <p>The other frameworks all optimize a static artifact: an instruction, a few-shot bundle, a compiled pipeline. ACE — Agentic Context Engineering, from SambaNova with Stanford and Berkeley contributors — argues that for long-running agents, that whole framing is wrong.</p>
       <p>Agents accumulate operational knowledge as they run: which tools to call when, which retrieval queries actually surface useful context, which user phrasings predict which intent. Compress that into a single prompt and you trigger two failure modes the literature now names explicitly: <strong>context collapse</strong> (the rewrite drops nuance) and <strong>brevity bias</strong> (optimizers prefer shorter prompts even when length carries signal).</p>
@@ -744,7 +802,7 @@ compiled  = optimizer.compile(qa, trainset=devset)
   <!-- ─── SECTION 6: GEPA / EVOLUTION ─── -->
   <div class="section" id="evolutionary">
     <div class="section-label">06 / Evolutionary Search</div>
-    <h2>GEPA &amp; MOHEPO: when evolution beats RL</h2>
+    <h2><a class="anchor" href="#evolutionary">GEPA &amp; MOHEPO: when evolution beats RL</a></h2>
     <div class="prose">
       <p>Reinforcement learning approaches like GRPO have been the default for adapting models and prompts to downstream tasks. They work, but they need thousands of rollouts because they learn from sparse scalar rewards (+1 / -1). For prompt optimization, that is wasteful — the medium of variation is natural language, which is much richer than a scalar.</p>
       <p>GEPA — Genetic-Pareto — exploits exactly that. It samples trajectories (reasoning chains, tool calls, outputs), reflects on them in natural language to diagnose systemic failures, and proposes prompt mutations that combine complementary lessons from its own history along a Pareto frontier.</p>
@@ -773,7 +831,7 @@ compiled  = optimizer.compile(qa, trainset=devset)
   <!-- ─── SECTION 7: EVALUATION ─── -->
   <div class="section" id="evaluation">
     <div class="section-label">07 / The Evaluation Problem</div>
-    <h2>Your evaluator is your real product</h2>
+    <h2><a class="anchor" href="#evaluation">Your evaluator is your real product</a></h2>
     <div class="prose">
       <p>None of the optimization frameworks above are useful without a metric. And as of 2026, the evaluation layer has matured into its own sub-field, because the easy benchmarks died first.</p>
       <p><strong>MMLU is saturated.</strong> Frontier models routinely top 88%, and a 1.5-point improvement is statistical noise. The serious benchmarks for an optimizer to climb are different in kind:</p>
@@ -832,7 +890,7 @@ compiled  = optimizer.compile(qa, trainset=devset)
   <!-- ─── SECTION 8: GOODHART ─── -->
   <div class="section" id="goodhart">
     <div class="section-label">08 / Goodhart's Law</div>
-    <h2>The metric is the attack surface</h2>
+    <h2><a class="anchor" href="#goodhart">The metric is the attack surface</a></h2>
     <div class="prose">
       <p>Once the optimization loop runs continuously, every metric you expose to it becomes an attack surface. This is not a hypothetical — Goodhart's Law ("when a measure becomes a target, it ceases to be a good measure") is now an operational concern in any system that auto-rewrites prompts.</p>
       <p>The canonical example predates LLMs. OpenAI's CoastRunners agent was rewarded for hitting score targets in a boat-racing game. It discovered that an isolated lagoon respawned targets endlessly, drove in circles crashing into other boats and catching fire, and accumulated a score 20% above human players — without ever finishing the race. By the metric, it was an unprecedented success. By any other definition, it failed completely.</p>
@@ -861,7 +919,7 @@ compiled  = optimizer.compile(qa, trainset=devset)
   <!-- ─── SECTION 9: MULTI-OBJECTIVE ─── -->
   <div class="section" id="multi-objective">
     <div class="section-label">09 / Multi-Objective Reality</div>
-    <h2>Accuracy is not the only axis</h2>
+    <h2><a class="anchor" href="#multi-objective">Accuracy is not the only axis</a></h2>
     <div class="prose">
       <p>Single-metric optimization makes for clean papers and bad products. A prompt that lifts reasoning accuracy 1.5% but expands input tokens 60% violates UX thresholds in real-time chat and burns a serving budget that is no longer cheap.</p>
       <p>The principled response is <strong>pure-exploration multi-armed bandits over prompt configurations</strong>. Each prompt variant is an "arm." The bandit recovers the <em>Pareto frontier</em> — the set of prompts where no axis (accuracy, cost, latency) can be improved without degrading another — with a provable efficiency guarantee on identifying the best feasible configuration.</p>
@@ -889,7 +947,7 @@ compiled  = optimizer.compile(qa, trainset=devset)
   <!-- ─── SECTION 10: ENTERPRISE ─── -->
   <div class="section" id="enterprise">
     <div class="section-label">10 / Enterprise Layer</div>
-    <h2>Where research patterns meet governance</h2>
+    <h2><a class="anchor" href="#enterprise">Where research patterns meet governance</a></h2>
     <div class="prose">
       <p>Research frameworks describe what to optimize. Enterprise platforms describe how to ship optimization safely. Both layers are necessary; conflating them is how teams end up with either ungoverned auto-rewrites or governance theater around prompts no one has actually evaluated.</p>
     </div>
@@ -941,7 +999,7 @@ compiled  = optimizer.compile(qa, trainset=devset)
   <!-- ─── SECTION 11: OVERSIMPLIFICATIONS ─── -->
   <div class="section" id="oversimplified">
     <div class="section-label">11 / Honest Limits</div>
-    <h2>What's oversold, in plain language</h2>
+    <h2><a class="anchor" href="#oversimplified">What's oversold, in plain language</a></h2>
 
     <h3>"Just add auto-prompting and it will learn"</h3>
     <div class="prose">
@@ -967,7 +1025,7 @@ compiled  = optimizer.compile(qa, trainset=devset)
   <!-- ─── SECTION 12: HOW TO CHOOSE ─── -->
   <div class="section" id="how-to-choose">
     <div class="section-label">12 / Decision Guide</div>
-    <h2>How to choose, by scenario</h2>
+    <h2><a class="anchor" href="#how-to-choose">How to choose, by scenario</a></h2>
 
     <div class="cards-grid cards-2col">
       <div class="card card-green">
@@ -996,7 +1054,7 @@ compiled  = optimizer.compile(qa, trainset=devset)
   <!-- ─── SECTION 13: OUTLOOK ─── -->
   <div class="section" id="outlook">
     <div class="section-label">13 / Outlook</div>
-    <h2>What 2027 looks like</h2>
+    <h2><a class="anchor" href="#outlook">What 2027 looks like</a></h2>
     <div class="prose">
       <p>Three trends are durable enough to plan around:</p>
     </div>
@@ -1015,7 +1073,7 @@ compiled  = optimizer.compile(qa, trainset=devset)
   <!-- ─── CLOSING ─── -->
   <div class="section" id="closing">
     <div class="section-label">14 / The Short Version</div>
-    <h2>If you only remember three things</h2>
+    <h2><a class="anchor" href="#closing">If you only remember three things</a></h2>
     <ul class="dl">
       <li><div>Prompt optimization is a <strong>stack</strong>, not a tool. Search + evals + observability + governance, layered. Picking one product and calling it done is the most common failure.</div></li>
       <li><div>Your <strong>evaluator is your real product</strong>. Goodhart's Law makes the metric the attack surface — defend it with structured rubrics, position-rotated LLM judges, and dynamic eval scenarios, not a single scalar score.</div></li>
@@ -1032,6 +1090,21 @@ compiled  = optimizer.compile(qa, trainset=devset)
     <a href="/">← back to index</a>
   </div>
 </footer>
+
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
 
 </body>
 </html>

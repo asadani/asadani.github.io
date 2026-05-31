@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Data Product Manifesto — Seven Pillars of Modern Data Architecture</title>
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
 <meta name="description" content="An opinionated synthesis of modern data product architecture: seven pillars for treating data as a sovereign, governed, SLA-backed product rather than pipeline exhaust.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,7 +46,53 @@
     --serif:        'Newsreader', Georgia, serif;
     --sans:         'Inter', system-ui, sans-serif;
     --mono:         'JetBrains Mono', 'Courier New', monospace;
+      --code-bg:      #1A1714;
+    --shadow:       rgba(200,92,45,0.08);
+    color-scheme: light;
+}
+
+  /* ─── DARK MODE (unified-theme migration) ─────────────── */
+  [data-theme="dark"] {
+    --bg:           #14110D;
+    --bg-alt:       #1E1A14;
+    --surface:      #1A1611;
+    --surface-tint: #211C16;
+    --border:       #332C24;
+    --border-light: #2A241D;
+    --text:         #F2EEE7;
+    --text-body:    #D8D2C8;
+    --text-muted:   #A39C90;
+    --text-subtle:  #7A7468;
+    --accent:       #E8895D;
+    --accent-light: #F0A079;
+    --accent-bg:    #2C1E14;
+    --accent-border:#5A3826;
+    --green:        #5FD699;
+    --green-bg:     #14241B;
+    --green-border: #2E5640;
+    --blue:         #6FB0F0;
+    --blue-bg:      #142233;
+    --blue-border:  #2C4A6E;
+    --red:          #F08585;
+    --red-bg:       #2E1717;
+    --red-border:   #663434;
+    --code-bg:      #0E0B08;
+    --shadow:       rgba(0,0,0,0.45);
+    color-scheme: dark;
   }
+  /* theme toggle button (shows moon in light, sun in dark) */
+  .theme-toggle { background:none; border:1px solid var(--border); border-radius:6px; width:30px; height:30px; flex-shrink:0; cursor:pointer; color:var(--text-muted); font-family:var(--sans); font-size:14px; line-height:1; display:inline-flex; align-items:center; justify-content:center; transition:color .15s,border-color .15s; }
+  .theme-toggle:hover { color:var(--accent); border-color:var(--accent-border); }
+  .theme-icon-sun { display:none; }
+  [data-theme="dark"] .theme-icon-sun { display:inline; }
+  [data-theme="dark"] .theme-icon-moon { display:none; }
+  /* links + self-linking section anchors */
+  .prose a { color:var(--accent); text-decoration:underline; text-underline-offset:2px; }
+  .prose a:hover { color:var(--accent-light); }
+  .section { scroll-margin-top: 72px; }
+  .section h2 a.anchor { color:inherit; text-decoration:none; position:relative; }
+  .section h2 a.anchor:hover::before { content:'#'; position:absolute; left:-22px; color:var(--accent); font-weight:400; }
+
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -381,7 +437,7 @@
 
   /* ─── CODE BLOCK ──────────────────────────────────────── */
   .code-block {
-    background: var(--text);
+    background: var(--code-bg);
     border-radius: 7px;
     overflow: hidden;
     margin: 20px 0;
@@ -531,6 +587,8 @@
   <div class="nav-right">
     <span>Data Architecture</span>
     <span class="nav-tag">APR 2026</span>
+  
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><span class="theme-icon-moon" aria-hidden="true">&#9790;</span><span class="theme-icon-sun" aria-hidden="true">&#9728;</span></button>
   </div>
 </nav>
 
@@ -600,9 +658,9 @@
   </div>
 
   <!-- SECTION: WHY IT MATTERS -->
-  <div class="section">
+  <div class="section" id="the-pipeline-era-is-over">
     <div class="section-label">Why it matters</div>
-    <h2>The pipeline era is over</h2>
+    <h2><a class="anchor" href="#the-pipeline-era-is-over">The pipeline era is over</a></h2>
     <div class="prose">
       <p>
         For two decades, data teams optimized for one thing: moving bytes from A to B. The resulting
@@ -627,9 +685,9 @@
   </div>
 
   <!-- SECTION: THE SEVEN PILLARS -->
-  <div class="section">
+  <div class="section" id="seven-pillars-in-detail">
     <div class="section-label">The architecture</div>
-    <h2>Seven pillars, in detail</h2>
+    <h2><a class="anchor" href="#seven-pillars-in-detail">Seven pillars, in detail</a></h2>
 
     <div class="pillar">
       <div class="pillar-num">01</div>
@@ -750,9 +808,9 @@
   </div>
 
   <!-- SECTION: ANATOMY DIAGRAM -->
-  <div class="section">
+  <div class="section" id="anatomy-of-a-single-data-product">
     <div class="section-label">How it fits together</div>
-    <h2>Anatomy of a single data product</h2>
+    <h2><a class="anchor" href="#anatomy-of-a-single-data-product">Anatomy of a single data product</a></h2>
     <div class="prose">
       <p>
         Viewed from the outside, a data product is a black box with declared input ports, output
@@ -797,9 +855,9 @@
   </div>
 
   <!-- SECTION: ARCHITECTURAL PATTERNS / TRADE-OFFS -->
-  <div class="section">
+  <div class="section" id="centralized-mesh-or-fabric">
     <div class="section-label">Trade-offs</div>
-    <h2>Centralized, mesh, or fabric?</h2>
+    <h2><a class="anchor" href="#centralized-mesh-or-fabric">Centralized, mesh, or fabric?</a></h2>
     <div class="prose">
       <p>
         The seven pillars are pattern-agnostic &mdash; you can build a data product inside a
@@ -853,9 +911,9 @@
   </div>
 
   <!-- SECTION: CONTRACT EXAMPLE -->
-  <div class="section">
+  <div class="section" id="what-a-data-product-contract-looks-like">
     <div class="section-label">Making it concrete</div>
-    <h2>What a data product contract looks like</h2>
+    <h2><a class="anchor" href="#what-a-data-product-contract-looks-like">What a data product contract looks like</a></h2>
     <div class="prose">
       <p>
         The abstractions get real when you write them down. Below is a minimal but complete
@@ -938,9 +996,9 @@
   </div>
 
   <!-- SECTION: BEST PRACTICES -->
-  <div class="section">
+  <div class="section" id="what-separates-good-from-nominal">
     <div class="section-label">Properties of good</div>
-    <h2>What separates good from nominal</h2>
+    <h2><a class="anchor" href="#what-separates-good-from-nominal">What separates good from nominal</a></h2>
     <div class="prose">
       <p>
         A data product that technically ticks every pillar can still fail in practice if it
@@ -982,9 +1040,9 @@
   </div>
 
   <!-- SECTION: PITFALLS -->
-  <div class="section">
+  <div class="section" id="ways-this-goes-wrong">
     <div class="section-label">Pitfalls</div>
-    <h2>Ways this goes wrong</h2>
+    <h2><a class="anchor" href="#ways-this-goes-wrong">Ways this goes wrong</a></h2>
     <div class="prose">
       <p>
         Most "data product" initiatives that stall do so for predictable reasons. None of them are
@@ -1002,9 +1060,9 @@
   </div>
 
   <!-- SECTION: CONCLUSION -->
-  <div class="section">
+  <div class="section" id="the-commitment">
     <div class="section-label">Closing</div>
-    <h2>The commitment</h2>
+    <h2><a class="anchor" href="#the-commitment">The commitment</a></h2>
     <div class="prose">
       <p>
         Treating data as a product is not an architectural style choice. It is an operational
@@ -1031,6 +1089,21 @@
     <a href="/">Home</a>
   </span>
 </footer>
+
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
 
 </body>
 </html>

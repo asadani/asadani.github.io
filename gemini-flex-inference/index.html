@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gemini Flex &amp; Priority Inference — Service Tier Benchmarks</title>
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -37,7 +47,53 @@
     --serif:        'Newsreader', Georgia, serif;
     --sans:         'Inter', system-ui, sans-serif;
     --mono:         'JetBrains Mono', 'Courier New', monospace;
+      --code-bg:      #1A1714;
+    --shadow:       rgba(200,92,45,0.08);
+    color-scheme: light;
+}
+
+  /* ─── DARK MODE (unified-theme migration) ─────────────── */
+  [data-theme="dark"] {
+    --bg:           #14110D;
+    --bg-alt:       #1E1A14;
+    --surface:      #1A1611;
+    --surface-tint: #211C16;
+    --border:       #332C24;
+    --border-light: #2A241D;
+    --text:         #F2EEE7;
+    --text-body:    #D8D2C8;
+    --text-muted:   #A39C90;
+    --text-subtle:  #7A7468;
+    --accent:       #E8895D;
+    --accent-light: #F0A079;
+    --accent-bg:    #2C1E14;
+    --accent-border:#5A3826;
+    --green:        #5FD699;
+    --green-bg:     #14241B;
+    --green-border: #2E5640;
+    --blue:         #6FB0F0;
+    --blue-bg:      #142233;
+    --blue-border:  #2C4A6E;
+    --red:          #F08585;
+    --red-bg:       #2E1717;
+    --red-border:   #663434;
+    --code-bg:      #0E0B08;
+    --shadow:       rgba(0,0,0,0.45);
+    color-scheme: dark;
   }
+  /* theme toggle button (shows moon in light, sun in dark) */
+  .theme-toggle { background:none; border:1px solid var(--border); border-radius:6px; width:30px; height:30px; flex-shrink:0; cursor:pointer; color:var(--text-muted); font-family:var(--sans); font-size:14px; line-height:1; display:inline-flex; align-items:center; justify-content:center; transition:color .15s,border-color .15s; }
+  .theme-toggle:hover { color:var(--accent); border-color:var(--accent-border); }
+  .theme-icon-sun { display:none; }
+  [data-theme="dark"] .theme-icon-sun { display:inline; }
+  [data-theme="dark"] .theme-icon-moon { display:none; }
+  /* links + self-linking section anchors */
+  .prose a { color:var(--accent); text-decoration:underline; text-underline-offset:2px; }
+  .prose a:hover { color:var(--accent-light); }
+  .section { scroll-margin-top: 72px; }
+  .section h2 a.anchor { color:inherit; text-decoration:none; position:relative; }
+  .section h2 a.anchor:hover::before { content:'#'; position:absolute; left:-22px; color:var(--accent); font-weight:400; }
+
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -361,7 +417,7 @@
     box-shadow: 0 2px 12px rgba(0,0,0,0.05);
   }
   .bench-head {
-    background: var(--text);
+    background: var(--code-bg);
     padding: 16px 24px;
     display: flex;
     align-items: center;
@@ -416,7 +472,7 @@
     letter-spacing: 0.03em;
   }
   .filter-btn:hover { border-color: var(--accent-border); color: var(--accent); }
-  .filter-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
+  .filter-btn.active { background: var(--code-bg); color: #fff; border-color: var(--text); }
   .filter-btn.active.flex-active { background: var(--amber); border-color: var(--amber); }
   .filter-btn.active.std-active  { background: var(--blue);  border-color: var(--blue); }
   .filter-btn.active.prio-active { background: var(--green); border-color: var(--green); }
@@ -606,7 +662,7 @@
 
   /* ─── CODE BLOCK ──────────────────────────────────────── */
   .code-block {
-    background: var(--text);
+    background: var(--code-bg);
     border-radius: 8px;
     padding: 24px 28px;
     margin: 20px 0;
@@ -729,7 +785,7 @@
     color: var(--text);
   }
   .dr-snippet {
-    background: var(--text);
+    background: var(--code-bg);
     border-radius: 6px;
     padding: 14px 18px;
     font-family: var(--mono);
@@ -836,6 +892,8 @@
   <div class="nav-right">
     <span>Gemini API</span>
     <span class="nav-tag preview">PREVIEW &middot; APR 2026</span>
+  
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><span class="theme-icon-moon" aria-hidden="true">&#9790;</span><span class="theme-icon-sun" aria-hidden="true">&#9728;</span></button>
   </div>
 </nav>
 
@@ -890,9 +948,9 @@
   </div>
 
   <!-- ─── SECTION 01: WHAT ARE TIERS ─────────────────────── -->
-  <div class="section">
+  <div class="section" id="three-tiers-one-api">
     <div class="section-label">01 &mdash; Overview</div>
-    <h2>Three Tiers, One API</h2>
+    <h2><a class="anchor" href="#three-tiers-one-api">Three Tiers, One API</a></h2>
     <div class="prose">
       <p>
         Google's Gemini API now offers <strong>three inference service tiers</strong> that let you trade off cost,
@@ -951,9 +1009,9 @@
   </div>
 
   <!-- ─── SECTION 02: BENCHMARK CHART ─────────────────────── -->
-  <div class="section">
+  <div class="section" id="interactive-benchmark-mdash-5-runs-per-tier">
     <div class="section-label">02 &mdash; Latency Benchmark</div>
-    <h2>Interactive Benchmark &mdash; 5 Runs per Tier</h2>
+    <h2><a class="anchor" href="#interactive-benchmark-mdash-5-runs-per-tier">Interactive Benchmark &mdash; 5 Runs per Tier</a></h2>
     <div class="prose">
       <p>
         All 15 runs using <strong>gemini-2.5-flash-preview</strong>, same prompt, sequential execution.
@@ -1092,9 +1150,9 @@
   </div>
 
   <!-- ─── SECTION 03: INDIVIDUAL RUNS TABLE ──────────────── -->
-  <div class="section">
+  <div class="section" id="all-15-runs">
     <div class="section-label">03 &mdash; Raw Data</div>
-    <h2>All 15 Runs</h2>
+    <h2><a class="anchor" href="#all-15-runs">All 15 Runs</a></h2>
     <p class="prose" style="margin-bottom:0;">
       Full per-run breakdown including token counts. The <em>Served</em> column reflects the actual tier confirmed
       via the <code style="font-family:var(--mono);font-size:0.9em;">x-gemini-service-tier</code> response header.
@@ -1143,9 +1201,9 @@
   </div>
 
   <!-- ─── SECTION 04: DECISION HELPER ─────────────────────── -->
-  <div class="section">
+  <div class="section" id="which-tier-is-right-for-your-workload">
     <div class="section-label">04 &mdash; Decision Helper</div>
-    <h2>Which Tier Is Right for Your Workload?</h2>
+    <h2><a class="anchor" href="#which-tier-is-right-for-your-workload">Which Tier Is Right for Your Workload?</a></h2>
 
     <div class="decision-wrap">
       <div class="decision-head">
@@ -1180,9 +1238,9 @@
   </div>
 
   <!-- ─── SECTION 05: THE SCRIPT ───────────────────────────── -->
-  <div class="section">
+  <div class="section" id="the-script">
     <div class="section-label">05 &mdash; Implementation</div>
-    <h2>The Script</h2>
+    <h2><a class="anchor" href="#the-script">The Script</a></h2>
     <div class="prose">
       <p>
         All benchmarks were run with
@@ -1234,9 +1292,9 @@
   </div>
 
   <!-- ─── SECTION 06: TAKEAWAYS ─────────────────────────────── -->
-  <div class="section">
+  <div class="section" id="production-guidance">
     <div class="section-label">06 &mdash; Key Takeaways</div>
-    <h2>Production Guidance</h2>
+    <h2><a class="anchor" href="#production-guidance">Production Guidance</a></h2>
 
     <div class="cards-grid">
       <div class="card">
@@ -1273,9 +1331,9 @@
   </div>
 
   <!-- ─── SECTION 07: RATE LIMITS & TRADE-OFFS ─────────────── -->
-  <div class="section">
+  <div class="section" id="the-real-cost-of-simplicity">
     <div class="section-label">07 &mdash; Rate Limits &amp; Trade-offs</div>
-    <h2>The Real Cost of Simplicity</h2>
+    <h2><a class="anchor" href="#the-real-cost-of-simplicity">The Real Cost of Simplicity</a></h2>
     <div class="prose">
       <p>
         There's a meaningful caveat worth understanding: <strong>Flex inference traffic counts towards your
@@ -1516,5 +1574,20 @@ document.querySelectorAll('.decision-opt').forEach(opt => {
   });
 });
 </script>
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
+
 </body>
 </html>

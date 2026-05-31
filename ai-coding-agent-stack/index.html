@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The 2026 AI Coding Agent Stack — Five Layers That Actually Matter</title>
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -35,7 +45,53 @@
     --serif:        'Newsreader', Georgia, serif;
     --sans:         'Inter', system-ui, sans-serif;
     --mono:         'JetBrains Mono', 'Courier New', monospace;
+      --code-bg:      #1A1714;
+    --shadow:       rgba(200,92,45,0.08);
+    color-scheme: light;
+}
+
+  /* ─── DARK MODE (unified-theme migration) ─────────────── */
+  [data-theme="dark"] {
+    --bg:           #14110D;
+    --bg-alt:       #1E1A14;
+    --surface:      #1A1611;
+    --surface-tint: #211C16;
+    --border:       #332C24;
+    --border-light: #2A241D;
+    --text:         #F2EEE7;
+    --text-body:    #D8D2C8;
+    --text-muted:   #A39C90;
+    --text-subtle:  #7A7468;
+    --accent:       #E8895D;
+    --accent-light: #F0A079;
+    --accent-bg:    #2C1E14;
+    --accent-border:#5A3826;
+    --green:        #5FD699;
+    --green-bg:     #14241B;
+    --green-border: #2E5640;
+    --blue:         #6FB0F0;
+    --blue-bg:      #142233;
+    --blue-border:  #2C4A6E;
+    --red:          #F08585;
+    --red-bg:       #2E1717;
+    --red-border:   #663434;
+    --code-bg:      #0E0B08;
+    --shadow:       rgba(0,0,0,0.45);
+    color-scheme: dark;
   }
+  /* theme toggle button (shows moon in light, sun in dark) */
+  .theme-toggle { background:none; border:1px solid var(--border); border-radius:6px; width:30px; height:30px; flex-shrink:0; cursor:pointer; color:var(--text-muted); font-family:var(--sans); font-size:14px; line-height:1; display:inline-flex; align-items:center; justify-content:center; transition:color .15s,border-color .15s; }
+  .theme-toggle:hover { color:var(--accent); border-color:var(--accent-border); }
+  .theme-icon-sun { display:none; }
+  [data-theme="dark"] .theme-icon-sun { display:inline; }
+  [data-theme="dark"] .theme-icon-moon { display:none; }
+  /* links + self-linking section anchors */
+  .prose a { color:var(--accent); text-decoration:underline; text-underline-offset:2px; }
+  .prose a:hover { color:var(--accent-light); }
+  .section { scroll-margin-top: 72px; }
+  .section h2 a.anchor { color:inherit; text-decoration:none; position:relative; }
+  .section h2 a.anchor:hover::before { content:'#'; position:absolute; left:-22px; color:var(--accent); font-weight:400; }
+
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -322,7 +378,7 @@
 
   /* ─── CODE BLOCK ──────────────────────────────────────── */
   .code-block {
-    background: var(--text);
+    background: var(--code-bg);
     border-radius: 7px;
     overflow: hidden;
     margin: 20px 0;
@@ -603,6 +659,8 @@
   <div class="nav-right">
     <span>AI Coding Agents</span>
     <span class="nav-tag">APR 2026</span>
+  
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><span class="theme-icon-moon" aria-hidden="true">&#9790;</span><span class="theme-icon-sun" aria-hidden="true">&#9728;</span></button>
   </div>
 </nav>
 
@@ -646,9 +704,9 @@
   </div>
 
   <!-- SECTION: WHY AGENTS FAIL -->
-  <div class="section">
+  <div class="section" id="why-unaugmented-agents-underperform">
     <div class="section-label">Root Causes</div>
-    <h2>Why Unaugmented Agents Underperform</h2>
+    <h2><a class="anchor" href="#why-unaugmented-agents-underperform">Why Unaugmented Agents Underperform</a></h2>
     <div class="prose">
       <p>The failure modes of a stock Claude Code or Copilot session are well-documented by now. Give an agent access to a large repository and it will either <strong>stream every file into its context window</strong> — burning tokens and introducing noise — or hallucinate structure it hasn't seen. Give it a complex multi-step task and it will start writing code before it fully understands the requirements, then discover halfway through that it has painted itself into an architectural corner.</p>
       <p>These aren't model limitations. They're tooling gaps. The open-source community has spent the last year building targeted solutions to each failure mode, and the results are measurable: 10–70× token reductions, 94% reduction in low-quality code that makes it to review, and agent sessions that compound knowledge across sessions instead of starting cold every time.</p>
@@ -674,9 +732,9 @@
   </div>
 
   <!-- SECTION: THE STACK MAP -->
-  <div class="section">
+  <div class="section" id="the-five-layer-stack">
     <div class="section-label">Architecture</div>
-    <h2>The Five-Layer Stack</h2>
+    <h2><a class="anchor" href="#the-five-layer-stack">The Five-Layer Stack</a></h2>
     <div class="prose">
       <p>The 2026 ecosystem maps cleanly onto five independent layers. Each can be adopted without the others, but they compound. A team with all five running is operating categorically differently from one using raw agent APIs.</p>
     </div>
@@ -722,9 +780,9 @@
   </div>
 
   <!-- SECTION: LAYER 1 — CONTEXT GRAPHS -->
-  <div class="section">
+  <div class="section" id="context-graphs-the-infrastructure-primitive">
     <div class="section-label">Layer 1</div>
-    <h2>Context Graphs: The Infrastructure Primitive</h2>
+    <h2><a class="anchor" href="#context-graphs-the-infrastructure-primitive">Context Graphs: The Infrastructure Primitive</a></h2>
     <div class="prose">
       <p>The core insight driving this category: a repository is a knowledge graph, not a directory of text files. Functions call other functions. Classes inherit from each other. Tests cover specific methods. When an agent needs to review a change to <code>auth.ts</code>, it doesn't need 27,000 files — it needs the 12 files that directly depend on or are depended on by <code>auth.ts</code>. A structural graph delivers exactly that.</p>
       <p>Two implementation approaches have emerged. <strong>AST-based tools</strong> (code-review-graph, Graphify, Codebase-Memory MCP) parse source files into syntax trees using Tree-sitter, extract entities and relationships, and store them in queryable databases. <strong>LSP-based tools</strong> (Serena) wrap Language Server Protocol backends to give agents the same symbol-level navigation a developer gets in an IDE — more precise, but requires a running LSP server per language.</p>
@@ -845,9 +903,9 @@
   </div>
 
   <!-- SECTION: LAYER 2 — SKILLS -->
-  <div class="section">
+  <div class="section" id="skills-and-methodology-the-process-layer">
     <div class="section-label">Layer 2</div>
-    <h2>Skills and Methodology: The Process Layer</h2>
+    <h2><a class="anchor" href="#skills-and-methodology-the-process-layer">Skills and Methodology: The Process Layer</a></h2>
     <div class="prose">
       <p>The shift from prompt engineering to agent skills represents the most significant change in how developers work with coding agents in 2026. Rather than writing elaborate system prompts that models probabilistically follow, skills encode process as portable markdown — structured instruction files that agents load dynamically, enforce consistently, and compose together.</p>
       <p>The distinction matters: a system prompt says "write tests." A skill enforces the full RED-GREEN-REFACTOR cycle, blocks commits that skip the red phase, and uses subagents for parallel test execution. Same underlying instruction; categorically different enforcement.</p>
@@ -901,9 +959,9 @@
   </div>
 
   <!-- SECTION: LAYER 3 — MEMORY -->
-  <div class="section">
+  <div class="section" id="memory-layers-solving-session-amnesia">
     <div class="section-label">Layer 3</div>
-    <h2>Memory Layers: Solving Session Amnesia</h2>
+    <h2><a class="anchor" href="#memory-layers-solving-session-amnesia">Memory Layers: Solving Session Amnesia</a></h2>
     <div class="prose">
       <p>Context loss across sessions is the most under-discussed pain point in agent workflows. The first session you debug a tricky async race condition, discover the right Stripe webhook signature validation pattern, or figure out that your team's monorepo requires a specific import path convention — all of that evaporates when the session ends. The next session starts cold and re-discovers everything from scratch.</p>
       <p>Memory layers solve this at different levels of sophistication, from simple key-value stores to full temporal knowledge graphs with bi-temporal invalidation.</p>
@@ -973,9 +1031,9 @@
   </div>
 
   <!-- SECTION: LAYER 4 — REVIEW -->
-  <div class="section">
+  <div class="section" id="code-review-and-ci-cd-the-quality-layer">
     <div class="section-label">Layer 4</div>
-    <h2>Code Review and CI/CD: The Quality Layer</h2>
+    <h2><a class="anchor" href="#code-review-and-ci-cd-the-quality-layer">Code Review and CI/CD: The Quality Layer</a></h2>
     <div class="prose">
       <p>Automated code review has split into two distinct tiers in 2026. The first tier — mature PR-level tools — handles the bulk of review work at the syntax and logic level. The second tier — agentic security pipelines — goes deeper, using structured task decomposition to find vulnerabilities that pattern matching misses.</p>
     </div>
@@ -999,9 +1057,9 @@
   </div>
 
   <!-- SECTION: LAYER 5 — ORCHESTRATION -->
-  <div class="section">
+  <div class="section" id="orchestration-multi-agent-coordination-at-scale">
     <div class="section-label">Layer 5</div>
-    <h2>Orchestration: Multi-Agent Coordination at Scale</h2>
+    <h2><a class="anchor" href="#orchestration-multi-agent-coordination-at-scale">Orchestration: Multi-Agent Coordination at Scale</a></h2>
     <div class="prose">
       <p>Multi-agent orchestration is the most architecturally interesting layer and the one most teams should adopt last. The promise — parallel subagents executing independent tasks simultaneously — is real, but the prerequisites are demanding. Teams that move to orchestration before nailing context management, skills, and memory typically experience context pollution, subagent hallucination, and coordination overhead that offsets the parallelism gains.</p>
     </div>
@@ -1039,9 +1097,9 @@
   </div>
 
   <!-- SECTION: WHAT TO ACTUALLY INSTALL -->
-  <div class="section">
+  <div class="section" id="what-to-actually-install">
     <div class="section-label">Practical Guide</div>
-    <h2>What to Actually Install</h2>
+    <h2><a class="anchor" href="#what-to-actually-install">What to Actually Install</a></h2>
     <div class="prose">
       <p>The ecosystem has 25+ high-traction tools. This is the prioritized installation sequence for a professional team — ordered by impact-per-effort, not by category.</p>
     </div>
@@ -1058,9 +1116,9 @@
   </div>
 
   <!-- SECTION: SYNTHESIS -->
-  <div class="section">
+  <div class="section" id="what-the-ecosystem-tells-us-about-where-ai-assisted-engineering-is-going">
     <div class="section-label">Synthesis</div>
-    <h2>What the Ecosystem Tells Us About Where AI-Assisted Engineering Is Going</h2>
+    <h2><a class="anchor" href="#what-the-ecosystem-tells-us-about-where-ai-assisted-engineering-is-going">What the Ecosystem Tells Us About Where AI-Assisted Engineering Is Going</a></h2>
     <div class="prose">
       <p>The recurring tension across every category in 2026 is <strong>safety versus throughput</strong>. Systems like code-review-graph deliberately accept conservative over-prediction to guarantee 100% recall. Deer-flow and spring-ai-agent-utils expose the acute tradeoff between execution speed and security — running agent-generated shell scripts on bare metal is faster but catastrophic when a hallucination slips through.</p>
       <p>The emergence of Spec-Driven Development frameworks (spec-kit, Superpowers) and autonomous review platforms like Macroscope signals that the role of the software engineer is genuinely shifting. Engineers are moving away from manual syntax generation toward high-level system specification and architectural oversight. The code repository is becoming a multi-agent workspace where structural context, temporal memory, and executable specifications drive generation — not prompts.</p>
@@ -1080,6 +1138,21 @@
     <a href="https://asadani.github.io/ai-agent-stack-map/">Stack Mind Map →</a>
   </div>
 </footer>
+
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
 
 </body>
 </html>

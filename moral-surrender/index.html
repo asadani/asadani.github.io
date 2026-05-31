@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Moral Surrender — Losing the Why, Not Just the How</title>
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
 <meta name="description" content="Cognitive surrender costs you skill. Moral surrender costs you judgment. A field guide for software engineers on the line between offloading, surrendering execution, and surrendering belief — and the postures and structural moves that keep you on the right side of it.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,7 +46,53 @@
     --serif:        'Newsreader', Georgia, serif;
     --sans:         'Inter', system-ui, sans-serif;
     --mono:         'JetBrains Mono', 'Courier New', monospace;
+      --code-bg:      #1A1714;
+    --shadow:       rgba(200,92,45,0.08);
+    color-scheme: light;
+}
+
+  /* ─── DARK MODE (unified-theme migration) ─────────────── */
+  [data-theme="dark"] {
+    --bg:           #14110D;
+    --bg-alt:       #1E1A14;
+    --surface:      #1A1611;
+    --surface-tint: #211C16;
+    --border:       #332C24;
+    --border-light: #2A241D;
+    --text:         #F2EEE7;
+    --text-body:    #D8D2C8;
+    --text-muted:   #A39C90;
+    --text-subtle:  #7A7468;
+    --accent:       #E8895D;
+    --accent-light: #F0A079;
+    --accent-bg:    #2C1E14;
+    --accent-border:#5A3826;
+    --green:        #5FD699;
+    --green-bg:     #14241B;
+    --green-border: #2E5640;
+    --blue:         #6FB0F0;
+    --blue-bg:      #142233;
+    --blue-border:  #2C4A6E;
+    --red:          #F08585;
+    --red-bg:       #2E1717;
+    --red-border:   #663434;
+    --code-bg:      #0E0B08;
+    --shadow:       rgba(0,0,0,0.45);
+    color-scheme: dark;
   }
+  /* theme toggle button (shows moon in light, sun in dark) */
+  .theme-toggle { background:none; border:1px solid var(--border); border-radius:6px; width:30px; height:30px; flex-shrink:0; cursor:pointer; color:var(--text-muted); font-family:var(--sans); font-size:14px; line-height:1; display:inline-flex; align-items:center; justify-content:center; transition:color .15s,border-color .15s; }
+  .theme-toggle:hover { color:var(--accent); border-color:var(--accent-border); }
+  .theme-icon-sun { display:none; }
+  [data-theme="dark"] .theme-icon-sun { display:inline; }
+  [data-theme="dark"] .theme-icon-moon { display:none; }
+  /* links + self-linking section anchors */
+  .prose a { color:var(--accent); text-decoration:underline; text-underline-offset:2px; }
+  .prose a:hover { color:var(--accent-light); }
+  .section { scroll-margin-top: 72px; }
+  .section h2 a.anchor { color:inherit; text-decoration:none; position:relative; }
+  .section h2 a.anchor:hover::before { content:'#'; position:absolute; left:-22px; color:var(--accent); font-weight:400; }
+
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -323,7 +379,7 @@
 
   /* ─── CODE BLOCK ──────────────────────────────────────── */
   .code-block {
-    background: var(--text);
+    background: var(--code-bg);
     border-radius: 7px;
     overflow: hidden;
     margin: 20px 0;
@@ -563,6 +619,8 @@
   <div class="nav-right">
     <span>Posture &amp; AI Practice</span>
     <span class="nav-tag">MAY 2026</span>
+  
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><span class="theme-icon-moon" aria-hidden="true">&#9790;</span><span class="theme-icon-sun" aria-hidden="true">&#9728;</span></button>
   </div>
 </nav>
 
@@ -610,7 +668,7 @@
   <!-- ─── SECTION 1 — TWO FAILURE MODES ─── -->
   <div class="section" id="two-modes">
     <div class="section-label">01 / Two Failure Modes</div>
-    <h2>Skill loss versus agency loss</h2>
+    <h2><a class="anchor" href="#two-modes">Skill loss versus agency loss</a></h2>
     <div class="prose">
       <p>"Cognitive surrender" is a phrase from a recent paper out of the <strong>Wharton School at UPenn</strong> — Steven Shaw and Gideon Nave's <em>"Thinking — Fast, Slow, and Artificial: How AI is Reshaping Human Reasoning and the Rise of Cognitive Surrender."</em> The phrase has older theological roots, but the AI framing is new and it lands hard for anyone shipping code with an agent at their elbow.</p>
       <p>The distinction in the paper is the part worth memorising: offloading keeps you in the loop, surrender doesn't. But once you start watching for it in real engineering work, a second failure mode shows up next to the first — adjacent, harder to spot, and arguably more expensive when it does happen.</p>
@@ -638,7 +696,7 @@
   <!-- ─── SECTION 2 — RESEARCH ─── -->
   <div class="section" id="research">
     <div class="section-label">02 / The Research</div>
-    <h2>Borrowed confidence is the load-bearing finding</h2>
+    <h2><a class="anchor" href="#research">Borrowed confidence is the load-bearing finding</a></h2>
     <div class="prose">
       <p>Across three experiments and 1,372 participants, Shaw and Nave found that simply having an AI available was enough for people to surrender. The numbers are unambiguous, and they're worse for the AI-assisted group than for the unassisted one in exactly the wrong way.</p>
     </div>
@@ -676,7 +734,7 @@
   <!-- ─── SECTION 3 — WHERE IT SHOWS UP ─── -->
   <div class="section" id="where">
     <div class="section-label">03 / Where Surrender Shows Up</div>
-    <h2>Four moments most engineers cross the line</h2>
+    <h2><a class="anchor" href="#where">Four moments most engineers cross the line</a></h2>
     <div class="prose">
       <p>Most of us don't surrender on the easy stuff. We notice when an agent invents an API or fabricates an import. The surrender happens further down the stack, in the moments where the cost of forming an independent view feels disproportionate to the task.</p>
     </div>
@@ -712,7 +770,7 @@
   <!-- ─── SECTION 4 — COMPARISON TABLE ─── -->
   <div class="section" id="at-a-glance">
     <div class="section-label">04 / Side By Side</div>
-    <h2>Cognitive vs moral surrender at a glance</h2>
+    <h2><a class="anchor" href="#at-a-glance">Cognitive vs moral surrender at a glance</a></h2>
     <div class="prose">
       <p>If you're going to keep one frame from this essay, keep this one. The two modes are not the same problem dressed differently — they fail in different layers of the work and require different mitigations.</p>
     </div>
@@ -770,7 +828,7 @@
   <!-- ─── SECTION 5 — WHY ENGINEERS ARE EXPOSED ─── -->
   <div class="section" id="exposure">
     <div class="section-label">05 / Why Engineers Are Exposed</div>
-    <h2>Four features of our work that make surrender easier</h2>
+    <h2><a class="anchor" href="#exposure">Four features of our work that make surrender easier</a></h2>
     <div class="prose">
       <p>Engineers are unusually vulnerable to both modes for reasons that don't apply as cleanly to other knowledge work. The structural shape of the job hides surrender behind signals that look like progress.</p>
     </div>
@@ -786,7 +844,7 @@
   <!-- ─── SECTION 6 — HEURISTICS ─── -->
   <div class="section" id="heuristics">
     <div class="section-label">06 / Personal Heuristics</div>
-    <h2>Five habits that hold the line</h2>
+    <h2><a class="anchor" href="#heuristics">Five habits that hold the line</a></h2>
     <div class="prose">
       <p>Calibration is a practice, not an attitude. The question to keep asking yourself is: <em>am I forming an independent view of this answer, or just adopting the agent's view wholesale?</em> Those are different psychological acts that look identical from the outside. The heuristics below force the difference back into view.</p>
     </div>
@@ -838,7 +896,7 @@
   <!-- ─── SECTION 7 — STRUCTURAL MOVES ─── -->
   <div class="section" id="structural">
     <div class="section-label">07 / Structural Moves</div>
-    <h2>Engineering scaffolding that resists surrender</h2>
+    <h2><a class="anchor" href="#structural">Engineering scaffolding that resists surrender</a></h2>
     <div class="prose">
       <p>Personal heuristics matter. They also fail at scale. The harder version of this problem is structural — building workflows, harnesses, and team norms that make surrender harder to fall into without thinking. A short list of moves that hold up:</p>
     </div>
@@ -885,7 +943,7 @@
   <!-- ─── SECTION 8 — COMPREHENSION DEBT ─── -->
   <div class="section" id="debt">
     <div class="section-label">08 / The Compounding Bill</div>
-    <h2>Surrender is how you take on cognitive debt</h2>
+    <h2><a class="anchor" href="#debt">Surrender is how you take on cognitive debt</a></h2>
     <div class="prose">
       <p>Each act of surrender is a tiny loan. The codebase grows by another patch you don't fully understand. The architecture absorbs another decision you didn't make. The test suite gains a test you didn't think to specify. None of these feel like a problem on the day they happen. They compound.</p>
       <p>Cognitive surrender is the mechanism by which <strong>comprehension debt</strong> accumulates. Comprehension debt is the bill, denominated in lost mental model. The interest gets paid the next time something goes wrong and nobody on the team can reconstruct the system from first principles.</p>
@@ -896,7 +954,7 @@
   <!-- ─── SECTION 9 — MUTUAL AMPLIFICATION ─── -->
   <div class="section" id="amplification">
     <div class="section-label">09 / The Frame To Leave On</div>
-    <h2>Mutual amplification, not delegation</h2>
+    <h2><a class="anchor" href="#amplification">Mutual amplification, not delegation</a></h2>
     <div class="prose">
       <p>The frame I want to leave on isn't the bleak one. Andy Clark, quoted in <em>Time</em> on this research, draws the right distinction: there's a difference between <strong>delegating</strong> to an AI system and <strong>cooperating</strong> with it. Delegation produces surrender. Cooperation produces what he calls <em>mutual amplification</em> — a loop where your prompts sharpen the model's output, which sharpens your next prompts, which sharpens your model of the problem.</p>
       <p>You can feel the difference. With mutual amplification, you catch yourself learning the domain through the conversation, not in spite of it. You end the session with a sharper mental model than you started with, not a fuzzier one. You can still build the thing yourself; you've just chosen a faster path. The agent is the second engineer in the room, not the only one.</p>
@@ -912,7 +970,7 @@
   <!-- ─── CLOSING — SHORT VERSION ─── -->
   <div class="section" id="short-version">
     <div class="section-label">10 / The Short Version</div>
-    <h2>If you only remember three things</h2>
+    <h2><a class="anchor" href="#short-version">If you only remember three things</a></h2>
     <ul class="dl">
       <li><div><strong>There are two failure modes, not one.</strong> Cognitive surrender hollows out your <em>skill</em>. Moral surrender hollows out your <em>judgment</em>. They look the same from the outside; they require different mitigations.</div></li>
       <li><div><strong>Borrowed confidence is the load-bearing mechanism.</strong> 73% wrong-answer acceptance, with confidence going <em>up</em>, is not a knowledge problem — it's a posture problem. The fix is to construct an independent view <em>before</em> reading the agent's answer, and to make the model argue against itself when you can't.</div></li>
@@ -929,6 +987,21 @@
     <a href="/">← back to index</a>
   </div>
 </footer>
+
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
 
 </body>
 </html>
