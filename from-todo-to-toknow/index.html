@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From TODO to TOKNOW — understanding AI code is the new technical debt</title>
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #F5F1EB;
+    --bg-alt:       #EDEAE3;
+    --surface:      #FFFFFF;
+    --surface-tint: #FAF8F5;
+    --border:       #DDD9D0;
+    --border-light: #EAE7E0;
+    --text:         #1A1714;
+    --text-body:    #3D3A35;
+    --text-muted:   #6B6760;
+    --text-subtle:  #9B9892;
+    --accent:       #C85C2D;
+    --accent-light: #E8895D;
+    --accent-bg:    #FDF1EB;
+    --accent-border:#F0C4A8;
+    --green:        #2A7A4B;
+    --green-bg:     #EAF5EF;
+    --green-border: #A8D9BC;
+    --blue:         #2563A8;
+    --blue-bg:      #EAF1FA;
+    --blue-border:  #A8C5E8;
+    --red:          #B83535;
+    --red-bg:       #FAEBEB;
+    --red-border:   #E8AAAA;
+    --code-bg:      #1A1714;  /* code blocks stay dark in BOTH modes */
+    --shadow:       rgba(200,92,45,0.08);
+    --serif:        'Newsreader', Georgia, serif;
+    --sans:         'Inter', system-ui, sans-serif;
+    --mono:         'JetBrains Mono', 'Courier New', monospace;
+    color-scheme: light;
+  }
+
+  /* ─── DARK MODE ───────────────────────────────────────── */
+  /* Same design, dark palette. Toggled via [data-theme] on <html>
+     (nav button + OS default + localStorage — see scripts). Warm dark,
+     not pure black; the terracotta accent brightens so it reads on dark. */
+  [data-theme="dark"] {
+    --bg:           #14110D;
+    --bg-alt:       #1E1A14;
+    --surface:      #1A1611;
+    --surface-tint: #211C16;
+    --border:       #332C24;
+    --border-light: #2A241D;
+    --text:         #F2EEE7;
+    --text-body:    #D8D2C8;
+    --text-muted:   #A39C90;
+    --text-subtle:  #7A7468;
+    --accent:       #E8895D;
+    --accent-light: #F0A079;
+    --accent-bg:    #2C1E14;
+    --accent-border:#5A3826;
+    --green:        #5FD699;
+    --green-bg:     #14241B;
+    --green-border: #2E5640;
+    --blue:         #6FB0F0;
+    --blue-bg:      #142233;
+    --blue-border:  #2C4A6E;
+    --red:          #F08585;
+    --red-bg:       #2E1717;
+    --red-border:   #663434;
+    --code-bg:      #0E0B08;
+    --shadow:       rgba(0,0,0,0.45);
+    color-scheme: dark;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-body);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .nav-tag {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+  }
+  /* Light/dark toggle — shows the moon in light mode (click → dark) and
+     the sun in dark mode (click → light). */
+  .theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .theme-toggle:hover { color: var(--accent); border-color: var(--accent-border); }
+  .theme-icon-sun { display: none; }
+  [data-theme="dark"] .theme-icon-sun  { display: inline; }
+  [data-theme="dark"] .theme-icon-moon { display: none; }
+
+  /* ─── LAYOUT ──────────────────────────────────────────── */
+  .page-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-deck {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 640px;
+    font-weight: 300;
+  }
+  .hero-meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-family: var(--mono);
+  }
+  .hero-meta-sep { color: var(--border); }
+
+  /* ─── BODY TEXT ───────────────────────────────────────── */
+  .prose p {
+    color: var(--text-body);
+    margin-bottom: 20px;
+    font-size: 17px;
+    line-height: 1.78;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+  .prose a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+  .prose a:hover { color: var(--accent-light); }
+  strong { color: var(--text); font-weight: 600; }
+  em { font-style: italic; color: var(--text-body); }
+
+  /* ─── SECTION HEADING ─────────────────────────────────── */
+  /* scroll-margin-top keeps the sticky 52px nav from covering the heading
+     when you jump to a #anchor. */
+  .section { margin-top: 56px; scroll-margin-top: 72px; }
+  .section-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section-label a { color: inherit; text-decoration: none; transition: color 0.15s; }
+  .section-label a:hover { color: var(--text); }
+  .section h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+  /* Self-linking heading: the whole H2 is an anchor to its own section,
+     and a '#' affordance appears on hover. */
+  .section h2 a.anchor { color: inherit; text-decoration: none; position: relative; }
+  .section h2 a.anchor:hover::before {
+    content: '#';
+    position: absolute;
+    left: -22px;
+    color: var(--accent);
+    font-weight: 400;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 32px 0 14px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── BANNER ──────────────────────────────────────────── */
+  .banner {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .banner-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .banner p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .banner a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ─── PLAIN ENGLISH ───────────────────────────────────── */
+  .plain-english {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 8px 8px;
+    padding: 28px 32px;
+    margin: 0 0 56px;
+  }
+  .plain-english .pe-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .pe-list { list-style: none; padding: 0; }
+  .pe-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 16px;
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+  .pe-list li:last-child { border-bottom: none; }
+  .pe-num {
+    width: 26px;
+    height: 26px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-family: var(--mono);
+  }
+
+  /* ─── TOC (jump links) ────────────────────────────────── */
+  /* Optional. Hrefs point at the section ids; pairs with the
+     self-linking H2 anchors below. 2-up grid, single column on mobile. */
+  .toc {
+    background: var(--surface-tint);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px 22px;
+    margin: 0 0 56px;
+  }
+  .toc-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 28px;
+  }
+  .toc-list li { display: flex; align-items: baseline; gap: 10px; font-size: 14px; line-height: 1.5; }
+  .toc-num { font-family: var(--mono); font-size: 11px; color: var(--text-subtle); flex-shrink: 0; width: 18px; }
+  .toc-list a {
+    color: var(--text-body);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .toc-list a:hover { color: var(--accent); border-bottom-color: var(--accent-border); }
+
+  /* ─── CARDS GRID ──────────────────────────────────────── */
+  /* Auto-balancing so you never get an orphan row:
+       default 3-up → 3 cards = 1×3, 6 cards = 3×2
+       exactly 2 or 4 cards drop to 2 columns → 2 = 1×2, 4 = 2×2
+     Force a count with .cols-2 / .cols-3 if you ever need to. */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 24px 0;
+  }
+  .cards-grid:has(> .card:nth-child(2):last-child),
+  .cards-grid:has(> .card:nth-child(4):last-child),
+  .cards-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .cards-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    border-color: var(--accent-border);
+    box-shadow: 0 2px 8px var(--shadow);
+  }
+  .card-icon { font-size: 20px; margin-bottom: 10px; }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+  .card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .card.card-red { border-color: var(--red-border); }
+  .card.card-red:hover { border-color: var(--red); box-shadow: 0 2px 8px rgba(184,53,53,0.08); }
+  .card.card-red .card-icon-badge {
+    display: inline-block;
+    background: var(--red-bg);
+    color: var(--red);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-green { border-color: var(--green-border); }
+  .card.card-green:hover { border-color: var(--green); box-shadow: 0 2px 8px rgba(42,122,75,0.08); }
+  .card.card-green .card-icon-badge {
+    display: inline-block;
+    background: var(--green-bg);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-blue { border-color: var(--blue-border); }
+  .card.card-blue:hover { border-color: var(--blue); box-shadow: 0 2px 8px rgba(37,99,168,0.08); }
+  .card.card-blue .card-icon-badge {
+    display: inline-block;
+    background: var(--blue-bg);
+    color: var(--blue);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  /* ─── CODE BLOCK ──────────────────────────────────────── */
+  .code-block {
+    background: var(--code-bg);
+    border-radius: 7px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .code-block .cb-label {
+    padding: 9px 16px;
+    background: rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .code-block pre {
+    padding: 20px;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #e8e8e8;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-block .tok-key  { color: #fdba74; }
+  .code-block .tok-val  { color: #86efac; }
+  .code-block .tok-cmt  { color: #6b7280; font-style: italic; }
+  .code-block .tok-str  { color: #93c5fd; }
+  .code-block .tok-acc  { color: #fde047; }
+
+  /* ─── CALLOUT ─────────────────────────────────────────── */
+  .callout {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+  .callout .callout-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout p { font-size: 15px; color: var(--text-muted); margin: 0; line-height: 1.7; }
+
+  /* ─── PULL QUOTE ──────────────────────────────────────── */
+  .pull-quote {
+    border-left: 3px solid var(--accent);
+    margin: 32px 0;
+    padding: 2px 0 2px 24px;
+  }
+  .pull-quote p {
+    font-family: var(--serif);
+    font-size: 21px;
+    line-height: 1.45;
+    color: var(--text);
+    font-weight: 500;
+    margin: 0 0 14px;
+  }
+  .pull-quote p:last-child { margin-bottom: 0; }
+  .pull-quote em { font-style: italic; color: var(--text-body); font-weight: 400; }
+  .pull-quote strong {
+    font-family: var(--mono);
+    font-size: 0.8em;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  /* ─── DETAIL LIST ─────────────────────────────────────── */
+  ul.dl {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  /* Not flex: a <strong> lead-in + body text must flow inline as one
+     paragraph. Flex would split the →, the <strong>, and the body into
+     three separate columns. So: left gutter + absolutely positioned →. */
+  ul.dl li {
+    position: relative;
+    padding: 13px 18px 13px 34px;
+    font-size: 15px;
+    color: var(--text-body);
+    border-bottom: 1px solid var(--border-light);
+    line-height: 1.65;
+  }
+  ul.dl li:last-child { border-bottom: none; }
+  ul.dl li::before {
+    content: '→';
+    position: absolute;
+    left: 14px;
+    top: 13px;
+    color: var(--accent);
+    font-size: 14px;
+  }
+
+  /* ─── TABLE ───────────────────────────────────────────── */
+  /* Default column sizing is content-driven (table-layout: auto) — best
+     for prose tables. To CONTROL column widths, add class="fixed" to the
+     <table> AND a <colgroup> of <col style="width:..%"> — fixed layout is
+     what actually makes those widths stick (auto layout treats colgroup
+     widths as hints and routinely ignores them, the usual "table looks
+     off" cause). Long unbroken strings wrap rather than blow a column out;
+     on narrow screens the wrapper scrolls horizontally. */
+  .data-table {
+    overflow-x: auto;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .data-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .data-table table.fixed { table-layout: fixed; }
+  .data-table thead th {
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    white-space: nowrap;      /* short header labels stay on one line */
+    vertical-align: bottom;
+  }
+  .data-table tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-body);
+    vertical-align: top;
+    line-height: 1.55;
+    overflow-wrap: anywhere;  /* long tokens/URLs wrap, never overflow */
+  }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:hover td { background: var(--surface-tint); }
+  .data-table tbody td:first-child { font-weight: 600; color: var(--text); }  /* row label */
+  /* Alignment helpers — apply to the <th> AND every <td> in that column */
+  .data-table th.center, .data-table td.center { text-align: center; }
+  .data-table th.num,    .data-table td.num    { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .data-table th.nowrap, .data-table td.nowrap { white-space: nowrap; }
+  .td-yes  { color: var(--green); font-weight: 600; }
+  .td-no   { color: var(--red);   font-weight: 600; }
+  .td-mono { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+
+  /* ─── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-refs { font-size: 12px; color: var(--text-subtle); }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 40px 0 36px; }
+    .page-wrap { padding: 0 16px 60px; }
+    footer { padding: 16px 20px; }
+    .plain-english { padding: 20px; }
+    .toc-list { grid-template-columns: 1fr; }
+    /* All card grids collapse to a single column on phones. */
+    .cards-grid,
+    .cards-grid.cols-2,
+    .cards-grid.cols-3,
+    .cards-grid:has(> .card:nth-child(2):last-child),
+    .cards-grid:has(> .card:nth-child(4):last-child) { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">asadani.tech</a>
+  <div class="nav-right">
+    <span>AI Engineering</span>
+    <span class="nav-tag">MAY 2026</span>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <span class="theme-icon-moon" aria-hidden="true">&#9790;</span><!-- ☾ shown in light mode -->
+      <span class="theme-icon-sun" aria-hidden="true">&#9728;</span><!-- ☀ shown in dark mode -->
+    </button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">AI Engineering</div>
+    <h1>From TODO to TOKNOW</h1>
+    <p class="hero-deck">A TODO is work you chose to defer. A TOKNOW is understanding you deferred without noticing. AI writes the code, the tests and the docs in minutes, and the debt it leaves behind is whether anyone can still explain the system.</p>
+    <div class="hero-meta">
+      <span>asadani.tech</span>
+      <span class="hero-meta-sep">/</span>
+      <span>May 2026</span>
+      <span class="hero-meta-sep">/</span>
+      <span>10 min read</span>
+    </div>
+  </header>
+
+  <!-- BANNER -->
+  <div class="banner">
+    <span class="banner-badge">THE CLAIM</span>
+    <p>AI did not invent a new kind of technical debt. It changed the denomination of the old one, from code we did not finish to code we do not understand.</p>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="section" id="the-dissonance">
+    <div class="section-label">The Thesis</div>
+    <h2><a class="anchor" href="#the-dissonance">We're shipping code we admit we don't trust</a></h2>
+    <div class="prose">
+      <p>Developers told Stack Overflow two things this year that do not fit together. <a href="https://survey.stackoverflow.co/2025/ai/" target="_blank" rel="noopener">84% of us</a> use or plan to use AI to write code. Only 3% say we highly trust what those tools produce, and among the most experienced developers that number falls to 2.6%. Active distrust of AI output climbed to 46%, up from 31% a year earlier.</p>
+      <p>Sit with that. We have adopted, at industry scale, a way of producing software that most of us openly say we do not believe. This is not recklessness. We ship anyway because it is fast, and we file the disbelief under "deal with it later."</p>
+      <p>That gap between using and trusting is the real story, and it has a cost nobody has named yet. For most of my career, technical debt had a shape I could see. It looked like a comment. <code>// TODO: handle the null case</code>. The work was deferred on purpose, and the understanding stayed intact.</p>
+      <p>AI changed which half you defer. It writes the code in minutes and generates the tests and the docs alongside it, so the things we used to postpone now come for free. What gets postponed instead is comprehension. The defining comment of this era is not the TODO. It is the TOKNOW.</p>
+    </div>
+    <div class="code-block">
+      <div class="cb-label">the comment that defines the era</div>
+<pre><span class="tok-cmt"># Yesterday: a known gap, deferred on purpose</span>
+<span class="tok-cmt"># TODO: handle the null response</span>
+
+<span class="tok-cmt"># Today: an unknown gap, shipped with passing tests</span>
+<span class="tok-cmt"># TOKNOW: figure out why this AI-generated flow actually works</span>
+<span class="tok-acc">#         To Know Later</span></pre>
+    </div>
+    <div class="pull-quote">
+      <p>A <strong>TODO</strong> is an honest promise. It says <em>I know exactly what is missing, and I am choosing to handle it later.</em></p>
+      <p>A <strong>TOKNOW</strong> is a promise nobody made. It says <em>I don't know what I just shipped, and I am trusting that later will come to explain it.</em> It rarely does.</p>
+    </div>
+  </div>
+
+  <!-- PLAIN ENGLISH -->
+  <div class="plain-english">
+    <div class="pe-label">In plain English &mdash; old debt vs new debt</div>
+    <ul class="pe-list">
+      <li>
+        <span class="pe-num">1</span>
+        <div><strong>Old debt was unfinished work.</strong> A skipped test, a TODO you could grep for. The uncertainty was bounded, because you knew what was missing.</div>
+      </li>
+      <li>
+        <span class="pe-num">2</span>
+        <div><strong>New debt is unfinished understanding.</strong> The code looks complete and passes its tests. The uncertainty sits in what is present and unexamined, and you cannot grep for "nobody here can reason about this."</div>
+      </li>
+      <li>
+        <span class="pe-num">3</span>
+        <div><strong>They bill to different accounts.</strong> The first is paid in rewrites. The second is paid on the day the system does something surprising and the only thing that understood it was the model that wrote it.</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section" id="forcing-function">
+    <div class="section-label">What Changed</div>
+    <h2><a class="anchor" href="#forcing-function">The friction was doing a second job</a></h2>
+    <div class="prose">
+      <p>Understanding never used to be a task of its own. It was a side effect, forced on you at four points in the work whether you wanted it or not. You understood the problem because you had to decide what to build. You understood the design because you defended it at a whiteboard against someone who disagreed. You understood the implementation because you wrote it and hit every wall in person. Then you understood it once more when a reviewer made you justify it.</p>
+      <p>The code was the residue of all that comprehension. AI removed the friction at each of those points, and that is the part people rightly celebrate. But the friction was quietly doing a second job nobody put on the invoice. It was forcing the thinking. Take away the struggle of producing the code and you also remove the thing that used to guarantee you understood it. Comprehension does not arrive for free just because the code compiled.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section" id="perception-gap">
+    <div class="section-label">Why You Can't Feel It</div>
+    <h2><a class="anchor" href="#perception-gap">You're a poor judge of your own speed</a></h2>
+    <div class="prose">
+      <p>Here is what makes this debt so easy to take on: you cannot feel yourself accruing it. In 2025, METR ran a careful randomized study of experienced open-source developers working on their own repositories. With AI tools allowed, they took <a href="https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/" target="_blank" rel="noopener">about 19% longer</a> to finish their tasks. They had expected AI to speed them up by 24%, and even after living through the slowdown they still believed it had sped them up by around 20%.</p>
+      <p>I want to be fair to that study, because it has a sequel. METR <a href="https://metr.org/blog/2026-02-24-uplift-update/" target="_blank" rel="noopener">later cautioned</a> that its follow-up data was distorted by selection effects, that the developers who gain most from AI kept opting out of the no-AI condition, and that it had probably underestimated how much current tools help. Fair enough. I would not bet a roadmap on the slowdown number.</p>
+      <p>The finding that survives all of that is the one I care about. These developers were wrong about their own productivity, in the optimistic direction, by roughly forty points. If we cannot feel a swing that large in our own speed, we certainly cannot feel the comprehension we skipped along the way. The velocity is loud and immediate. The debt is silent and deferred. We calibrate on the loud signal and miss the quiet one.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section" id="on-the-books">
+    <div class="section-label">The Evidence</div>
+    <h2><a class="anchor" href="#on-the-books">The debt is already in the diffs</a></h2>
+    <div class="prose">
+      <p>You do not have to take the perception argument on faith, because the debt is starting to surface in the code itself. GitClear analyzed <a href="https://www.gitclear.com/ai_assistant_code_quality_2025_research" target="_blank" rel="noopener">211 million lines</a> of code changed between 2020 and 2024 across repositories at Google, Microsoft and other large companies. Two trends move in step with AI adoption.</p>
+    </div>
+    <div class="data-table">
+      <table class="fixed">
+        <colgroup>
+          <col style="width:32%">
+          <col style="width:15%">
+          <col style="width:15%">
+          <col style="width:38%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Signal in the codebase</th>
+            <th class="num">2020&ndash;21</th>
+            <th class="num">2024</th>
+            <th>What it tells you</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Refactored ("moved") lines</td>
+            <td class="num">24%</td>
+            <td class="num">&lt;10%</td>
+            <td>We reshape understood code far less often</td>
+          </tr>
+          <tr>
+            <td>Copy-pasted lines</td>
+            <td class="num">8.3%</td>
+            <td class="num">12.3%</td>
+            <td>We now paste more than we refactor</td>
+          </tr>
+          <tr>
+            <td>Code revised within two weeks</td>
+            <td class="num">3.1%</td>
+            <td class="num">5.7%</td>
+            <td>More shipped-then-yanked, less considered</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose">
+      <p>This is what comprehension debt looks like from orbit. Refactoring requires understanding the thing you are reshaping. Pasting does not. When the share of refactoring collapses while duplication climbs past it for the first time on record, that is a workforce assembling more and understanding less.</p>
+      <p>I will be honest about the limits. This is correlation, the timing simply lines up with the spread of AI assistants, and GitClear sells tools in this market, so weigh it with that in mind. But the direction is hard to wave away, and duplicated code is independently associated with <a href="https://www.gitclear.com/ai_assistant_code_quality_2025_research" target="_blank" rel="noopener">15 to 50% more defects</a> in prior research.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="section" id="confidence-inverted">
+    <div class="section-label">Why It's Dangerous</div>
+    <h2><a class="anchor" href="#confidence-inverted">Plausible beats wrong, and that's the problem</a></h2>
+    <div class="prose">
+      <p>Bad code is not the real threat. Bad code tends to announce itself. It throws an error, fails a test, or falls over in the demo. The threat is plausible code, the kind that compiles and passes its tests and reads cleanly, then turns out to be quietly wrong in a way nobody thought to question.</p>
+      <p>A Stanford team led by Dan Boneh put numbers on this in 2023. Across 47 participants writing security-sensitive code, the group with an AI assistant wrote <a href="https://arxiv.org/abs/2211.03622" target="_blank" rel="noopener">measurably less secure code</a> than the group without one. The part that should worry you is the second half: the people using the assistant were also more confident their code was secure. Less safe, and more sure.</p>
+      <p>That inversion is the engine of the whole problem. The tool raises your confidence faster than it raises your correctness. The danger was never that AI writes bad code. It is that AI writes convincing code, and convincing code does not get the second look that ugly code earns for free.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 6 -->
+  <div class="section" id="cognitive-equity">
+    <div class="section-label">The Analogy</div>
+    <h2><a class="anchor" href="#cognitive-equity">Don't mail your paycheck to a stranger</a></h2>
+    <div class="prose">
+      <p>Here is the analogy I keep returning to. Imagine telling your employer to stop paying your salary into your own account, and to send it straight to a financial advisor you have never met. Let them understand your goals and move the money for you. You just get a dashboard that says things are going well.</p>
+      <p>Nobody sane agrees to that, and not only out of fear of fraud. We want the money in our own hands because the friction of managing it is how we ever learn to manage it. The struggle is what builds the judgment.</p>
+      <p>In software we are signing up for that exact deal and calling it productivity. We hand the agent the one asset that actually compounds, our grasp of how the system works, in exchange for the speed of getting features out the door. The dashboard looks great. And quietly, the only entity that understands the codebase becomes the one we rent by the token.</p>
+    </div>
+    <div class="callout">
+      <div class="callout-lbl">Cognitive Rent</div>
+      <p>If you need the model to explain the code it just wrote you, you do not own that feature. You are renting a system you remain fully responsible for maintaining.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 7 -->
+  <div class="section" id="amplifier">
+    <div class="section-label">The Honest Part</div>
+    <h2><a class="anchor" href="#amplifier">AI doesn't create the debt. It amplifies you.</a></h2>
+    <div class="prose">
+      <p>It would be easy to land this as an anti-AI piece, and it would be wrong. The best evidence we have says the tool is not the villain. It is a multiplier.</p>
+      <p>Google's DORA program has the longest-running data on this. In 2024 it found that a 25% increase in AI adoption came with an estimated <a href="https://cloud.google.com/blog/products/devops-sre/announcing-the-2024-dora-report" target="_blank" rel="noopener">7.2% drop in delivery stability</a> and a smaller dip in throughput. The mechanism was not "AI writes garbage." It was batch size. AI makes it trivial to produce more change at once, and bigger changesets have always carried more risk.</p>
+      <p>By 2025, with AI adoption near 90%, the picture matured. Throughput actually turned <a href="https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report" target="_blank" rel="noopener">positive</a>, so teams really do ship more now. But the negative relationship with stability held. DORA's reading is that AI amplifies whatever your organization already is. Teams with strong testing and fast feedback turn it into real gains. Teams with fragmented process and shallow understanding get their weaknesses magnified. The comprehension gap is the pre-existing condition. AI just turns up the volume on it.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 8 -->
+  <div class="section" id="what-id-do">
+    <div class="section-label">What I'd Actually Do</div>
+    <h2><a class="anchor" href="#what-id-do">Make comprehension the thing you refuse to defer</a></h2>
+    <div class="prose">
+      <p>None of this argues for slowing down or hand-writing code out of nostalgia. I want the velocity. The fix is to stop letting the agent be the only thing that holds the understanding. Four habits I keep, each pointed at one of the failure modes above:</p>
+    </div>
+    <div class="cards-grid">
+      <div class="card card-blue">
+        <div class="card-icon-badge">Batch</div>
+        <h4>Cap the diff you'll accept</h4>
+        <p>DORA's risk lever is changeset size, and the model will happily hand you a thousand lines. If you cannot reason about the whole change in one sitting, it is too big to merge, however green the tests look.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Refactor</div>
+        <h4>Watch your refactor rate</h4>
+        <p>GitClear's warning light is refactoring collapsing while duplication climbs. If your team only ever adds and pastes and never reshapes, comprehension is already leaking out of the codebase.</p>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon-badge">Explain</div>
+        <h4>The explain test, no model</h4>
+        <p>Before merge, someone explains the change without the assistant. Not the prompt that produced it, the behavior: what it does on malformed input, where it breaks first. If only the AI can explain it, it is not done.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Harness</div>
+        <h4>Agent as harness, not brain</h4>
+        <p>Use the agent as an execution harness for your intent, not a substitute for it. You still decide what to build and why. The model types. The architecture stays yours, or it stays nobody's.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 9 -->
+  <div class="section" id="discernment">
+    <div class="section-label">The Shift</div>
+    <h2><a class="anchor" href="#discernment">Generation is free. Judgment isn't.</a></h2>
+    <div class="prose">
+      <p>There is a career implication buried in all of this. For twenty years the prized engineer was the one who could produce. Type faster, know more libraries, ship more volume. Generation was the bottleneck, so generation was the prize.</p>
+      <p>Generation is no longer the bottleneck. It is close to free and close to infinite. When supply runs to infinity, value moves to whatever is now scarce, and what is scarce is the judgment to decide whether a given thousand lines should exist at all. The valuable engineer now is not the fastest typist. It is the person who can read what the model produced and tell you which fifty lines are load-bearing and which are confidently wrong.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 10 -->
+  <div class="section" id="short-version">
+    <div class="section-label">The Frame To Leave On</div>
+    <h2><a class="anchor" href="#short-version">The short version</a></h2>
+    <div class="prose">
+      <p>AI did not abolish technical debt. It changed its denomination. The old debt was unfinished implementation and you could see it. The new debt is unfinished understanding, and it hides behind a green test suite and a confident tone.</p>
+      <p>I wrote once about moral surrender, losing the why and not just the how. TOKNOW is what that surrender looks like inside a codebase. Every generated function nobody has reasoned about is a quiet bet that later will come, and that someone will understand it before it matters. The data says later does not arrive on its own.</p>
+      <p>So I have started asking one question before anything ships. If this breaks, and the only thing that ever understood it is the model that wrote it, who fixes it? If the answer is nobody, you did not ship a feature. You filed a TOKNOW and called it done. The TODO was a promise to do the work. Make the TOKNOW the one promise you refuse to write.</p>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <span>asadani.tech · May 2026</span>
+  <div class="footer-refs">
+    Sources linked inline: METR, GitClear, Stanford, DORA, Stack Overflow &nbsp;·&nbsp; <a href="/">← back to index</a>
+  </div>
+</footer>
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
+
+</body>
+</html>
