@@ -840,14 +840,36 @@
     <div class="section-label">Writing</div>
     <div class="section-heading">Articles</div>
 
-    <div class="filter-bar">
-      <button class="filter-pill active" data-filter="all">All</button>
-      <button class="filter-pill" data-filter="ai-engineering">AI Engineering</button>
-      <button class="filter-pill" data-filter="security">Security</button>
-      <button class="filter-pill" data-filter="infrastructure">Infrastructure</button>
-      <button class="filter-pill" data-filter="policy">Policy</button>
-      <button class="filter-pill" data-filter="data">Data</button>
-      <button class="filter-pill" data-filter="interactive">Interactive</button>
+    <input type="search" id="article-search" class="article-search" placeholder="Search articles by title, description, or tag…" aria-label="Search articles" autocomplete="off">
+
+    <div class="filter-row">
+      <span class="filter-lead">Topic</span>
+      <div class="filter-bar">
+        <button class="filter-pill active" data-filter="all">All</button>
+        <button class="filter-pill" data-filter="ai-engineering">AI Engineering</button>
+        <button class="filter-pill" data-filter="security">Security</button>
+        <button class="filter-pill" data-filter="infrastructure">Infrastructure</button>
+        <button class="filter-pill" data-filter="policy">Policy</button>
+        <button class="filter-pill" data-filter="data">Data</button>
+        <button class="filter-pill" data-filter="interactive">Interactive</button>
+      </div>
+    </div>
+
+    <div class="filter-row">
+      <span class="filter-lead">Flavor</span>
+      <div class="flavor-bar">
+        <button class="flavor-chip" data-flavor="agents">agents</button>
+        <button class="flavor-chip" data-flavor="agentic-coding">agentic-coding</button>
+        <button class="flavor-chip" data-flavor="models">models</button>
+        <button class="flavor-chip" data-flavor="evals">evals</button>
+        <button class="flavor-chip" data-flavor="craft">craft</button>
+        <button class="flavor-chip" data-flavor="prompting">prompting</button>
+        <button class="flavor-chip" data-flavor="cost-latency">cost-latency</button>
+        <button class="flavor-chip" data-flavor="supply-chain">supply-chain</button>
+        <button class="flavor-chip" data-flavor="provenance">provenance</button>
+        <button class="flavor-chip" data-flavor="rag">rag</button>
+        <button class="flavor-chip" data-flavor="research">research</button>
+      </div>
     </div>
 
     <div class="articles-list">
