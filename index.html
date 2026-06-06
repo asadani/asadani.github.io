@@ -1344,17 +1344,32 @@
   const ARTICLES_PER_PAGE = 10;
   let currentPage = 1;
   let currentFilter = 'all';
+  let currentFlavor = null;
+  let currentSearch = '';
   const allRows     = Array.from(document.querySelectorAll('.articles-list .art-row'));
   const pills       = document.querySelectorAll('.filter-pill');
+  const flavorChips = document.querySelectorAll('.flavor-chip');
+  const searchInput = document.getElementById('article-search');
   const paginationInfo   = document.getElementById('pagination-info');
   const paginationCtrls  = document.getElementById('pagination-controls');
   const pageNumsEl       = document.getElementById('page-nums');
   const prevBtn          = document.getElementById('prev-btn');
   const nextBtn          = document.getElementById('next-btn');
 
+  function matchesCategory(r) {
+    return currentFilter === 'all'
+      || (r.dataset.tags || '').split(' ').includes(currentFilter);
+  }
+  function matchesFlavor(r) {
+    return !currentFlavor
+      || (r.dataset.flavors || '').split(' ').includes(currentFlavor);
+  }
+  function matchesSearch(r) {
+    if (!currentSearch) return true;
+    return r.textContent.toLowerCase().includes(currentSearch);
+  }
   function filteredRows() {
-    if (currentFilter === 'all') return allRows;
-    return allRows.filter(r => (r.dataset.tags || '').split(' ').includes(currentFilter));
+    return allRows.filter(r => matchesCategory(r) && matchesFlavor(r) && matchesSearch(r));
   }
 
   function renderPage(page) {
@@ -1398,6 +1413,28 @@
       renderPage(1);
     });
   });
+
+  flavorChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const f = chip.dataset.flavor;
+      if (currentFlavor === f) {
+        currentFlavor = null;
+        chip.classList.remove('active');
+      } else {
+        flavorChips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        currentFlavor = f;
+      }
+      renderPage(1);
+    });
+  });
+
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      currentSearch = searchInput.value.trim().toLowerCase();
+      renderPage(1);
+    });
+  }
 
   prevBtn.addEventListener('click', () => renderPage(currentPage - 1));
   nextBtn.addEventListener('click', () => renderPage(currentPage + 1));
