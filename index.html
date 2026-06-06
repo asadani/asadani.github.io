@@ -872,6 +872,15 @@
       </div>
     </div>
 
+    <!--
+      Article tagging: each .art-row carries data-tags (broad category, drives the Topic pills)
+      and data-flavors (space-separated cross-cutting flavors, drives the Flavor chips + the
+      visible .card-flavors chips). Flavor vocabulary (keep in sync with the .flavor-bar buttons):
+        agents · agentic-coding · models · evals · craft · prompting ·
+        cost-latency · supply-chain · provenance · rag · research
+      A new flavor must be added to (a) this list, (b) a .flavor-chip button in the .flavor-bar,
+      and (c) the row's data-flavors + .card-flavors chips.
+    -->
     <div class="articles-list">
 
       <a class="art-row art-ai" href="/from-todo-to-toknow/" data-tags="ai-engineering" data-flavors="craft agentic-coding">
