@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verification-maxxing — Generation is solved, judgment is the moat</title>
+<meta name="description" content="The syntax tax collapsed; the verification tax replaced it. Generation is solved — judgment is the moat. Why 'vibe coding to agentic engineering' is not a tooling rename but a shift in where the cost of software lives: Agent = Model + Scaffold, and most teams invest in the wrong half.">
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #F5F1EB;
+    --bg-alt:       #EDEAE3;
+    --surface:      #FFFFFF;
+    --surface-tint: #FAF8F5;
+    --border:       #DDD9D0;
+    --border-light: #EAE7E0;
+    --text:         #1A1714;
+    --text-body:    #3D3A35;
+    --text-muted:   #6B6760;
+    --text-subtle:  #9B9892;
+    --accent:       #C85C2D;
+    --accent-light: #E8895D;
+    --accent-bg:    #FDF1EB;
+    --accent-border:#F0C4A8;
+    --green:        #2A7A4B;
+    --green-bg:     #EAF5EF;
+    --green-border: #A8D9BC;
+    --blue:         #2563A8;
+    --blue-bg:      #EAF1FA;
+    --blue-border:  #A8C5E8;
+    --red:          #B83535;
+    --red-bg:       #FAEBEB;
+    --red-border:   #E8AAAA;
+    --code-bg:      #1A1714;  /* code blocks stay dark in BOTH modes */
+    --shadow:       rgba(200,92,45,0.08);
+    --serif:        'Newsreader', Georgia, serif;
+    --sans:         'Inter', system-ui, sans-serif;
+    --mono:         'JetBrains Mono', 'Courier New', monospace;
+    color-scheme: light;
+  }
+
+  /* ─── DARK MODE ───────────────────────────────────────── */
+  [data-theme="dark"] {
+    --bg:           #14110D;
+    --bg-alt:       #1E1A14;
+    --surface:      #1A1611;
+    --surface-tint: #211C16;
+    --border:       #332C24;
+    --border-light: #2A241D;
+    --text:         #F2EEE7;
+    --text-body:    #D8D2C8;
+    --text-muted:   #A39C90;
+    --text-subtle:  #7A7468;
+    --accent:       #E8895D;
+    --accent-light: #F0A079;
+    --accent-bg:    #2C1E14;
+    --accent-border:#5A3826;
+    --green:        #5FD699;
+    --green-bg:     #14241B;
+    --green-border: #2E5640;
+    --blue:         #6FB0F0;
+    --blue-bg:      #142233;
+    --blue-border:  #2C4A6E;
+    --red:          #F08585;
+    --red-bg:       #2E1717;
+    --red-border:   #663434;
+    --code-bg:      #0E0B08;
+    --shadow:       rgba(0,0,0,0.45);
+    color-scheme: dark;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-body);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .nav-tag {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+  }
+  .theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .theme-toggle:hover { color: var(--accent); border-color: var(--accent-border); }
+  .theme-icon-sun { display: none; }
+  [data-theme="dark"] .theme-icon-sun  { display: inline; }
+  [data-theme="dark"] .theme-icon-moon { display: none; }
+
+  /* ─── LAYOUT ──────────────────────────────────────────── */
+  .page-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-deck {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 640px;
+    font-weight: 300;
+  }
+  .hero-meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-family: var(--mono);
+  }
+  .hero-meta-sep { color: var(--border); }
+
+  /* ─── BODY TEXT ───────────────────────────────────────── */
+  .prose p {
+    color: var(--text-body);
+    margin-bottom: 20px;
+    font-size: 17px;
+    line-height: 1.78;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); font-weight: 600; }
+  em { font-style: italic; color: var(--text-body); }
+
+  /* ─── SECTION HEADING ─────────────────────────────────── */
+  .section { margin-top: 56px; scroll-margin-top: 72px; }
+  .section-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section-label a { color: inherit; text-decoration: none; transition: color 0.15s; }
+  .section-label a:hover { color: var(--text); }
+  .section h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+  .section h2 a.anchor { color: inherit; text-decoration: none; position: relative; }
+  .section h2 a.anchor:hover::before {
+    content: '#';
+    position: absolute;
+    left: -22px;
+    color: var(--accent);
+    font-weight: 400;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 32px 0 14px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── BANNER ──────────────────────────────────────────── */
+  .banner {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .banner-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .banner p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .banner a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ─── PLAIN ENGLISH ───────────────────────────────────── */
+  .plain-english {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 8px 8px;
+    padding: 28px 32px;
+    margin: 0 0 56px;
+  }
+  .plain-english .pe-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .pe-list { list-style: none; padding: 0; }
+  .pe-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 16px;
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+  .pe-list li:last-child { border-bottom: none; }
+  .pe-num {
+    width: 26px;
+    height: 26px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-family: var(--mono);
+  }
+
+  /* ─── TOC (jump links) ────────────────────────────────── */
+  .toc {
+    background: var(--surface-tint);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px 22px;
+    margin: 0 0 56px;
+  }
+  .toc-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 28px;
+  }
+  .toc-list li { display: flex; align-items: baseline; gap: 10px; font-size: 14px; line-height: 1.5; }
+  .toc-num { font-family: var(--mono); font-size: 11px; color: var(--text-subtle); flex-shrink: 0; width: 18px; }
+  .toc-list a {
+    color: var(--text-body);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .toc-list a:hover { color: var(--accent); border-bottom-color: var(--accent-border); }
+
+  /* ─── CARDS GRID ──────────────────────────────────────── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 24px 0;
+  }
+  .cards-grid:has(> .card:nth-child(2):last-child),
+  .cards-grid:has(> .card:nth-child(4):last-child),
+  .cards-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .cards-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    border-color: var(--accent-border);
+    box-shadow: 0 2px 8px var(--shadow);
+  }
+  .card-icon { font-size: 20px; margin-bottom: 10px; }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+  .card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .card.card-red { border-color: var(--red-border); }
+  .card.card-red:hover { border-color: var(--red); box-shadow: 0 2px 8px rgba(184,53,53,0.08); }
+  .card.card-red .card-icon-badge {
+    display: inline-block;
+    background: var(--red-bg);
+    color: var(--red);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-green { border-color: var(--green-border); }
+  .card.card-green:hover { border-color: var(--green); box-shadow: 0 2px 8px rgba(42,122,75,0.08); }
+  .card.card-green .card-icon-badge {
+    display: inline-block;
+    background: var(--green-bg);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-blue { border-color: var(--blue-border); }
+  .card.card-blue:hover { border-color: var(--blue); box-shadow: 0 2px 8px rgba(37,99,168,0.08); }
+  .card.card-blue .card-icon-badge {
+    display: inline-block;
+    background: var(--blue-bg);
+    color: var(--blue);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  /* ─── CODE BLOCK ──────────────────────────────────────── */
+  .code-block {
+    background: var(--code-bg);
+    border-radius: 7px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .code-block .cb-label {
+    padding: 9px 16px;
+    background: rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .code-block pre {
+    padding: 20px;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #e8e8e8;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-block .tok-key  { color: #fdba74; }
+  .code-block .tok-val  { color: #86efac; }
+  .code-block .tok-cmt  { color: #6b7280; font-style: italic; }
+  .code-block .tok-str  { color: #93c5fd; }
+  .code-block .tok-acc  { color: #fde047; }
+
+  /* ─── CALLOUT ─────────────────────────────────────────── */
+  .callout {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+  .callout .callout-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout p { font-size: 15px; color: var(--text-muted); margin: 0; line-height: 1.7; }
+
+  /* ─── DETAIL LIST ─────────────────────────────────────── */
+  ul.dl {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  ul.dl li {
+    position: relative;
+    padding: 13px 18px 13px 34px;
+    font-size: 15px;
+    color: var(--text-body);
+    border-bottom: 1px solid var(--border-light);
+    line-height: 1.65;
+  }
+  ul.dl li:last-child { border-bottom: none; }
+  ul.dl li::before {
+    content: '→';
+    position: absolute;
+    left: 14px;
+    top: 13px;
+    color: var(--accent);
+    font-size: 14px;
+  }
+
+  /* ─── FIGURE / CHART ──────────────────────────────────── */
+  /* Inline SVG chart. Surface + border + radius match the
+     .card / .data-table / .toc visual language. Theme-aware:
+     all fills/strokes reference design tokens via style attrs. */
+  .chart-fig {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 22px 22px 16px;
+    margin: 24px 0;
+  }
+  .chart-fig svg { width: 100%; height: auto; display: block; }
+  .chart-fig figcaption {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-light);
+  }
+  .chart-fig figcaption strong { color: var(--text); }
+
+  /* ─── TABLE ───────────────────────────────────────────── */
+  .data-table {
+    overflow-x: auto;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .data-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .data-table table.fixed { table-layout: fixed; }
+  .data-table thead th {
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    white-space: nowrap;
+    vertical-align: bottom;
+  }
+  .data-table tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-body);
+    vertical-align: top;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:hover td { background: var(--surface-tint); }
+  .data-table tbody td:first-child { font-weight: 600; color: var(--text); }
+  .data-table th.center, .data-table td.center { text-align: center; }
+  .data-table th.num,    .data-table td.num    { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .data-table th.nowrap, .data-table td.nowrap { white-space: nowrap; }
+  .td-yes  { color: var(--green); font-weight: 600; }
+  .td-no   { color: var(--red);   font-weight: 600; }
+  .td-mono { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+
+  /* ─── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-refs { font-size: 12px; color: var(--text-subtle); }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 40px 0 36px; }
+    .page-wrap { padding: 0 16px 60px; }
+    footer { padding: 16px 20px; }
+    .plain-english { padding: 20px; }
+    .toc-list { grid-template-columns: 1fr; }
+    .cards-grid,
+    .cards-grid.cols-2,
+    .cards-grid.cols-3,
+    .cards-grid:has(> .card:nth-child(2):last-child),
+    .cards-grid:has(> .card:nth-child(4):last-child) { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">asadani.tech</a>
+  <div class="nav-right">
+    <span>Engineering</span>
+    <span class="nav-tag">JUN 2026</span>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <span class="theme-icon-moon" aria-hidden="true">&#9790;</span>
+      <span class="theme-icon-sun" aria-hidden="true">&#9728;</span>
+    </button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">AI &amp; Software Engineering — Synthesis</div>
+    <h1>Verification-maxxing</h1>
+    <p class="hero-deck">For seventy years the cost of software lived in syntax: translating intent into something a parser would accept. That tax is collapsing. What replaced it is the <em>verification tax</em> — the cost of checking what the machine hands back — and the move from "vibe coding" to "agentic engineering" is really a fight over who pays it, and when. Generation is solved. Judgment is the moat.</p>
+    <div class="hero-meta">
+      <span>June 2026</span>
+      <span class="hero-meta-sep">/</span>
+      <span>12 min read</span>
+      <span class="hero-meta-sep">/</span>
+      <span>Synthesis of 4 sources</span>
+    </div>
+  </header>
+
+  <!-- TL;DR -->
+  <div class="plain-english">
+    <div class="pe-label">The argument in four lines</div>
+    <ul class="pe-list">
+      <li>
+        <span class="pe-num">1</span>
+        <div><strong>The bottleneck moved, it didn't disappear.</strong> Generation is close to solved. The expensive work is now specifying intent precisely enough and verifying that the output is correct — the verification tax.</div>
+      </li>
+      <li>
+        <span class="pe-num">2</span>
+        <div><strong>Agent = Model + Scaffold.</strong> The model is one input. The rule files, tests, tools, and feedback loops around it are the scaffold. Most teams pour effort into the model and ignore the scaffold. That is backwards.</div>
+      </li>
+      <li>
+        <span class="pe-num">3</span>
+        <div><strong>Vibe coding and agentic engineering are a spectrum, not a binary.</strong> The differentiator is not which model you use — it's how much structure surrounds its output. The same agent can do either.</div>
+      </li>
+      <li>
+        <span class="pe-num">4</span>
+        <div><strong>The economics flip.</strong> Vibe coding is cheap upfront and expensive forever (token burn, rework, security debt). Agentic engineering is expensive upfront and cheap to run. Past a crossover point, casual prompting costs several times more per feature.</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- SOURCING BANNER -->
+  <div class="banner">
+    <span class="banner-badge">SOURCING</span>
+    <p>This piece synthesizes four 2026 sources: the Kaggle-published whitepaper <a href="https://www.kaggle.com/whitepaper-the-new-SDLC-with-vibe-coding"><em>The New SDLC With Vibe Coding</em></a> by Google engineers Addy Osmani, Shubham Saboo &amp; Sokratis Kartakis; Sayed Ali Alkamel's practitioner write-up on DEV; and Medium essays by Mohamed A. Hassan and Avishay Cohen. The empirical claims (METR, JetBrains, the benchmark deltas) come from independently citable studies, not the whitepaper alone.</p>
+  </div>
+
+  <!-- ── 01 ───────────────────────────────────────────── -->
+  <div class="section" id="bottleneck">
+    <div class="section-label"><a href="#bottleneck">01 — The premise</a></div>
+    <h2><a class="anchor" href="#bottleneck">Coding was never the bottleneck</a></h2>
+    <div class="prose">
+      <p>For decades the industry quietly believed that writing code was the slow part of building software. It wasn't. Give an experienced engineer a clear specification and the implementation was usually the <em>straightforward</em> part — testing and deployment had working automation years ago. The drag lived upstream: deciding what to build, agreeing on requirements, and surviving the design rituals where weeks vanished into workshops and "back to the drawing board." Mohamed Hassan puts it bluntly: the hardest part of building software was never the coding, it was deciding what to build in the first place.</p>
+      <p>This matters because it tells you exactly which constraint generative AI relaxed. AI didn't just make implementation faster — it hit the front of the lifecycle, the part that was always slowest, by turning rough goals into draft requirements, user flows, and a testable prototype in an afternoon. The output stops being another document nobody reads and becomes something users can touch. The feedback loop tightens. You learn faster.</p>
+      <p>But relaxing the upstream constraint exposes a new one. Once an agent can produce roughly 80% of a feature in minutes, the scarce resource is no longer typing speed or algorithmic recall. It is <strong>judgment</strong>: knowing what to ask for, and knowing whether what came back is actually right. The syntax tax — the price you paid to compress human intent into something a parser would accept — is collapsing. A verification tax took its place, and the rest of this piece is about how to pay it without going broke.</p>
+    </div>
+  </div>
+
+  <!-- ── 02 ───────────────────────────────────────────── -->
+  <div class="section" id="spectrum">
+    <div class="section-label"><a href="#spectrum">02 — The frame</a></div>
+    <h2><a class="anchor" href="#spectrum">A spectrum, not a binary</a></h2>
+    <div class="prose">
+      <p>Andrej Karpathy coined "vibe coding" in February 2025 and by early 2026 was already calling it passé, proposing "agentic engineering" at Sequoia's AI Ascent. The rename wasn't marketing. "Vibe" had become a suitcase word stuffed with everything from a weekend hack to a disciplined, agent-driven production workflow — and, as Osmani notes, telling a CTO you're "vibe engineering" their payment system tends to produce a visible flinch.</p>
+      <p>The useful way to read the landscape is as a spectrum of how much structure surrounds the model's output. Vibe coding is an attitude toward verification: optional. Agentic engineering puts the model inside a scaffold of specs, tests, and feedback loops. Crucially, <strong>you can do either with the exact same agent and model</strong> — the difference is the discipline around it, not the tool.</p>
+    </div>
+
+    <div class="data-table">
+      <table class="fixed">
+        <colgroup>
+          <col style="width:22%">
+          <col style="width:26%">
+          <col style="width:26%">
+          <col style="width:26%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Dimension</th>
+            <th>Vibe coding</th>
+            <th>Structured AI-assisted</th>
+            <th>Agentic engineering</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Intent</td>
+            <td>Casual natural-language prompts</td>
+            <td>Detailed prompts with examples</td>
+            <td>Formal specs, architecture docs, rule files</td>
+          </tr>
+          <tr>
+            <td>Verification</td>
+            <td>"Does it seem to work?"</td>
+            <td>Manual testing, spot-checks</td>
+            <td>Automated suites, CI gates, LLM judges</td>
+          </tr>
+          <tr>
+            <td>Error handling</td>
+            <td>Paste the error back into the prompt</td>
+            <td>Developer diagnoses root cause</td>
+            <td>Agent self-diagnoses against defined behaviour</td>
+          </tr>
+          <tr>
+            <td>Codebase grasp</td>
+            <td>May not read the generated code</td>
+            <td>Selective review of critical paths</td>
+            <td>Comprehensive architectural review</td>
+          </tr>
+          <tr>
+            <td>Best scope</td>
+            <td>Prototypes, hackathons, scripts</td>
+            <td>Features in established codebases</td>
+            <td>Production systems at scale</td>
+          </tr>
+          <tr>
+            <td>Risk</td>
+            <td class="td-no">High — fine for throwaway</td>
+            <td>Moderate — human judgment at checkpoints</td>
+            <td class="td-yes">Low — systematic verification at every stage</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>The trap is treating speed as a free upgrade. Vibe coding is the right gear for exploration and the wrong gear for production — and teams that keep the boundary blurry end up shipping prototypes by accident.</p>
+    </div>
+  </div>
+
+  <!-- ── 03 ───────────────────────────────────────────── -->
+  <div class="section" id="scaffold">
+    <div class="section-label"><a href="#scaffold">03 — The mechanism</a></div>
+    <h2><a class="anchor" href="#scaffold">Agent = Model + Scaffold</a></h2>
+    <div class="prose">
+      <p>There is a strong temptation, when adopting AI tooling, to treat the model as the system. A newer model arrives and the agent gets smarter; an older one and it gets worse. The model becomes the explanation for everything. That intuition leads to the wrong investments.</p>
+      <p>The whitepaper's framing is cleaner: the model is one input into a running agent. Everything else — the prompts, the tools, the rule files, the test runners, the observability layer — is the <strong>scaffold</strong> (the paper also calls it the harness): the machinery that gives the model state, feedback, and constraints.</p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">The core equation</div>
+      <p>Agent = Model + Scaffold. A model arrives at your repository with the same blank-slate uncertainty as a new engineer on day one — except it cannot ask questions. It will infer. Without a rule file, those inferences will be wrong in predictable ways: wrong state pattern, wrong folder structure, wrong testing convention. The scaffold is the onboarding document the new hire never gets to ask you to write.</p>
+    </div>
+
+    <div class="prose">
+      <p>How much does the scaffold actually move the needle? Public benchmarks make it concrete. On Terminal Bench 2.0, one team moved a coding agent <strong>from outside the top 30 into the top 5 by changing only the scaffold</strong> — no model change. A LangChain study lifted an agent's benchmark score by 13.7 points by tweaking only the system prompt and middleware around a fixed model. Examined honestly, most agent failures are scaffold-configuration failures wearing a model's clothes.</p>
+      <p>A practical scaffold starts as a single rule file at the project root. It is not prompting — it's operating instructions, written once, paid forward into every future session:</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label"><span>AGENTS.md — a starting scaffold</span><span>~10 lines</span></div>
+<pre><span class="tok-cmt"># AGENTS.md — operating instructions, not prompts</span>
+
+<span class="tok-acc">## Stack</span>
+- Runtime + framework versions pinned here
+- State management: one named library, not "whatever fits"
+- Networking + data layers named explicitly
+
+<span class="tok-acc">## Architecture</span>
+- Hexagonal: feature folders, not layer folders
+- Domain layer has zero framework imports
+- Repositories are interfaces; concretes live at the edge
+
+<span class="tok-acc">## Hard rules</span>
+- Never add a package not already declared
+- Tests live in test/, never beside source files
+- No print/console debugging — use the logger
+- Run the static analyzer before considering a task done
+
+<span class="tok-acc">## Workflow</span>
+1. Read the feature spec before generating anything
+2. Write the test first, then implement to pass it
+3. Flag any change that touches the domain layer
+4. Confirm the suite is green before reporting done</pre>
+    </div>
+
+    <div class="prose">
+      <p>The developer who writes this spends about an hour. Every subsequent agent interaction in that project inherits the hour. It compounds — which is exactly the property the model alone does not give you.</p>
+    </div>
+  </div>
+
+  <!-- ── 04 ───────────────────────────────────────────── -->
+  <div class="section" id="context">
+    <div class="section-label"><a href="#context">04 — The real skill</a></div>
+    <h2><a class="anchor" href="#context">Context engineering is not prompt engineering</a></h2>
+    <div class="prose">
+      <p>Prompt engineering asks: <em>how do I phrase this question to get a smarter answer from the model?</em> It optimizes a single turn. Context engineering asks a different question: <em>what would a new team member need to know to contribute correctly to this project, and how do I encode that in a form the AI can use?</em> It optimizes the whole session — and when context persists across sessions, every future session too.</p>
+      <p>Six kinds of context matter in any agentic workflow:</p>
+    </div>
+
+    <ul class="dl">
+      <li><strong>Instructions</strong> — the agent's role, constraints, and operating bounds.</li>
+      <li><strong>Knowledge</strong> — retrieved docs, architecture diagrams, domain-specific data.</li>
+      <li><strong>Memory</strong> — short-term session state (what just happened) and long-term project state (what the project is).</li>
+      <li><strong>Examples</strong> — few-shot patterns from <em>your own</em> codebase, not generic snippets from the internet.</li>
+      <li><strong>Tools</strong> — precise definitions of the APIs, scripts, and services the agent may call.</li>
+      <li><strong>Guardrails</strong> — the hard constraints it cannot cross.</li>
+    </ul>
+
+    <div class="prose">
+      <p>The practical heuristic, hard-won: a rule should be <strong>short, specific, and paired with a concrete example</strong> of the behaviour you want. Rule files that are too broad don't help; rule files too verbose don't fit efficiently. And there's a cost dimension most people miss — the distinction between static and dynamic context is an architectural decision, not a detail.</p>
+      <p><strong>Static context</strong> (rule files, system instructions) is always loaded: every token is paid on every model call, relevant or not. <strong>Dynamic context</strong> (tool results, retrieved docs, windowed history) loads on demand and costs only when the information is actually needed. The most effective pattern for managing the dynamic side is portable, structured packages of procedural knowledge — "skills" — that the agent loads only when a task matches: lightweight metadata at startup, full instructions on match, deep reference material only when explicitly needed.</p>
+    </div>
+  </div>
+
+  <!-- ── 05 ───────────────────────────────────────────── -->
+  <div class="section" id="economics">
+    <div class="section-label"><a href="#economics">05 — The economics</a></div>
+    <h2><a class="anchor" href="#economics">Who pays the tax, and when</a></h2>
+    <div class="prose">
+      <p>Velocity — <em>how fast can we write code?</em> — is the wrong metric for a leader. The right one is total cost of ownership, and in the AI era a large share of that cost is dictated by the token economy. Reframed as capital versus operating expenditure, the two ends of the spectrum invert each other.</p>
+      <p><strong>Vibe coding is low CapEx, high OpEx.</strong> The barrier to entry is essentially zero — a subscription and a few prompts. But the operating cost compounds: a <em>token burn rate</em> from dumping unstructured files into context and repeatedly asking the model to fix its own unverified mistakes (an expensive prompting loop with low first-pass success); a <em>maintenance tax</em> when a bug surfaces six months later in code nobody structured; and <em>security remediation</em>, where rapid generation without an evaluation harness means rapid generation of vulnerabilities.</p>
+      <p><strong>Agentic engineering is high CapEx, low OpEx.</strong> You pay upfront — designing API schemas, building deterministic test suites, structuring the agent's context — before a line of production code is generated. In return, the marginal cost of shipping and maintaining each feature drops, because the agent operates inside a governed factory and its output is structurally sound, pre-tested, and aligned with your standards.</p>
+    </div>
+
+    <figure class="chart-fig">
+      <svg viewBox="0 0 720 360" role="img" aria-labelledby="tco-title tco-desc" preserveAspectRatio="xMidYMid meet">
+        <title id="tco-title">Cumulative total cost of ownership over time</title>
+        <desc id="tco-desc">Two curves over time. Vibe coding starts cheaper but rises exponentially; agentic engineering starts higher due to upfront investment but stays flat. They cross at a crossover point, after which vibe coding costs three to ten times more per feature.</desc>
+
+        <!-- shaded gap right of crossover: vibe coding's compounding cost penalty -->
+        <path d="M360,182 C474,110 582,70 690,52 L690,158 C600,168 492,182 360,182 Z"
+              style="fill:var(--red);opacity:0.10;stroke:none"/>
+
+        <!-- axes -->
+        <line x1="64" y1="24" x2="64" y2="300" style="stroke:var(--border);stroke-width:1.5"/>
+        <line x1="64" y1="300" x2="700" y2="300" style="stroke:var(--border);stroke-width:1.5"/>
+        <!-- axis arrowheads -->
+        <path d="M64,18 l-4,8 l8,0 Z" style="fill:var(--text-subtle)"/>
+        <path d="M706,300 l-8,-4 l0,8 Z" style="fill:var(--text-subtle)"/>
+
+        <!-- crossover guide line -->
+        <line x1="360" y1="182" x2="360" y2="300" style="stroke:var(--text-subtle);stroke-width:1.2;stroke-dasharray:4 4;opacity:0.7"/>
+
+        <!-- agentic engineering curve (green) -->
+        <path d="M64,222 C172,194 282,182 360,182 C492,182 600,168 690,158"
+              style="fill:none;stroke:var(--green);stroke-width:2.75;stroke-linecap:round"/>
+        <!-- vibe coding curve (red) -->
+        <path d="M64,288 C200,276 296,238 360,182 C474,110 582,70 690,52"
+              style="fill:none;stroke:var(--red);stroke-width:2.75;stroke-linecap:round"/>
+
+        <!-- crossover marker -->
+        <circle cx="360" cy="182" r="5" style="fill:var(--surface);stroke:var(--text);stroke-width:2"/>
+
+        <!-- curve labels (placed in clear space, off the curves) -->
+        <text x="540" y="44" style="font-family:'Inter',system-ui,sans-serif;font-size:14px;font-weight:600;fill:var(--red)">Vibe coding</text>
+        <text x="560" y="214" style="font-family:'Inter',system-ui,sans-serif;font-size:14px;font-weight:600;fill:var(--green)">Agentic</text>
+        <text x="560" y="231" style="font-family:'Inter',system-ui,sans-serif;font-size:14px;font-weight:600;fill:var(--green)">engineering</text>
+
+        <!-- gap annotation -->
+        <text x="520" y="122" style="font-family:'Inter',system-ui,sans-serif;font-size:11.5px;fill:var(--red);opacity:0.92" text-anchor="middle">compounding</text>
+        <text x="520" y="137" style="font-family:'Inter',system-ui,sans-serif;font-size:11.5px;fill:var(--red);opacity:0.92" text-anchor="middle">OpEx penalty</text>
+
+        <!-- crossover label -->
+        <text x="352" y="166" text-anchor="end" style="font-family:'Inter',system-ui,sans-serif;font-size:12px;font-weight:600;fill:var(--text)">Crossover</text>
+
+        <!-- region annotations under axis -->
+        <text x="200" y="320" text-anchor="middle" style="font-family:'Inter',system-ui,sans-serif;font-size:11px;fill:var(--text-muted)">vibe wins: speed to first output</text>
+        <text x="528" y="320" text-anchor="middle" style="font-family:'Inter',system-ui,sans-serif;font-size:11px;fill:var(--text-muted)">agentic wins: sustainable scale</text>
+
+        <!-- axis titles -->
+        <text x="700" y="343" text-anchor="end" style="font-family:'Inter',system-ui,sans-serif;font-size:12px;fill:var(--text-subtle)">time / features shipped →</text>
+        <text transform="translate(26,162) rotate(-90)" text-anchor="middle" style="font-family:'Inter',system-ui,sans-serif;font-size:12px;fill:var(--text-subtle)">cumulative cost of ownership →</text>
+      </svg>
+      <figcaption><strong>The crossover.</strong> Vibe coding is cheaper to first output, but its operating cost (token burn, rework, security debt) compounds. Past the crossover point, casual prompting costs roughly <strong>3–10× more per feature</strong> than agentic engineering's flat marginal cost. <em>After Fig. 9 of the whitepaper.</em></figcaption>
+    </figure>
+
+    <div class="prose">
+      <p>This reframes context engineering as a <strong>financial lever</strong>, not just a craft skill. LLMs charge for every token you send; passing an entire 100,000-token repository into every prompt is financially unviable at scale. A dense, high-signal payload — a precise rule file plus architectural guardrails — raises first-pass success and kills the trial-and-error loops that quietly drain the budget.</p>
+      <p>The same logic powers <strong>intelligent model routing</strong>. Vibe coding leans on a single frontier model for everything — paying premium token prices to fix a typo or generate a basic unit test. A well-designed factory routes complex work (requirements, architecture, initial implementation) to large models, and deterministic, low-complexity work (test generation, code review, CI monitoring) to smaller, cheaper, faster ones. Orchestrating a multi-model ecosystem holds output quality while systematically driving operating cost down.</p>
+    </div>
+  </div>
+
+  <!-- ── 06 ───────────────────────────────────────────── -->
+  <div class="section" id="productivity">
+    <div class="section-label"><a href="#productivity">06 — The honest part</a></div>
+    <h2><a class="anchor" href="#productivity">Does AI actually make you faster?</a></h2>
+    <div class="prose">
+      <p>The fair criticism of AI tools was never that they produce bad code. It's that experienced developers using early tools were, under controlled conditions, measurably <em>slower</em> on complex tasks. In July 2025, METR found that sixteen seasoned open-source contributors — working on repos averaging 22,000 stars — took <strong>19% longer</strong> with AI tools, while estimating they'd been <strong>20% faster</strong>. The gap between perception and reality wasn't a rounding error. It was a full reversal of sign.</p>
+      <p>Resist the urge to over-read it in either direction. METR's February 2026 follow-up complicated its own finding: heavy AI adopters had systematically refused to participate in the no-AI control condition, even at $50/hour, biasing the sample. Their revised, refreshingly honest conclusion: <em>"We do not know if AI makes developers more productive."</em></p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">What the broader data does show</div>
+      <p>Developers who use AI on well-specified, implementation-heavy tasks <em>and</em> maintain strong review practices report gains of 25–39% (JetBrains, Index.dev). Developers who accept output without review see bugs rise — by up to 41% in some studies — through increased churn and duplication. The productivity gain is real but <strong>conditional</strong>, and the condition is structure.</p>
+    </div>
+
+    <div class="prose">
+      <p>This is the verification tax made measurable. Unstructured AI assistance was slower because it added verification overhead without removing specification overhead. Agentic engineering earns its keep only when the upfront investment in spec, scaffold, and tests means the AI's implementation <em>replaces</em> genuinely slower human implementation rather than piling on top of it. The payoff arrives in the second sprint, not the first — which is precisely why teams under deadline pressure find it counterintuitive and skip it.</p>
+    </div>
+  </div>
+
+  <!-- ── 07 ───────────────────────────────────────────── -->
+  <div class="section" id="factory">
+    <div class="section-label"><a href="#factory">07 — The role shift</a></div>
+    <h2><a class="anchor" href="#factory">The factory and its two modes</a></h2>
+    <div class="prose">
+      <p>The mental model that ties this together is the factory. A factory manager doesn't assemble each widget by hand; they design the assembly line and own quality control. In the new SDLC the developer's primary output is not code — it's <strong>the system that produces code</strong>: the specs, the agent configurations, the test suites, the feedback loops, the guardrails. Within that frame, the work splits into two modes most developers move between in a single day.</p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card card-blue">
+        <div class="card-icon-badge">Hands-on</div>
+        <h4>Conductor mode</h4>
+        <p>Real-time direction in the IDE — watching code appear, guiding with prompts and corrections. Natural for traditional engineers; preserves understanding at each step. Risk: if you personally direct every interaction, the throughput gain stays small.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon-badge">Delegated</div>
+        <h4>Orchestrator mode</h4>
+        <p>Higher abstraction: define goals, assign them to agents, review results without watching every line. Best for well-defined work — bug fixes, features against established patterns, migrations. Requires writing precise specs first, so it demands <em>more</em> upfront discipline, not less.</p>
+      </div>
+      <div class="card card-red">
+        <div class="card-icon-badge">The catch</div>
+        <h4>The 80% problem</h4>
+        <p>Agents generate ~80% of a feature fast. The remaining 20% — edge cases, error handling, integration, the constraint you only understand because you know <em>why</em> it exists — is where production failures originate and where human judgment is non-negotiable.</p>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>The orchestrator mode is where the leverage is, but it's also where the trap is. You cannot delegate an implementation you haven't specified. Treat AI tooling as a shortcut to <em>avoid</em> specification work and you produce, once again, prototypes that ship by accident.</p>
+    </div>
+  </div>
+
+  <!-- ── 08 ───────────────────────────────────────────── -->
+  <div class="section" id="practice">
+    <div class="section-label"><a href="#practice">08 — Practice</a></div>
+    <h2><a class="anchor" href="#practice">What to do Monday</a></h2>
+    <div class="prose">
+      <p>None of this requires a platform purchase. It requires a change in where you spend attention.</p>
+    </div>
+
+    <h3>If you write code</h3>
+    <ul class="dl">
+      <li><strong>Write a rule file for each active project.</strong> Start with ten lines — stack, architecture constraints, hard rules, testing conventions. Add a line every time an agent does something it shouldn't have. In a few weeks you'll have a project-specific config that improves output with no model change.</li>
+      <li><strong>Write tests and evals before generating code.</strong> A good test communicates intent more precisely than any natural-language prompt, and gives the agent something concrete to run, fail against, and correct toward. A test is a specification a machine can verify.</li>
+      <li><strong>Review every line that ships.</strong> Be skeptical of anything clever. Check that imported packages actually exist. Verify error handling covers realistic failure modes, not just the happy path. Code your team doesn't understand becomes debugging cost it can't afford — doubly so in regulated domains where the edge case matters <em>because</em> of a constraint the agent never had context for.</li>
+      <li><strong>Keep your core skills sharp.</strong> The arrangement only works if debugging, system design, and intuition for correctness stay strong. AI is a way to apply expertise at greater scale, not a substitute for having it.</li>
+    </ul>
+
+    <h3>If you lead engineers</h3>
+    <ul class="dl">
+      <li><strong>Treat rule files, prompts, evals, and skill libraries as code.</strong> Versioned, reviewed in pull requests, owned by named engineers. Without that discipline, agent behaviour becomes irreproducible across the team.</li>
+      <li><strong>Set the bar at the eval, not the demo.</strong> A demo proves an agent can succeed once — a sample size of one. A passing eval suite proves it succeeds reliably.</li>
+      <li><strong>Make the prototype/production boundary explicit.</strong> Which projects, branches, and environments warrant vibe coding versus agentic engineering? Teams that keep this blurry ship prototypes by accident.</li>
+      <li><strong>Budget the CapEx.</strong> The upfront cost of specs, scaffolds, and test suites is real and lands in sprint one; the savings land in sprint two and compound. Plan for the curve, don't get ambushed by it.</li>
+    </ul>
+  </div>
+
+  <!-- ── 09 ───────────────────────────────────────────── -->
+  <div class="section" id="arc">
+    <div class="section-label"><a href="#arc">09 — The long view</a></div>
+    <h2><a class="anchor" href="#arc">The deeper arc</a></h2>
+    <div class="prose">
+      <p>Step back far enough and the pattern predates every modern framework. In the 1950s the bottleneck was hardware; in the 1970s, languages; in the 1990s, networking; in the 2010s, infrastructure. At each transition the skills that mattered most shifted, and a new, larger population gained the ability to build what had needed a smaller, more specialized group.</p>
+      <p>Every abstraction layer made the skills below it less central. Writing assembly mattered less once C arrived; knowing TCP/IP details mattered less once frameworks abstracted the network. And in every case, the engineers who treated the new abstraction as a threat were right that their specific skills would matter less — and wrong that <em>they</em> would matter less. The abstraction raised the ceiling on what a skilled engineer could build, every single time.</p>
+      <p>We're at that inflection again. The syntax tax isn't fully gone, but it's low enough that the verification tax is now the dominant cost. The bottleneck is no longer implementation capacity; it's specification quality, architectural judgment, and the ability to evaluate whether a system that can generate enormous volumes of code is generating the <em>right</em> enormous volumes of code.</p>
+      <p>So the honest summary is narrow and useful: the factory model, the conductor–orchestrator split, context engineering — these are not replacements for engineering skill. They're the next abstraction layer, and the developers who learn to work at it will build things the ones who stay below it simply cannot. Generation is solved. <strong>Verification, judgment, and direction are the new craft</strong> — and learning to pay the verification tax deliberately, rather than letting it accrue as debt, is the whole game.</p>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <span>asadani.tech · June 2026</span>
+  <div class="footer-refs">
+    Source: <a href="https://www.kaggle.com/whitepaper-the-new-SDLC-with-vibe-coding">The New SDLC With Vibe Coding</a> — Osmani, Saboo &amp; Kartakis (Google, Kaggle, 2026) &nbsp;·&nbsp; <a href="/">← back to index</a>
+  </div>
+</footer>
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
+
+</body>
+</html>
