@@ -88,8 +88,8 @@
   h1.title .amp{font-weight:400;font-style:italic;color:var(--clay);}
   .dek{
     font-family:var(--serif);font-size:clamp(19px,2.6vw,23px);
-    line-height:1.42;color:var(--muted);font-style:italic;
-    max-width:34ch;margin:0 0 30px;
+    line-height:1.44;color:var(--muted);font-style:italic;
+    max-width:600px;margin:0 0 30px;
   }
   .memo{
     border-top:1px solid var(--line);border-bottom:1px solid var(--line);
@@ -106,6 +106,10 @@
     margin-top:12px;letter-spacing:0.01em;
   }
   figcaption .fn{color:var(--clay);font-weight:600;}
+
+  @media (min-width:840px){
+    figure{width:800px;max-width:94vw;margin-left:50%;transform:translateX(-50%);}
+  }
 
   .cover-note{
     font-family:var(--serif);font-size:15.5px;color:var(--muted);
@@ -171,16 +175,16 @@
   /* ---------- pull quote ---------- */
   blockquote.pull{
     margin:30px 0;padding:0 0 0 22px;border-left:3px solid var(--clay);
-    font-family:var(--display);font-weight:400;font-style:italic;
-    font-size:24px;line-height:1.34;color:var(--ink);
+    font-family:var(--serif);font-weight:500;font-style:italic;
+    font-size:22px;line-height:1.45;color:var(--ink);
   }
   blockquote.pull .who{
     display:block;margin-top:12px;font-family:var(--mono);font-style:normal;
     font-size:11.5px;letter-spacing:0.04em;text-transform:uppercase;color:var(--faint);font-weight:500;
   }
   .aphorism{
-    text-align:center;font-family:var(--display);font-style:italic;font-weight:400;
-    font-size:20px;line-height:1.4;color:var(--teal-deep);margin:34px auto;max-width:34ch;
+    text-align:center;font-family:var(--serif);font-style:italic;font-weight:500;
+    font-size:19px;line-height:1.5;color:var(--teal-deep);margin:34px auto;max-width:36ch;
   }
 
   /* ---------- stat strip ---------- */
@@ -240,7 +244,7 @@
     background:var(--ink);color:#E9E6DC;border-radius:6px;padding:30px 30px 26px;margin:34px 0;
   }
   .verdict .vl{font-family:var(--mono);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
-  .verdict p{font-family:var(--display);font-weight:400;font-size:22px;line-height:1.4;color:#F4F2EB;margin:0;}
+  .verdict p{font-family:var(--serif);font-weight:500;font-style:italic;font-size:21px;line-height:1.5;color:#F4F2EB;margin:0;}
   .verdict p em{color:#E8A98E;font-style:italic;}
 
   /* ---------- checklist ---------- */
@@ -268,6 +272,12 @@
 
   hr.rule{border:none;border-top:1px solid var(--line);margin:34px 0;}
 
+  .share-cta{
+    border-top:1px solid var(--line);margin-top:6px;padding:26px 0 4px;
+    font-family:var(--serif);font-size:16px;line-height:1.55;color:var(--muted);
+  }
+  .share-cta a{font-weight:600;}
+
   @media (max-width:560px){
     body{font-size:17px;}
     .frames,.frames.three{grid-template-columns:1fr;}
@@ -276,15 +286,28 @@
     .contents .ds{display:none;}
   }
 
+  .print-foot{display:none;}
   @media print{
-    .nav,footer,.cover-dl{display:none!important;}
-    body{background:#fff;font-size:11pt;}
+    .nav,footer,.cover-dl,.share-cta{display:none!important;}
+    body{background:#fff;font-size:10.5pt;}
     .wrap{max-width:none;}
-    .cover{break-after:page;padding-top:30px;}
-    .cover-foot{margin-top:44px;}
-    .section{break-inside:avoid-page;}
-    figure,.stats,.tbl-wrap,.verdict,.note{break-inside:avoid;}
+    @page{margin:0;}
+    .cover{break-after:page;padding-top:0;}
+    .cover h1.title{font-size:42px;line-height:1.0;margin-bottom:16px;}
+    .cover .kicker{margin-bottom:14px;}
+    .cover .dek{font-size:15px;line-height:1.4;margin-bottom:16px;}
+    .cover .memo{margin:0 0 16px;padding:12px 0;line-height:1.7;}
+    .cover figure{margin:14px 0;}
+    .cover .cover-note{margin-top:14px;font-size:12.5px;}
+    .cover-foot{margin-top:20px;}
+    .section{padding:22px 0 8px;}
+    h2,h3{break-after:avoid;break-inside:avoid;}
+    .sec-tag,p.lead,.beat{break-after:avoid;}
+    p{orphans:3;widows:3;}
+    figure,.stats,.tbl-wrap,.verdict,.note,blockquote.pull,.check,.frames{break-inside:avoid;}
+    figure{width:auto;max-width:100%;margin-left:0;transform:none;}
     a{color:var(--ink);border:none;}
+    .print-foot{display:none;}
   }
 </style>
 </head>
@@ -304,7 +327,7 @@
 
 <!-- ===================== COVER ===================== -->
 <header class="cover">
-  <div class="kicker">A Field Report on AI Strategy &middot; A Triptych</div>
+  <div class="kicker">A Field Report on AI Strategy &middot; Three Portraits</div>
   <h1 class="title">Three Leaders,<br>One <span class="amp">Market</span></h1>
   <p class="dek">Three experienced leaders, three good-faith strategies, all backed by data and the board. The AI era broke all three, by different paths. There are no villains here, only the people left on the stake.</p>
 
@@ -332,10 +355,10 @@
       <text x="632" y="120" font-family="Spectral, Georgia, serif" font-style="italic" font-size="15" fill="#0A5147" text-anchor="middle">&ldquo;Build the right system.&rdquo;</text>
       <text x="632" y="150" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6B716C" text-anchor="middle">the ground moved</text>
     </svg>
-    <figcaption><span class="fn">Frontispiece.</span> Three sincere leaders, three good-faith strategies, one market that kept changing the rules. Clay is the Steward, gold the Surfer, teal the Architect. All three failed.</figcaption>
+    <figcaption><span class="fn">At a glance.</span> Three sincere leaders, three good-faith strategies, one market that kept changing the rules. Clay is the Steward, gold the Surfer, teal the Architect. All three failed.</figcaption>
   </figure>
 
-  <p class="cover-note">Read the <strong>Overture</strong> in five minutes for the whole triptych. Read the rest for each leader&rsquo;s honest case, the one thing that moved under all of them, and why the failure was not a character flaw.</p>
+  <p class="cover-note">Read the <strong>Overture</strong> in five minutes for the whole story. Read the rest for each leader&rsquo;s honest case, the one thing that moved under all of them, and why the failure was not a character flaw.</p>
 
   <a class="cover-dl" href="three-leaders-one-market.pdf" download><span class="ar">&darr;</span>&nbsp; Download the PDF</a>
 
@@ -346,7 +369,7 @@
 <section class="contents">
   <div class="clab">Contents</div>
   <ol>
-    <li><span class="n">&mdash;</span><span class="t"><a href="#overture">Overture: Three Good Bets, One Moving Target</a></span><span class="ds">the triptych in five minutes</span></li>
+    <li><span class="n">&mdash;</span><span class="t"><a href="#overture">Overture: Three Good Bets, One Moving Target</a></span><span class="ds">the story in five minutes</span></li>
     <li><span class="n">01</span><span class="t"><a href="#start">The Same Starting Line</a></span><span class="ds">all three were sound</span></li>
     <li><span class="n">02</span><span class="t"><a href="#steward">The Steward, Who Held the Line</a></span><span class="ds">the proven playbook</span></li>
     <li><span class="n">03</span><span class="t"><a href="#surfer">The Surfer, Who Rode Every Wave</a></span><span class="ds">change without compounding</span></li>
@@ -364,7 +387,7 @@
 <section class="section overture" id="overture">
   <div class="sec-tag">Overture</div>
   <h2>Three Good Bets, One Moving Target</h2>
-  <p class="lead">Read only this and you have the whole triptych. Everything after it is evidence, and none of it is an accusation.</p>
+  <p class="lead">Read only this and you have the whole story. Everything after it is evidence, and none of it is an accusation.</p>
 
   <div class="beat">Three sincere bets</div>
   <p>Three companies in the same market, the same years, the same pressure to do something real about AI. Three leaders, each experienced, each backed by data and a board that signed off. None of them was careless. Each chose a strategy that had a strong case at the time, and each gave it their conviction. I want to say that plainly at the start, because the easy version of this story looks for the fool, and there is no fool in it.</p>
@@ -379,7 +402,7 @@
   <p><span class="lt">The Architect</span> made one deep, careful bet: rebuild the operating model around a specific, well-reasoned thesis about where value would sit, and let it compound. This was the most sophisticated of the three, the one most people would call correct. The Architect committed once and built for the long run, because that is how durable advantage has always been made.</p>
 
   <div class="beat">The turn</div>
-  <p>All three failed. Not equally, and not on the same schedule, but all three. The Steward&rsquo;s playbook was built for a technology whose rules stayed put, and these rules did not. The Surfer&rsquo;s constant motion meant nothing ever compounded into an advantage. The Architect committed correctly to a target that then moved, and watched a careful moat get overtaken before it paid. The common thread is not incompetence. It is that the ground itself kept shifting, faster than any one fixed strategy could track.</p>
+  <p>All three failed. Not equally, and not on the same schedule, but all three. The Steward&rsquo;s playbook was built for a technology whose rules stayed put, and these rules did not. The Surfer&rsquo;s constant motion meant nothing ever compounded into an advantage. The Architect committed correctly to a target that then moved, and watched a carefully built lead get overtaken before it paid. The common thread is not incompetence. It is that the ground itself kept shifting, faster than any one fixed strategy could track.</p>
 
   <blockquote class="pull">Three experienced leaders, three strategies that had each worked somewhere before, each backed by data and signed off by a board. One held the proven line, one rode every wave, one built the careful system. The era broke all three, because the ground they stood on kept moving. There are no villains here. There is only the fact that when the company fails, the leader is the one left on the stake.
   <span class="who">The thesis, ~75% right, and the 25% worth arguing</span></blockquote>
@@ -441,7 +464,7 @@
 
   <p>The Architect did the sophisticated, patient thing. Rather than announce or chase, the Architect formed a clear thesis about where durable value would sit, then rebuilt the operating model around it: redesigned workflows, an evaluation culture, proprietary data flywheels, accountability written down before launch. This is the approach I have argued for, the one that compounds while rivals run pilots. For two years it looked like the obvious winner, and by the internal evidence it was working.</p>
 
-  <p>It failed anyway, and not because the execution was poor. The Architect committed to a specific picture of the future, and the future moved. A model release commoditized part of the carefully built moat. The market quietly re-decided what counted as defensible, and the thesis the whole system was optimized around was no longer the thesis that mattered. The Architect had built the right system for a target that shifted while it was being built. Deep commitment is how durable advantage is made, and it is also what makes you brittle when the thing you committed to is overtaken.</p>
+  <p>It failed anyway, and not because the execution was poor. The Architect committed to a specific picture of the future, and the future moved. A model release commoditized part of what the company had carefully built. The market quietly re-decided what counted as defensible, and the thesis the whole system was optimized around was no longer the thesis that mattered. The Architect had built the right system for a target that shifted while it was being built. Deep commitment is how durable advantage is made, and it is also what makes you brittle when the thing you committed to is overtaken.</p>
 
   <div class="note warn">
     <div class="nl">Right effort, moved target</div>
@@ -458,10 +481,10 @@
 
   <p class="lead">Hold the three failures together and the shared cause is not in any of the leaders. It is in the ground they stood on.</p>
 
-  <p>What actually changed underneath all three was the market&rsquo;s definition of winning. The bar did not just rise, it kept relocating. Early on, having a chatbot at all was credible. Then the credible thing was retrieval and copilots. Then it was agents in production. Then it was a defensible moat that a foundation model could not erase. Each shift invalidated a strategy that had been correct against the previous bar, and each shift arrived before the last one had been fully answered.</p>
+  <p>What actually changed underneath all three was the market&rsquo;s definition of winning. The bar did not just rise, it kept relocating. Early on, having a chatbot at all was credible. Then the credible thing was retrieval and copilots. Then it was agents in production. Then it was a defensible edge a foundation model could not erase. Each shift invalidated a strategy that had been correct against the previous bar, and each shift arrived before the last one had been fully answered.</p>
 
   <figure>
-    <svg viewBox="0 0 700 220" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A rising staircase of what the market rewarded: 2023 have a chatbot, 2024 RAG and copilots, 2025 agents in production, 2026 a defensible moat, connected by a rising dashed line.">
+    <svg viewBox="0 0 700 220" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A rising staircase of what the market rewarded: 2023 have a chatbot, 2024 RAG and copilots, 2025 agents in production, 2026 a defensible edge, connected by a rising dashed line.">
       <text x="350" y="24" font-family="IBM Plex Mono, monospace" font-size="11" fill="#171C1A" text-anchor="middle" letter-spacing="0.5">WHAT THE MARKET REWARDED KEPT MOVING UP</text>
       <line x1="60" y1="190" x2="668" y2="190" stroke="#D9D5C8" stroke-width="1.4"/>
       <!-- rising dashed connector -->
@@ -470,7 +493,7 @@
       <rect x="80" y="150" width="100" height="28" rx="5" fill="#ECE9DF" stroke="#D9D5C8"/><text x="130" y="168" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="#363C39" text-anchor="middle">have a chatbot</text>
       <rect x="250" y="118" width="100" height="28" rx="5" fill="#ECE9DF" stroke="#D9D5C8"/><text x="300" y="136" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="#363C39" text-anchor="middle">RAG &amp; copilots</text>
       <rect x="420" y="86" width="100" height="28" rx="5" fill="#ECE9DF" stroke="#D9D5C8"/><text x="470" y="104" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="#363C39" text-anchor="middle">agents in prod</text>
-      <rect x="566" y="54" width="124" height="28" rx="5" fill="#F1E9D4" stroke="#9A7A2E"/><text x="628" y="72" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="#7A5F20" text-anchor="middle">a defensible moat</text>
+      <rect x="566" y="54" width="124" height="28" rx="5" fill="#F1E9D4" stroke="#9A7A2E"/><text x="628" y="72" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="#7A5F20" text-anchor="middle">a defensible edge</text>
       <!-- year ticks -->
       <text x="130" y="206" font-family="IBM Plex Mono, monospace" font-size="9" fill="#9A9E95" text-anchor="middle">2023</text>
       <text x="300" y="206" font-family="IBM Plex Mono, monospace" font-size="9" fill="#9A9E95" text-anchor="middle">2024</text>
@@ -480,7 +503,7 @@
     <figcaption><span class="fn">Figure 1.</span> The market kept moving what it rewarded. A strategy aimed at the 2023 bar was pointed at a spot the target had already left by the time it shipped.</figcaption>
   </figure>
 
-  <p>This relocation was not gentle, and it was widely felt. The share of enterprises chasing agentic approaches jumped from roughly a quarter to two-thirds in a single year as the consensus moved.<sup class="c">5</sup> By 2025, <strong>42% of companies had abandoned most of their AI initiatives</strong>, up from 17% a year earlier, much of it the sound of strategies being scrapped because the target had moved out from under them.<sup class="c">3</sup> When the definition of success changes every year, no fixed strategy is safe, because the thing that made it correct keeps expiring.</p>
+  <p>This relocation was not gentle, and it was widely felt. The share of enterprises chasing agentic approaches jumped from roughly a quarter to two-thirds in a single year as the consensus moved.<sup class="c">4</sup> By 2025, <strong>42% of companies had abandoned most of their AI initiatives</strong>, up from 17% a year earlier, much of it the sound of strategies being scrapped because the target had moved out from under them.<sup class="c">3</sup> When the definition of success changes every year, no fixed strategy is safe, because the thing that made it correct keeps expiring.</p>
 
   <p class="aphorism">The goalposts did not only move. They moved faster than any one bet could be carried to them.</p>
 </section>
@@ -540,7 +563,7 @@
   <p>I have leaned hard on &ldquo;no villains,&rdquo; and I should be honest that some failures are not like this. There are leaders who do not understand the technology, who chase prestige, who will not listen to their own engineers. Those failures are about the person. My claim is only that a great many AI failures are not those, and that the reflex to assume they are does real harm to good people.</p>
 
   <h3>One of them might have made it</h3>
-  <p>A triptych where all three fail is tidy, and reality is lumpier. In a different draw, the Architect&rsquo;s bet pays before the ground moves and looks like genius. The Steward&rsquo;s discipline is exactly right in a market that happens to settle down. Outcomes carry more luck than we like to admit, and I do not want the clean structure to hide how much of this is timing rather than logic.</p>
+  <p>A story where all three fail is tidy, and reality is lumpier. In a different draw, the Architect&rsquo;s bet pays before the ground moves and looks like genius. The Steward&rsquo;s discipline is exactly right in a market that happens to settle down. Outcomes carry more luck than we like to admit, and I do not want the clean structure to hide how much of this is timing rather than logic.</p>
 
   <h3>&ldquo;Re-ground continuously&rdquo; is easy to say</h3>
   <p>My implied prescription, track the moving target, is close to unfalsifiable as advice. Continuous re-grounding can curdle into the Surfer&rsquo;s thrash just as easily as it can save you, and from inside the moment, the moving target and the passing fad look identical. I am describing the problem more confidently than anyone can prescribe the solution, and pretending otherwise would be its own dishonesty.</p>
@@ -621,17 +644,22 @@
   <h2>Notes &amp; Sources</h2>
   <p class="small">The three leaders are composites, drawn from recurring patterns I have watched across AI programs, not three named firms. The cited statistics are public findings; citation numbers in the text map to them, and exact wording varies by source release.</p>
   <ol>
-    <li>MIT (Project NANDA) &mdash; <em>The GenAI Divide: State of AI in Business 2025.</em> Finding: ~95% of organizations report no measurable P&amp;L return on generative-AI pilots. Reported August 2025.</li>
-    <li>Boston Consulting Group &mdash; <em>Where&rsquo;s the Value in AI?</em> (2024). The 10&ndash;20&ndash;70 split of realized AI value (10% algorithms, 20% technology and data, 70% people and process).</li>
-    <li>S&amp;P Global Market Intelligence &mdash; enterprise AI survey (2025). Finding: 42% of companies abandoned most of their AI initiatives, up from 17% the prior year.</li>
-    <li>RAND Corporation &mdash; <em>The Root Causes of Failure for Artificial Intelligence Projects and How They Can Succeed</em> (2024). Finding: more than 80% of AI projects fail, roughly twice the rate of non-AI IT projects.</li>
-    <li>Analyst surveys on agentic-AI adoption (2023&ndash;2025) and the Gartner AI Hype Cycle &mdash; the rapid year-over-year shift in what enterprises pursued (chatbots, then retrieval, then agents, then defensible moats), used here as evidence that the market&rsquo;s definition of success kept relocating.</li>
+    <li>MIT (Project NANDA) &mdash; <em>The GenAI Divide: State of AI in Business 2025</em> (August 2025): ~95% of organizations report no measurable P&amp;L return on generative-AI pilots. <a href="https://nanda.media.mit.edu/">nanda.media.mit.edu</a></li>
+    <li>Boston Consulting Group &mdash; <em>Where&rsquo;s the Value in AI?</em> (2024): the 10&ndash;20&ndash;70 split of realized AI value (10% algorithms, 20% technology and data, 70% people and process). <a href="https://www.bcg.com/publications/2024/wheres-value-in-ai">bcg.com</a></li>
+    <li>S&amp;P Global Market Intelligence &mdash; enterprise AI survey (2025): 42% of companies abandoned most of their AI initiatives, up from 17% the prior year. <a href="https://www.spglobal.com/market-intelligence/en/">spglobal.com</a></li>
+    <li>Analyst surveys on agentic-AI adoption (2023&ndash;2025) and the Gartner AI Hype Cycle &mdash; the year-over-year shift in what enterprises pursued (chatbots, then retrieval, then agents, then defensibility), evidence that the market&rsquo;s definition of success kept relocating. <a href="https://www.gartner.com/en/research/methodologies/gartner-hype-cycle">gartner.com</a></li>
   </ol>
   <hr class="rule">
-  <p class="small">&copy; 2026 Anuj Sadani. A triptych on three good-faith AI strategies that all failed, and the moving target underneath them. Read the Overture for the argument; read the sections for the evidence.</p>
+  <p class="small">&copy; 2026 Anuj Sadani. A story on three good-faith AI strategies that all failed, and the moving target underneath them. Read the Overture for the argument; read the sections for the evidence.</p>
 </section>
 
+  <div class="share-cta">
+    If this was worth your time, pass it to someone carrying the same bet. Share it on <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fasadani.github.io%2Fthree-leaders-one-market%2F" target="_blank" rel="noopener">LinkedIn</a>, or wherever your people are.
+  </div>
+
 </div><!-- /wrap -->
+
+<div class="print-foot">Anuj Sadani &middot; asadani.tech</div>
 
 <footer>
   <div class="wrap" style="display:flex;justify-content:space-between;width:100%;padding:0 26px;">

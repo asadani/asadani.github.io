@@ -87,8 +87,8 @@
   h1.title .amp{font-weight:400;font-style:italic;color:var(--clay);}
   .dek{
     font-family:var(--serif);font-size:clamp(19px,2.6vw,23px);
-    line-height:1.42;color:var(--muted);font-style:italic;
-    max-width:33ch;margin:0 0 30px;
+    line-height:1.44;color:var(--muted);font-style:italic;
+    max-width:600px;margin:0 0 30px;
   }
   .memo{
     border-top:1px solid var(--line);border-bottom:1px solid var(--line);
@@ -105,6 +105,10 @@
     margin-top:12px;letter-spacing:0.01em;
   }
   figcaption .fn{color:var(--clay);font-weight:600;}
+
+  @media (min-width:840px){
+    figure{width:800px;max-width:94vw;margin-left:50%;transform:translateX(-50%);}
+  }
 
   .cover-note{
     font-family:var(--serif);font-size:15.5px;color:var(--muted);
@@ -166,16 +170,16 @@
   /* ---------- pull quote ---------- */
   blockquote.pull{
     margin:30px 0;padding:0 0 0 22px;border-left:3px solid var(--clay);
-    font-family:var(--display);font-weight:400;font-style:italic;
-    font-size:24px;line-height:1.34;color:var(--ink);
+    font-family:var(--serif);font-weight:500;font-style:italic;
+    font-size:22px;line-height:1.45;color:var(--ink);
   }
   blockquote.pull .who{
     display:block;margin-top:12px;font-family:var(--mono);font-style:normal;
     font-size:11.5px;letter-spacing:0.04em;text-transform:uppercase;color:var(--faint);font-weight:500;
   }
   .aphorism{
-    text-align:center;font-family:var(--display);font-style:italic;font-weight:400;
-    font-size:20px;line-height:1.4;color:var(--teal-deep);margin:34px auto;max-width:30ch;
+    text-align:center;font-family:var(--serif);font-style:italic;font-weight:500;
+    font-size:19px;line-height:1.5;color:var(--teal-deep);margin:34px auto;max-width:36ch;
   }
 
   /* ---------- stat strip ---------- */
@@ -231,7 +235,7 @@
     background:var(--ink);color:#E9E6DC;border-radius:6px;padding:30px 30px 26px;margin:34px 0;
   }
   .verdict .vl{font-family:var(--mono);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
-  .verdict p{font-family:var(--display);font-weight:400;font-size:22px;line-height:1.4;color:#F4F2EB;margin:0;}
+  .verdict p{font-family:var(--serif);font-weight:500;font-style:italic;font-size:21px;line-height:1.5;color:#F4F2EB;margin:0;}
   .verdict p em{color:#E8A98E;font-style:italic;}
 
   /* ---------- checklist ---------- */
@@ -259,6 +263,12 @@
 
   hr.rule{border:none;border-top:1px solid var(--line);margin:34px 0;}
 
+  .share-cta{
+    border-top:1px solid var(--line);margin-top:6px;padding:26px 0 4px;
+    font-family:var(--serif);font-size:16px;line-height:1.55;color:var(--muted);
+  }
+  .share-cta a{font-weight:600;}
+
   @media (max-width:560px){
     body{font-size:17px;}
     .frames{grid-template-columns:1fr;}
@@ -267,15 +277,28 @@
     .contents .ds{display:none;}
   }
 
+  .print-foot{display:none;}
   @media print{
-    .nav,footer,.cover-dl{display:none!important;}
-    body{background:#fff;font-size:11pt;}
+    .nav,footer,.cover-dl,.share-cta{display:none!important;}
+    body{background:#fff;font-size:10.5pt;}
     .wrap{max-width:none;}
-    .cover{break-after:page;padding-top:30px;}
-    .cover-foot{margin-top:44px;}
-    .section{break-inside:avoid-page;}
-    figure,.stats,.tbl-wrap,.verdict,.note{break-inside:avoid;}
+    @page{margin:0;}
+    .cover{break-after:page;padding-top:0;}
+    .cover h1.title{font-size:42px;line-height:1.0;margin-bottom:16px;}
+    .cover .kicker{margin-bottom:14px;}
+    .cover .dek{font-size:15px;line-height:1.4;margin-bottom:16px;}
+    .cover .memo{margin:0 0 16px;padding:12px 0;line-height:1.7;}
+    .cover figure{margin:14px 0;}
+    .cover .cover-note{margin-top:14px;font-size:12.5px;}
+    .cover-foot{margin-top:20px;}
+    .section{padding:22px 0 8px;}
+    h2,h3{break-after:avoid;break-inside:avoid;}
+    .sec-tag,p.lead,.beat{break-after:avoid;}
+    p{orphans:3;widows:3;}
+    figure,.stats,.tbl-wrap,.verdict,.note,blockquote.pull,.check,.frames{break-inside:avoid;}
+    figure{width:auto;max-width:100%;margin-left:0;transform:none;}
     a{color:var(--ink);border:none;}
+    .print-foot{display:none;}
   }
 </style>
 </head>
@@ -325,10 +348,10 @@
         <text x="600" y="108" font-size="11" fill="#8F3E2B" font-weight="600" text-anchor="middle">no moat &middot; rivals converge</text>
       </g>
     </svg>
-    <figcaption><span class="fn">Frontispiece.</span> Borrowed capability scales fast and feels like genius. Then the rented edge converges to zero, and the moat you stopped digging is gone.</figcaption>
+    <figcaption><span class="fn">At a glance.</span> Borrowed capability scales fast and feels like genius. Then the rented edge converges to zero, and the moat you stopped digging is gone.</figcaption>
   </figure>
 
-  <p class="cover-note">Read the <strong>Overture</strong> in five minutes for the whole arc. Read the rest for what the moat actually was, why even a strong ML org gives it away, and how to borrow without dissolving.</p>
+  <p class="cover-note">Read the <strong>Overture</strong> in five minutes for the whole arc. Read the rest for what the edge actually was, why even a strong ML org gives it away, and how to borrow without dissolving.</p>
 
   <a class="cover-dl" href="the-monk-who-oversold-the-ai.pdf" download><span class="ar">&darr;</span>&nbsp; Download the PDF</a>
 
@@ -360,7 +383,7 @@
   <p class="lead">Read only this and you have the whole arc. Everything after it is evidence.</p>
 
   <div class="beat">The company</div>
-  <p>Start with a company that earned its place the hard way. It sold an AI product, and the reason customers paid for it was a decade of its own research: proprietary models trained on data nobody else had, a domain understanding that took years to accumulate, and an R&amp;D group that was slow, expensive, and genuinely the source of the edge. The moat was not the brand or the sales team. The moat was the research, compounding quietly underneath the product.</p>
+  <p>Start with a company that earned its place the hard way. It sold an AI product, and the reason customers paid for it was a decade of its own research: proprietary models trained on data nobody else had, a domain understanding that took years to accumulate, and an R&amp;D group that was slow, expensive, and genuinely the source of what set it apart. The advantage was not the brand or the sales team. It was the research, compounding quietly underneath the product.</p>
 
   <div class="beat">The reframe</div>
   <p>Then foundation models arrived, and with them a product leader who preached letting go. Why fund a slow research lab when a public API is better than what we can train, ships next week, and costs a fraction of the salaries? Give up the heavy, expensive lab. Travel light on borrowed intelligence. Move at the speed of the market, not the speed of a PhD. It was not a stupid argument. For a while it was the right one.</p>
@@ -372,12 +395,12 @@
   <p>Then the third year arrived, and the ship started taking on water in a way nobody could quite explain, because nothing had broken. The product still worked. The model was still good. What changed is that everyone else had the same model. A competitor who started a year behind shipped the same feature in a weekend, because the intelligence was a public API for them too. The thing that used to take a decade of research to copy now took an afternoon of prompt engineering. The edge did not collapse. It evaporated, because it had been rented all along.</p>
 
   <div class="beat">The diagnosis</div>
-  <p>Here is the part worth sitting with. The product leader was not wrong that R&amp;D was slow and expensive. They were wrong about what it was <em>for.</em> The research was not a cost center that happened to produce features. It was the moat-making machine, the one thing in the building that turned proprietary data and domain knowledge into an edge a rival could not buy off a price list. Borrowing intelligence got the company two years of speed by spending down an asset it had stopped replenishing. BCG&rsquo;s own breakdown of where AI value comes from puts roughly <strong>70% in people, process, and proprietary data and only about 10% in the model itself</strong>.<sup class="c">1</sup> The leader optimized the 10% and dismantled the 70%.</p>
+  <p>Here is the part worth sitting with. The product leader was not wrong that R&amp;D was slow and expensive. They were wrong about what it was <em>for.</em> The research was not a cost center that happened to produce features. It was the edge-making machine, the one thing in the building that turned proprietary data and domain knowledge into something a rival could not buy off a price list. Borrowing intelligence got the company two years of speed by spending down an asset it had stopped replenishing. BCG&rsquo;s own breakdown of where AI value comes from puts roughly <strong>70% in people, process, and proprietary data and only about 10% in the model itself</strong>.<sup class="c">1</sup> The leader optimized the 10% and dismantled the 70%.</p>
 
   <blockquote class="pull">The product did not fail because the AI was bad. It failed because the AI was borrowed. A leader traded the company&rsquo;s proprietary R&amp;D for foundation-model speed, scaled brilliantly on capability every rival could rent, and called the missing moat &ldquo;efficiency.&rdquo; You can rent capability. You cannot rent a moat.
   <span class="who">The thesis, ~75% right, and the 25% worth arguing</span></blockquote>
 
-  <p>The instinct to use borrowed intelligence was correct. Foundation models are extraordinary, and refusing them would have been its own failure. The error was treating a starting line as a finish line: borrowing the capability and never reinvesting a cent of the savings into the proprietary edge that borrowing was supposed to fund. Read on for what the moat actually was, and how to use the well without poisoning your own spring.</p>
+  <p>The instinct to use borrowed intelligence was correct. Foundation models are extraordinary, and refusing them would have been its own failure. The error was treating a starting line as a finish line: borrowing the capability and never reinvesting a cent of the savings into the proprietary edge that borrowing was supposed to fund. Read on for what that edge actually was, and how to use the well without poisoning your own spring.</p>
 </section>
 
 <!-- ===================== 01 ===================== -->
@@ -387,21 +410,21 @@
 
   <p class="lead">Before the reframe, this company had something most AI startups never get: a reason it could not be cloned over a weekend.</p>
 
-  <p>It is worth being concrete about what the moat was, because the word gets thrown around loosely. This company&rsquo;s edge was not a single model. It was a loop. Years of customer usage produced proprietary data nobody else could legally or practically assemble. That data trained models tuned to a specific domain, which made the product measurably better at the one job customers cared about, which won more customers, which produced more proprietary data. The research group sat at the center of that loop, turning raw data into models and models into an edge.</p>
+  <p>It is worth being concrete about what that edge was, because the word gets thrown around loosely. It was not a single model. It was a loop. Years of customer usage produced proprietary data nobody else could legally or practically assemble. That data trained models tuned to a specific domain, which made the product measurably better at the one job customers cared about, which won more customers, which produced more proprietary data. The research group sat at the center of that loop, turning raw data into models and models into an edge.</p>
 
   <figure>
-    <svg viewBox="0 0 700 252" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A four-node flywheel: proprietary data, better models, better product, more usage, looping clockwise, labelled the moat compounds.">
+    <svg viewBox="0 0 700 252" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A four-node flywheel: proprietary data, better models, better product, more usage, looping clockwise, labelled the loop compounds.">
       <defs>
         <marker id="fw" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0F6E63"/></marker>
       </defs>
       <g font-family="IBM Plex Mono, monospace" font-size="11" text-anchor="middle">
-        <!-- nodes -->
+        <!-- nodes : THE LOOP -->
         <rect x="280" y="22"  width="140" height="36" rx="8" fill="#E3EEEA" stroke="#0F6E63"/><text x="350" y="44"  fill="#0A5147">proprietary data</text>
         <rect x="500" y="112" width="140" height="36" rx="8" fill="#E3EEEA" stroke="#0F6E63"/><text x="570" y="134" fill="#0A5147">better models</text>
         <rect x="280" y="204" width="140" height="36" rx="8" fill="#E3EEEA" stroke="#0F6E63"/><text x="350" y="226" fill="#0A5147">better product</text>
         <rect x="60"  y="112" width="140" height="36" rx="8" fill="#E3EEEA" stroke="#0F6E63"/><text x="130" y="134" fill="#0A5147">more usage</text>
         <!-- center -->
-        <text x="350" y="127" font-size="11" fill="#8F3E2B" font-weight="600" letter-spacing="1">THE MOAT</text>
+        <text x="350" y="127" font-size="11" fill="#8F3E2B" font-weight="600" letter-spacing="1">THE LOOP</text>
         <text x="350" y="143" font-size="9.5" fill="#9A9E95">compounds</text>
       </g>
       <g fill="none" stroke="#0F6E63" stroke-width="1.8" marker-end="url(#fw)">
@@ -411,7 +434,7 @@
         <path d="M130,108 Q160,52 276,46"/>
       </g>
     </svg>
-    <figcaption><span class="fn">Figure 1.</span> The R&amp;D flywheel. Proprietary data trains better models, which make a better product, which earns more usage and more proprietary data. The loop, not any one model, is the moat.</figcaption>
+    <figcaption><span class="fn">Figure 1.</span> The R&amp;D flywheel. Proprietary data trains better models, which make a better product, which earns more usage and more proprietary data. The loop, not any one model, is the edge.</figcaption>
   </figure>
 
   <p>A flywheel like this is slow, and that slowness was the point. It took years to spin up, which is exactly why it took years for a competitor to match. A rival could copy the product&rsquo;s features in a quarter, but it could not copy the data flywheel underneath without running its own loop for the same years. That delay, measured in lead time over the competition, was the asset. Every turn of the wheel widened it.</p>
@@ -428,7 +451,7 @@
 
   <p>Put yourself in that leadership meeting. A public foundation model has just beaten your in-house model on a benchmark your own researchers used to be proud of. It costs cents per call. It ships today. And here is your research group, asking for another year and another budget to maybe close a gap that an API just closed for free. The product leader stands up and says the quiet thing out loud: our R&amp;D is no longer our edge, it is our anchor. Build on the frontier instead of trying to be it.</p>
 
-  <p>Every clause of that is locally true. The model really was better. It really was cheaper. The lab really was slow. What the reframe smuggled in was a hidden equivalence: that the model the lab produced and the moat the lab produced were the same thing. They were not. The model was the output. The moat was the loop that produced it, and the proprietary data and domain knowledge that fed the loop. You can replace the output with a better one off the shelf. You cannot buy the loop, which means when you shut the loop down to save money, you do not lose a model. You lose the ability to ever have a private one again.</p>
+  <p>Every clause of that is locally true. The model really was better. It really was cheaper. The lab really was slow. What the reframe smuggled in was a hidden equivalence: that the model the lab produced and the advantage the lab produced were the same thing. They were not. The model was the output. The advantage was the loop that produced it, and the proprietary data and domain knowledge that fed the loop. You can replace the output with a better one off the shelf. You cannot buy the loop, which means when you shut the loop down to save money, you do not lose a model. You lose the ability to ever have a private one again.</p>
 
   <div class="tbl-wrap">
     <table>
@@ -436,11 +459,11 @@
       <tr><td class="h bad">R&amp;D is slow and expensive.</td><td class="h good">Slow is what made it hard to copy.</td></tr>
       <tr><td class="bad">The public model beats ours.</td><td class="good">On the public benchmark. Not on your proprietary data.</td></tr>
       <tr><td class="bad">We can ship features faster without it.</td><td class="good">So can every rival, using the same API.</td></tr>
-      <tr><td class="bad">R&amp;D is a cost center.</td><td class="good">It was the moat-making machine.</td></tr>
+      <tr><td class="bad">R&amp;D is a cost center.</td><td class="good">It was the edge-making machine.</td></tr>
     </table>
   </div>
 
-  <p>This is the seduction, and it is worth naming as a pattern rather than a blunder. The reframe optimizes a real and visible cost while quietly retiring an asset whose value is real and invisible. On a quarterly dashboard, the cost shows up immediately and the lost moat shows up in three years. A leader rewarded on the dashboard will make this trade every time, and look brilliant for as long as the lag lasts.</p>
+  <p>This is the seduction, and it is worth naming as a pattern rather than a blunder. The reframe optimizes a real and visible cost while quietly retiring an asset whose value is real and invisible. On a quarterly dashboard, the cost shows up immediately and the lost edge shows up in three years. A leader rewarded on the dashboard will make this trade every time, and look brilliant for as long as the lag lasts.</p>
 </section>
 
 <!-- ===================== 03 ===================== -->
@@ -456,7 +479,7 @@
 
   <div class="note warn">
     <div class="nl">The lag is the trap</div>
-    <p>Borrowed intelligence pays out immediately and bills you later. The speed is real in year one. The missing moat is also real in year one. You just cannot see it yet, and the visible win buys permission to ignore the invisible loss.</p>
+    <p>Borrowed intelligence pays out immediately and bills you later. The speed is real in year one. The missing edge is also real in year one. You just cannot see it yet, and the visible win buys permission to ignore the invisible loss.</p>
   </div>
 
   <p>So when the turn came, it did not feel like a consequence of the original decision, because two years and a wall of good results sat between cause and effect. That distance is exactly why this failure mode is so hard to catch in the act. The reward and the bill arrive on completely different schedules.</p>
@@ -507,7 +530,7 @@
   <div class="sec-tag"><span class="num">&sect; 05</span> &middot; The Erosion</div>
   <h2>The Moat You Stopped Digging</h2>
 
-  <p class="lead">A moat does not collapse the day you stop maintaining it. It fills in slowly, invisibly, until the morning a competitor walks straight across.</p>
+  <p class="lead">An edge does not collapse the day you stop maintaining it. It fills in slowly, invisibly, until the morning a competitor walks straight across.</p>
 
   <p>The cruelest property of this failure is its timing. When the company stopped running its flywheel, its lead over competitors did not vanish. It started decaying, one turn of the wheel at a time, while the dashboard showed nothing but green. The proprietary data stopped accumulating an edge. The domain models stopped improving past the public frontier. Rivals, running their own borrowed-intelligence playbook, kept closing the distance the old R&amp;D used to keep open.</p>
 
@@ -533,10 +556,10 @@
         <text x="591" y="208" font-size="9.5" fill="#6B716C" text-anchor="middle">+3 years</text>
       </g>
     </svg>
-    <figcaption><span class="fn">Figure 3.</span> Lead time is a moat only while you keep extending it. Borrowed capability does not extend the lead; rivals calling the same model close it on their own schedule.</figcaption>
+    <figcaption><span class="fn">Figure 3.</span> Lead time is an edge only while you keep extending it. Borrowed capability does not extend the lead; rivals calling the same model close it on their own schedule.</figcaption>
   </figure>
 
-  <p>By the time the damage shows up in the numbers, the recovery is brutal. Restarting a research flywheel is not a budget you switch back on. The team has scattered, the tooling has rotted, and the data advantage you would train on is the very thing you let go stale for three years. The company that took a decade to build its moat now has to rebuild it from behind, against rivals who never had to, while explaining to a board why the strategy that looked brilliant for two years suddenly is not. The asset was cheap to spend and expensive past the point of pain to replace.</p>
+  <p>By the time the damage shows up in the numbers, the recovery is brutal. Restarting a research flywheel is not a budget you switch back on. The team has scattered, the tooling has rotted, and the data advantage you would train on is the very thing you let go stale for three years. The company that took a decade to build its edge now has to rebuild it from behind, against rivals who never had to, while explaining to a board why the strategy that looked brilliant for two years suddenly is not. The asset was cheap to spend and expensive past the point of pain to replace.</p>
 
   <p>This is the real meaning of the sinking ship. Nothing dramatic breaks. The product keeps working, the model keeps responding, the demos keep demoing. What is gone is the reason anyone had to choose you over the rival with the same API, and that reason was the quiet flywheel the company decided was overhead.</p>
 </section>
@@ -563,7 +586,7 @@
       </ul>
     </div>
     <div class="frame new">
-      <div class="ft">Pulling toward the moat</div>
+      <div class="ft">Pulling toward the edge</div>
       <ul>
         <li>The lost edge is real but invisible for years.</li>
         <li>Proprietary data compounds only if you keep feeding it.</li>
@@ -573,7 +596,7 @@
     </div>
   </div>
 
-  <p>Read the two columns and the outcome is almost mechanical. Every force on the borrowing side is fast, visible, and rewarded. Every force on the moat side is slow, invisible, and easy to defer. An organization that runs on quarterly evidence will tilt toward borrowing even when its smartest people know better, because the scoreboard only measures one column. This is why &ldquo;just hire great ML people&rdquo; does not protect you. The trap is not ignorance. It is an incentive structure that pays out for spending the moat and stays silent while it erodes.</p>
+  <p>Read the two columns and the outcome is almost mechanical. Every force on the borrowing side is fast, visible, and rewarded. Every force on the edge side is slow, invisible, and easy to defer. An organization that runs on quarterly evidence will tilt toward borrowing even when its smartest people know better, because the scoreboard only measures one column. This is why &ldquo;just hire great ML people&rdquo; does not protect you. The trap is not ignorance. It is an incentive structure that pays out for spending the edge and stays silent while it erodes.</p>
 </section>
 
 <!-- ===================== 07 ===================== -->
@@ -583,19 +606,19 @@
 
   <p class="lead">A thesis you cannot argue against is not strong, it is unexamined. Here is the quarter of this argument I hold loosely.</p>
 
-  <h3>Not all R&amp;D is a moat</h3>
-  <p>Plenty of corporate research is vanity, defended by sunk cost and prestige. Some labs produce papers and not edges. If a company&rsquo;s R&amp;D was chasing a frontier the public models now own outright, cutting it was not the crime; clinging to it would have been. The argument is not &ldquo;never cut research.&rdquo; It is &ldquo;know whether the research you are cutting is the moat or the vanity,&rdquo; and that is a hard, specific judgment, not a slogan.</p>
+  <h3>Not all research is an edge</h3>
+  <p>Plenty of corporate research is vanity, defended by sunk cost and prestige. Some labs produce papers and not edges. If a company&rsquo;s R&amp;D was chasing a frontier the public models now own outright, cutting it was not the crime; clinging to it would have been. The argument is not &ldquo;never cut research.&rdquo; It is &ldquo;know whether the research you are cutting is the edge or the vanity,&rdquo; and that is a hard, specific judgment, not a slogan.</p>
 
   <h3>Borrowing genuinely raises the floor</h3>
   <p>Foundation models democratized capability that used to be locked behind nine-figure research budgets. A small team can now do things that were impossible a few years ago. Refusing to use borrowed intelligence on principle would be its own failure mode, slower and prouder and just as fatal. The point is not to avoid the well. It is to not mistake the well for a private spring.</p>
 
-  <h3>The moat can legitimately live elsewhere</h3>
-  <p>Model R&amp;D is one moat, not the only one. A company can defend itself with proprietary data, distribution, brand, regulatory position, switching costs, or a workflow lock-in that no API touches. Some companies are right to rent the intelligence and build their moat entirely in distribution or data. The failure in this story was not borrowing the model. It was borrowing the model and building no moat <em>anywhere</em> with the time and money that borrowing freed up.</p>
+  <h3>The edge can live elsewhere</h3>
+  <p>Model R&amp;D is one kind of edge, not the only one. A company can defend itself with proprietary data, distribution, brand, regulatory position, switching costs, or a workflow lock-in that no API touches. Some companies are right to rent the intelligence and build their edge entirely in distribution or data. The failure in this story was not borrowing the model. It was borrowing the model and building no edge <em>anywhere</em> with the time and money that borrowing freed up.</p>
 
   <h3>&ldquo;Borrow then build&rdquo; is a valid sequence</h3>
-  <p>The strongest version of the product leader&rsquo;s plan is one I would have backed: borrow to move fast now, and reinvest the savings into a proprietary edge that compounds later. Borrowing to bootstrap is good strategy. The error was stopping at the first half, treating a starting line as a finish, and pocketing the savings as margin instead of plowing them into the moat the borrowing was meant to fund.</p>
+  <p>The strongest version of the product leader&rsquo;s plan is one I would have backed: borrow to move fast now, and reinvest the savings into a proprietary edge that compounds later. Borrowing to bootstrap is good strategy. The error was stopping at the first half, treating a starting line as a finish, and pocketing the savings as margin instead of plowing them into the edge the borrowing was meant to fund.</p>
 
-  <p>None of this softens the core claim. It sharpens it. Borrowed intelligence is a fine input and a fatal sole asset. The two-year miracle was real, and so was the bill. Hold the thesis at 75%, allow that some research deserved to die and some moats live outside the lab, and the argument gets stronger: the failure was never using the well, it was forgetting to dig.</p>
+  <p>None of this softens the core claim. It sharpens it. Borrowed intelligence is a fine input and a fatal sole asset. The two-year miracle was real, and so was the bill. Hold the thesis at 75%, allow that some research deserved to die and some edges live outside the lab, and the argument gets stronger: the failure was never using the well, it was forgetting to dig.</p>
 </section>
 
 <!-- ===================== 08 ===================== -->
@@ -615,9 +638,9 @@
   <p>Notice what that does not say. It does not say train your own foundation model; almost no one should. It does not say research is sacred; some of it deserved to die. It says the savings from borrowing are not margin to harvest, they are capital to reinvest, and the place to reinvest is the proprietary layer the well cannot reach. The reason the company sank was not that it borrowed. It is that it borrowed and never built.</p>
 
   <figure>
-    <svg viewBox="0 0 700 224" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A two-layer stack: a rented commodity foundation at the bottom and a built proprietary moat on top.">
+    <svg viewBox="0 0 700 224" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A two-layer stack: a rented commodity foundation at the bottom and a built proprietary edge on top.">
       <g font-family="IBM Plex Mono, monospace">
-        <text x="350" y="26" font-size="11.5" fill="#171C1A" text-anchor="middle" letter-spacing="0.5">WHERE THE MOAT ACTUALLY LIVES</text>
+        <text x="350" y="26" font-size="11.5" fill="#171C1A" text-anchor="middle" letter-spacing="0.5">WHERE THE EDGE ACTUALLY LIVES</text>
         <!-- built layer -->
         <rect x="120" y="50" width="460" height="62" rx="5" fill="#0F6E63"/>
         <text x="350" y="78" font-size="12.5" fill="#FBFAF5" text-anchor="middle" font-weight="600">BUILT &middot; your proprietary edge</text>
@@ -630,10 +653,10 @@
         <text x="350" y="206" font-size="9.5" fill="#9A9E95" text-anchor="middle">reinvest what you save on the floor into the layer above it</text>
       </g>
     </svg>
-    <figcaption><span class="fn">Figure 4.</span> Rent the commodity floor. Spend what you save building the layer competitors cannot rent. The moat was never the model.</figcaption>
+    <figcaption><span class="fn">Figure 4.</span> Rent the commodity floor. Spend what you save building the layer competitors cannot rent. The edge was never the model.</figcaption>
   </figure>
 
-  <p>The instinct to borrow was right. The correction is the whole point: a rented input is a starting line, the model was the easy part, and the moat is the proprietary loop you build on top of it. Use the well. Keep digging your own.</p>
+  <p>The instinct to borrow was right. The correction is the whole point: a rented input is a starting line, the model was the easy part, and the edge is the proprietary loop you build on top of it. Use the well. Keep digging your own.</p>
 </section>
 
 <!-- ===================== 09 ===================== -->
@@ -641,15 +664,15 @@
   <div class="sec-tag"><span class="num">&sect; 09</span> &middot; Coda</div>
   <h2>Borrowing Without Dissolving</h2>
 
-  <p class="lead">It is one thing to say rent the floor and build the moat. It is another to run it on Monday without lying to yourself about which is which.</p>
+  <p class="lead">It is one thing to say rent the floor and build the edge. It is another to run it on Monday without lying to yourself about which is which.</p>
 
   <h3>Six rules for using borrowed intelligence</h3>
   <div class="checklist">
-    <div class="check"><div class="cn">01</div><div class="ct"><b>Separate the commodity layer from the moat layer, explicitly.</b>Draw the line on a whiteboard: what you rent because everyone can, and what you build because only you can. If you cannot name the moat layer, you do not have one yet.</div></div>
-    <div class="check"><div class="cn">02</div><div class="ct"><b>Treat borrowing&rsquo;s savings as reinvestment capital, not margin.</b>The money and time you save by renting the model are the budget for the proprietary edge. If the savings go straight to the bottom line, you are harvesting the moat, not building it.</div></div>
-    <div class="check"><div class="cn">03</div><div class="ct"><b>Keep the data flywheel turning even when the model is rented.</b>You can borrow the intelligence and still own the proprietary data, the labels, the feedback, and the domain evaluations the public model never sees. That ownership is the moat that survives the next model release.</div></div>
+    <div class="check"><div class="cn">01</div><div class="ct"><b>Separate the commodity layer from the edge layer, explicitly.</b>Draw the line on a whiteboard: what you rent because everyone can, and what you build because only you can. If you cannot name the edge layer, you do not have one yet.</div></div>
+    <div class="check"><div class="cn">02</div><div class="ct"><b>Treat borrowing&rsquo;s savings as reinvestment capital, not margin.</b>The money and time you save by renting the model are the budget for the proprietary edge. If the savings go straight to the bottom line, you are harvesting the edge, not building it.</div></div>
+    <div class="check"><div class="cn">03</div><div class="ct"><b>Keep the data flywheel turning even when the model is rented.</b>You can borrow the intelligence and still own the proprietary data, the labels, the feedback, and the domain evaluations the public model never sees. That ownership is the edge that survives the next model release.</div></div>
     <div class="check"><div class="cn">04</div><div class="ct"><b>Measure your lead, not just your shipping speed.</b>Track time-to-copy: how long would it take a well-funded rival with the same API to match this feature. If the answer is a weekend, you shipped a commodity, however fast you shipped it.</div></div>
-    <div class="check"><div class="cn">05</div><div class="ct"><b>Fund R&amp;D as moat maintenance, with a moat metric.</b>Do not defend research on prestige. Defend the specific work that widens an edge a rival cannot rent, and kill the work that does not. Tie the budget to defensibility, not to publications.</div></div>
+    <div class="check"><div class="cn">05</div><div class="ct"><b>Fund R&amp;D as edge maintenance, with an edge metric.</b>Do not defend research on prestige. Defend the specific work that widens an edge a rival cannot rent, and kill the work that does not. Tie the budget to defensibility, not to publications.</div></div>
     <div class="check"><div class="cn">06</div><div class="ct"><b>Watch the trust the wins are buying.</b>A run of borrowed-capability success buys the political capital to borrow harder. Name that out loud at the top, so a two-year winning streak does not quietly fund the cut that sinks you.</div></div>
   </div>
 
@@ -671,13 +694,13 @@
       <ul>
         <li>The frontier model is rentable by every competitor at the same price.</li>
         <li>Borrowed capability scales fast and differentiates not at all.</li>
-        <li>Moats erode invisibly and rebuild expensively.</li>
-        <li>The model is the cheap 10%; the moat is the 70% you have to own.</li>
+        <li>Edges erode invisibly and rebuild expensively.</li>
+        <li>The model is the cheap 10%; the edge is the 70% you have to own.</li>
       </ul>
     </div>
   </div>
 
-  <p>Read the two columns together and the strategy falls out on its own. You spend your scarce capital on the frontier column, and you stop pretending the bedrock column is negotiable, because those are facts you build on rather than bet against. The leaders who survive the next three years will be the ones who borrowed the floor without mistaking it for the building, and kept digging the moat while the borrowing looked, for a while, like it had made the moat unnecessary.</p>
+  <p>Read the two columns together and the strategy falls out on its own. You spend your scarce capital on the frontier column, and you stop pretending the bedrock column is negotiable, because those are facts you build on rather than bet against. The leaders who survive the next three years will be the ones who borrowed the floor without mistaking it for the building, and kept digging the edge while the borrowing looked, for a while, like it had made the edge unnecessary.</p>
 
   <p class="aphorism">Rent the intelligence. Own the reason anyone needs you to.</p>
 </section>
@@ -688,17 +711,21 @@
   <h2>Notes &amp; Sources</h2>
   <p class="small">The company arc in this report is a composite, drawn from the recurring pattern I have watched across AI product organizations, not a single named firm. The analytical claims are grounded in the public sources below; citation numbers in the text map to them. Figures are headline findings from the named institutions; exact wording varies by source release.</p>
   <ol>
-    <li>Boston Consulting Group &mdash; <em>Where&rsquo;s the Value in AI?</em> (2024). The 10&ndash;20&ndash;70 split of realized AI value: roughly 10% algorithms, 20% technology and data, 70% people and process. Finding: a minority of companies move beyond proofs of concept to durable value.</li>
-    <li>Sequoia Capital (David Cahn) &mdash; <em>AI&rsquo;s $600B Question</em> (2024). On the gap between AI infrastructure spend and the revenue required to justify it, and the weak defensibility of thin application layers built over shared foundation models.</li>
-    <li>MIT (Project NANDA) &mdash; <em>The GenAI Divide: State of AI in Business 2025.</em> Finding: ~95% of organizations report no measurable P&amp;L return on generative-AI pilots, consistent with borrowed-capability bets that fail to compound into an edge.</li>
-    <li>General industry analysis on AI defensibility and &ldquo;thin wrapper&rdquo; economics (a16z, Sequoia, and others, 2023&ndash;2025) &mdash; on proprietary data, distribution, and workflow as the durable moats once the model itself is a shared commodity input.</li>
-    <li>Public model-capability tracking (open-weight models narrowing the gap to closed frontier models, 2024&ndash;2025) &mdash; context for why a rented capability edge erodes as the frontier becomes broadly and cheaply available.</li>
+    <li>Boston Consulting Group &mdash; <em>Where&rsquo;s the Value in AI?</em> (2024): the 10&ndash;20&ndash;70 split of realized AI value (roughly 10% algorithms, 20% technology and data, 70% people and process), and that a minority of companies move beyond proofs of concept to durable value. <a href="https://www.bcg.com/publications/2024/wheres-value-in-ai">bcg.com</a></li>
+    <li>Sequoia Capital, David Cahn &mdash; <em>AI&rsquo;s $600B Question</em> (2024): the gap between AI infrastructure spend and the revenue needed to justify it, and the weak defensibility of thin layers built over shared foundation models. <a href="https://www.sequoiacap.com/article/ais-600b-question/">sequoiacap.com</a></li>
   </ol>
+  <p class="small">Background &amp; further reading: MIT Project NANDA, <em>The GenAI Divide: State of AI in Business 2025</em> (~95% of generative-AI pilots show no measurable return) &mdash; <a href="https://nanda.media.mit.edu/">nanda.media.mit.edu</a>; and the broader writing on AI defensibility and &ldquo;thin wrapper&rdquo; economics from a16z, Sequoia, and others, alongside open-weight models narrowing the gap to the closed frontier &mdash; <a href="https://a16z.com/">a16z.com</a>.</p>
   <hr class="rule">
-  <p class="small">&copy; 2026 Anuj Sadani. A field report on borrowed intelligence and the moats it dissolves. Read the Overture for the arc; read the sections for the evidence.</p>
+  <p class="small">&copy; 2026 Anuj Sadani. A field report on borrowed intelligence and the edge it dissolves. Read the Overture for the arc; read the sections for the evidence.</p>
 </section>
 
+  <div class="share-cta">
+    If this was worth your time, pass it to someone carrying the same bet. Share it on <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fasadani.github.io%2Fthe-monk-who-oversold-the-ai%2F" target="_blank" rel="noopener">LinkedIn</a>, or wherever your people are.
+  </div>
+
 </div><!-- /wrap -->
+
+<div class="print-foot">Anuj Sadani &middot; asadani.tech</div>
 
 <footer>
   <div class="wrap" style="display:flex;justify-content:space-between;width:100%;padding:0 26px;">
