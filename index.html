@@ -439,6 +439,37 @@
   .pub-date { font-family: var(--mono); font-size: 10.5px; color: var(--text-subtle); }
   .pub-link { font-family: var(--sans); font-size: 11.5px; font-weight: 600; color: var(--accent); }
 
+  /* Book card — richer than a pub-card: cover art + description + Buy CTA */
+  .book-card {
+    display: flex;
+    text-decoration: none;
+    color: inherit;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 8px;
+    transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s;
+  }
+  .book-card:hover { box-shadow: 0 4px 22px rgba(0,0,0,0.09); transform: translateY(-2px); border-color: var(--accent-border); }
+  .book-strip { width: 3px; flex-shrink: 0; background: var(--accent); }
+  .book-cover {
+    width: 104px; flex-shrink: 0; align-self: stretch; object-fit: cover;
+    border-right: 1px solid var(--border-light); background: var(--bg-alt);
+  }
+  .book-body { flex: 1; padding: 13px 18px 14px; min-width: 0; }
+  .book-title { font-family: var(--serif); font-size: 17px; font-weight: 600; line-height: 1.25; color: var(--text); letter-spacing: -0.01em; margin-bottom: 4px; }
+  .book-sub { font-family: var(--sans); font-size: 12.5px; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px; }
+  .book-desc { font-family: var(--sans); font-size: 12.5px; color: var(--text-body); line-height: 1.55; margin-bottom: 11px; }
+  .book-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .book-meta { font-family: var(--mono); font-size: 10.5px; color: var(--text-subtle); }
+  .book-cta {
+    font-family: var(--sans); font-size: 11.5px; font-weight: 600;
+    padding: 4px 11px; border-radius: 4px;
+    background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border);
+  }
+  .book-card:hover .book-cta { background: var(--accent); color: #fff; border-color: var(--accent); }
+
   /* ─── PAGINATION ─────────────────────────────────────── */
   .pagination { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-light); flex-wrap: wrap; gap: 10px; }
   .pagination-info { font-family: var(--mono); font-size: 11px; color: var(--text-subtle); }
@@ -530,6 +561,9 @@
     .tech-map-mobile-cta { display: inline-flex; }
     .pub-body        { padding: 10px 14px 11px; }
     .pub-title       { font-size: 14.5px; }
+    .book-cover      { width: 80px; }
+    .book-body       { padding: 12px 14px 13px; }
+    .book-title      { font-size: 15.5px; }
   }
 </style>
 </head>
@@ -799,6 +833,20 @@
   <div class="section-wrap section-anchor" id="research">
     <div class="section-label">Research</div>
     <div class="section-heading">Publications</div>
+
+    <a class="book-card" href="https://www.amazon.in/dp/B0H2ZBMFR4" target="_blank" rel="noopener">
+      <div class="book-strip"></div>
+      <img class="book-cover" src="/assets/clean-vibe-coder-cover.jpg" alt="The Clean Vibe Coder book cover">
+      <div class="book-body">
+        <div class="book-title">The Clean Vibe Coder</div>
+        <div class="book-sub">A Code of Conduct for Programmers in the Age of AI Agents &middot; <span class="pub-self" style="color:var(--accent);font-weight:600">Anuj Sadani</span></div>
+        <div class="book-desc">A field guide for the working engineer when a stochastic, non-deterministic teammate writes a substantial fraction of the code — and the human at the keyboard still owns every commit that ships under their name. An updated professional ethic for the agent era: the orchestrator role, verification duty, provenance as part of the artifact, and concrete practices you can apply on Monday. A chapter-for-chapter response, fifteen years on, to <em>The Clean Coder</em>.</div>
+        <div class="book-footer">
+          <span class="book-meta">Kindle &middot; 134 pages &middot; May 26, 2026</span>
+          <span class="book-cta">Buy on Amazon ↗</span>
+        </div>
+      </div>
+    </a>
 
     <a class="pub-card" href="https://arxiv.org/abs/2605.13538" target="_blank" rel="noopener">
       <div class="pub-strip"></div>
