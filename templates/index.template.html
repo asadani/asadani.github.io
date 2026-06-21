@@ -15,10 +15,10 @@
 <nav>
   <a class="nav-brand" href="/">asadani.tech</a>
   <div class="nav-links">
+    <a class="nav-link" href="#articles">Articles</a>
+    <a class="nav-link" href="#research">Research</a>
     <a class="nav-link" href="#journey">Journey</a>
     <a class="nav-link" href="#tech">Tech</a>
-    <a class="nav-link" href="#research">Research</a>
-    <a class="nav-link" href="#articles">Articles</a>
     <a class="nav-link" href="#interests">Interests</a>
   </div>
   <span class="nav-tag">Engineering Leader</span>
@@ -56,9 +56,87 @@
         <img class="hero-pic" src="/assets/profile-pic.png" alt="Anuj Sadani">
       </div>
     </div>
+    <!-- BUILD:pillars --><!-- /BUILD:pillars -->
   </section>
 
-  <!-- ── JOURNEY ────────────────────────────────────────────── -->
+  <!-- ── ARTICLES ───────────────────────────────────────────── -->
+  <section class="section-anchor" id="articles">
+    <div class="section-label">Writing</div>
+    <div class="section-heading">Articles</div>
+
+    <input type="search" id="article-search" class="article-search" placeholder="Search articles by title, description, or tag…" aria-label="Search articles" autocomplete="off">
+
+    <div class="filter-row">
+      <span class="filter-lead">Topic</span>
+      <div class="filter-bar">
+        <button class="filter-pill active" data-filter="all">All</button>
+        <button class="filter-pill" data-filter="ai-engineering">AI Engineering</button>
+        <button class="filter-pill" data-filter="security">Security</button>
+        <button class="filter-pill" data-filter="infrastructure">Infrastructure</button>
+        <button class="filter-pill" data-filter="policy">Policy</button>
+        <button class="filter-pill" data-filter="data">Data</button>
+        <button class="filter-pill" data-filter="interactive">Interactive</button>
+      </div>
+    </div>
+
+    <div class="filter-row">
+      <span class="filter-lead">Flavor</span>
+      <div class="flavor-bar">
+        <button class="flavor-chip" data-flavor="agents">agents</button>
+        <button class="flavor-chip" data-flavor="agentic-coding">agentic-coding</button>
+        <button class="flavor-chip" data-flavor="models">models</button>
+        <button class="flavor-chip" data-flavor="evals">evals</button>
+        <button class="flavor-chip" data-flavor="craft">craft</button>
+        <button class="flavor-chip" data-flavor="prompting">prompting</button>
+        <button class="flavor-chip" data-flavor="cost-latency">cost-latency</button>
+        <button class="flavor-chip" data-flavor="supply-chain">supply-chain</button>
+        <button class="flavor-chip" data-flavor="provenance">provenance</button>
+        <button class="flavor-chip" data-flavor="rag">rag</button>
+        <button class="flavor-chip" data-flavor="research">research</button>
+      </div>
+    </div>
+
+    <!--
+      Article tagging: each .art-row carries data-tags (broad category, drives the Topic pills)
+      and data-flavors (space-separated cross-cutting flavors, drives the Flavor chips + the
+      visible .card-flavors chips). Flavor vocabulary (keep in sync with the .flavor-bar buttons):
+        agents · agentic-coding · models · evals · craft · prompting ·
+        cost-latency · supply-chain · provenance · rag · research
+      A new flavor must be added to (a) this list, (b) a .flavor-chip button in the .flavor-bar,
+      and (c) the row's data-flavors + .card-flavors chips.
+    -->
+    <div class="articles-list">
+
+      <!-- BUILD:articles --><!-- /BUILD:articles -->
+
+    </div>
+
+    <div class="pagination" id="pagination">
+      <span class="pagination-info" id="pagination-info"></span>
+      <div class="pagination-controls" id="pagination-controls">
+        <button class="page-btn" id="prev-btn" disabled>&#8592; Prev</button>
+        <span id="page-nums" style="display:flex;gap:6px;align-items:center"></span>
+        <button class="page-btn" id="next-btn" disabled>Next &#8594;</button>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── RESEARCH ───────────────────────────────────────────── -->
+  <div class="section-wrap section-anchor" id="research">
+    <div class="section-label">Research</div>
+    <div class="section-heading">Publications</div>
+
+    <!-- BUILD:publications --><!-- /BUILD:publications -->
+  </div>
+
+    <!-- ── ABOUT ──────────────────────────────────────────────── -->
+  <div class="section-anchor" id="about">
+    <div class="section-label">About</div>
+    <div class="section-heading">About Anuj</div>
+  </div>
+
+<!-- ── JOURNEY ────────────────────────────────────────────── -->
   <div class="section-wrap section-anchor" id="journey">
     <div class="section-label">Career</div>
     <div class="section-heading">Journey</div>
@@ -271,77 +349,6 @@
 
 
   </div>
-
-  <!-- ── RESEARCH ───────────────────────────────────────────── -->
-  <div class="section-wrap section-anchor" id="research">
-    <div class="section-label">Research</div>
-    <div class="section-heading">Publications</div>
-
-    <!-- BUILD:publications --><!-- /BUILD:publications -->
-  </div>
-
-  <!-- ── ARTICLES ───────────────────────────────────────────── -->
-  <section class="section-anchor" id="articles">
-    <div class="section-label">Writing</div>
-    <div class="section-heading">Articles</div>
-
-    <input type="search" id="article-search" class="article-search" placeholder="Search articles by title, description, or tag…" aria-label="Search articles" autocomplete="off">
-
-    <div class="filter-row">
-      <span class="filter-lead">Topic</span>
-      <div class="filter-bar">
-        <button class="filter-pill active" data-filter="all">All</button>
-        <button class="filter-pill" data-filter="ai-engineering">AI Engineering</button>
-        <button class="filter-pill" data-filter="security">Security</button>
-        <button class="filter-pill" data-filter="infrastructure">Infrastructure</button>
-        <button class="filter-pill" data-filter="policy">Policy</button>
-        <button class="filter-pill" data-filter="data">Data</button>
-        <button class="filter-pill" data-filter="interactive">Interactive</button>
-      </div>
-    </div>
-
-    <div class="filter-row">
-      <span class="filter-lead">Flavor</span>
-      <div class="flavor-bar">
-        <button class="flavor-chip" data-flavor="agents">agents</button>
-        <button class="flavor-chip" data-flavor="agentic-coding">agentic-coding</button>
-        <button class="flavor-chip" data-flavor="models">models</button>
-        <button class="flavor-chip" data-flavor="evals">evals</button>
-        <button class="flavor-chip" data-flavor="craft">craft</button>
-        <button class="flavor-chip" data-flavor="prompting">prompting</button>
-        <button class="flavor-chip" data-flavor="cost-latency">cost-latency</button>
-        <button class="flavor-chip" data-flavor="supply-chain">supply-chain</button>
-        <button class="flavor-chip" data-flavor="provenance">provenance</button>
-        <button class="flavor-chip" data-flavor="rag">rag</button>
-        <button class="flavor-chip" data-flavor="research">research</button>
-      </div>
-    </div>
-
-    <!--
-      Article tagging: each .art-row carries data-tags (broad category, drives the Topic pills)
-      and data-flavors (space-separated cross-cutting flavors, drives the Flavor chips + the
-      visible .card-flavors chips). Flavor vocabulary (keep in sync with the .flavor-bar buttons):
-        agents · agentic-coding · models · evals · craft · prompting ·
-        cost-latency · supply-chain · provenance · rag · research
-      A new flavor must be added to (a) this list, (b) a .flavor-chip button in the .flavor-bar,
-      and (c) the row's data-flavors + .card-flavors chips.
-    -->
-    <div class="articles-list">
-
-      <!-- BUILD:articles --><!-- /BUILD:articles -->
-
-    </div>
-
-    <div class="pagination" id="pagination">
-      <span class="pagination-info" id="pagination-info"></span>
-      <div class="pagination-controls" id="pagination-controls">
-        <button class="page-btn" id="prev-btn" disabled>&#8592; Prev</button>
-        <span id="page-nums" style="display:flex;gap:6px;align-items:center"></span>
-        <button class="page-btn" id="next-btn" disabled>Next &#8594;</button>
-      </div>
-    </div>
-
-  </section>
 
   <!-- ── INTERESTS ─────────────────────────────────────────── -->
   <div class="section-wrap section-anchor" id="interests">
