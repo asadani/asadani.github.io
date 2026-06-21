@@ -1,0 +1,54 @@
+{
+  "_note": "SSRN paper abstract_id=6071412 pending title/date from author; add as a third entry in papers[] when available.",
+  "books": [
+    {
+      "title": "The Clean Vibe Coder",
+      "subtitle": "A Code of Conduct for Programmers in the Age of AI Agents",
+      "author": "Anuj Sadani",
+      "desc": "A field guide for the working engineer when a stochastic, non-deterministic teammate writes a substantial fraction of the code — and the human at the keyboard still owns every commit that ships under their name. An updated professional ethic for the agent era: the orchestrator role, verification duty, provenance as part of the artifact, and concrete practices you can apply on Monday. A chapter-for-chapter response, fifteen years on, to The Clean Coder.",
+      "cover": "/assets/clean-vibe-coder-cover.jpg",
+      "meta": "Kindle · 134 pages · May 26, 2026",
+      "url": "https://www.amazon.in/dp/B0H2ZBMFR4"
+    }
+  ],
+  "papers": [
+    {
+      "badge": "arXiv",
+      "cat": "cs.CL",
+      "id": "arXiv:2605.13538",
+      "title": "Locale-Conditioned Few-Shot Prompting Mitigates Demonstration Regurgitation in On-Device PII Substitution with Small Language Models",
+      "authors": [{ "name": "Anuj Sadani", "self": true }, { "name": "Deepak Kumar" }],
+      "date": "2026-05-13",
+      "url": "https://arxiv.org/abs/2605.13538"
+    },
+    {
+      "badge": "arXiv",
+      "cat": "cs.AI",
+      "id": "arXiv:2604.21816",
+      "title": "Tool Attention Is All You Need: Dynamic Tool Gating and Lazy Schema Loading for Eliminating the MCP/Tools Tax in Scalable Agentic Workflows",
+      "authors": [{ "name": "Anuj Sadani", "self": true }, { "name": "Deepak Kumar" }],
+      "date": "2026-04-23",
+      "url": "https://arxiv.org/abs/2604.21816"
+    }
+  ],
+  "digital": [
+    {
+      "title": "The Monk Who Oversold the AI",
+      "desc": "Why borrowed foundation-model capability is shared capability — how a product leader scales on it for two years and still dissolves the only moat the product had.",
+      "image": "/the-monk-who-oversold-the-ai/the-monk-who-oversold-the-ai.png",
+      "url": "https://ko-fi.com/s/02e8517c71"
+    },
+    {
+      "title": "Three Leaders, One Market: A Field Report on Why Good AI Strategies Still Fail",
+      "desc": "A field report on good-faith failure: three experienced leaders, three defensible AI strategies in one market, and why all three fail as the market keeps moving what it rewards.",
+      "image": "/three-leaders-one-market/three-leader.png",
+      "url": "https://ko-fi.com/s/b7efb1eb2e"
+    },
+    {
+      "title": "The Barbell & The Vanishing Middle: IDP",
+      "desc": "Where intelligent document processing is heading through 2028 — value migrating to infrastructure and decision automation while the extraction middle becomes invisible, not simple.",
+      "image": "/idp-barbell/the-idp-barbell.png",
+      "url": "https://ko-fi.com/s/3be014f2e6"
+    }
+  ]
+}
