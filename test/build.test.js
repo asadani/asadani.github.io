@@ -58,14 +58,44 @@ test('renderArticleRow supports multi-tag rows and custom CTA', () => {
   assert.match(html, /class="art-link">Explore →</);
 });
 
-test('renderStoreCard is a Ko-fi card with image and CTA', () => {
-  const d = { title:'Monk', desc:'A note', image:'/m/m.png', url:'https://ko-fi.com/s/x' };
-  const html = b.renderStoreCard(d);
-  assert.match(html, /class="store-card"/);
-  assert.match(html, /class="store-badge">Ko-fi</);
-  assert.match(html, /src="\/m\/m\.png"/);
-  assert.match(html, /View on Ko-fi ↗/);
-  assert.match(html, /href="https:\/\/ko-fi\.com\/s\/x"/);
+test('venueFor derives venue from type + paper badge', () => {
+  assert.deepStrictEqual(b.venueFor('books', {}),   { key:'amazon', label:'Amazon' });
+  assert.deepStrictEqual(b.venueFor('digital', {}), { key:'kofi',   label:'Ko-fi' });
+  assert.deepStrictEqual(b.venueFor('papers', { badge:'arXiv' }), { key:'arxiv', label:'arXiv' });
+  assert.deepStrictEqual(b.venueFor('papers', { badge:'SSRN' }),  { key:'ssrn',  label:'SSRN' });
+});
+
+test('renderPublicationCard: paper uses a venue panel + chip, no cover image', () => {
+  const p = { badge:'arXiv', cat:'cs.CL', title:'On Things', date:'2026-05-13',
+    authors:[{name:'Anuj Sadani',self:true},{name:'Deepak Kumar'}], url:'https://arxiv.org/abs/x' };
+  const html = b.renderPublicationCard(p, 'papers');
+  assert.match(html, /class="pubcard"/);
+  assert.match(html, /class="pubcard-panel venue-arxiv"/);
+  assert.match(html, /class="pubcard-panel-venue">arXiv</);
+  assert.match(html, /class="venue-badge venue-arxiv">arXiv</);
+  assert.ok(!/pubcard-cover/.test(html), 'paper has no cover image');
+  assert.match(html, /class="pubcard-meta">&middot; May 13, 2026</);
+  assert.match(html, /<span class="pub-self">Anuj Sadani<\/span>, Deepak Kumar/);
+});
+
+test('renderPublicationCard: book uses cover + Amazon chip + subtitle/author + desc', () => {
+  const bk = { title:'The Clean Vibe Coder', subtitle:'A Code of Conduct', author:'Anuj Sadani',
+    desc:'A field guide.', cover:'/assets/c.jpg', meta:'Kindle · 134 pages', url:'https://amazon/x' };
+  const html = b.renderPublicationCard(bk, 'books');
+  assert.match(html, /class="pubcard-cover" src="\/assets\/c\.jpg"/);
+  assert.match(html, /class="venue-badge venue-amazon">Amazon</);
+  assert.match(html, /class="pubcard-sub">A Code of Conduct &middot; <span class="pub-self">Anuj Sadani<\/span><\/div>/);
+  assert.match(html, /class="pubcard-desc">A field guide.<\/div>/);
+  assert.match(html, /class="pubcard-meta">&middot; Kindle · 134 pages</);
+});
+
+test('renderPublicationCard: digital uses image + Ko-fi chip + desc, no meta', () => {
+  const d = { title:'Monk', desc:'A note.', image:'/m/m.png', url:'https://ko-fi.com/s/x' };
+  const html = b.renderPublicationCard(d, 'digital');
+  assert.match(html, /class="pubcard-cover" src="\/m\/m\.png"/);
+  assert.match(html, /class="venue-badge venue-kofi">Ko-fi</);
+  assert.match(html, /class="pubcard-desc">A note.<\/div>/);
+  assert.ok(!/pubcard-meta/.test(html), 'digital has no meta line');
 });
 
 test('renderPillars emits three cards with counts', () => {

@@ -60,65 +60,63 @@ function renderArticlesList(arts){
   return arts.slice().sort((x,y)=> String(y.date).localeCompare(String(x.date))).map(renderArticleRow).join('\n\n');
 }
 
-function renderBookCard(b){
-  return `    <a class="book-card" href="${escAttr(b.url)}" target="_blank" rel="noopener">
-      <div class="book-strip"></div>
-      <img class="book-cover" src="${escAttr(b.cover)}" alt="${escAttr(b.title)} book cover">
-      <div class="book-body">
-        <div class="book-title">${esc(b.title)}</div>
-        <div class="book-sub">${esc(b.subtitle)} &middot; <span class="pub-self" style="color:var(--accent);font-weight:600">${esc(b.author)}</span></div>
-        <div class="book-desc">${esc(b.desc)}</div>
-        <div class="book-footer">
-          <span class="book-meta">${esc(b.meta)}</span>
-          <span class="book-cta">Buy on Amazon ↗</span>
-        </div>
-      </div>
-    </a>`;
+function venueFor(type, item){
+  if(type === 'books')   return { key:'amazon', label:'Amazon' };
+  if(type === 'digital') return { key:'kofi',   label:'Ko-fi' };
+  return item.badge === 'SSRN' ? { key:'ssrn', label:'SSRN' } : { key:'arxiv', label:'arXiv' };
 }
 
-function renderPubCard(p){
-  const cat = p.cat ? `\n          <span class="pub-cat">${esc(p.cat)}</span>` : '';
-  const authors = p.authors.map(a => a.self
-    ? `<span class="pub-self">${esc(a.name)}</span>` : esc(a.name)).join(', ');
-  return `    <a class="pub-card" href="${escAttr(p.url)}" target="_blank" rel="noopener">
-      <div class="pub-strip"></div>
-      <div class="pub-body">
-        <div class="pub-top">
-          <span class="pub-badge">${esc(p.badge)}</span>${cat}
-          <span class="pub-id">${esc(p.id)}</span>
-        </div>
-        <div class="pub-title">${esc(p.title)}</div>
-        <div class="pub-authors">${authors}</div>
-        <div class="pub-footer">
-          <span class="pub-date">${formatDate(p.date)}</span>
-          <span class="pub-link">Read on ${esc(p.badge)} ↗</span>
-        </div>
-      </div>
-    </a>`;
-}
+function renderPublicationCard(item, type){
+  const v = venueFor(type, item);
 
-function renderStoreCard(d){
-  return `    <a class="store-card" href="${escAttr(d.url)}" target="_blank" rel="noopener">
-      <div class="store-strip"></div>
-      <img class="store-cover" src="${escAttr(d.image)}" alt="${escAttr(d.title)} cover">
-      <div class="store-body">
-        <span class="store-badge">Ko-fi</span>
-        <div class="store-title">${esc(d.title)}</div>
-        <div class="store-desc">${esc(d.desc)}</div>
-        <div class="store-footer">
-          <span class="store-cta">View on Ko-fi ↗</span>
+  let media;
+  if(type === 'papers'){
+    const cat = item.cat ? `\n        <span class="pubcard-panel-cat">${esc(item.cat)}</span>` : '';
+    media = `<div class="pubcard-panel venue-${v.key}">
+        <span class="pubcard-panel-venue">${esc(v.label)}</span>${cat}
+      </div>`;
+  } else {
+    const src = type === 'books' ? item.cover : item.image;
+    media = `<img class="pubcard-cover" src="${escAttr(src)}" alt="${escAttr(item.title)} cover">`;
+  }
+
+  let sub = '';
+  if(type === 'books'){
+    sub = `\n        <div class="pubcard-sub">${esc(item.subtitle)} &middot; <span class="pub-self">${esc(item.author)}</span></div>`;
+  } else if(type === 'papers'){
+    const authors = item.authors.map(a => a.self
+      ? `<span class="pub-self">${esc(a.name)}</span>` : esc(a.name)).join(', ');
+    sub = `\n        <div class="pubcard-sub">${authors}</div>`;
+  }
+
+  const desc = (type === 'books' || type === 'digital')
+    ? `\n        <div class="pubcard-desc">${esc(item.desc)}</div>` : '';
+
+  let meta = '';
+  if(type === 'books') meta = item.meta;
+  else if(type === 'papers') meta = formatDate(item.date);
+  const metaSpan = meta ? `\n          <span class="pubcard-meta">&middot; ${esc(meta)}</span>` : '';
+
+  return `    <a class="pubcard" href="${escAttr(item.url)}" target="_blank" rel="noopener">
+      <div class="pubcard-media">${media}</div>
+      <div class="pubcard-body">
+        <div class="pubcard-title">${esc(item.title)}</div>${sub}${desc}
+        <div class="pubcard-foot">
+          <span class="venue-badge venue-${v.key}">${esc(v.label)}</span>${metaSpan}
+          <span class="pubcard-arrow">↗</span>
         </div>
       </div>
     </a>`;
 }
 
 function renderPublications(pubs){
-  const bucket = (label, items, fn) =>
-    `    <div class="pub-bucket-label">${esc(label)}</div>\n` + items.map(fn).join('\n');
+  const bucket = (label, items, type) =>
+    `    <div class="pub-bucket-label">${esc(label)}</div>\n` +
+    items.map(it => renderPublicationCard(it, type)).join('\n');
   return [
-    bucket('Books', pubs.books, renderBookCard),
-    bucket('Papers', pubs.papers, renderPubCard),
-    bucket('Digital', pubs.digital, renderStoreCard),
+    bucket('Books', pubs.books, 'books'),
+    bucket('Papers', pubs.papers, 'papers'),
+    bucket('Digital', pubs.digital, 'digital'),
   ].join('\n\n');
 }
 
@@ -171,5 +169,5 @@ function build(){
 if (require.main === module) build();
 
 module.exports = { esc, escAttr, formatDate, TOPICS,
-  renderArticleRow, renderArticlesList, renderBookCard, renderPubCard,
-  renderStoreCard, renderPublications, renderPillars, injectBlocks, build };
+  renderArticleRow, renderArticlesList, venueFor, renderPublicationCard,
+  renderPublications, renderPillars, injectBlocks, build };

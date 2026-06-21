@@ -33,13 +33,16 @@ test('all three Ko-fi products have image + non-empty description', () => {
   }
 });
 
-test('publications render without throwing and emit all three buckets', () => {
+test('publications render as unified pubcards across three buckets', () => {
   let html;
   assert.doesNotThrow(() => { html = b.renderPublications(pubs); });
   assert.match(html, /pub-bucket-label">Books</);
   assert.match(html, /pub-bucket-label">Papers</);
   assert.match(html, /pub-bucket-label">Digital</);
-  assert.match(html, /class="store-card"/);
-  assert.match(html, /class="book-card"/);
-  assert.match(html, /class="pub-card"/);
+  const cards = (html.match(/class="pubcard"/g) || []).length;
+  assert.strictEqual(cards, pubs.books.length + pubs.papers.length + pubs.digital.length);
+  assert.match(html, /venue-badge venue-amazon/);
+  assert.match(html, /venue-badge venue-arxiv/);
+  assert.match(html, /venue-badge venue-kofi/);
+  assert.match(html, /class="pubcard-panel venue-arxiv"/);
 });
