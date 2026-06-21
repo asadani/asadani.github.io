@@ -11,6 +11,7 @@
     --accent:        #C85C2D;
     --accent-bg:     #FDF1EB;
     --accent-border: #F0C4A8;
+    --shadow:        rgba(200,92,45,0.08);
     --green:         #2A7A4B;
     --green-bg:      #EAF5EF;
     --green-border:  #A8D9BC;
@@ -392,72 +393,6 @@
   .tech-map-mobile-cta { display: none; }
 
   /* ─── PUBLICATIONS ───────────────────────────────────── */
-  .pub-card {
-    display: flex;
-    text-decoration: none;
-    color: inherit;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    overflow: hidden;
-    margin-bottom: 8px;
-    transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s;
-  }
-  .pub-card:last-of-type { margin-bottom: 0; }
-  .pub-card:hover { box-shadow: 0 4px 22px rgba(0,0,0,0.09); transform: translateY(-2px); border-color: var(--accent-border); }
-  .pub-strip { width: 3px; flex-shrink: 0; background: var(--blue); }
-  .pub-body { flex: 1; padding: 10px 16px 11px; min-width: 0; }
-  .pub-top { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; flex-wrap: wrap; }
-  .pub-badge {
-    display: inline-flex; align-items: center; gap: 4px;
-    font-family: var(--mono); font-size: 9px; font-weight: 600;
-    padding: 1px 6px; border-radius: 3px; letter-spacing: 0.05em;
-    background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border);
-    text-transform: uppercase;
-  }
-  .pub-cat {
-    font-family: var(--mono); font-size: 9px; font-weight: 500;
-    padding: 1px 6px; border-radius: 3px; letter-spacing: 0.04em;
-    background: var(--bg-alt); color: var(--text-muted); border: 1px solid var(--border);
-  }
-  .pub-id { font-family: var(--mono); font-size: 9.5px; color: var(--text-subtle); letter-spacing: 0.03em; }
-  .pub-title { font-family: var(--serif); font-size: 15.5px; font-weight: 600; line-height: 1.3; color: var(--text); letter-spacing: -0.01em; margin-bottom: 3px; }
-  .pub-authors { font-family: var(--sans); font-size: 12px; color: var(--text-muted); margin-bottom: 3px; }
-  .pub-authors .pub-self { color: var(--accent); font-weight: 600; }
-  .pub-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
-  .pub-date { font-family: var(--mono); font-size: 10.5px; color: var(--text-subtle); }
-  .pub-link { font-family: var(--sans); font-size: 11.5px; font-weight: 600; color: var(--accent); }
-
-  /* Book card — richer than a pub-card: cover art + description + Buy CTA */
-  .book-card {
-    display: flex;
-    text-decoration: none;
-    color: inherit;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    overflow: hidden;
-    margin-bottom: 8px;
-    transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s;
-  }
-  .book-card:hover { box-shadow: 0 4px 22px rgba(0,0,0,0.09); transform: translateY(-2px); border-color: var(--accent-border); }
-  .book-strip { width: 3px; flex-shrink: 0; background: var(--accent); }
-  .book-cover {
-    width: 104px; flex-shrink: 0; align-self: stretch; object-fit: cover;
-    border-right: 1px solid var(--border-light); background: var(--bg-alt);
-  }
-  .book-body { flex: 1; padding: 13px 18px 14px; min-width: 0; }
-  .book-title { font-family: var(--serif); font-size: 17px; font-weight: 600; line-height: 1.25; color: var(--text); letter-spacing: -0.01em; margin-bottom: 4px; }
-  .book-sub { font-family: var(--sans); font-size: 12.5px; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px; }
-  .book-desc { font-family: var(--sans); font-size: 12.5px; color: var(--text-body); line-height: 1.55; margin-bottom: 11px; }
-  .book-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
-  .book-meta { font-family: var(--mono); font-size: 10.5px; color: var(--text-subtle); }
-  .book-cta {
-    font-family: var(--sans); font-size: 11.5px; font-weight: 600;
-    padding: 4px 11px; border-radius: 4px;
-    background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border);
-  }
-  .book-card:hover .book-cta { background: var(--accent); color: #fff; border-color: var(--accent); }
 
   /* ─── PAGINATION ─────────────────────────────────────── */
   .pagination { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-light); flex-wrap: wrap; gap: 10px; }
@@ -548,11 +483,6 @@
     .pagination      { flex-direction: column; align-items: flex-start; }
     .tech-map-frame  { display: none; }
     .tech-map-mobile-cta { display: inline-flex; }
-    .pub-body        { padding: 10px 14px 11px; }
-    .pub-title       { font-size: 14.5px; }
-    .book-cover      { width: 80px; }
-    .book-body       { padding: 12px 14px 13px; }
-    .book-title      { font-size: 15.5px; }
   }
 
 /* ─── PUBLICATIONS: bucket labels ─────────────────────── */
@@ -562,37 +492,6 @@
   margin: 20px 0 10px;
 }
 .pub-bucket-label:first-of-type { margin-top: 4px; }
-
-/* ─── PUBLICATIONS: Ko-fi store card ──────────────────── */
-.store-card {
-  display: flex; text-decoration: none; color: inherit;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 6px; overflow: hidden; margin-bottom: 8px;
-  transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s;
-}
-.store-card:hover { box-shadow: 0 4px 22px rgba(0,0,0,0.09); transform: translateY(-2px); border-color: var(--accent-border); }
-.store-strip { width: 3px; flex-shrink: 0; background: var(--accent); }
-.store-cover {
-  width: 104px; flex-shrink: 0; align-self: stretch; object-fit: cover;
-  border-right: 1px solid var(--border-light); background: var(--bg-alt);
-}
-.store-body { flex: 1; padding: 13px 18px 14px; min-width: 0; }
-.store-badge {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-family: var(--mono); font-size: 9px; font-weight: 600;
-  padding: 1px 6px; border-radius: 3px; letter-spacing: 0.05em; text-transform: uppercase;
-  background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border);
-  margin-bottom: 6px;
-}
-.store-title { font-family: var(--serif); font-size: 16px; font-weight: 600; line-height: 1.25; color: var(--text); letter-spacing: -0.01em; margin-bottom: 5px; }
-.store-desc { font-family: var(--sans); font-size: 12.5px; color: var(--text-body); line-height: 1.5; margin-bottom: 10px; }
-.store-footer { display: flex; justify-content: flex-end; align-items: center; }
-.store-cta {
-  font-family: var(--sans); font-size: 11.5px; font-weight: 600;
-  padding: 4px 11px; border-radius: 4px;
-  background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border);
-}
-.store-card:hover .store-cta { background: var(--accent); color: #fff; border-color: var(--accent); }
 
 /* ─── HERO PILLARS (Direction A) ──────────────────────── */
 .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 28px; }
@@ -607,3 +506,54 @@
 .pillar-count { font-family: var(--serif); font-size: 28px; font-weight: 600; color: var(--text); line-height: 1; }
 .pillar-meta { font-family: var(--sans); font-size: 12px; color: var(--text-muted); }
 .pillar-link { font-family: var(--sans); font-size: 11.5px; font-weight: 600; color: var(--accent); margin-top: auto; }
+
+/* ─── PUBLICATION CARD (unified 40:60 split) ──────────── */
+.pubcard {
+  display: flex; text-decoration: none; color: inherit;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden; margin-bottom: 10px;
+  transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s;
+}
+.pubcard:last-of-type { margin-bottom: 0; }
+.pubcard:hover { box-shadow: 0 4px 22px var(--shadow); transform: translateY(-2px); border-color: var(--accent-border); }
+
+.pubcard-media { flex: 0 0 40%; min-width: 120px; max-width: 240px; align-self: stretch; display: flex; }
+.pubcard-cover { width: 100%; object-fit: cover; background: var(--bg-alt); border-right: 1px solid var(--border-light); }
+
+.pubcard-panel {
+  width: 100%; display: flex; flex-direction: column; justify-content: center; gap: 6px;
+  padding: 18px; border-right: 1px solid var(--border-light); background: var(--accent-bg);
+}
+.pubcard-panel-venue { font-family: var(--mono); font-size: 22px; font-weight: 600; letter-spacing: -0.01em; color: var(--accent); }
+.pubcard-panel-cat { font-family: var(--mono); font-size: 11px; color: var(--text-muted); }
+.pubcard-panel.venue-arxiv { background: var(--red-bg); }
+.pubcard-panel.venue-arxiv .pubcard-panel-venue { color: var(--red); }
+.pubcard-panel.venue-ssrn { background: var(--blue-bg); }
+.pubcard-panel.venue-ssrn .pubcard-panel-venue { color: var(--blue); }
+
+.pubcard-body { flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 14px 18px; }
+.pubcard-title { font-family: var(--serif); font-size: 16.5px; font-weight: 600; line-height: 1.28; letter-spacing: -0.01em; color: var(--text); margin-bottom: 4px; }
+.pubcard-sub { font-family: var(--sans); font-size: 12.5px; color: var(--text-muted); line-height: 1.45; margin-bottom: 7px; }
+.pubcard-sub .pub-self { color: var(--accent); font-weight: 600; }
+.pubcard-desc { font-family: var(--sans); font-size: 12.5px; color: var(--text-body); line-height: 1.55; margin-bottom: 10px; }
+.pubcard-foot { display: flex; align-items: center; gap: 8px; margin-top: auto; }
+.pubcard-meta { font-family: var(--mono); font-size: 10.5px; color: var(--text-subtle); }
+.pubcard-arrow { margin-left: auto; font-size: 13px; color: var(--accent); }
+
+/* venue wordmark chip */
+.venue-badge {
+  display: inline-flex; align-items: center; font-family: var(--mono);
+  font-size: 9.5px; font-weight: 600; letter-spacing: 0.04em;
+  padding: 2px 7px; border-radius: 3px; border: 1px solid var(--border);
+}
+.venue-badge.venue-arxiv  { background: var(--red-bg);    color: var(--red);    border-color: var(--red-border); }
+.venue-badge.venue-ssrn   { background: var(--blue-bg);   color: var(--blue);   border-color: var(--blue-border); }
+.venue-badge.venue-kofi   { background: var(--accent-bg); color: var(--accent); border-color: var(--accent-border); }
+.venue-badge.venue-amazon { background: var(--accent-bg); color: var(--accent); border-color: var(--accent-border); }
+
+@media (max-width: 640px) {
+  .pubcard { flex-direction: column; }
+  .pubcard-media { flex-basis: auto; max-width: none; width: 100%; height: 160px; }
+  .pubcard-cover { height: 160px; }
+  .pubcard-panel { border-right: none; border-bottom: 1px solid var(--border-light); }
+}
