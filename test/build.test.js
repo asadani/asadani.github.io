@@ -65,37 +65,41 @@ test('venueFor derives venue from type + paper badge', () => {
   assert.deepStrictEqual(b.venueFor('papers', { badge:'SSRN' }),  { key:'ssrn',  label:'SSRN' });
 });
 
-test('renderPublicationCard: paper uses a venue panel + chip, no cover image', () => {
-  const p = { badge:'arXiv', cat:'cs.CL', title:'On Things', date:'2026-05-13',
-    authors:[{name:'Anuj Sadani',self:true},{name:'Deepak Kumar'}], url:'https://arxiv.org/abs/x' };
-  const html = b.renderPublicationCard(p, 'papers');
-  assert.match(html, /class="pubcard"/);
-  assert.match(html, /class="pubcard-panel venue-arxiv"/);
-  assert.match(html, /class="pubcard-panel-venue">arXiv</);
-  assert.match(html, /class="venue-badge venue-arxiv">arXiv</);
-  assert.ok(!/pubcard-cover/.test(html), 'paper has no cover image');
-  assert.match(html, /class="pubcard-meta">&middot; May 13, 2026</);
-  assert.match(html, /<span class="pub-self">Anuj Sadani<\/span>, Deepak Kumar/);
-});
-
-test('renderPublicationCard: book uses cover + Amazon chip + subtitle/author + desc', () => {
-  const bk = { title:'The Clean Vibe Coder', subtitle:'A Code of Conduct', author:'Anuj Sadani',
+test('renderFlipCard book: media front (cover+caption), back desc+meta, Amazon link', () => {
+  const bk = { title:'The Clean Vibe Coder', subtitle:'A Code', author:'Anuj Sadani',
     desc:'A field guide.', cover:'/assets/c.jpg', meta:'Kindle · 134 pages', url:'https://amazon/x' };
-  const html = b.renderPublicationCard(bk, 'books');
-  assert.match(html, /class="pubcard-cover" src="\/assets\/c\.jpg"/);
-  assert.match(html, /class="venue-badge venue-amazon">Amazon</);
-  assert.match(html, /class="pubcard-sub">A Code of Conduct &middot; <span class="pub-self">Anuj Sadani<\/span><\/div>/);
-  assert.match(html, /class="pubcard-desc">A field guide.<\/div>/);
-  assert.match(html, /class="pubcard-meta">&middot; Kindle · 134 pages</);
+  const html = b.renderFlipCard(bk, 'books');
+  assert.match(html, /class="flipcard venue-amazon flipcard--media"/);
+  assert.match(html, /class="flipcard-cover" src="\/assets\/c\.jpg" alt="The Clean Vibe Coder cover"/);
+  assert.match(html, /class="flipcard-caption">The Clean Vibe Coder</);
+  assert.match(html, /class="flipcard-desc">A field guide.</);
+  assert.match(html, /class="flipcard-meta">Kindle · 134 pages</);
+  assert.match(html, /class="flipcard-link"[^>]*href="https:\/\/amazon\/x"[^>]*>Amazon ↗</);
+  assert.ok((html.match(/aria-expanded="false"/g) || []).length === 2, 'two toggles');
 });
 
-test('renderPublicationCard: digital uses image + Ko-fi chip + desc, no meta', () => {
+test('renderFlipCard paper: text title-panel front (no cover), authors+date back, arXiv link', () => {
+  const p = { badge:'arXiv', cat:'cs.CL', title:'On Things', dateDisplay:'May 13, 2026',
+    authors:[{name:'Anuj Sadani',self:true},{name:'Deepak Kumar'}], url:'https://arxiv.org/abs/x' };
+  const html = b.renderFlipCard(p, 'papers');
+  assert.match(html, /class="flipcard venue-arxiv flipcard--text"/);
+  assert.ok(!/flipcard-cover/.test(html), 'paper has no cover image');
+  assert.match(html, /class="flipcard-panel-venue">arXiv</);
+  assert.match(html, /class="flipcard-paneltitle">On Things</);
+  assert.match(html, /class="flipcard-panel-cat">cs.CL</);
+  assert.match(html, /<span class="pub-self">Anuj Sadani<\/span>, Deepak Kumar/);
+  assert.match(html, /class="flipcard-meta">May 13, 2026</);
+  assert.match(html, />arXiv ↗</);
+});
+
+test('renderFlipCard digital: media front, desc back, Ko-fi link', () => {
   const d = { title:'Monk', desc:'A note.', image:'/m/m.png', url:'https://ko-fi.com/s/x' };
-  const html = b.renderPublicationCard(d, 'digital');
-  assert.match(html, /class="pubcard-cover" src="\/m\/m\.png"/);
-  assert.match(html, /class="venue-badge venue-kofi">Ko-fi</);
-  assert.match(html, /class="pubcard-desc">A note.<\/div>/);
-  assert.ok(!/pubcard-meta/.test(html), 'digital has no meta line');
+  const html = b.renderFlipCard(d, 'digital');
+  assert.match(html, /class="flipcard venue-kofi flipcard--media"/);
+  assert.match(html, /class="flipcard-cover" src="\/m\/m\.png"/);
+  assert.match(html, /class="flipcard-caption">Monk</);
+  assert.match(html, /class="flipcard-desc">A note.</);
+  assert.match(html, />Ko-fi ↗</);
 });
 
 test('renderPillars emits three cards with counts', () => {

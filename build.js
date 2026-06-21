@@ -66,53 +66,65 @@ function venueFor(type, item){
   return item.badge === 'SSRN' ? { key:'ssrn', label:'SSRN' } : { key:'arxiv', label:'arXiv' };
 }
 
-function renderPublicationCard(item, type){
-  const v = venueFor(type, item);
+function venueLink(v, url){
+  return `<a class="flipcard-link" href="${escAttr(url)}" target="_blank" rel="noopener">${esc(v.label)} ↗</a>`;
+}
 
-  let media;
-  if(type === 'papers'){
-    const cat = item.cat ? `\n        <span class="pubcard-panel-cat">${esc(item.cat)}</span>` : '';
-    media = `<div class="pubcard-panel venue-${v.key}">
-        <span class="pubcard-panel-venue">${esc(v.label)}</span>${cat}
-      </div>`;
+function renderFlipCard(item, type){
+  const v = venueFor(type, item);
+  const isText = (type === 'papers');
+  const variant = isText ? 'flipcard--text' : 'flipcard--media';
+
+  let front;
+  if(isText){
+    const cat = item.cat ? `\n        <span class="flipcard-panel-cat">${esc(item.cat)}</span>` : '';
+    front = `<span class="flipcard-panel-venue">${esc(v.label)}</span>
+        <span class="flipcard-paneltitle">${esc(item.title)}</span>${cat}`;
   } else {
     const src = type === 'books' ? item.cover : item.image;
-    media = `<img class="pubcard-cover" src="${escAttr(src)}" alt="${escAttr(item.title)} cover">`;
+    front = `<img class="flipcard-cover" src="${escAttr(src)}" alt="${escAttr(item.title)} cover">
+        <span class="flipcard-caption">${esc(item.title)}</span>`;
   }
 
-  let sub = '';
+  let back;
   if(type === 'books'){
-    sub = `\n        <div class="pubcard-sub">${esc(item.subtitle)} &middot; <span class="pub-self">${esc(item.author)}</span></div>`;
+    back = `<span class="flipcard-desc">${esc(item.desc)}</span>
+        <span class="flipcard-meta">${esc(item.meta)}</span>`;
   } else if(type === 'papers'){
     const authors = item.authors.map(a => a.self
       ? `<span class="pub-self">${esc(a.name)}</span>` : esc(a.name)).join(', ');
-    sub = `\n        <div class="pubcard-sub">${authors}</div>`;
+    back = `<span class="flipcard-meta">${authors}</span>
+        <span class="flipcard-meta">${esc(item.dateDisplay)}</span>`;
+  } else { // digital
+    back = `<span class="flipcard-desc">${esc(item.desc)}</span>`;
   }
 
-  const desc = (type === 'books' || type === 'digital')
-    ? `\n        <div class="pubcard-desc">${esc(item.desc)}</div>` : '';
-
-  let meta = '';
-  if(type === 'books') meta = item.meta;
-  else if(type === 'papers') meta = formatDate(item.date);
-  const metaSpan = meta ? `\n          <span class="pubcard-meta">&middot; ${esc(meta)}</span>` : '';
-
-  return `    <a class="pubcard" href="${escAttr(item.url)}" target="_blank" rel="noopener">
-      <div class="pubcard-media">${media}</div>
-      <div class="pubcard-body">
-        <div class="pubcard-title">${esc(item.title)}</div>${sub}${desc}
-        <div class="pubcard-foot">
-          <span class="venue-badge venue-${v.key}">${esc(v.label)}</span>${metaSpan}
-          <span class="pubcard-arrow">↗</span>
+  const link = venueLink(v, item.url);
+  const t = escAttr(item.title);
+  return `      <div class="flipcard venue-${v.key} ${variant}">
+        <div class="flipcard-inner">
+          <div class="flipcard-face flipcard-front">
+            <button class="flipcard-toggle" type="button" aria-expanded="false" aria-label="Show details for ${t}">
+        ${front}
+            </button>
+            ${link}
+          </div>
+          <div class="flipcard-face flipcard-back">
+            <button class="flipcard-toggle" type="button" aria-expanded="false" aria-label="Hide details for ${t}">
+        ${back}
+            </button>
+            ${link}
+          </div>
         </div>
-      </div>
-    </a>`;
+      </div>`;
 }
 
 function renderPublications(pubs){
   const bucket = (label, items, type) =>
     `    <div class="pub-bucket-label">${esc(label)}</div>\n` +
-    items.map(it => renderPublicationCard(it, type)).join('\n');
+    `    <div class="flip-grid">\n` +
+    items.map(it => renderFlipCard(it, type)).join('\n') +
+    `\n    </div>`;
   return [
     bucket('Books', pubs.books, 'books'),
     bucket('Papers', pubs.papers, 'papers'),
@@ -169,5 +181,5 @@ function build(){
 if (require.main === module) build();
 
 module.exports = { esc, escAttr, formatDate, TOPICS,
-  renderArticleRow, renderArticlesList, venueFor, renderPublicationCard,
+  renderArticleRow, renderArticlesList, venueFor, venueLink, renderFlipCard,
   renderPublications, renderPillars, injectBlocks, build };

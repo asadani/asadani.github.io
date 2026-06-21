@@ -38,16 +38,16 @@ test('all three Ko-fi products have image + non-empty description', () => {
   }
 });
 
-test('publications render as unified pubcards across three buckets', () => {
+test('publications render as flip-card grids across three buckets', () => {
   let html;
   assert.doesNotThrow(() => { html = b.renderPublications(pubs); });
   assert.match(html, /pub-bucket-label">Books</);
   assert.match(html, /pub-bucket-label">Papers</);
   assert.match(html, /pub-bucket-label">Digital</);
-  const cards = (html.match(/class="pubcard"/g) || []).length;
+  const grids = (html.match(/class="flip-grid"/g) || []).length;
+  assert.strictEqual(grids, 3, 'one flip-grid per bucket');
+  const cards = (html.match(/class="flipcard /g) || []).length;
   assert.strictEqual(cards, pubs.books.length + pubs.papers.length + pubs.digital.length);
-  assert.match(html, /venue-badge venue-amazon/);
-  assert.match(html, /venue-badge venue-arxiv/);
-  assert.match(html, /venue-badge venue-kofi/);
-  assert.match(html, /class="pubcard-panel venue-arxiv"/);
+  assert.match(html, /flipcard--text/);  // papers
+  assert.match(html, /flipcard--media/); // books/digital
 });
