@@ -598,5 +598,22 @@
   });
 </script>
 
+<script>
+(function(){
+  var research = document.getElementById('research');
+  if(!research) return;
+  research.addEventListener('click', function(e){
+    if(e.target.closest('.flipcard-link')) return;       // let the venue link open
+    var toggle = e.target.closest('.flipcard-toggle');
+    if(!toggle) return;
+    var card = toggle.closest('.flipcard');
+    if(!card) return;
+    var flipped = card.classList.toggle('is-flipped');
+    var btns = card.querySelectorAll('.flipcard-toggle');
+    for(var i=0;i<btns.length;i++){ btns[i].setAttribute('aria-expanded', flipped ? 'true' : 'false'); }
+  });
+})();
+</script>
+
 </body>
 </html>
