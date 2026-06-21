@@ -1,0 +1,397 @@
+[
+  {
+    "slug": "the-monk-who-oversold-the-ai",
+    "title": "The Monk Who Oversold the AI",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "models",
+      "research"
+    ],
+    "quote": "\"You can rent capability. You cannot rent a moat.\"",
+    "desc": "A product leader replaced the company's R&amp;D with borrowed foundation-model capability, scaled brilliantly for two years, won the CEO's trust, and then dissolved the only moat the product had. Why borrowed intelligence is shared intelligence, why even strong ML teams give the moat away, and how to borrow without dissolving. Includes a downloadable designed PDF.",
+    "date": "2026-06-18",
+    "dateDisplay": "June 18, 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/the-monk-who-oversold-the-ai/"
+  },
+  {
+    "slug": "three-leaders-one-market",
+    "title": "Three Leaders, One Market",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "models",
+      "craft"
+    ],
+    "quote": "\"There are no villains. When the company fails, the leader is the one left on the stake.\"",
+    "desc": "A triptych. Three experienced leaders take three defensible AI strategies in the same market: one holds the proven playbook, one rides every wave, one builds the right system. All three fail, by different paths, because the market kept moving what it rewarded. A field report on good-faith failure, with no villains and the leader on the stake. Includes a downloadable designed PDF.",
+    "date": "2026-06-18",
+    "dateDisplay": "June 18, 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/three-leaders-one-market/"
+  },
+  {
+    "slug": "the-verification-tax",
+    "title": "Verification-maxxing",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "agents",
+      "craft"
+    ],
+    "quote": "\"Generation is solved. Judgment is the moat.\"",
+    "desc": "The syntax tax collapsed; the verification tax replaced it. Why \"vibe coding to agentic engineering\" is a shift in where software's cost lives &mdash; Agent = Model + Scaffold, and most teams invest in the wrong half.",
+    "date": "2026-06-17",
+    "dateDisplay": "June 17, 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/the-verification-tax/"
+  },
+  {
+    "slug": "idp-barbell",
+    "title": "The Barbell and the Vanishing Middle",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "agents",
+      "rag"
+    ],
+    "quote": "\"The middle didn't disappear. It became a load-bearing wall you can't see.\"",
+    "desc": "Where intelligent document processing is heading through 2028: value migrating to document infrastructure on one end and decision automation on the other, while the extraction layer becomes invisible, not simple. Includes a downloadable designed PDF.",
+    "date": "2026-06-09",
+    "dateDisplay": "June 9, 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/idp-barbell/"
+  },
+  {
+    "slug": "coding-with-enemy",
+    "title": "The safety layer is you",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "agents",
+      "craft",
+      "supply-chain"
+    ],
+    "quote": "\"The safety layer for the code your agents write is you. Right now you catch six percent.\"",
+    "desc": "A study put real developers in five-hour sessions with frontier coding agents that were quietly stealing user data. 94% shipped the sabotage after reviewing and approving it. Why human review is a 6% control, why the real attack surface is the agent's context and not the model, and why daily use erodes the one trait that actually catches it.",
+    "date": "2026-06-06",
+    "dateDisplay": "June 6, 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/coding-with-enemy/"
+  },
+  {
+    "slug": "from-todo-to-toknow",
+    "title": "From TODO to TOKNOW",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "craft",
+      "agentic-coding"
+    ],
+    "quote": "\"The TODO was a promise to do the work. Make the TOKNOW a promise you refuse to write.\"",
+    "desc": "We used to defer work with a TODO. Now AI writes the code, the tests, and the docs in minutes, and what gets deferred is understanding the system. Why this debt compiles and passes its tests, the cognitive-equity cost of letting the agent hold the comprehension, and the one question I treat as the real launch gate.",
+    "date": "2026-05-31",
+    "dateDisplay": "May 31, 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/from-todo-to-toknow/"
+  },
+  {
+    "slug": "spec-lies-until-something-runs-it",
+    "title": "The spec lies until something runs it",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "prompting",
+      "evals",
+      "craft"
+    ],
+    "quote": "\"The spec you can finally trust is the one that has already eaten its examples.\"",
+    "desc": "I had a template and a skill to write these posts and still kept opening a real one. Why template plus skill wasn't enough, why adding a worked example cost more tokens and worked anyway, and how feeding its lessons back into the spec made the lean version the honest one.",
+    "date": "2026-05-31",
+    "dateDisplay": "May 31, 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/spec-lies-until-something-runs-it/"
+  },
+  {
+    "slug": "synthid-watermark-check",
+    "title": "SynthID can't tell you who made it.",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "provenance"
+    ],
+    "quote": "\"Machine-made is not the same as authentic.\"",
+    "desc": "Google wired SynthID into Gemini: drop an image in, ask if it's AI, read the answer in five seconds. The check is real and it's the best we have. It also tells you whether a model made something, not who did. Why screenshots beat it, why exiftool can't, and why video and audio are the real win.",
+    "date": "2026-05-29",
+    "dateDisplay": "May 29, 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/synthid-watermark-check/"
+  },
+  {
+    "slug": "agentic-ocr-for-real",
+    "title": "What is \"agentic OCR,\" really?",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "agents"
+    ],
+    "quote": "\"Traditional OCR is a camera. Agentic OCR is a cinematographer.\"",
+    "desc": "Vendors keep renaming document extraction agentic; skeptics call it LLM orchestration in a trench coat. The honest definition, three metaphors, and a decision table for when the word earns its keep.",
+    "date": "2026-05-29",
+    "dateDisplay": "May 29, 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/agentic-ocr-for-real/"
+  },
+  {
+    "slug": "self-improving-ai-honestly",
+    "title": "Self-Improving AI, Honestly",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "agents",
+      "research"
+    ],
+    "quote": "\"The map is real. The 'step toward AGI' label is doing far more work than the results actually carry.\"",
+    "desc": "A landscape read across Reflexion, STaR, Voyager, AI Scientist, Darwin Gödel Machine, TTT/TTRL, and the 2026 SIA paper. Where self-improving AI actually works today, and the four pieces still missing for the AGI framing to hold.",
+    "date": "2026-05-28",
+    "dateDisplay": "May 28, 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/self-improving-ai-honestly/"
+  },
+  {
+    "slug": "gemini-3-5-flash-agent-first",
+    "title": "Google is quietly changing what \"Flash\" means",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "models",
+      "cost-latency"
+    ],
+    "quote": "\"Flash is the new product floor, not the cheap tier.\"",
+    "desc": "Gemini 3.5 Flash beats 3.1 Pro on agentic benchmarks, ships GA across Google, and triples its own per-token cost. What the agent-first pivot means for builders.",
+    "date": "2026-05-22",
+    "dateDisplay": "May 22, 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/gemini-3-5-flash-agent-first/"
+  },
+  {
+    "slug": "moral-surrender",
+    "title": "Moral Surrender",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "agents",
+      "craft"
+    ],
+    "quote": "\"Cognitive surrender costs you skill. Moral surrender costs you the architecture.\"",
+    "desc": "Two failure modes when working with AI agents — and why surrendering judgment is more dangerous than surrendering skill.",
+    "date": "2026-05-08",
+    "dateDisplay": "May 8, 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/moral-surrender/"
+  },
+  {
+    "slug": "contextual-retrieval-tradeoffs",
+    "title": "Contextual retrieval, honestly",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "rag"
+    ],
+    "quote": "\"Treat it as a strong default chunk-level upgrade, not a strategy.\"",
+    "desc": "Anthropic's contextual retrieval, read straight: real gains, real preprocessing costs, and the blind spots around long-horizon reasoning and governance.",
+    "date": "2026-05-07",
+    "dateDisplay": "May 7, 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/contextual-retrieval-tradeoffs/"
+  },
+  {
+    "slug": "automated-prompt-optimization",
+    "title": "Automated prompt optimization, in 2026",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "prompting",
+      "evals"
+    ],
+    "quote": "\"Prompts have stopped being something you write. They are something the system compiles.\"",
+    "desc": "A field guide to DSPy, TextGrad, ACE, GEPA, and the evaluation and Pareto trade-offs that decide what survives production.",
+    "date": "2026-05-04",
+    "dateDisplay": "May 4, 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/automated-prompt-optimization/"
+  },
+  {
+    "slug": "deepseek-v4-real-leap",
+    "title": "The Complaints Are Valid. The Leap Is Real.",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "models"
+    ],
+    "quote": "\"The leap is real. It's just not the leap people expected.\"",
+    "desc": "15 months after R1, DeepSeek V4 lands with valid criticism — but a genuine architectural win hiding behind the benchmark noise.",
+    "date": "2026-04-24",
+    "dateDisplay": "Apr 24, 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/deepseek-v4-real-leap/"
+  },
+  {
+    "slug": "mcp-supply-chain-rce",
+    "title": "The Mother of All AI Supply Chains: MCP's By-Design RCE",
+    "tags": [
+      "security"
+    ],
+    "flavors": [
+      "supply-chain"
+    ],
+    "quote": "\"The most dangerous vulnerabilities aren't bugs — they're features.\"",
+    "desc": "A configuration string is a shell command. Anthropic called it expected. OX Security called it an RCE.",
+    "date": "2026-04-21",
+    "dateDisplay": "Apr 21, 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/mcp-supply-chain-rce/"
+  },
+  {
+    "slug": "data-product-manifesto",
+    "title": "The Data Product Manifesto",
+    "tags": [
+      "data"
+    ],
+    "flavors": [],
+    "quote": "\"Data is the new oil. Valuable, messy, and everyone's hands are dirty.\"",
+    "desc": "Seven pillars for treating data as a first-class product, not a departmental afterthought.",
+    "date": "2026-04-15",
+    "dateDisplay": "Apr 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/data-product-manifesto/"
+  },
+  {
+    "slug": "ai-coding-agent-stack",
+    "title": "The Five Layers of the Modern AI Coding Agent Stack",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "agentic-coding"
+    ],
+    "quote": "\"Any sufficiently advanced autocomplete is indistinguishable from AGI — until it rewrites your prod config.\"",
+    "desc": "Five architectural layers that separate a genuine productivity multiplier from expensive autocomplete.",
+    "date": "2026-04-15",
+    "dateDisplay": "Apr 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/ai-coding-agent-stack/"
+  },
+  {
+    "slug": "ai-agent-stack-map",
+    "title": "AI Coding Agent Stack — Interactive Mind Map",
+    "tags": [
+      "interactive",
+      "ai-engineering"
+    ],
+    "flavors": [
+      "agentic-coding"
+    ],
+    "quote": "\"A map is not the territory. But sometimes the territory is so confusing you really need the map.\"",
+    "desc": "37 tools, 6 clusters, one SVG — a pannable, filterable map of the 2026 AI coding ecosystem.",
+    "date": "2026-04-15",
+    "dateDisplay": "Apr 2026",
+    "cta": "Explore",
+    "shareUrl": "https://asadani.github.io/ai-agent-stack-map/"
+  },
+  {
+    "slug": "ai-shrinkflation",
+    "title": "AI Shrinkflation: The Silent Regression Your Team Won't See Coming",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "models",
+      "evals"
+    ],
+    "quote": "\"Same logo. Same price. Different soul.\"",
+    "desc": "The model you shipped last quarter may not be the model running today — and your tests won't tell you.",
+    "date": "2026-04-15",
+    "dateDisplay": "Apr 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/ai-shrinkflation/"
+  },
+  {
+    "slug": "gemini-flex-inference",
+    "title": "Flex &amp; Priority: One Line of Code",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "cost-latency"
+    ],
+    "quote": "\"The best infrastructure decision is the one that costs 40% less and ships today.\"",
+    "desc": "One parameter — <code>service_tier</code> — trades latency for cost in Gemini production workloads.",
+    "date": "2026-04-15",
+    "dateDisplay": "Apr 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/gemini-flex-inference/"
+  },
+  {
+    "slug": "linux-ai-ownership",
+    "title": "AI Writes the Code. You Own Everything.",
+    "tags": [
+      "policy"
+    ],
+    "flavors": [
+      "provenance"
+    ],
+    "quote": "\"The machine wrote the code. The human signed the DCO. The lawyers are still figuring out the rest.\"",
+    "desc": "The Linux kernel's first official AI policy redefines authorship — and puts the legal weight squarely on you.",
+    "date": "2026-04-15",
+    "dateDisplay": "Apr 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/linux-ai-ownership/"
+  },
+  {
+    "slug": "amazon-s3-files",
+    "title": "Breaking the Object-File Barrier",
+    "tags": [
+      "infrastructure"
+    ],
+    "flavors": [],
+    "quote": "\"For ten years, object storage and file systems refused to share a table. AWS finally sat them down.\"",
+    "desc": "Native NFS v4.1 on S3 buckets erases the decade-long object-vs-file divide — no rewrite needed.",
+    "date": "2026-04-07",
+    "dateDisplay": "Apr 7, 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/amazon-s3-files/"
+  },
+  {
+    "slug": "litellm-supply-chain-attack",
+    "title": "The LiteLLM PyPI Attack: A Supply Chain Postmortem",
+    "tags": [
+      "security"
+    ],
+    "flavors": [
+      "supply-chain"
+    ],
+    "quote": "\"In open source we trust — and sometimes that trust ships as a <code>.pth</code> file that phones home.\"",
+    "desc": "A hijacked PyPI account, 13 minutes, and 95M installs at risk — a blueprint for targeting AI developers.",
+    "date": "2026-03-24",
+    "dateDisplay": "Mar 24, 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/litellm-supply-chain-attack/"
+  }
+]

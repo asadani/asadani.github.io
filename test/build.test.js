@@ -15,24 +15,47 @@ test('formatDate renders long US date', () => {
   assert.strictEqual(b.formatDate('2026-04-23'), 'April 23, 2026');
 });
 
-test('renderArticlesList sorts by date descending', () => {
+const ART = (over={}) => ({ slug:'demo', title:'T &amp; U', tags:['ai-engineering'],
+  flavors:['models','research'], quote:'"hi"', desc:'D', date:'2026-06-18',
+  dateDisplay:'June 18, 2026', cta:'Read', shareUrl:'https://x/demo/', ...over });
+
+test('renderArticlesList sorts by date descending (stable)', () => {
   const arts = [
-    { slug:'a', title:'A', date:'2026-01-01', topic:'ai-engineering', flavors:[], quote:'q', desc:'d', shareUrl:'https://x/a/' },
-    { slug:'b', title:'B', date:'2026-03-01', topic:'ai-engineering', flavors:[], quote:'q', desc:'d', shareUrl:'https://x/b/' },
+    ART({ slug:'a', date:'2026-01-01' }),
+    ART({ slug:'b', date:'2026-03-01' }),
   ];
   const html = b.renderArticlesList(arts);
   assert.ok(html.indexOf('href="/b/"') < html.indexOf('href="/a/"'), 'newer (b) must come first');
 });
 
-test('renderArticleRow carries data attributes and topic class', () => {
-  const a = { slug:'demo', title:'T & U', date:'2026-06-18', topic:'ai-engineering',
-    flavors:['models','research'], quote:'"hi"', desc:'D', shareUrl:'https://x/demo/' };
-  const html = b.renderArticleRow(a);
+test('renderArticleRow carries data attributes, topic class, raw title', () => {
+  const html = b.renderArticleRow(ART());
   assert.match(html, /class="art-row art-ai"/);
   assert.match(html, /data-tags="ai-engineering"/);
   assert.match(html, /data-flavors="models research"/);
-  assert.match(html, /<span class="art-title">T &amp; U<\/span>/);
-  assert.match(html, /class="art-quote">"hi"</); // literal quotes preserved
+  assert.match(html, /<span class="art-title">T &amp; U<\/span>/); // raw HTML preserved
+  assert.match(html, /class="art-quote">"hi"</);                   // literal quotes preserved
+  assert.match(html, /class="art-link">Read →</);
+});
+
+test('renderArticleRow preserves inline HTML (code tags) in desc, derives share title', () => {
+  const html = b.renderArticleRow(ART({ title:'A "B"', desc:'use <code>x</code> now' }));
+  assert.match(html, /<div class="art-desc">use <code>x<\/code> now<\/div>/); // not escaped
+  assert.match(html, /data-title="A &quot;B&quot;"/);                          // quotes escaped in attr
+});
+
+test('renderArticleRow omits flavors markup when there are none', () => {
+  const html = b.renderArticleRow(ART({ flavors:[] }));
+  assert.ok(!/data-flavors=/.test(html), 'no data-flavors attribute');
+  assert.ok(!/card-flavors/.test(html), 'no card-flavors span');
+});
+
+test('renderArticleRow supports multi-tag rows and custom CTA', () => {
+  const html = b.renderArticleRow(ART({ tags:['interactive','ai-engineering'], cta:'Explore' }));
+  assert.match(html, /class="art-row art-interactive"/);
+  assert.match(html, /class="art-badge badge-interactive">Interactive</);
+  assert.match(html, /data-tags="interactive ai-engineering"/);
+  assert.match(html, /class="art-link">Explore →</);
 });
 
 test('renderStoreCard is a Ko-fi card with image and CTA', () => {

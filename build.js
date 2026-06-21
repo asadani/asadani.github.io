@@ -9,39 +9,55 @@ function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').rep
 function escAttr(s){ return esc(s).replace(/"/g,'&quot;'); }
 function formatDate(iso){ const [y,m,d] = iso.split('-').map(Number); return `${MONTHS[m-1]} ${d}, ${y}`; }
 
-// topic slug -> row class / badge class / human label.
-// Completed in Task 2 from the existing index.html (grep the live rows).
+// topic slug -> row class / badge class / human label. Derived from the live
+// homepage rows. The primary topic is tags[0]; extra tags are filter-only.
 const TOPICS = {
-  'ai-engineering': { row:'art-ai', badge:'badge-ai', label:'AI Engineering' },
-  // security / infrastructure / policy / data / interactive — added in Task 2
+  'ai-engineering': { row:'art-ai',          badge:'badge-ai',          label:'AI Engineering' },
+  'security':       { row:'art-sec',         badge:'badge-sec',         label:'Security' },
+  'infrastructure': { row:'art-infra',       badge:'badge-infra',       label:'Infrastructure' },
+  'policy':         { row:'art-policy',      badge:'badge-policy',      label:'Policy' },
+  'data':           { row:'art-data',        badge:'badge-data',        label:'Data' },
+  'interactive':    { row:'art-interactive', badge:'badge-interactive', label:'Interactive' },
 };
 
 const SHARE_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>';
 
+// Article title/quote/desc are stored as raw HTML fragments (migrated verbatim
+// from the existing homepage — they may contain <code>, &mdash;, &amp;, etc.),
+// so they are emitted WITHOUT escaping. Data attributes and flavor names are
+// plain text and ARE escaped. The share data-title only needs " escaped.
 function renderArticleRow(a){
-  const t = TOPICS[a.topic];
-  if(!t) throw new Error(`Unknown topic: ${a.topic}`);
-  const flavorChips = a.flavors.map(f => `<span class="card-flavor">${esc(f)}</span>`).join('');
-  return `      <a class="art-row ${t.row}" href="/${a.slug}/" data-tags="${escAttr(a.topic)}" data-flavors="${escAttr(a.flavors.join(' '))}">
+  const topic = a.tags[0];
+  const t = TOPICS[topic];
+  if(!t) throw new Error(`Unknown topic: ${topic}`);
+  const flavorsAttr = a.flavors && a.flavors.length
+    ? ` data-flavors="${escAttr(a.flavors.join(' '))}"` : '';
+  const flavorsSpan = a.flavors && a.flavors.length
+    ? `<span class="card-flavors">${a.flavors.map(f => `<span class="card-flavor">${esc(f)}</span>`).join('')}</span>`
+    : '';
+  const shareTitle = String(a.title).replace(/"/g,'&quot;');
+  return `      <a class="art-row ${t.row}" href="/${a.slug}/" data-tags="${escAttr(a.tags.join(' '))}"${flavorsAttr}>
         <div class="art-strip"></div>
         <div class="art-body">
-          <div class="art-top"><span class="art-badge ${t.badge}">${esc(t.label)}</span><span class="art-title">${esc(a.title)}</span><span class="card-flavors">${flavorChips}</span></div>
-          <div class="art-quote">${esc(a.quote)}</div>
-          <div class="art-desc">${esc(a.desc)}</div>
+          <div class="art-top"><span class="art-badge ${t.badge}">${esc(t.label)}</span><span class="art-title">${a.title}</span>${flavorsSpan}</div>
+          <div class="art-quote">${a.quote}</div>
+          <div class="art-desc">${a.desc}</div>
         </div>
         <div class="art-meta">
-          <span class="art-date">${formatDate(a.date)}</span>
+          <span class="art-date">${a.dateDisplay}</span>
           <div class="art-actions">
-            <button class="share-btn" aria-label="Share" data-url="${escAttr(a.shareUrl)}" data-title="${escAttr(a.title)}">
+            <button class="share-btn" aria-label="Share" data-url="${escAttr(a.shareUrl)}" data-title="${shareTitle}">
               ${SHARE_SVG}
             </button>
-            <span class="art-link">Read &rarr;</span>
+            <span class="art-link">${esc(a.cta)} →</span>
           </div>
-        </div></a>`;
+        </div>
+      </a>`;
 }
 
+// Stable sort by ISO date descending; equal dates keep input order.
 function renderArticlesList(arts){
-  return arts.slice().sort((x,y)=> y.date.localeCompare(x.date)).map(renderArticleRow).join('\n\n');
+  return arts.slice().sort((x,y)=> String(y.date).localeCompare(String(x.date))).map(renderArticleRow).join('\n\n');
 }
 
 function renderBookCard(b){
