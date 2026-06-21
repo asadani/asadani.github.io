@@ -147,6 +147,29 @@ function injectBlocks(template, blocks){
   return out;
 }
 
+function build(){
+  const articles = JSON.parse(fs.readFileSync(path.join(ROOT,'data/articles.json'),'utf8'));
+  const pubs = JSON.parse(fs.readFileSync(path.join(ROOT,'data/publications.json'),'utf8'));
+  const template = fs.readFileSync(path.join(ROOT,'templates/index.template.html'),'utf8');
+  const counts = {
+    writing: articles.length,
+    papers: pubs.papers.length,
+    booksDigital: pubs.books.length + pubs.digital.length,
+  };
+  const blocks = {
+    publications: renderPublications(pubs),
+    articles: renderArticlesList(articles),
+  };
+  // The pillars marker is added to the template in the landing rework (Task 6);
+  // only inject it when present so the pipeline works before and after that change.
+  if(/<!-- BUILD:pillars -->/.test(template)) blocks.pillars = renderPillars(counts);
+  const out = injectBlocks(template, blocks);
+  fs.writeFileSync(path.join(ROOT,'index.html'), out);
+  return out;
+}
+
+if (require.main === module) build();
+
 module.exports = { esc, escAttr, formatDate, TOPICS,
   renderArticleRow, renderArticlesList, renderBookCard, renderPubCard,
-  renderStoreCard, renderPublications, renderPillars, injectBlocks };
+  renderStoreCard, renderPublications, renderPillars, injectBlocks, build };
