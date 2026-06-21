@@ -6,12 +6,17 @@ const b = require('../build.js');
 
 const pubs = JSON.parse(fs.readFileSync(path.join(__dirname,'../data/publications.json'),'utf8'));
 
-// NOTE: papers is 2 (arXiv) until the SSRN entry (abstract_id=6071412) gets its
-// title/date from the author; bump to 3 when that lands.
-test('bucket counts: 1 book, 2 papers, 3 digital', () => {
+test('bucket counts: 1 book, 3 papers, 3 digital', () => {
   assert.strictEqual(pubs.books.length, 1);
-  assert.strictEqual(pubs.papers.length, 2);
+  assert.strictEqual(pubs.papers.length, 3);
   assert.strictEqual(pubs.digital.length, 3);
+});
+
+test('every paper has a dateDisplay string and the SSRN paper is present', () => {
+  for(const p of pubs.papers){
+    assert.ok(typeof p.dateDisplay === 'string' && p.dateDisplay.length > 0, `missing dateDisplay on ${p.id}`);
+  }
+  assert.ok(pubs.papers.some(p => /6071412/.test(p.url)), 'SSRN paper (6071412) missing');
 });
 
 test('every paper has a self-authored entry and a real abstract URL', () => {

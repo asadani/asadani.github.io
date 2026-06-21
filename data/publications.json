@@ -1,5 +1,4 @@
 {
-  "_note": "SSRN paper abstract_id=6071412 pending title/date from author; add as a third entry in papers[] when available.",
   "books": [
     {
       "title": "The Clean Vibe Coder",
@@ -19,6 +18,7 @@
       "title": "Locale-Conditioned Few-Shot Prompting Mitigates Demonstration Regurgitation in On-Device PII Substitution with Small Language Models",
       "authors": [{ "name": "Anuj Sadani", "self": true }, { "name": "Deepak Kumar" }],
       "date": "2026-05-13",
+      "dateDisplay": "May 13, 2026",
       "url": "https://arxiv.org/abs/2605.13538"
     },
     {
@@ -28,7 +28,18 @@
       "title": "Tool Attention Is All You Need: Dynamic Tool Gating and Lazy Schema Loading for Eliminating the MCP/Tools Tax in Scalable Agentic Workflows",
       "authors": [{ "name": "Anuj Sadani", "self": true }, { "name": "Deepak Kumar" }],
       "date": "2026-04-23",
+      "dateDisplay": "April 23, 2026",
       "url": "https://arxiv.org/abs/2604.21816"
+    },
+    {
+      "badge": "SSRN",
+      "cat": "",
+      "id": "SSRN:6071412",
+      "title": "The Great Recalibration: The 2026 Pivot from Generalist Wrappers to Sovereign Application Layers and Industrialized Services",
+      "authors": [{ "name": "Anuj Sadani", "self": true }],
+      "date": "2026-01-01",
+      "dateDisplay": "2026",
+      "url": "https://dx.doi.org/10.2139/ssrn.6071412"
     }
   ],
   "digital": [
