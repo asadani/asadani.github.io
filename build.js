@@ -152,7 +152,10 @@ function injectBlocks(template, blocks){
   for(const [key, html] of Object.entries(blocks)){
     const re = new RegExp(`<!-- BUILD:${key} -->[\\s\\S]*?<!-- /BUILD:${key} -->`);
     if(!re.test(out)) throw new Error(`Marker not found: BUILD:${key}`);
-    out = out.replace(re, `<!-- BUILD:${key} -->\n${html}\n<!-- /BUILD:${key} -->`);
+    // Function replacement so `$`-sequences (e.g. "$&", "$1", "$$") in rendered
+    // content are inserted literally, not interpreted as replacement patterns.
+    const replacement = `<!-- BUILD:${key} -->\n${html}\n<!-- /BUILD:${key} -->`;
+    out = out.replace(re, () => replacement);
   }
   return out;
 }

@@ -115,3 +115,10 @@ test('injectBlocks replaces only inside the named marker pair', () => {
   const out = b.injectBlocks(tpl, { x: 'NEW' });
   assert.strictEqual(out, 'A<!-- BUILD:x -->\nNEW\n<!-- /BUILD:x -->B');
 });
+
+test('injectBlocks inserts content literally even with $-replacement patterns', () => {
+  const tpl = 'A<!-- BUILD:x -->OLD<!-- /BUILD:x -->B';
+  const html = 'price $100, $& $1 $` $$ end';
+  const out = b.injectBlocks(tpl, { x: html });
+  assert.strictEqual(out, `A<!-- BUILD:x -->\n${html}\n<!-- /BUILD:x -->B`);
+});
