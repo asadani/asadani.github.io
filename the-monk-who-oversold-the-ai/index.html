@@ -280,22 +280,31 @@
   .print-foot{display:none;}
   @media print{
     .nav,footer,.cover-dl,.share-cta{display:none!important;}
-    body{background:#fff;font-size:10.5pt;}
-    .wrap{max-width:none;}
-    @page{margin:0;}
+    body{background:#fff;font-size:11pt;line-height:1.62;}
+    /* @page margins (set in CSS, honoured via preferCSSPageSize) give the
+       book its frame: room at top, and a reserved band at the bottom so the
+       running footer never collides with body copy. */
+    @page{
+      size:A4;
+      margin:20mm 22mm 22mm 22mm;
+    }
+    .wrap{max-width:none;padding:0;}
+    /* cover sits inside the same @page margin; let it breathe, then break. */
     .cover{break-after:page;padding-top:0;}
-    .cover h1.title{font-size:42px;line-height:1.0;margin-bottom:16px;}
+    .cover h1.title{font-size:40px;line-height:1.04;margin-bottom:16px;}
     .cover .kicker{margin-bottom:14px;}
-    .cover .dek{font-size:15px;line-height:1.4;margin-bottom:16px;}
+    .cover .dek{font-size:15px;line-height:1.45;margin-bottom:16px;}
     .cover .memo{margin:0 0 16px;padding:12px 0;line-height:1.7;}
     .cover figure{margin:14px 0;}
     .cover .cover-note{margin-top:14px;font-size:12.5px;}
     .cover-foot{margin-top:20px;}
-    .section{padding:22px 0 8px;}
+    .section{padding:18px 0 6px;}
+    /* keep headings attached to the text that follows them */
     h2,h3{break-after:avoid;break-inside:avoid;}
-    .sec-tag,p.lead,.beat{break-after:avoid;}
+    .sec-tag,p.lead,.beat{break-after:avoid;break-inside:avoid;}
     p{orphans:3;widows:3;}
-    figure,.stats,.tbl-wrap,.verdict,.note,blockquote.pull,.check,.frames{break-inside:avoid;}
+    li{orphans:2;widows:2;}
+    figure,.stats,.tbl-wrap,.verdict,.note,blockquote.pull,.check,.frames,.contents{break-inside:avoid;}
     figure{width:auto;max-width:100%;margin-left:0;transform:none;}
     a{color:var(--ink);border:none;}
     .print-foot{display:none;}
