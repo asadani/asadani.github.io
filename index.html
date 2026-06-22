@@ -8,574 +8,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg:            #F5F1EB;
-    --bg-alt:        #EDEAE3;
-    --surface:       #FFFFFF;
-    --border:        #DDD9D0;
-    --border-light:  #EAE7E0;
-    --text:          #1A1714;
-    --text-body:     #3D3A35;
-    --text-muted:    #6B6760;
-    --text-subtle:   #9B9892;
-    --accent:        #C85C2D;
-    --accent-bg:     #FDF1EB;
-    --accent-border: #F0C4A8;
-    --green:         #2A7A4B;
-    --green-bg:      #EAF5EF;
-    --green-border:  #A8D9BC;
-    --blue:          #2563A8;
-    --blue-bg:       #EAF1FA;
-    --blue-border:   #A8C5E8;
-    --red:           #B83535;
-    --red-bg:        #FAEBEB;
-    --red-border:    #E8AAAA;
-    --serif:  'Newsreader', Georgia, serif;
-    --sans:   'Inter', system-ui, sans-serif;
-    --mono:   'JetBrains Mono', 'Courier New', monospace;
-    /* timeline brand colors */
-    --nvidia:  #76B900;
-    --dh:      #E00024;
-    --infrrd:  #00A651;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--text-body); font-family: var(--sans); font-size: 17px; line-height: 1.75; }
-
-  /* ─── NAV ─────────────────────────────────────────────── */
-  nav {
-    background: var(--surface); border-bottom: 1px solid var(--border);
-    padding: 0 48px; height: 52px; display: flex; align-items: center;
-    justify-content: space-between; position: sticky; top: 0; z-index: 100;
-  }
-  .nav-brand { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--text); letter-spacing: 0.01em; text-decoration: none; }
-  .nav-tag   { background: var(--accent); color: #fff; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 3px; letter-spacing: 0.04em; }
-
-  /* ─── LAYOUT ──────────────────────────────────────────── */
-  .page-wrap { max-width: 980px; margin: 0 auto; padding: 0 32px 80px; }
-
-  /* ─── HERO ────────────────────────────────────────────── */
-  .hero { padding: 72px 0 64px; border-bottom: 1px solid var(--border); margin-bottom: 64px; }
-  .hero-layout { display: flex; align-items: center; gap: 56px; }
-  .hero-text { flex: 1; min-width: 0; }
-  .hero-tagline { font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--accent); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 16px; }
-  .hero h1 { font-family: var(--serif); font-size: clamp(42px, 5.5vw, 60px); font-weight: 600; line-height: 1.04; letter-spacing: -0.025em; color: var(--text); margin-bottom: 8px; }
-  .hero-bio { font-family: var(--serif); font-size: 18px; font-style: italic; font-weight: 500; line-height: 1.75; color: var(--text-muted); margin-bottom: 36px; }
-
-  .hero-ctas { display: flex; gap: 10px; flex-wrap: wrap; }
-  .cta-link { display: inline-flex; align-items: center; gap: 7px; font-family: var(--sans); font-size: 13px; font-weight: 600; text-decoration: none; padding: 9px 16px; border-radius: 6px; letter-spacing: 0.01em; transition: opacity 0.15s; }
-  .cta-link:hover { opacity: 0.82; }
-  .cta-link svg  { width: 15px; height: 15px; flex-shrink: 0; }
-  .cta-primary   { background: var(--text); color: #fff; }
-  .cta-linkedin  { background: #0A66C2; color: #fff; }
-  .cta-medium    { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
-
-  .hero-pic-wrap { flex-shrink: 0; padding-top: 6px; }
-  @keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    33%       { transform: translateY(-7px) rotate(0.4deg); }
-    66%       { transform: translateY(-3px) rotate(-0.3deg); }
-  }
-  @keyframes shimmer-border {
-    0%, 100% { box-shadow: 0 8px 32px rgba(200,92,45,0.10); }
-    50%       { box-shadow: 0 14px 40px rgba(200,92,45,0.22), 0 0 0 4px rgba(200,92,45,0.06); }
-  }
-  .hero-pic {
-    width: 160px; height: 160px; border-radius: 18px;
-    object-fit: cover; object-position: top center; display: block;
-    border: 2px solid var(--border);
-    animation: float 5s ease-in-out infinite, shimmer-border 4s ease-in-out infinite;
-    transition: border-color 0.3s;
-  }
-  .hero-pic:hover { border-color: var(--accent); animation-play-state: paused; }
-
-  /* ─── SECTION CHROME ──────────────────────────────────── */
-  .section-wrap { margin-bottom: 64px; padding-bottom: 64px; border-bottom: 1px solid var(--border); }
-  .section-label { font-family: var(--sans); font-size: 11px; font-weight: 600; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
-  .section-heading { font-family: var(--serif); font-size: 26px; font-weight: 600; letter-spacing: -0.01em; color: var(--text); margin-bottom: 32px; }
-
-  /* ════════════════════════════════════════════════════════
-     HORIZONTAL TIMELINE — year-by-year 2009–2026
-  ════════════════════════════════════════════════════════ */
-  .tl-scroll-wrap { padding-bottom: 8px; }
-
-  .tl-track {
-    display: flex;
-    width: 100%;
-  }
-
-  /* ── each year column ── */
-  .tl-col {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 0;
-  }
-
-  /* year label */
-  .tl-yr {
-    font-family: var(--mono);
-    font-size: 9px;
-    color: var(--text-subtle);
-    letter-spacing: 0.03em;
-    padding-bottom: 6px;
-    text-align: center;
-    white-space: nowrap;
-    line-height: 1;
-  }
-
-  /* coloured line bar */
-  .tl-bar {
-    width: 100%;
-    height: 6px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .tl-col.nvidia .tl-bar  { background: var(--nvidia); }
-  .tl-col.dh .tl-bar      { background: var(--dh); }
-  .tl-col.infrrd .tl-bar  { background: var(--infrrd); }
-
-  /* tick mark on each bar */
-  .tl-bar::after {
-    content: '';
-    display: block;
-    width: 1px;
-    height: 12px;
-    background: rgba(255,255,255,0.55);
-    position: absolute;
-  }
-
-  /* icon slot below the bar — fixed height so columns align */
-  .tl-icon-slot {
-    margin-top: 10px;
-    height: 48px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-  }
-
-  /* company logo button */
-  .tl-logo-btn {
-    width: 42px;
-    height: 42px;
-    border-radius: 10px;
-    border: 2px solid var(--border);
-    background: var(--surface);
-    overflow: hidden;
-    cursor: pointer;
-    padding: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  }
-  .tl-logo-btn img { width: 100%; height: 100%; object-fit: contain; }
-  .tl-logo-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 16px rgba(0,0,0,0.14); }
-  .tl-logo-btn.active { border-color: var(--accent); box-shadow: 0 4px 18px rgba(200,92,45,0.22); transform: translateY(-2px); }
-
-  /* company label below icon — clipped to column width */
-  .tl-icon-name {
-    font-family: var(--sans);
-    font-size: 8px;
-    font-weight: 500;
-    color: var(--text-subtle);
-    margin-top: 4px;
-    text-align: center;
-    letter-spacing: 0.02em;
-    max-width: 100%;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
-  /* ── detail panel ── */
-  .tl-mobile { display: none; }
-  .tl-detail-wrap { margin-top: 28px; }
-  .tl-detail {
-    display: none;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 28px 32px;
-  }
-  .tl-detail.open { display: block; animation: fadeSlide 0.22s ease; }
-  @keyframes fadeSlide { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-  .tl-detail-header { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-light); }
-  .tl-detail-logo   { width: 44px; height: 44px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; padding: 4px; }
-  .tl-detail-logo img { width: 100%; height: 100%; object-fit: contain; }
-  .tl-detail-company { font-family: var(--serif); font-size: 20px; font-weight: 600; color: var(--text); }
-  .tl-detail-total   { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
-
-  .tl-roles { display: flex; flex-direction: column; }
-  .tl-role  { display: grid; grid-template-columns: 1fr auto; gap: 4px 24px; padding: 14px 0; border-bottom: 1px solid var(--border-light); align-items: start; }
-  .tl-role:last-child { border-bottom: none; padding-bottom: 0; }
-  .tl-role-title { font-size: 14px; font-weight: 500; color: var(--text); }
-  .tl-role-desc  { font-size: 13px; color: var(--text-muted); grid-column: 1; margin-top: 3px; line-height: 1.55; }
-  .tl-role-dates { font-family: var(--mono); font-size: 11px; color: var(--text-subtle); white-space: nowrap; padding-top: 2px; }
-
-  .tl-exit {
-    margin-top: 20px;
-    padding: 14px 18px;
-    background: var(--bg-alt);
-    border-radius: 6px;
-    border-left: 3px solid var(--border);
-    font-family: var(--serif);
-    font-size: 14px;
-    font-style: italic;
-    color: var(--text-muted);
-    line-height: 1.65;
-  }
-  .tl-exit-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 500;
-    color: var(--text-subtle);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 6px;
-  }
-
-  /* ════════════════════════════════════════════════════════
-     ARTICLE LIST  (one per row, rectangular)
-  ════════════════════════════════════════════════════════ */
-  .filter-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 0; }
-  .filter-pill { font-family: var(--sans); font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
-  .filter-pill:hover { border-color: var(--accent); color: var(--accent); }
-  .filter-pill.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-  /* search box */
-  .article-search { width: 100%; box-sizing: border-box; font-family: var(--sans); font-size: 13px; padding: 9px 14px; margin-bottom: 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text-body); transition: border-color 0.15s; }
-  .article-search::placeholder { color: var(--text-subtle); }
-  .article-search:focus { outline: none; border-color: var(--accent); }
-  /* two-row filter layout (category + flavor) */
-  .filter-row { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
-  .filter-lead { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-subtle); flex-shrink: 0; width: 56px; padding-top: 4px; }
-  .filter-row:last-of-type { margin-bottom: 24px; }
-  /* flavor chips (interactive filter) */
-  .flavor-bar { display: flex; flex-wrap: wrap; gap: 6px; }
-  .flavor-chip { font-family: var(--mono); font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
-  .flavor-chip::before { content: "#"; opacity: 0.55; }
-  .flavor-chip:hover { border-color: var(--accent); color: var(--accent); }
-  .flavor-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-  /* flavor chips shown on each article card (display-only) */
-  .card-flavors { display: inline-flex; flex-wrap: wrap; gap: 5px; }
-  .card-flavor { font-family: var(--mono); font-size: 9px; padding: 1px 6px; border-radius: 3px; border: 1px solid var(--border); color: var(--text-subtle); white-space: nowrap; }
-  .card-flavor::before { content: "#"; opacity: 0.5; }
-
-  .articles-list { display: flex; flex-direction: column; gap: 8px; }
-
-  .art-row {
-    display: flex;
-    align-items: stretch;
-    text-decoration: none;
-    color: inherit;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 7px;
-    overflow: hidden;
-    transition: box-shadow 0.15s, transform 0.15s;
-  }
-  .art-row:hover { box-shadow: 0 3px 16px rgba(0,0,0,0.08); transform: translateX(2px); }
-  .art-row.hidden { display: none; }
-
-  /* Left accent strip */
-  .art-strip { width: 4px; flex-shrink: 0; }
-  .art-ai    .art-strip { background: var(--blue); }
-  .art-sec   .art-strip { background: var(--red); }
-  .art-infra .art-strip { background: var(--green); }
-  .art-policy .art-strip { background: var(--accent); }
-  .art-data  .art-strip { background: var(--blue); }
-  .art-interactive .art-strip { background: var(--green); }
-
-  /* Body */
-  .art-body { flex: 1; padding: 14px 20px; min-width: 0; }
-  .art-top  { display: flex; align-items: baseline; gap: 10px; margin-bottom: 3px; flex-wrap: wrap; }
-
-  .art-badge { display: inline-block; font-family: var(--mono); font-size: 9px; font-weight: 500; padding: 2px 7px; border-radius: 3px; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
-  .badge-ai          { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-border); }
-  .badge-sec         { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-border); }
-  .badge-infra       { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
-  .badge-policy      { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border); }
-  .badge-data        { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-border); }
-  .badge-interactive { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
-
-  .art-title { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--text); line-height: 1.3; }
-  .art-quote { font-size: 12px; font-style: italic; color: var(--text-subtle); margin-top: 3px; line-height: 1.5; }
-  .art-quote code { font-style: normal; font-family: var(--mono); font-size: 0.9em; }
-  .art-desc  { font-size: 13px; color: var(--text-muted); margin-top: 4px; line-height: 1.55; }
-  .art-desc code { font-family: var(--mono); font-size: 0.85em; background: var(--accent-bg); border: 1px solid var(--accent-border); padding: 1px 4px; border-radius: 3px; color: var(--accent); }
-
-  /* Meta (right side) */
-  .art-meta {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: center;
-    gap: 6px;
-    padding: 14px 18px;
-    flex-shrink: 0;
-    border-left: 1px solid var(--border-light);
-    min-width: 130px;
-  }
-  .art-date { font-family: var(--mono); font-size: 10px; color: var(--text-subtle); white-space: nowrap; }
-  .art-actions { display: flex; align-items: center; gap: 8px; }
-  .art-link { font-size: 13px; font-weight: 600; color: var(--accent); white-space: nowrap; }
-
-  /* share button (reused) */
-  .share-btn { background: none; border: 1px solid var(--border); border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-subtle); transition: all 0.15s; padding: 0; }
-  .share-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .share-btn.copied { border-color: var(--green); color: var(--green); }
-  .share-btn svg { width: 12px; height: 12px; }
-
-  /* ─── NAV LINKS ──────────────────────────────────────── */
-  .nav-links { display: flex; gap: 20px; }
-  .nav-link { font-family: var(--sans); font-size: 13px; font-weight: 500; color: var(--text-muted); text-decoration: none; letter-spacing: 0.01em; transition: color 0.15s; }
-  .nav-link:hover { color: var(--text); }
-  .nav-link.active { color: var(--accent); }
-
-  /* ─── SCROLL ANCHOR OFFSET ───────────────────────────── */
-  .section-anchor { scroll-margin-top: 64px; }
-
-  /* ─── TECH STACK ─────────────────────────────────────── */
-  .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; }
-  .tech-group { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; }
-  .tech-group-label { font-family: var(--sans); font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border-light); }
-  .tech-badges { display: flex; flex-wrap: wrap; gap: 6px; }
-  .tech-badge { display: inline-block; font-family: var(--mono); font-size: 10px; font-weight: 500; padding: 3px 9px; border-radius: 4px; letter-spacing: 0.04em; white-space: nowrap; border: 1px solid; line-height: 1.6; }
-  .tech-blue    { background: var(--blue-bg);   color: var(--blue);   border-color: var(--blue-border); }
-  .tech-green   { background: var(--green-bg);  color: var(--green);  border-color: var(--green-border); }
-  .tech-accent  { background: var(--accent-bg); color: var(--accent); border-color: var(--accent-border); }
-  .tech-neutral { background: var(--bg-alt);    color: var(--text-muted); border-color: var(--border); }
-
-  /* ─── EMBEDDED MIND MAP ──────────────────────────────── */
-  .tech-map-wrap {
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 24px;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
-  }
-  .tech-map-topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 9px 16px;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-  }
-  .tech-map-topbar-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .tech-map-dot {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 6px rgba(200,92,45,0.5);
-  }
-  .tech-map-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--text-muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-  .tech-map-open {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--accent);
-    text-decoration: none;
-    letter-spacing: 0.04em;
-    transition: opacity 0.15s;
-  }
-  .tech-map-open:hover { opacity: 0.7; }
-  .tech-map-frame { height: 500px; background: #0c0c0c; display: block; }
-  .tech-map-frame iframe { width: 100%; height: 100%; border: none; display: block; }
-  .tech-map-mobile-cta { display: none; }
-
-  /* ─── PUBLICATIONS ───────────────────────────────────── */
-  .pub-card {
-    display: flex;
-    text-decoration: none;
-    color: inherit;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    overflow: hidden;
-    margin-bottom: 8px;
-    transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s;
-  }
-  .pub-card:last-of-type { margin-bottom: 0; }
-  .pub-card:hover { box-shadow: 0 4px 22px rgba(0,0,0,0.09); transform: translateY(-2px); border-color: var(--accent-border); }
-  .pub-strip { width: 3px; flex-shrink: 0; background: var(--blue); }
-  .pub-body { flex: 1; padding: 10px 16px 11px; min-width: 0; }
-  .pub-top { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; flex-wrap: wrap; }
-  .pub-badge {
-    display: inline-flex; align-items: center; gap: 4px;
-    font-family: var(--mono); font-size: 9px; font-weight: 600;
-    padding: 1px 6px; border-radius: 3px; letter-spacing: 0.05em;
-    background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border);
-    text-transform: uppercase;
-  }
-  .pub-cat {
-    font-family: var(--mono); font-size: 9px; font-weight: 500;
-    padding: 1px 6px; border-radius: 3px; letter-spacing: 0.04em;
-    background: var(--bg-alt); color: var(--text-muted); border: 1px solid var(--border);
-  }
-  .pub-id { font-family: var(--mono); font-size: 9.5px; color: var(--text-subtle); letter-spacing: 0.03em; }
-  .pub-title { font-family: var(--serif); font-size: 15.5px; font-weight: 600; line-height: 1.3; color: var(--text); letter-spacing: -0.01em; margin-bottom: 3px; }
-  .pub-authors { font-family: var(--sans); font-size: 12px; color: var(--text-muted); margin-bottom: 3px; }
-  .pub-authors .pub-self { color: var(--accent); font-weight: 600; }
-  .pub-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
-  .pub-date { font-family: var(--mono); font-size: 10.5px; color: var(--text-subtle); }
-  .pub-link { font-family: var(--sans); font-size: 11.5px; font-weight: 600; color: var(--accent); }
-
-  /* Book card — richer than a pub-card: cover art + description + Buy CTA */
-  .book-card {
-    display: flex;
-    text-decoration: none;
-    color: inherit;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    overflow: hidden;
-    margin-bottom: 8px;
-    transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s;
-  }
-  .book-card:hover { box-shadow: 0 4px 22px rgba(0,0,0,0.09); transform: translateY(-2px); border-color: var(--accent-border); }
-  .book-strip { width: 3px; flex-shrink: 0; background: var(--accent); }
-  .book-cover {
-    width: 104px; flex-shrink: 0; align-self: stretch; object-fit: cover;
-    border-right: 1px solid var(--border-light); background: var(--bg-alt);
-  }
-  .book-body { flex: 1; padding: 13px 18px 14px; min-width: 0; }
-  .book-title { font-family: var(--serif); font-size: 17px; font-weight: 600; line-height: 1.25; color: var(--text); letter-spacing: -0.01em; margin-bottom: 4px; }
-  .book-sub { font-family: var(--sans); font-size: 12.5px; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px; }
-  .book-desc { font-family: var(--sans); font-size: 12.5px; color: var(--text-body); line-height: 1.55; margin-bottom: 11px; }
-  .book-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
-  .book-meta { font-family: var(--mono); font-size: 10.5px; color: var(--text-subtle); }
-  .book-cta {
-    font-family: var(--sans); font-size: 11.5px; font-weight: 600;
-    padding: 4px 11px; border-radius: 4px;
-    background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border);
-  }
-  .book-card:hover .book-cta { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-  /* ─── PAGINATION ─────────────────────────────────────── */
-  .pagination { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-light); flex-wrap: wrap; gap: 10px; }
-  .pagination-info { font-family: var(--mono); font-size: 11px; color: var(--text-subtle); }
-  .pagination-controls { display: flex; align-items: center; gap: 6px; }
-  .page-btn { font-family: var(--sans); font-size: 12px; font-weight: 500; padding: 5px 11px; border: 1px solid var(--border); border-radius: 5px; background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
-  .page-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
-  .page-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .page-btn:disabled { opacity: 0.35; cursor: default; }
-
-  /* ─── INTERESTS ───────────────────────────────────────── */
-  .interests-grid { display: flex; flex-direction: column; gap: 10px; }
-  .interest-card {
-    background: var(--surface);
-    border: 1px solid var(--border-light);
-    border-left: 3px solid var(--accent);
-    border-radius: 0 10px 10px 0;
-    padding: 14px 18px;
-  }
-  .interest-card.ic-blue   { border-left-color: var(--blue); }
-  .interest-card.ic-green  { border-left-color: var(--green); }
-  .interest-card.ic-purple { border-left-color: #7B5EA7; }
-  .interest-card.ic-orange { border-left-color: #FF6719; }
-  .interest-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .interest-icon {
-    width: 32px; height: 32px; border-radius: 7px; flex-shrink: 0;
-    background: var(--accent-bg);
-    display: flex; align-items: center; justify-content: center; font-size: 16px;
-  }
-  .interest-card.ic-blue   .interest-icon { background: var(--blue-bg); }
-  .interest-card.ic-green  .interest-icon { background: var(--green-bg); }
-  .interest-card.ic-purple .interest-icon { background: #F3F0FA; }
-  .interest-card.ic-orange .interest-icon { background: #FFF4EE; }
-  .interest-title {
-    font-size: 11px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.08em; color: var(--text-muted);
-  }
-  .interest-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .interest-tag {
-    font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 20px;
-    border: 1px solid var(--border); background: var(--bg); color: var(--text-body);
-    transition: background 0.15s, border-color 0.15s, color 0.15s;
-    cursor: default; text-decoration: none; display: inline-block;
-  }
-  .interest-tag:hover { background: var(--accent-bg); border-color: var(--accent-border); color: var(--accent); }
-  a.interest-tag { cursor: pointer; }
-  a.interest-tag:hover { background: #FFF4EE; border-color: #FFB899; color: #FF6719; }
-
-  /* ─── FOOTER ──────────────────────────────────────────── */
-  footer { background: var(--surface); border-top: 1px solid var(--border); padding: 24px 48px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--text-muted); }
-  .footer-links { display: flex; gap: 24px; }
-  .footer-links a { color: var(--text-muted); text-decoration: none; font-weight: 500; transition: color 0.15s; }
-  .footer-links a:hover { color: var(--accent); }
-
-  /* ─── RESPONSIVE ──────────────────────────────────────── */
-  @media (max-width: 700px) {
-    nav { padding: 0 20px; }
-    .nav-links { display: none; }
-    footer { padding: 20px; flex-direction: column; gap: 14px; text-align: center; }
-    .page-wrap  { padding: 0 20px 60px; }
-    .hero       { padding: 48px 0 40px; }
-    .hero-layout { flex-direction: column-reverse; gap: 28px; }
-    .hero-pic   { width: 100px; height: 100px; border-radius: 14px; }
-    .art-meta   { min-width: 110px; padding: 12px; }
-    .tl-role    { grid-template-columns: 1fr; }
-    .tl-role-dates { margin-top: 2px; }
-    .tl-detail  { padding: 18px; }
-    .tl-scroll-wrap { display: none; }
-    .tl-mobile { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
-    .tl-mobile-row {
-      display: flex; align-items: center; gap: 14px;
-      background: var(--surface); border: 1px solid var(--border-light);
-      border-radius: 12px; padding: 12px 14px; cursor: pointer;
-      transition: box-shadow 0.15s, border-color 0.15s;
-    }
-    .tl-mobile-row:active { box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
-    .tl-mobile-row.active { border-color: var(--accent); box-shadow: 0 2px 12px rgba(200,92,45,0.18); }
-    .tl-mobile-accent { width: 4px; height: 40px; border-radius: 2px; flex-shrink: 0; }
-    .tl-mobile-accent.nvidia { background: var(--nvidia); }
-    .tl-mobile-accent.dh     { background: var(--dh); }
-    .tl-mobile-accent.infrrd { background: var(--infrrd); }
-    .tl-mobile-logo { width: 38px; height: 38px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); overflow: hidden; padding: 3px; flex-shrink: 0; }
-    .tl-mobile-logo img { width: 100%; height: 100%; object-fit: contain; }
-    .tl-mobile-info { flex: 1; min-width: 0; }
-    .tl-mobile-name { font-size: 14px; font-weight: 600; color: var(--text); }
-    .tl-mobile-years { font-family: var(--mono); font-size: 11px; color: var(--text-subtle); margin-top: 2px; }
-    .tech-grid       { grid-template-columns: 1fr; }
-    .pagination      { flex-direction: column; align-items: flex-start; }
-    .tech-map-frame  { display: none; }
-    .tech-map-mobile-cta { display: inline-flex; }
-    .pub-body        { padding: 10px 14px 11px; }
-    .pub-title       { font-size: 14.5px; }
-    .book-cover      { width: 80px; }
-    .book-body       { padding: 12px 14px 13px; }
-    .book-title      { font-size: 15.5px; }
-  }
-</style>
+<link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
 
 <nav>
   <a class="nav-brand" href="/">asadani.tech</a>
   <div class="nav-links">
+    <a class="nav-link" href="#articles">Articles</a>
+    <a class="nav-link" href="#research">Research</a>
     <a class="nav-link" href="#journey">Journey</a>
     <a class="nav-link" href="#tech">Tech</a>
-    <a class="nav-link" href="#research">Research</a>
-    <a class="nav-link" href="#articles">Articles</a>
     <a class="nav-link" href="#interests">Interests</a>
   </div>
   <span class="nav-tag">Engineering Leader</span>
@@ -613,275 +56,29 @@
         <img class="hero-pic" src="/assets/profile-pic.png" alt="Anuj Sadani">
       </div>
     </div>
+    <!-- BUILD:pillars -->
+<div class="pillars">
+      <a class="pillar-card" href="#articles">
+        <span class="pillar-label">Writing</span>
+        <span class="pillar-count">24</span>
+        <span class="pillar-meta">essays &amp; field notes</span>
+        <span class="pillar-link">Browse &rarr;</span>
+      </a>
+      <a class="pillar-card" href="#research">
+        <span class="pillar-label">Papers</span>
+        <span class="pillar-count">3</span>
+        <span class="pillar-meta">arXiv / SSRN</span>
+        <span class="pillar-link">Browse &rarr;</span>
+      </a>
+      <a class="pillar-card" href="#research">
+        <span class="pillar-label">Books &amp; Digital</span>
+        <span class="pillar-count">4</span>
+        <span class="pillar-meta">books &amp; Ko-fi</span>
+        <span class="pillar-link">Browse &rarr;</span>
+      </a>
+    </div>
+<!-- /BUILD:pillars -->
   </section>
-
-  <!-- ── JOURNEY ────────────────────────────────────────────── -->
-  <div class="section-wrap section-anchor" id="journey">
-    <div class="section-label">Career</div>
-    <div class="section-heading">Journey</div>
-
-    <div class="tl-scroll-wrap">
-      <div class="tl-track">
-
-        <!-- 2009 — NVIDIA starts -->
-        <div class="tl-col tl-col-start nvidia">
-          <div class="tl-yr">2009</div>
-          <div class="tl-bar"></div>
-          <div class="tl-icon-slot">
-            <div>
-              <button class="tl-logo-btn" data-company="nvidia" aria-label="NVIDIA">
-                <img src="/assets/nvidia_logo.jpeg" alt="NVIDIA">
-              </button>
-              <div class="tl-icon-name">NVIDIA</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2010–2019: NVIDIA, no logo -->
-        <div class="tl-col nvidia"><div class="tl-yr">2010</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
-        <div class="tl-col nvidia"><div class="tl-yr">2011</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
-        <div class="tl-col nvidia"><div class="tl-yr">2012</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
-        <div class="tl-col nvidia"><div class="tl-yr">2013</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
-        <div class="tl-col nvidia"><div class="tl-yr">2014</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
-        <div class="tl-col nvidia"><div class="tl-yr">2015</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
-        <div class="tl-col nvidia"><div class="tl-yr">2016</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
-        <div class="tl-col nvidia"><div class="tl-yr">2017</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
-        <div class="tl-col nvidia"><div class="tl-yr">2018</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
-        <div class="tl-col nvidia"><div class="tl-yr">2019</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
-
-        <!-- 2020 — Delivery Hero -->
-        <div class="tl-col tl-col-start dh">
-          <div class="tl-yr">2020</div>
-          <div class="tl-bar"></div>
-          <div class="tl-icon-slot">
-            <div>
-              <button class="tl-logo-btn" data-company="dh" aria-label="Delivery Hero">
-                <img src="/assets/delivery_hero_se_logo.jpeg" alt="Delivery Hero">
-              </button>
-              <div class="tl-icon-name">Delivery Hero</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2021 — Infrrd starts -->
-        <div class="tl-col tl-col-start infrrd">
-          <div class="tl-yr">2021</div>
-          <div class="tl-bar"></div>
-          <div class="tl-icon-slot">
-            <div>
-              <button class="tl-logo-btn" data-company="infrrd" aria-label="Infrrd">
-                <img src="/assets/infrrd_logo.jpeg" alt="Infrrd">
-              </button>
-              <div class="tl-icon-name">Infrrd</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2022–2026: Infrrd, no logo -->
-        <div class="tl-col infrrd"><div class="tl-yr">2022</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
-        <div class="tl-col infrrd"><div class="tl-yr">2023</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
-        <div class="tl-col infrrd"><div class="tl-yr">2024</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
-        <div class="tl-col infrrd"><div class="tl-yr">2025</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
-        <div class="tl-col infrrd"><div class="tl-yr">2026</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
-
-      </div>
-    </div>
-
-    <!-- Mobile company list (hidden on desktop) -->
-    <div class="tl-mobile">
-      <button class="tl-mobile-row" data-company="nvidia">
-        <div class="tl-mobile-accent nvidia"></div>
-        <div class="tl-mobile-logo"><img src="/assets/nvidia_logo.jpeg" alt="NVIDIA"></div>
-        <div class="tl-mobile-info">
-          <div class="tl-mobile-name">NVIDIA</div>
-          <div class="tl-mobile-years">2009 – 2019 &nbsp;·&nbsp; 10 yrs</div>
-        </div>
-      </button>
-      <button class="tl-mobile-row" data-company="dh">
-        <div class="tl-mobile-accent dh"></div>
-        <div class="tl-mobile-logo"><img src="/assets/delivery_hero_se_logo.jpeg" alt="Delivery Hero"></div>
-        <div class="tl-mobile-info">
-          <div class="tl-mobile-name">Delivery Hero</div>
-          <div class="tl-mobile-years">2020 &nbsp;·&nbsp; 1 yr</div>
-        </div>
-      </button>
-      <button class="tl-mobile-row" data-company="infrrd">
-        <div class="tl-mobile-accent infrrd"></div>
-        <div class="tl-mobile-logo"><img src="/assets/infrrd_logo.jpeg" alt="Infrrd"></div>
-        <div class="tl-mobile-info">
-          <div class="tl-mobile-name">Infrrd</div>
-          <div class="tl-mobile-years">2021 – present &nbsp;·&nbsp; 5 yrs</div>
-        </div>
-      </button>
-    </div>
-
-    <!-- Detail panels — all hidden by default -->
-    <div class="tl-detail-wrap">
-
-      <div class="tl-detail" id="detail-nvidia">
-        <div class="tl-detail-header">
-          <div class="tl-detail-logo"><img src="/assets/nvidia_logo.jpeg" alt="NVIDIA"></div>
-          <div>
-            <div class="tl-detail-company">NVIDIA</div>
-            <div class="tl-detail-total">Pune &nbsp;·&nbsp; Full-time &nbsp;·&nbsp; 10 yrs 6 mos</div>
-          </div>
-        </div>
-        <div class="tl-roles">
-          <div class="tl-role">
-            <div class="tl-role-title">Senior Tools Development Engineer</div>
-            <div class="tl-role-dates">Oct 2014 – Jan 2020</div>
-            <div class="tl-role-desc">By this point I'd outgrown .NET and made a deliberate pivot to Python — new territory, but I adapted fast and never looked back. The scope expanded: I led a small team of Python developers, built automation frameworks for the Tegra/Jetson embedded platform, and added data analytics and reporting tooling on top of the existing automation work. I went from writing tests to leading the engineers writing them — and owning the full SDLC end to end.</div>
-          </div>
-          <div class="tl-role">
-            <div class="tl-role-title">Tools Development Engineer</div>
-            <div class="tl-role-dates">Aug 2010 – Sep 2014</div>
-            <div class="tl-role-desc">Built NVQM — a full-stack .NET application that managed NVIDIA's internal software quality lifecycle: test case management, bug tracking, RCCA, reporting, and analytics. This is where I discovered I genuinely enjoyed building for engineers, making their daily work less painful. The system touched QA and dev teams across the org, which meant constant stakeholder conversations, requirement translation, and shipping features people actually used.</div>
-          </div>
-          <div class="tl-role">
-            <div class="tl-role-title">Software Quality Assurance Engineer</div>
-            <div class="tl-role-dates">Aug 2009 – Jul 2010</div>
-            <div class="tl-role-desc">An honest pit stop in the QA department before moving into tools development. I spent the year building dashboards and internal tracking tools to help the QA team work more effectively — and in doing so, realised my instinct was less to find bugs and more to build things that helped others find them.</div>
-          </div>
-        </div>
-        <div class="tl-exit">
-          <span class="tl-exit-label">Why I left</span>
-          Spending ten years at NVIDIA gave me an incredible technical foundation. Very early on, I was trusted with end-to-end ownership of the product cycle — handling both development and deployment. That level of accountability taught me a vital lesson: building mutual trust and letting your work speak for itself is the ultimate driver of your career. I'm incredibly proud of the engineering work I did there, but it was largely on an internal stage. Eventually, I outgrew that comfort zone. I wanted to build products that real customers touched and interacted with — shifting my audience from the internal to the broader market.
-        </div>
-      </div>
-
-      <div class="tl-detail" id="detail-dh">
-        <div class="tl-detail-header">
-          <div class="tl-detail-logo"><img src="/assets/delivery_hero_se_logo.jpeg" alt="Delivery Hero"></div>
-          <div>
-            <div class="tl-detail-company">Delivery Hero</div>
-            <div class="tl-detail-total">Berlin, Germany &nbsp;·&nbsp; Full-time &nbsp;·&nbsp; 11 mos</div>
-          </div>
-        </div>
-        <div class="tl-roles">
-          <div class="tl-role">
-            <div class="tl-role-title">Software Engineer II</div>
-            <div class="tl-role-dates">Feb 2020 – Dec 2020</div>
-            <div class="tl-role-desc">Joined a logistics tribe inside one of the world's largest food delivery networks — responsible for the infrastructure that moves orders from restaurants to riders to customers at scale. Hands-on with Python/Flask microservices, on-call rotations, Kubernetes, containerisation, CI/CD, and end-to-end release management. Worked closely with Data Science and BI teams to integrate analytical workflows that shaped real-time operational decisions. This was my first taste of genuine end-to-end ownership: you build it, you ship it, you support it — and it changed how I think about software.</div>
-          </div>
-        </div>
-        <div class="tl-exit">
-          <span class="tl-exit-label">Why I left</span>
-          Eleven months, six nationalities in one pod, and the most culturally rewarding experience of my career to that point. I hadn't planned to leave — the work was meaningful and the team exceptional. But COVID brought uncertainty, and family back in India brought clarity. I returned home.
-        </div>
-      </div>
-
-      <div class="tl-detail" id="detail-infrrd">
-        <div class="tl-detail-header">
-          <div class="tl-detail-logo"><img src="/assets/infrrd_logo.jpeg" alt="Infrrd"></div>
-          <div>
-            <div class="tl-detail-company">Infrrd</div>
-            <div class="tl-detail-total">Pune / Bangalore, India &nbsp;·&nbsp; Full-time &nbsp;·&nbsp; 5 yrs 4 mos &nbsp;·&nbsp; <span style="color:var(--green);font-weight:500">Current</span></div>
-          </div>
-        </div>
-        <div class="tl-roles">
-          <div class="tl-role">
-            <div class="tl-role-title">Principal Software Development Engineer</div>
-            <div class="tl-role-dates">May 2025 – Present</div>
-            <div class="tl-role-desc">Moved from Applied ML practitioner to Principal Engineer — from building AI systems to leading the strategy behind them. I now own the Python stack across the organisation, lead and mentor a team of 8+ engineers, and run a focused LLM cost-optimisation pod alongside multi-feature delivery teams. The GenAI and hybrid ML+AI work I've architected contributed to Infrrd's recognition as a Leader in the Gartner Magic Quadrant and by Everest Group. Two patents are grant-pending. Two papers are on arXiv. The work continues.</div>
-          </div>
-          <div class="tl-role">
-            <div class="tl-role-title">ML Engineering Technical Architect</div>
-            <div class="tl-role-dates">Nov 2021 – Apr 2025</div>
-            <div class="tl-role-desc">Went deep on Applied ML and started owning the AI transition company-wide. I moved from practitioner to architect — designed the hybrid ML+AI cost architecture that cut operational costs 30–40% versus LLM-only approaches, led the GenAI platform work, built agentic workflows with CrewAI, and co-authored two technical patents. Owned the enterprise Python stack and evangelised MLOps best practices across engineering. The "Innovator of the Year" recognition from Deep Analysis meant more than any award — it came from people who watched the work firsthand.</div>
-          </div>
-          <div class="tl-role">
-            <div class="tl-role-title">Technical Specialist</div>
-            <div class="tl-role-dates">Jan 2021 – Oct 2021</div>
-            <div class="tl-role-desc">Joined the R&amp;D team as the bridge between research and engineering — translating business needs into technical decisions and research outputs into shipped product. Built the foundational feedback loop for the IDP solution: data collection, ingestion, preprocessing, stratification, training, evaluation, deployment, monitoring. Unglamorous work, but the kind that makes everything else possible. Also set the Python architecture standards and secure SDLC practices that the engineering org still follows.</div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ── TECH STACK ───────────────────────────────────────────── -->
-  <div class="section-wrap section-anchor" id="tech">
-    <div class="section-label">Skills</div>
-    <div class="section-heading" style="margin-bottom:12px">What I Work With</div>
-
-    <p style="font-family:var(--serif);font-size:14px;font-style:italic;color:var(--text-subtle);line-height:1.65;margin-bottom:20px;padding-left:14px;border-left:2px solid var(--border);">"Not every tool here was used in an enterprise production system — some came through self-learning, POCs, or deliberate exploration. Breadth matters; so does being honest about depth."</p>
-
-    <!-- Embedded interactive mind map (hidden on mobile, CTA shown instead) -->
-    <div class="tech-map-wrap">
-      <div class="tech-map-topbar">
-        <div class="tech-map-topbar-left">
-          <span class="tech-map-dot"></span>
-          <span class="tech-map-label">Skills &amp; Technologies — Interactive Map</span>
-        </div>
-        <a class="tech-map-open" href="/skills/" target="_blank" rel="noopener">Open full screen ↗</a>
-      </div>
-      <div class="tech-map-frame">
-        <iframe src="/skills/" title="Skills & Technologies — Interactive Mind Map" loading="lazy" allowfullscreen></iframe>
-      </div>
-    </div>
-
-    <!-- Mobile fallback: plain link -->
-    <a href="/skills/" class="tech-map-mobile-cta" style="align-items:center;gap:8px;font-family:var(--mono);font-size:11px;font-weight:500;color:var(--accent);text-decoration:none;border:1px solid var(--accent-border);background:var(--accent-bg);padding:6px 14px;border-radius:5px;letter-spacing:0.04em;margin-bottom:24px;transition:opacity 0.15s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
-      What I Work With — Skills Map →
-    </a>
-
-
-  </div>
-
-  <!-- ── RESEARCH ───────────────────────────────────────────── -->
-  <div class="section-wrap section-anchor" id="research">
-    <div class="section-label">Research</div>
-    <div class="section-heading">Publications</div>
-
-    <a class="book-card" href="https://www.amazon.in/dp/B0H2ZBMFR4" target="_blank" rel="noopener">
-      <div class="book-strip"></div>
-      <img class="book-cover" src="/assets/clean-vibe-coder-cover.jpg" alt="The Clean Vibe Coder book cover">
-      <div class="book-body">
-        <div class="book-title">The Clean Vibe Coder</div>
-        <div class="book-sub">A Code of Conduct for Programmers in the Age of AI Agents &middot; <span class="pub-self" style="color:var(--accent);font-weight:600">Anuj Sadani</span></div>
-        <div class="book-desc">A field guide for the working engineer when a stochastic, non-deterministic teammate writes a substantial fraction of the code — and the human at the keyboard still owns every commit that ships under their name. An updated professional ethic for the agent era: the orchestrator role, verification duty, provenance as part of the artifact, and concrete practices you can apply on Monday. A chapter-for-chapter response, fifteen years on, to <em>The Clean Coder</em>.</div>
-        <div class="book-footer">
-          <span class="book-meta">Kindle &middot; 134 pages &middot; May 26, 2026</span>
-          <span class="book-cta">Buy on Amazon ↗</span>
-        </div>
-      </div>
-    </a>
-
-    <a class="pub-card" href="https://arxiv.org/abs/2605.13538" target="_blank" rel="noopener">
-      <div class="pub-strip"></div>
-      <div class="pub-body">
-        <div class="pub-top">
-          <span class="pub-badge">arXiv</span>
-          <span class="pub-cat">cs.CL</span>
-          <span class="pub-id">arXiv:2605.13538</span>
-        </div>
-        <div class="pub-title">Locale-Conditioned Few-Shot Prompting Mitigates Demonstration Regurgitation in On-Device PII Substitution with Small Language Models</div>
-        <div class="pub-authors"><span class="pub-self">Anuj Sadani</span>, Deepak Kumar</div>
-        <div class="pub-footer">
-          <span class="pub-date">May 13, 2026</span>
-          <span class="pub-link">Read on arXiv ↗</span>
-        </div>
-      </div>
-    </a>
-
-    <a class="pub-card" href="https://arxiv.org/abs/2604.21816" target="_blank" rel="noopener">
-      <div class="pub-strip"></div>
-      <div class="pub-body">
-        <div class="pub-top">
-          <span class="pub-badge">arXiv</span>
-          <span class="pub-cat">cs.AI</span>
-          <span class="pub-id">arXiv:2604.21816</span>
-        </div>
-        <div class="pub-title">Tool Attention Is All You Need: Dynamic Tool Gating and Lazy Schema Loading for Eliminating the MCP/Tools Tax in Scalable Agentic Workflows</div>
-        <div class="pub-authors"><span class="pub-self">Anuj Sadani</span>, Deepak Kumar</div>
-        <div class="pub-footer">
-          <span class="pub-date">Apr 23, 2026</span>
-          <span class="pub-link">Read on arXiv ↗</span>
-        </div>
-      </div>
-    </a>
-  </div>
 
   <!-- ── ARTICLES ───────────────────────────────────────────── -->
   <section class="section-anchor" id="articles">
@@ -931,6 +128,7 @@
     -->
     <div class="articles-list">
 
+      <!-- BUILD:articles -->
       <a class="art-row art-ai" href="/the-monk-who-oversold-the-ai/" data-tags="ai-engineering" data-flavors="models research">
         <div class="art-strip"></div>
         <div class="art-body">
@@ -944,7 +142,7 @@
             <button class="share-btn" aria-label="Share" data-url="https://asadani.github.io/the-monk-who-oversold-the-ai/" data-title="The Monk Who Oversold the AI">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
             </button>
-            <span class="art-link">Read &rarr;</span>
+            <span class="art-link">Read →</span>
           </div>
         </div>
       </a>
@@ -962,7 +160,7 @@
             <button class="share-btn" aria-label="Share" data-url="https://asadani.github.io/three-leaders-one-market/" data-title="Three Leaders, One Market">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
             </button>
-            <span class="art-link">Read &rarr;</span>
+            <span class="art-link">Read →</span>
           </div>
         </div>
       </a>
@@ -980,7 +178,7 @@
             <button class="share-btn" aria-label="Share" data-url="https://asadani.github.io/the-verification-tax/" data-title="Verification-maxxing">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
             </button>
-            <span class="art-link">Read &rarr;</span>
+            <span class="art-link">Read →</span>
           </div>
         </div>
       </a>
@@ -998,7 +196,7 @@
             <button class="share-btn" aria-label="Share" data-url="https://asadani.github.io/idp-barbell/" data-title="The Barbell and the Vanishing Middle">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
             </button>
-            <span class="art-link">Read &rarr;</span>
+            <span class="art-link">Read →</span>
           </div>
         </div>
       </a>
@@ -1362,6 +560,7 @@
           </div>
         </div>
       </a>
+<!-- /BUILD:articles -->
 
     </div>
 
@@ -1375,6 +574,371 @@
     </div>
 
   </section>
+
+  <!-- ── RESEARCH ───────────────────────────────────────────── -->
+  <div class="section-wrap section-anchor" id="research">
+    <div class="section-label">Research</div>
+    <div class="section-heading">Publications</div>
+
+    <!-- BUILD:publications -->
+    <div class="pub-bucket-label">Books</div>
+    <div class="flip-grid">
+      <div class="flipcard venue-amazon flipcard--media">
+        <div class="flipcard-inner">
+          <div class="flipcard-face flipcard-front">
+            <button class="flipcard-toggle" type="button" aria-expanded="false" aria-label="Show details for The Clean Vibe Coder">
+        <img class="flipcard-cover" src="/assets/clean-vibe-coder-cover.jpg" alt="The Clean Vibe Coder cover">
+        <span class="flipcard-caption">The Clean Vibe Coder</span>
+            </button>
+            <a class="flipcard-link" href="https://www.amazon.in/dp/B0H2ZBMFR4" target="_blank" rel="noopener">Amazon ↗</a>
+          </div>
+          <div class="flipcard-face flipcard-back">
+            <button class="flipcard-toggle" type="button" aria-expanded="false" aria-label="Hide details for The Clean Vibe Coder">
+        <span class="flipcard-desc">A field guide for the working engineer when a stochastic, non-deterministic teammate writes a substantial fraction of the code — and the human at the keyboard still owns every commit that ships under their name. An updated professional ethic for the agent era: the orchestrator role, verification duty, provenance as part of the artifact, and concrete practices you can apply on Monday. A chapter-for-chapter response, fifteen years on, to The Clean Coder.</span>
+        <span class="flipcard-meta">Kindle · 134 pages · May 26, 2026</span>
+            </button>
+            <a class="flipcard-link" href="https://www.amazon.in/dp/B0H2ZBMFR4" target="_blank" rel="noopener">Amazon ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-bucket-label">Papers</div>
+    <div class="flip-grid">
+      <div class="flipcard venue-arxiv flipcard--text">
+        <div class="flipcard-inner">
+          <div class="flipcard-face flipcard-front">
+            <button class="flipcard-toggle" type="button" aria-expanded="false" aria-label="Show details for Locale-Conditioned Few-Shot Prompting Mitigates Demonstration Regurgitation in On-Device PII Substitution with Small Language Models">
+        <span class="flipcard-panel-venue">arXiv</span>
+        <span class="flipcard-paneltitle">Locale-Conditioned Few-Shot Prompting Mitigates Demonstration Regurgitation in On-Device PII Substitution with Small Language Models</span>
+        <span class="flipcard-panel-cat">cs.CL</span>
+            </button>
+            <a class="flipcard-link" href="https://arxiv.org/abs/2605.13538" target="_blank" rel="noopener">arXiv ↗</a>
+          </div>
+          <div class="flipcard-face flipcard-back">
+            <button class="flipcard-toggle" type="button" aria-expanded="false" aria-label="Hide details for Locale-Conditioned Few-Shot Prompting Mitigates Demonstration Regurgitation in On-Device PII Substitution with Small Language Models">
+        <span class="flipcard-meta"><span class="pub-self">Anuj Sadani</span>, Deepak Kumar</span>
+        <span class="flipcard-meta">May 13, 2026</span>
+            </button>
+            <a class="flipcard-link" href="https://arxiv.org/abs/2605.13538" target="_blank" rel="noopener">arXiv ↗</a>
+          </div>
+        </div>
+      </div>
+      <div class="flipcard venue-arxiv flipcard--text">
+        <div class="flipcard-inner">
+          <div class="flipcard-face flipcard-front">
+            <button class="flipcard-toggle" type="button" aria-expanded="false" aria-label="Show details for Tool Attention Is All You Need: Dynamic Tool Gating and Lazy Schema Loading for Eliminating the MCP/Tools Tax in Scalable Agentic Workflows">
+        <span class="flipcard-panel-venue">arXiv</span>
+        <span class="flipcard-paneltitle">Tool Attention Is All You Need: Dynamic Tool Gating and Lazy Schema Loading for Eliminating the MCP/Tools Tax in Scalable Agentic Workflows</span>
+        <span class="flipcard-panel-cat">cs.AI</span>
+            </button>
+            <a class="flipcard-link" href="https://arxiv.org/abs/2604.21816" target="_blank" rel="noopener">arXiv ↗</a>
+          </div>
+          <div class="flipcard-face flipcard-back">
+            <button class="flipcard-toggle" type="button" aria-expanded="false" aria-label="Hide details for Tool Attention Is All You Need: Dynamic Tool Gating and Lazy Schema Loading for Eliminating the MCP/Tools Tax in Scalable Agentic Workflows">
+        <span class="flipcard-meta"><span class="pub-self">Anuj Sadani</span>, Deepak Kumar</span>
+        <span class="flipcard-meta">April 23, 2026</span>
+            </button>
+            <a class="flipcard-link" href="https://arxiv.org/abs/2604.21816" target="_blank" rel="noopener">arXiv ↗</a>
+          </div>
+        </div>
+      </div>
+      <div class="flipcard venue-ssrn flipcard--text">
+        <div class="flipcard-inner">
+          <div class="flipcard-face flipcard-front">
+            <button class="flipcard-toggle" type="button" aria-expanded="false" aria-label="Show details for The Great Recalibration: The 2026 Pivot from Generalist Wrappers to Sovereign Application Layers and Industrialized Services">
+        <span class="flipcard-panel-venue">SSRN</span>
+        <span class="flipcard-paneltitle">The Great Recalibration: The 2026 Pivot from Generalist Wrappers to Sovereign Application Layers and Industrialized Services</span>
+            </button>
+            <a class="flipcard-link" href="https://dx.doi.org/10.2139/ssrn.6071412" target="_blank" rel="noopener">SSRN ↗</a>
+          </div>
+          <div class="flipcard-face flipcard-back">
+            <button class="flipcard-toggle" type="button" aria-expanded="false" aria-label="Hide details for The Great Recalibration: The 2026 Pivot from Generalist Wrappers to Sovereign Application Layers and Industrialized Services">
+        <span class="flipcard-meta"><span class="pub-self">Anuj Sadani</span></span>
+        <span class="flipcard-meta">2026</span>
+            </button>
+            <a class="flipcard-link" href="https://dx.doi.org/10.2139/ssrn.6071412" target="_blank" rel="noopener">SSRN ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-bucket-label">Digital</div>
+    <div class="flip-grid">
+      <div class="flipcard venue-kofi flipcard--media">
+        <div class="flipcard-inner">
+          <div class="flipcard-face flipcard-front">
+            <button class="flipcard-toggle" type="button" aria-expanded="false" aria-label="Show details for The Monk Who Oversold the AI">
+        <img class="flipcard-cover" src="/the-monk-who-oversold-the-ai/the-monk-who-oversold-the-ai.png" alt="The Monk Who Oversold the AI cover">
+        <span class="flipcard-caption">The Monk Who Oversold the AI</span>
+            </button>
+            <a class="flipcard-link" href="https://ko-fi.com/s/02e8517c71" target="_blank" rel="noopener">Ko-fi ↗</a>
+          </div>
+          <div class="flipcard-face flipcard-back">
+            <button class="flipcard-toggle" type="button" aria-expanded="false" aria-label="Hide details for The Monk Who Oversold the AI">
+        <span class="flipcard-desc">Why borrowed foundation-model capability is shared capability — how a product leader scales on it for two years and still dissolves the only moat the product had.</span>
+            </button>
+            <a class="flipcard-link" href="https://ko-fi.com/s/02e8517c71" target="_blank" rel="noopener">Ko-fi ↗</a>
+          </div>
+        </div>
+      </div>
+      <div class="flipcard venue-kofi flipcard--media">
+        <div class="flipcard-inner">
+          <div class="flipcard-face flipcard-front">
+            <button class="flipcard-toggle" type="button" aria-expanded="false" aria-label="Show details for Three Leaders, One Market: A Field Report on Why Good AI Strategies Still Fail">
+        <img class="flipcard-cover" src="/three-leaders-one-market/three-leader.png" alt="Three Leaders, One Market: A Field Report on Why Good AI Strategies Still Fail cover">
+        <span class="flipcard-caption">Three Leaders, One Market: A Field Report on Why Good AI Strategies Still Fail</span>
+            </button>
+            <a class="flipcard-link" href="https://ko-fi.com/s/b7efb1eb2e" target="_blank" rel="noopener">Ko-fi ↗</a>
+          </div>
+          <div class="flipcard-face flipcard-back">
+            <button class="flipcard-toggle" type="button" aria-expanded="false" aria-label="Hide details for Three Leaders, One Market: A Field Report on Why Good AI Strategies Still Fail">
+        <span class="flipcard-desc">A field report on good-faith failure: three experienced leaders, three defensible AI strategies in one market, and why all three fail as the market keeps moving what it rewards.</span>
+            </button>
+            <a class="flipcard-link" href="https://ko-fi.com/s/b7efb1eb2e" target="_blank" rel="noopener">Ko-fi ↗</a>
+          </div>
+        </div>
+      </div>
+      <div class="flipcard venue-kofi flipcard--media">
+        <div class="flipcard-inner">
+          <div class="flipcard-face flipcard-front">
+            <button class="flipcard-toggle" type="button" aria-expanded="false" aria-label="Show details for The Barbell &amp; The Vanishing Middle: IDP">
+        <img class="flipcard-cover" src="/idp-barbell/the-idp-barbell.png" alt="The Barbell &amp; The Vanishing Middle: IDP cover">
+        <span class="flipcard-caption">The Barbell &amp; The Vanishing Middle: IDP</span>
+            </button>
+            <a class="flipcard-link" href="https://ko-fi.com/s/3be014f2e6" target="_blank" rel="noopener">Ko-fi ↗</a>
+          </div>
+          <div class="flipcard-face flipcard-back">
+            <button class="flipcard-toggle" type="button" aria-expanded="false" aria-label="Hide details for The Barbell &amp; The Vanishing Middle: IDP">
+        <span class="flipcard-desc">Where intelligent document processing is heading through 2028 — value migrating to infrastructure and decision automation while the extraction middle becomes invisible, not simple.</span>
+            </button>
+            <a class="flipcard-link" href="https://ko-fi.com/s/3be014f2e6" target="_blank" rel="noopener">Ko-fi ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+<!-- /BUILD:publications -->
+  </div>
+
+    <!-- ── ABOUT ──────────────────────────────────────────────── -->
+  <div class="section-anchor" id="about">
+    <div class="section-label">About</div>
+    <div class="section-heading">About Anuj</div>
+  </div>
+
+<!-- ── JOURNEY ────────────────────────────────────────────── -->
+  <div class="section-wrap section-anchor" id="journey">
+    <div class="section-label">Career</div>
+    <div class="section-heading">Journey</div>
+
+    <div class="tl-scroll-wrap">
+      <div class="tl-track">
+
+        <!-- 2009 — NVIDIA starts -->
+        <div class="tl-col tl-col-start nvidia">
+          <div class="tl-yr">2009</div>
+          <div class="tl-bar"></div>
+          <div class="tl-icon-slot">
+            <div>
+              <button class="tl-logo-btn" data-company="nvidia" aria-label="NVIDIA">
+                <img src="/assets/nvidia_logo.jpeg" alt="NVIDIA">
+              </button>
+              <div class="tl-icon-name">NVIDIA</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2010–2019: NVIDIA, no logo -->
+        <div class="tl-col nvidia"><div class="tl-yr">2010</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col nvidia"><div class="tl-yr">2011</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col nvidia"><div class="tl-yr">2012</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col nvidia"><div class="tl-yr">2013</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col nvidia"><div class="tl-yr">2014</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col nvidia"><div class="tl-yr">2015</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col nvidia"><div class="tl-yr">2016</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col nvidia"><div class="tl-yr">2017</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col nvidia"><div class="tl-yr">2018</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col nvidia"><div class="tl-yr">2019</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+
+        <!-- 2020 — Delivery Hero -->
+        <div class="tl-col tl-col-start dh">
+          <div class="tl-yr">2020</div>
+          <div class="tl-bar"></div>
+          <div class="tl-icon-slot">
+            <div>
+              <button class="tl-logo-btn" data-company="dh" aria-label="Delivery Hero">
+                <img src="/assets/delivery_hero_se_logo.jpeg" alt="Delivery Hero">
+              </button>
+              <div class="tl-icon-name">Delivery Hero</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2021 — Infrrd starts -->
+        <div class="tl-col tl-col-start infrrd">
+          <div class="tl-yr">2021</div>
+          <div class="tl-bar"></div>
+          <div class="tl-icon-slot">
+            <div>
+              <button class="tl-logo-btn" data-company="infrrd" aria-label="Infrrd">
+                <img src="/assets/infrrd_logo.jpeg" alt="Infrrd">
+              </button>
+              <div class="tl-icon-name">Infrrd</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2022–2026: Infrrd, no logo -->
+        <div class="tl-col infrrd"><div class="tl-yr">2022</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col infrrd"><div class="tl-yr">2023</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col infrrd"><div class="tl-yr">2024</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col infrrd"><div class="tl-yr">2025</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+        <div class="tl-col infrrd"><div class="tl-yr">2026</div><div class="tl-bar"></div><div class="tl-icon-slot"></div></div>
+
+      </div>
+    </div>
+
+    <!-- Mobile company list (hidden on desktop) -->
+    <div class="tl-mobile">
+      <button class="tl-mobile-row" data-company="nvidia">
+        <div class="tl-mobile-accent nvidia"></div>
+        <div class="tl-mobile-logo"><img src="/assets/nvidia_logo.jpeg" alt="NVIDIA"></div>
+        <div class="tl-mobile-info">
+          <div class="tl-mobile-name">NVIDIA</div>
+          <div class="tl-mobile-years">2009 – 2019 &nbsp;·&nbsp; 10 yrs</div>
+        </div>
+      </button>
+      <button class="tl-mobile-row" data-company="dh">
+        <div class="tl-mobile-accent dh"></div>
+        <div class="tl-mobile-logo"><img src="/assets/delivery_hero_se_logo.jpeg" alt="Delivery Hero"></div>
+        <div class="tl-mobile-info">
+          <div class="tl-mobile-name">Delivery Hero</div>
+          <div class="tl-mobile-years">2020 &nbsp;·&nbsp; 1 yr</div>
+        </div>
+      </button>
+      <button class="tl-mobile-row" data-company="infrrd">
+        <div class="tl-mobile-accent infrrd"></div>
+        <div class="tl-mobile-logo"><img src="/assets/infrrd_logo.jpeg" alt="Infrrd"></div>
+        <div class="tl-mobile-info">
+          <div class="tl-mobile-name">Infrrd</div>
+          <div class="tl-mobile-years">2021 – present &nbsp;·&nbsp; 5 yrs</div>
+        </div>
+      </button>
+    </div>
+
+    <!-- Detail panels — all hidden by default -->
+    <div class="tl-detail-wrap">
+
+      <div class="tl-detail" id="detail-nvidia">
+        <div class="tl-detail-header">
+          <div class="tl-detail-logo"><img src="/assets/nvidia_logo.jpeg" alt="NVIDIA"></div>
+          <div>
+            <div class="tl-detail-company">NVIDIA</div>
+            <div class="tl-detail-total">Pune &nbsp;·&nbsp; Full-time &nbsp;·&nbsp; 10 yrs 6 mos</div>
+          </div>
+        </div>
+        <div class="tl-roles">
+          <div class="tl-role">
+            <div class="tl-role-title">Senior Tools Development Engineer</div>
+            <div class="tl-role-dates">Oct 2014 – Jan 2020</div>
+            <div class="tl-role-desc">By this point I'd outgrown .NET and made a deliberate pivot to Python — new territory, but I adapted fast and never looked back. The scope expanded: I led a small team of Python developers, built automation frameworks for the Tegra/Jetson embedded platform, and added data analytics and reporting tooling on top of the existing automation work. I went from writing tests to leading the engineers writing them — and owning the full SDLC end to end.</div>
+          </div>
+          <div class="tl-role">
+            <div class="tl-role-title">Tools Development Engineer</div>
+            <div class="tl-role-dates">Aug 2010 – Sep 2014</div>
+            <div class="tl-role-desc">Built NVQM — a full-stack .NET application that managed NVIDIA's internal software quality lifecycle: test case management, bug tracking, RCCA, reporting, and analytics. This is where I discovered I genuinely enjoyed building for engineers, making their daily work less painful. The system touched QA and dev teams across the org, which meant constant stakeholder conversations, requirement translation, and shipping features people actually used.</div>
+          </div>
+          <div class="tl-role">
+            <div class="tl-role-title">Software Quality Assurance Engineer</div>
+            <div class="tl-role-dates">Aug 2009 – Jul 2010</div>
+            <div class="tl-role-desc">An honest pit stop in the QA department before moving into tools development. I spent the year building dashboards and internal tracking tools to help the QA team work more effectively — and in doing so, realised my instinct was less to find bugs and more to build things that helped others find them.</div>
+          </div>
+        </div>
+        <div class="tl-exit">
+          <span class="tl-exit-label">Why I left</span>
+          Spending ten years at NVIDIA gave me an incredible technical foundation. Very early on, I was trusted with end-to-end ownership of the product cycle — handling both development and deployment. That level of accountability taught me a vital lesson: building mutual trust and letting your work speak for itself is the ultimate driver of your career. I'm incredibly proud of the engineering work I did there, but it was largely on an internal stage. Eventually, I outgrew that comfort zone. I wanted to build products that real customers touched and interacted with — shifting my audience from the internal to the broader market.
+        </div>
+      </div>
+
+      <div class="tl-detail" id="detail-dh">
+        <div class="tl-detail-header">
+          <div class="tl-detail-logo"><img src="/assets/delivery_hero_se_logo.jpeg" alt="Delivery Hero"></div>
+          <div>
+            <div class="tl-detail-company">Delivery Hero</div>
+            <div class="tl-detail-total">Berlin, Germany &nbsp;·&nbsp; Full-time &nbsp;·&nbsp; 11 mos</div>
+          </div>
+        </div>
+        <div class="tl-roles">
+          <div class="tl-role">
+            <div class="tl-role-title">Software Engineer II</div>
+            <div class="tl-role-dates">Feb 2020 – Dec 2020</div>
+            <div class="tl-role-desc">Joined a logistics tribe inside one of the world's largest food delivery networks — responsible for the infrastructure that moves orders from restaurants to riders to customers at scale. Hands-on with Python/Flask microservices, on-call rotations, Kubernetes, containerisation, CI/CD, and end-to-end release management. Worked closely with Data Science and BI teams to integrate analytical workflows that shaped real-time operational decisions. This was my first taste of genuine end-to-end ownership: you build it, you ship it, you support it — and it changed how I think about software.</div>
+          </div>
+        </div>
+        <div class="tl-exit">
+          <span class="tl-exit-label">Why I left</span>
+          Eleven months, six nationalities in one pod, and the most culturally rewarding experience of my career to that point. I hadn't planned to leave — the work was meaningful and the team exceptional. But COVID brought uncertainty, and family back in India brought clarity. I returned home.
+        </div>
+      </div>
+
+      <div class="tl-detail" id="detail-infrrd">
+        <div class="tl-detail-header">
+          <div class="tl-detail-logo"><img src="/assets/infrrd_logo.jpeg" alt="Infrrd"></div>
+          <div>
+            <div class="tl-detail-company">Infrrd</div>
+            <div class="tl-detail-total">Pune / Bangalore, India &nbsp;·&nbsp; Full-time &nbsp;·&nbsp; 5 yrs 4 mos &nbsp;·&nbsp; <span style="color:var(--green);font-weight:500">Current</span></div>
+          </div>
+        </div>
+        <div class="tl-roles">
+          <div class="tl-role">
+            <div class="tl-role-title">Principal Software Development Engineer</div>
+            <div class="tl-role-dates">May 2025 – Present</div>
+            <div class="tl-role-desc">Moved from Applied ML practitioner to Principal Engineer — from building AI systems to leading the strategy behind them. I now own the Python stack across the organisation, lead and mentor a team of 8+ engineers, and run a focused LLM cost-optimisation pod alongside multi-feature delivery teams. The GenAI and hybrid ML+AI work I've architected contributed to Infrrd's recognition as a Leader in the Gartner Magic Quadrant and by Everest Group. Two patents are grant-pending. Two papers are on arXiv. The work continues.</div>
+          </div>
+          <div class="tl-role">
+            <div class="tl-role-title">ML Engineering Technical Architect</div>
+            <div class="tl-role-dates">Nov 2021 – Apr 2025</div>
+            <div class="tl-role-desc">Went deep on Applied ML and started owning the AI transition company-wide. I moved from practitioner to architect — designed the hybrid ML+AI cost architecture that cut operational costs 30–40% versus LLM-only approaches, led the GenAI platform work, built agentic workflows with CrewAI, and co-authored two technical patents. Owned the enterprise Python stack and evangelised MLOps best practices across engineering. The "Innovator of the Year" recognition from Deep Analysis meant more than any award — it came from people who watched the work firsthand.</div>
+          </div>
+          <div class="tl-role">
+            <div class="tl-role-title">Technical Specialist</div>
+            <div class="tl-role-dates">Jan 2021 – Oct 2021</div>
+            <div class="tl-role-desc">Joined the R&amp;D team as the bridge between research and engineering — translating business needs into technical decisions and research outputs into shipped product. Built the foundational feedback loop for the IDP solution: data collection, ingestion, preprocessing, stratification, training, evaluation, deployment, monitoring. Unglamorous work, but the kind that makes everything else possible. Also set the Python architecture standards and secure SDLC practices that the engineering org still follows.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── TECH STACK ───────────────────────────────────────────── -->
+  <div class="section-wrap section-anchor" id="tech">
+    <div class="section-label">Skills</div>
+    <div class="section-heading" style="margin-bottom:12px">What I Work With</div>
+
+    <p style="font-family:var(--serif);font-size:14px;font-style:italic;color:var(--text-subtle);line-height:1.65;margin-bottom:20px;padding-left:14px;border-left:2px solid var(--border);">"Not every tool here was used in an enterprise production system — some came through self-learning, POCs, or deliberate exploration. Breadth matters; so does being honest about depth."</p>
+
+    <!-- Embedded interactive mind map (hidden on mobile, CTA shown instead) -->
+    <div class="tech-map-wrap">
+      <div class="tech-map-topbar">
+        <div class="tech-map-topbar-left">
+          <span class="tech-map-dot"></span>
+          <span class="tech-map-label">Skills &amp; Technologies — Interactive Map</span>
+        </div>
+        <a class="tech-map-open" href="/skills/" target="_blank" rel="noopener">Open full screen ↗</a>
+      </div>
+      <div class="tech-map-frame">
+        <iframe src="/skills/" title="Skills & Technologies — Interactive Mind Map" loading="lazy" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <!-- Mobile fallback: plain link -->
+    <a href="/skills/" class="tech-map-mobile-cta" style="align-items:center;gap:8px;font-family:var(--mono);font-size:11px;font-weight:500;color:var(--accent);text-decoration:none;border:1px solid var(--accent-border);background:var(--accent-bg);padding:6px 14px;border-radius:5px;letter-spacing:0.04em;margin-bottom:24px;transition:opacity 0.15s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+      What I Work With — Skills Map →
+    </a>
+
+
+  </div>
 
   <!-- ── INTERESTS ─────────────────────────────────────────── -->
   <div class="section-wrap section-anchor" id="interests">
@@ -1622,6 +1186,23 @@
       }
     });
   });
+</script>
+
+<script>
+(function(){
+  var research = document.getElementById('research');
+  if(!research) return;
+  research.addEventListener('click', function(e){
+    if(e.target.closest('.flipcard-link')) return;       // let the venue link open
+    var toggle = e.target.closest('.flipcard-toggle');
+    if(!toggle) return;
+    var card = toggle.closest('.flipcard');
+    if(!card) return;
+    var flipped = card.classList.toggle('is-flipped');
+    var btns = card.querySelectorAll('.flipcard-toggle');
+    for(var i=0;i<btns.length;i++){ btns[i].setAttribute('aria-expanded', flipped ? 'true' : 'false'); }
+  });
+})();
 </script>
 
 </body>
