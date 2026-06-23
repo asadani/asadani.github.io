@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Engineers Who Didn&rsquo;t Make It Through AI: Twelve Failure Modes, No Villains</title>
+<meta name="description" content="Twelve brilliant principal engineers made rational decisions based on the world they knew. Then the world changed faster than their optimization function. A field report on the failure modes of senior technical leadership during a discontinuity. No villains, only people who optimized for a reality that stopped existing.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400;1,9..144,600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4F2EB;
+    --panel:#ECE9DF;
+    --surface:#FBFAF5;
+    --ink:#171C1A;
+    --body:#363C39;
+    --muted:#6B716C;
+    --faint:#9A9E95;
+    --line:#D9D5C8;
+    --line-soft:#E6E2D6;
+    --teal:#0F6E63;
+    --teal-deep:#0A5147;
+    --teal-wash:#E3EEEA;
+    --clay:#B5563F;
+    --clay-deep:#8F3E2B;
+    --clay-wash:#F4E6DF;
+    --gold:#9A7A2E;
+    --gold-deep:#7A5F20;
+    --gold-wash:#F1E9D4;
+    --display:'Fraunces',Georgia,serif;
+    --serif:'Spectral','Iowan Old Style',Georgia,serif;
+    --mono:'IBM Plex Mono','SFMono-Regular',Menlo,monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--body);
+    font-family:var(--serif);
+    font-size:18px;
+    line-height:1.66;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .wrap{max-width:740px;margin:0 auto;padding:0 26px;}
+
+  /* ---------- nav ---------- */
+  .nav{
+    position:sticky;top:0;z-index:40;
+    background:rgba(244,242,235,0.9);
+    backdrop-filter:blur(7px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:740px;margin:0 auto;padding:0 26px;height:50px;
+    display:flex;align-items:center;justify-content:space-between;
+    font-family:var(--mono);font-size:12px;letter-spacing:0.02em;
+  }
+  .nav-brand{color:var(--ink);text-decoration:none;font-weight:600;}
+  .nav-brand .d{color:var(--clay);}
+  .nav-right{display:flex;gap:16px;align-items:center;}
+  .nav-inner a.idx{color:var(--muted);text-decoration:none;}
+  .nav-inner a.idx:hover{color:var(--teal);}
+  .nav-companion{
+    color:var(--teal-deep);text-decoration:none;font-weight:600;
+    border-bottom:1px solid var(--teal-wash);
+  }
+  .nav-companion:hover{color:var(--teal);}
+  .nav-dl{
+    color:#fff;background:var(--clay);text-decoration:none;font-weight:600;
+    padding:5px 12px;border-radius:20px;letter-spacing:0.02em;border:none;
+  }
+  .nav-dl:hover{background:var(--clay-deep);}
+
+  /* ---------- cover ---------- */
+  .cover{padding:62px 0 30px;}
+  .kicker{
+    font-family:var(--mono);font-size:12px;letter-spacing:0.32em;
+    text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:26px;
+  }
+  h1.title{
+    font-family:var(--display);
+    font-weight:800;
+    font-size:clamp(38px,7.8vw,68px);
+    line-height:0.99;
+    letter-spacing:-0.018em;
+    color:var(--ink);
+    margin:0 0 22px;
+  }
+  h1.title .amp{font-weight:400;font-style:italic;color:var(--clay);}
+  .dek{
+    font-family:var(--serif);font-size:clamp(19px,2.6vw,23px);
+    line-height:1.44;color:var(--muted);font-style:italic;
+    max-width:600px;margin:0 0 30px;
+  }
+  .memo{
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    padding:16px 0;margin:0 0 34px;
+    font-family:var(--mono);font-size:12.5px;line-height:1.9;color:var(--muted);
+  }
+  .memo b{color:var(--ink);font-weight:600;}
+  .memo .lbl{display:inline-block;width:62px;color:var(--clay);}
+
+  figure{margin:30px 0;text-align:center;}
+  figure svg{max-width:100%;height:auto;}
+  figcaption{
+    font-family:var(--mono);font-size:11.5px;line-height:1.6;color:var(--faint);
+    margin-top:12px;letter-spacing:0.01em;
+  }
+  figcaption .fn{color:var(--clay);font-weight:600;}
+
+  @media (min-width:840px){
+    figure{width:800px;max-width:94vw;margin-left:50%;transform:translateX(-50%);}
+  }
+
+  .cover-note{
+    font-family:var(--serif);font-size:15.5px;color:var(--muted);
+    border-left:3px solid var(--teal);padding:2px 0 2px 16px;margin-top:30px;
+  }
+  .cover-dl{
+    display:inline-block;margin-top:26px;
+    font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:0.02em;
+    color:#fff;background:var(--clay);padding:11px 20px;border-radius:24px;text-decoration:none;
+  }
+  .cover-dl:hover{background:var(--clay-deep);}
+  .cover-dl .ar{font-weight:400;opacity:0.85;}
+  .cover-foot{
+    margin-top:32px;padding-top:16px;border-top:1px solid var(--line);
+    font-family:var(--mono);font-size:12px;letter-spacing:0.04em;color:var(--muted);
+  }
+  .cover-foot b{color:var(--ink);font-weight:600;}
+
+  /* ---------- contents ---------- */
+  .contents{padding:30px 0;border-top:1px solid var(--line);margin-top:24px;}
+  .contents .clab{font-family:var(--mono);font-size:12px;letter-spacing:0.22em;text-transform:uppercase;color:var(--teal);margin-bottom:14px;}
+  .contents ol{list-style:none;margin:0;padding:0;}
+  .contents li{display:flex;align-items:baseline;gap:14px;padding:8px 0;border-bottom:1px solid var(--line-soft);}
+  .contents .n{font-family:var(--mono);font-size:13px;color:var(--clay);width:34px;flex:none;font-weight:500;}
+  .contents .t{color:var(--ink);font-weight:500;}
+  .contents .t a{color:inherit;text-decoration:none;}
+  .contents .t a:hover{color:var(--teal);}
+  .contents .ds{color:var(--faint);font-size:14px;margin-left:auto;text-align:right;font-style:italic;}
+
+  /* ---------- sections ---------- */
+  .section{padding:54px 0 8px;}
+  .section + .section{border-top:1px solid var(--line);}
+  .sec-tag{
+    font-family:var(--mono);font-size:12px;letter-spacing:0.06em;color:var(--teal);
+    font-weight:600;margin-bottom:10px;
+  }
+  .sec-tag .num{color:var(--clay);}
+  .sec-tag.movA{color:var(--clay);} .sec-tag.movB{color:var(--gold);} .sec-tag.movC{color:var(--teal);}
+  h2{
+    font-family:var(--display);font-weight:600;
+    font-size:clamp(27px,4.4vw,38px);line-height:1.08;letter-spacing:-0.012em;
+    color:var(--ink);margin:0 0 22px;
+  }
+  h3{
+    font-family:var(--display);font-weight:600;font-size:21px;line-height:1.2;
+    color:var(--ink);margin:34px 0 8px;letter-spacing:-0.008em;
+  }
+  h3 .arch{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--clay);font-weight:600;display:block;margin-bottom:3px;}
+  p{margin:0 0 18px;}
+  p.lead{font-size:21px;line-height:1.5;color:var(--ink);font-family:var(--serif);}
+  .section.overture p.lead{color:var(--teal-deep);}
+  strong{font-weight:600;color:var(--ink);}
+  em{font-style:italic;}
+  a{color:var(--teal);text-decoration:none;border-bottom:1px solid var(--teal-wash);}
+  .lc{color:var(--clay-deep);font-weight:600;}
+  .lg{color:var(--gold-deep);font-weight:600;}
+  .lt{color:var(--teal-deep);font-weight:600;}
+
+  .beat{
+    font-family:var(--mono);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;
+    color:var(--clay);font-weight:600;margin:30px 0 8px;
+  }
+
+  /* ---------- pull quote ---------- */
+  blockquote.pull{
+    margin:30px 0;padding:0 0 0 22px;border-left:3px solid var(--clay);
+    font-family:var(--serif);font-weight:500;font-style:italic;
+    font-size:22px;line-height:1.45;color:var(--ink);
+  }
+  blockquote.pull .who{
+    display:block;margin-top:12px;font-family:var(--mono);font-style:normal;
+    font-size:11.5px;letter-spacing:0.04em;text-transform:uppercase;color:var(--faint);font-weight:500;
+  }
+  .aphorism{
+    text-align:center;font-family:var(--serif);font-style:italic;font-weight:500;
+    font-size:19px;line-height:1.5;color:var(--teal-deep);margin:34px auto;max-width:40ch;
+  }
+
+  /* ---------- stat strip ---------- */
+  .stats{
+    display:flex;flex-wrap:wrap;gap:0;margin:28px 0;
+    border:1px solid var(--line);border-radius:4px;background:var(--surface);overflow:hidden;
+  }
+  .stat{flex:1 1 33%;min-width:150px;padding:18px 20px;border-right:1px solid var(--line-soft);}
+  .stat:last-child{border-right:none;}
+  .stat .big{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;color:var(--clay);letter-spacing:-0.02em;}
+  .stat .big.teal{color:var(--teal);}
+  .stat .big.gold{color:var(--gold);}
+  .stat .sl{font-family:var(--mono);font-size:11.5px;line-height:1.5;color:var(--muted);margin-top:10px;}
+  sup.c{font-family:var(--mono);font-size:9.5px;color:var(--clay);font-weight:600;vertical-align:super;line-height:0;padding-left:1px;}
+
+  /* ---------- note / callout ---------- */
+  .note{
+    background:var(--teal-wash);border:1px solid #cfe2dc;border-left:3px solid var(--teal);
+    border-radius:4px;padding:16px 20px;margin:26px 0;
+  }
+  .note.warn{background:var(--clay-wash);border-color:#e6cabd;border-left-color:var(--clay);}
+  .note .nl{font-family:var(--mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--teal-deep);font-weight:600;margin-bottom:6px;}
+  .note.warn .nl{color:var(--clay-deep);}
+  .note p{margin:0;font-size:16.5px;line-height:1.55;}
+
+  /* ---------- table ---------- */
+  .tbl-wrap{margin:28px 0;overflow-x:auto;border:1px solid var(--line);border-radius:4px;}
+  table{width:100%;border-collapse:collapse;font-family:var(--serif);font-size:14.5px;}
+  th{
+    text-align:left;background:var(--ink);color:#F4F2EB;padding:11px 13px;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:0.04em;text-transform:uppercase;font-weight:500;
+  }
+  th.a{color:#E8A98E;} th.b{color:#7FCDBE;}
+  td{padding:12px 13px;border-bottom:1px solid var(--line-soft);vertical-align:top;line-height:1.5;}
+  tr:last-child td{border-bottom:none;}
+  tr:nth-child(even) td{background:var(--surface);}
+  td.h{font-weight:600;color:var(--ink);font-family:var(--serif);}
+  td.bad{color:var(--clay-deep);} td.good{color:var(--teal-deep);}
+
+  /* ---------- frame cards ---------- */
+  .frames{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:28px 0;}
+  .frame{border:1px solid var(--line);border-radius:5px;padding:18px 18px;background:var(--surface);}
+  .frame.old{border-top:3px solid var(--clay);}
+  .frame.mid{border-top:3px solid var(--gold);}
+  .frame.new{border-top:3px solid var(--teal);}
+  .frame .ft{font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;margin-bottom:10px;}
+  .frame.old .ft{color:var(--clay);}
+  .frame.mid .ft{color:var(--gold-deep);}
+  .frame.new .ft{color:var(--teal);}
+  .frame ul{margin:0;padding-left:17px;font-size:14.5px;line-height:1.5;color:var(--body);}
+  .frame li{margin-bottom:8px;}
+  .frame li::marker{color:var(--faint);}
+
+  /* ---------- verdict ---------- */
+  .verdict{
+    background:var(--ink);color:#E9E6DC;border-radius:6px;padding:30px 30px 26px;margin:34px 0;
+  }
+  .verdict .vl{font-family:var(--mono);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+  .verdict p{font-family:var(--serif);font-weight:500;font-style:italic;font-size:21px;line-height:1.5;color:#F4F2EB;margin:0;}
+  .verdict p em{color:#E8A98E;font-style:italic;}
+
+  /* ---------- checklist ---------- */
+  .checklist{margin:24px 0;}
+  .check{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line-soft);}
+  .check .cn{font-family:var(--mono);font-size:13px;color:var(--teal);font-weight:600;flex:none;width:30px;}
+  .check .ct{font-size:16px;line-height:1.5;}
+  .check .ct b{display:block;color:var(--ink);font-family:var(--display);font-weight:600;font-size:17px;margin-bottom:2px;}
+
+  /* ---------- references ---------- */
+  .refs{padding:50px 0 10px;border-top:1px solid var(--line);}
+  .refs ol{font-family:var(--mono);font-size:12.5px;line-height:1.6;color:var(--muted);padding-left:22px;}
+  .refs li{margin-bottom:10px;}
+  .refs a{word-break:break-word;}
+  .small{font-size:13px;color:var(--faint);font-family:var(--mono);line-height:1.6;}
+
+  /* ---------- footer ---------- */
+  footer{
+    border-top:1px solid var(--line);margin-top:40px;
+    padding:22px 0 60px;
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:var(--mono);font-size:12px;color:var(--faint);
+  }
+  footer a{color:var(--teal);text-decoration:none;}
+
+  hr.rule{border:none;border-top:1px solid var(--line);margin:34px 0;}
+
+  .share-cta{
+    border-top:1px solid var(--line);margin-top:6px;padding:26px 0 4px;
+    font-family:var(--serif);font-size:16px;line-height:1.55;color:var(--muted);
+  }
+  .share-cta a{font-weight:600;}
+
+  @media (max-width:560px){
+    body{font-size:17px;}
+    .frames{grid-template-columns:1fr;}
+    .stat{flex:1 1 100%;border-right:none;border-bottom:1px solid var(--line-soft);}
+    .stat:last-child{border-bottom:none;}
+    .contents .ds{display:none;}
+  }
+
+  .print-foot{display:none;}
+  @media print{
+    .nav,footer,.cover-dl,.share-cta{display:none!important;}
+    body{background:#fff;font-size:11pt;line-height:1.62;}
+    @page{
+      size:letter;
+      margin:20mm 22mm 22mm 22mm;
+    }
+    .wrap{max-width:none;padding:0;}
+    .cover{break-after:page;padding-top:0;}
+    .cover h1.title{font-size:40px;line-height:1.04;margin-bottom:16px;}
+    .cover .kicker{margin-bottom:14px;}
+    .cover .dek{font-size:15px;line-height:1.45;margin-bottom:16px;}
+    .cover .memo{margin:0 0 16px;padding:12px 0;line-height:1.7;}
+    .cover figure{margin:14px 0;}
+    .cover .cover-note{margin-top:14px;font-size:12.5px;}
+    .cover-foot{margin-top:20px;}
+    .section{padding:18px 0 6px;}
+    h2,h3{break-after:avoid;break-inside:avoid;}
+    .sec-tag,p.lead,.beat{break-after:avoid;break-inside:avoid;}
+    p{orphans:3;widows:3;}
+    li{orphans:2;widows:2;}
+    figure,.stats,.tbl-wrap,.verdict,.note,blockquote.pull,.check,.frames,.contents{break-inside:avoid;}
+    figure{width:auto;max-width:100%;margin-left:0;transform:none;}
+    a{color:var(--ink);border:none;}
+    .print-foot{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="/">asadani<span class="d">.tech</span></a>
+    <span class="nav-right">
+      <a class="nav-companion" href="/three-leaders-one-market/">Companion &rarr;</a>
+      <a class="nav-dl" href="the-failed-engineer.pdf" download>&darr; PDF</a>
+      <a class="idx" href="/">&larr; index</a>
+    </span>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ===================== COVER ===================== -->
+<header class="cover">
+  <div class="kicker">A Field Report on the AI Discontinuity &middot; Twelve Portraits</div>
+  <h1 class="title">The Engineers Who Didn&rsquo;t Make It <span class="amp">Through AI</span></h1>
+  <p class="dek">Twelve brilliant principal engineers made rational decisions based on the world they knew. Then the world changed faster than their optimization function. Every one of them was right. Every one of them still failed.</p>
+
+  <div class="memo">
+    <div><span class="lbl">TO</span> <b>Senior engineers, the people who manage them, and anyone who used to be the smartest in the room</b></div>
+    <div><span class="lbl">FROM</span> <b>Anuj Sadani</b> &middot; Principal SDE, builder of AI systems and the teams behind them</div>
+    <div><span class="lbl">RE</span> <b>The failure modes of senior technical leadership during a discontinuity</b></div>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 760 240" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three principal engineers, same starting line, five years later: one becomes VP of AI, one is still Principal but feels irrelevant, one quietly leaves the industry.">
+      <text x="128" y="52" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#0A5147" text-anchor="middle" letter-spacing="1.5">ENGINEER A</text>
+      <rect x="16" y="66" width="224" height="122" rx="10" fill="#FBFAF5" stroke="#0F6E63" stroke-width="2"/>
+      <text x="128" y="116" font-family="Spectral, Georgia, serif" font-style="italic" font-size="15" fill="#0A5147" text-anchor="middle">becomes VP of AI</text>
+      <text x="128" y="150" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6B716C" text-anchor="middle">stayed a beginner on purpose</text>
+      <text x="380" y="52" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#7A5F20" text-anchor="middle" letter-spacing="1.5">ENGINEER B</text>
+      <rect x="268" y="66" width="224" height="122" rx="10" fill="#FBFAF5" stroke="#9A7A2E" stroke-width="2"/>
+      <text x="380" y="116" font-family="Spectral, Georgia, serif" font-style="italic" font-size="15" fill="#7A5F20" text-anchor="middle">still Principal</text>
+      <text x="380" y="150" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6B716C" text-anchor="middle">and quietly less relevant</text>
+      <text x="632" y="52" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#8F3E2B" text-anchor="middle" letter-spacing="1.5">ENGINEER C</text>
+      <rect x="520" y="66" width="224" height="122" rx="10" fill="#FBFAF5" stroke="#B5563F" stroke-width="2"/>
+      <text x="632" y="116" font-family="Spectral, Georgia, serif" font-style="italic" font-size="15" fill="#8F3E2B" text-anchor="middle">quietly leaves</text>
+      <text x="632" y="150" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6B716C" text-anchor="middle">the difference was not IQ</text>
+    </svg>
+    <figcaption><span class="fn">At a glance.</span> Same starting line, same talent, same effort. Five years later, three different fates. The variable was not intelligence. It was what each one optimized for after the rules changed.</figcaption>
+  </figure>
+
+  <p class="cover-note">Read the <strong>Overture</strong> in five minutes for the whole argument. Read the rest for each engineer&rsquo;s honest case &mdash; twelve of them, braided into three movements &mdash; and the one thing that moved under all of them.</p>
+
+  <a class="cover-dl" href="the-failed-engineer.pdf" download><span class="ar">&darr;</span>&nbsp; Download the PDF</a>
+
+  <div class="cover-foot">By <b>Anuj Sadani</b> &middot; asadani.tech &middot; June 2026 &middot; A companion to <a href="/three-leaders-one-market/">Three Leaders, One Market</a></div>
+</header>
+
+<!-- ===================== CONTENTS ===================== -->
+<section class="contents">
+  <div class="clab">Contents</div>
+  <ol>
+    <li><span class="n">&mdash;</span><span class="t"><a href="#overture">Overture: Three Engineers, One Discontinuity</a></span><span class="ds">the story in five minutes</span></li>
+    <li><span class="n">01</span><span class="t"><a href="#start">The Same Starting Line</a></span><span class="ds">why none of them were fools</span></li>
+    <li><span class="n">02</span><span class="t"><a href="#kept">Those Who Kept Doing What Worked</a></span><span class="ds">Craftsman, Architect, Optimizer</span></li>
+    <li><span class="n">03</span><span class="t"><a href="#wave">Those Who Misjudged the Wave</a></span><span class="ds">Skeptic, Power User, Maximalist, Collector</span></li>
+    <li><span class="n">04</span><span class="t"><a href="#human">Those Who Lost the Human Game</a></span><span class="ds">Silent Principal, Lone Expert, Learner</span></li>
+    <li><span class="n">05</span><span class="t"><a href="#builder">The One Who Probably Makes It</a></span><span class="ds">the Builder</span></li>
+    <li><span class="n">06</span><span class="t"><a href="#inversion">The Inversion</a></span><span class="ds">what good engineering came to mean</span></li>
+    <li><span class="n">07</span><span class="t"><a href="#twist">The Twist, and the Mentor Problem</a></span><span class="ds">why seniority got lonely</span></li>
+    <li><span class="n">08</span><span class="t"><a href="#coda">Coda: Beginners Again</a></span><span class="ds">what the era selects for</span></li>
+    <li><span class="n">&mdash;</span><span class="t"><a href="#notes">Notes &amp; Sources</a></span><span class="ds">where the claims come from</span></li>
+  </ol>
+</section>
+
+<!-- ===================== OVERTURE ===================== -->
+<section class="section overture" id="overture">
+  <div class="sec-tag">Overture</div>
+  <h2>Three Engineers, One Discontinuity</h2>
+  <p class="lead">Read only this and you have the argument. Everything after it is evidence, and none of it is an accusation.</p>
+
+  <div class="beat">Same starting line</div>
+  <p>Imagine three principal engineers. All respected. All technically exceptional. All capable of leading a hundred-million-dollar product. They start the AI era from the same line: the same access to the same models, the same intelligence, the same work ethic. Five years later, one is a VP of AI, one is still a principal engineer who feels increasingly irrelevant, and one has quietly left the industry. The difference was not intelligence. It was not effort. It was not experience. It was what each of them chose to optimize for after the rules changed.</p>
+
+  <div class="beat">The shape of the failure</div>
+  <p>This is not a story about success. It is a story about brilliant people who made perfectly reasonable decisions that turned out to be the wrong ones. Nobody here is a villain. Nobody was lazy. Nobody was stupid. They simply optimized for a reality that no longer existed. That is the whole shape of it, and it is worth saying at the start, because the lazy version of this story goes looking for the engineer who didn&rsquo;t keep up, and there is no such person in it.</p>
+
+  <div class="beat">Why it is timeless, not topical</div>
+  <p>The AI era did not just introduce a new technology. It changed what <em>good engineering means</em>. For twenty years, the trait that made you a principal engineer was the trait that made you successful &mdash; correctness, depth, judgment, the ability to hold an enormous system in your head. Then the market quietly stopped paying for that as the bottleneck, and many exceptional engineers kept doing exactly the thing that had always worked. That is the trap, and it is older than AI: Clayton Christensen built a whole theory on companies that did <em>everything right</em> &mdash; listened to their best customers, invested in proven technology &mdash; and failed anyway.<sup class="c">1</sup> What follows is that theory applied to people instead of firms.</p>
+
+  <blockquote class="pull">Several brilliant principal engineers made rational decisions based on the world they knew. Then the world changed faster than their optimization function. Nobody is the villain. Nobody was lazy. They were simply playing yesterday&rsquo;s game beautifully while the rules were being rewritten underneath them.
+  <span class="who">The thesis, held at about 80 percent</span></blockquote>
+
+  <p>What follows are twelve of them. Not twelve types of person &mdash; twelve <em>failure modes</em>, any of which can show up in the same career, sometimes in the same week. I have braided them into three movements: those who kept doing what worked, those who misjudged the wave, and those who lost the human game. Then the one who probably makes it. Read each case fairly, because in a different draw, any of them could have been the VP of AI.</p>
+</section>
+
+<!-- ===================== 01 ===================== -->
+<section class="section" id="start">
+  <div class="sec-tag"><span class="num">&sect; 01</span> &middot; The Control</div>
+  <h2>The Same Starting Line</h2>
+
+  <p class="lead">Before they diverge, establish the thing the whole essay depends on: none of them started from weakness or bad faith.</p>
+
+  <p>Each of these engineers earned the title. Each had real depth, a real track record, and the trust of people who had watched them be right for a decade. If you had sat across from any of them in 2022 and asked what good engineering looked like, you would have nodded at every answer. That is precisely the problem. The reflex, when someone competent slowly slides into irrelevance, is to find the flaw in them. Sometimes the flaw is there. Often it is not, and the search for it is a way of avoiding a harder truth: that deep expertise is not a fixed asset. It is an asset <em>conditional on the environment staying the kind of place where that expertise pays.</em></p>
+
+  <p>Psychologists have a name for the mechanism. Erik Dane calls it <em>cognitive entrenchment</em>: as you acquire deep expertise, your mental models become larger, more accurate, more interconnected &mdash; and more stable. In a steady environment, that stability is the whole point; it is what lets an expert see in two seconds what a novice misses in two hours. In a rapidly changing environment, the same stability becomes a liability, because you grow less likely to question the assumptions underneath your own interpretations.<sup class="c">2</sup> The trait does not invert because the engineer got worse. It inverts because the world changed its mind about what to reward, and the engineer&rsquo;s schemas were optimized for the old answer.</p>
+
+  <div class="note">
+    <div class="nl">The control group</div>
+    <p>Same models, same access, same talent, same intentions. When a dozen capable people slide the same way, the cause is unlikely to be a dozen independent character flaws. Look at what they were all standing on instead. The thing that moved was the definition of &ldquo;good engineering,&rdquo; and expertise is exactly the thing that adapts to that move most slowly.</p>
+  </div>
+</section>
+
+<!-- ===================== 02 — MOVEMENT A ===================== -->
+<section class="section" id="kept">
+  <div class="sec-tag movA"><span class="num">&sect; 02</span> &middot; Movement A</div>
+  <h2>Those Who Kept Doing What Worked</h2>
+
+  <p class="lead">The first three failed by doing, faithfully, the exact thing that had made them great. Their craft never became useless. It just stopped being the bottleneck.</p>
+
+  <h3><span class="arch">Engineer 01</span>The Craftsman</h3>
+  <p>&ldquo;Good engineering takes time.&rdquo; He believes it because it has always been true for him. He understands distributed systems to the bone, debugs what no one else can, writes architecture you could frame. He believes, correctly, that mastery compounds. The old world rewarded exactly his virtues: correctness, stability, maintainability. The AI world started rewarding something adjacent and uncomfortable &mdash; experimentation, iteration, shipping to learn. So he keeps polishing systems to a mirror finish while competitors discover entirely new products every month. His craftsmanship never became worthless; it simply stopped being the scarce thing. He perfected the horse just as the automobile arrived &mdash; and the cruel part is that his horse really was the finest in the county.</p>
+
+  <h3><span class="arch">Engineer 02</span>The Architect</h3>
+  <p>&ldquo;I already know how software is built.&rdquo; And he did: APIs, microservices, scalability, cloud, the whole deterministic cathedral. Then AI moved the hard part somewhere his training never went. The difficulty was no longer the architecture &mdash; it was prompting, evaluation, datasets, uncertainty, the management of a system that is <em>probabilistic by nature.</em> He keeps applying deterministic engineering to a stochastic problem. Everything looks correct in review. Nothing performs well in production. This is cognitive entrenchment in its purest form: the depth that made him an architect is the depth that makes it hardest to accept that &ldquo;looks right&rdquo; and &ldquo;works&rdquo; have quietly stopped being the same claim.</p>
+
+  <h3><span class="arch">Engineer 03</span>The Optimizer</h3>
+  <p>He optimized, beautifully, exactly what leadership had always measured: latency, availability, cost, reliability. Five nines. And then the company lost, because customers preferred something <em>80 percent correct today</em> over something <em>99.9 percent correct next year.</em> He did not misunderstand engineering. He understood it perfectly and aimed it at a metric the business had already abandoned. The discipline of shipping the minimum viable version to learn fast &mdash; the thing the winners were doing &mdash; looked to him like sloppiness, because for his entire career sloppiness is exactly what it would have been. He optimized the right number from the wrong year.</p>
+
+  <div class="note warn">
+    <div class="nl">The shared error in Movement A</div>
+    <p>None of these three stopped being excellent. They kept being excellent at a task that was no longer the constraint. The half-life of a specific technical skill set has been collapsing for decades &mdash; the IEEE pegged the working half-life of a software engineer&rsquo;s knowledge at under three years back in the 1990s, and the AI era did not slow that down.<sup class="c">3</sup> Mastery still compounds. It just compounds in a currency the market can devalue overnight.</p>
+  </div>
+</section>
+
+<!-- ===================== 03 — MOVEMENT B ===================== -->
+<section class="section" id="wave">
+  <div class="sec-tag movB"><span class="num">&sect; 03</span> &middot; Movement B</div>
+  <h2>Those Who Misjudged the Wave</h2>
+
+  <p class="lead">The next four got their relationship to the new thing wrong &mdash; too late, too shallow, too much, too scattered. Each posture was defensible. Each was a different way of not actually building anything that compounded.</p>
+
+  <h3><span class="arch">Engineer 04</span>The Skeptic</h3>
+  <p>&ldquo;I&rsquo;ll adopt AI after the hype dies.&rdquo; Completely reasonable &mdash; and earned. He had survived blockchain, Web3, and NFTs by being the adult in the room who waited for the substance to show up, and was vindicated every time. He was, in effect, applying Amara&rsquo;s Law by hand: <em>we overestimate a technology in the short run and underestimate it in the long run</em>,<sup class="c">4</sup> so wait out the overestimate. The trouble is that Amara&rsquo;s Law has two halves, and the Skeptic only priced the first. This one actually changed software. By the time the hype &ldquo;died&rdquo; into ordinary daily use, the people who had been clumsily building with it for two years had a two-year head start in judgment that he could not buy back. Waiting had been wisdom four times. The fifth time, waiting was just losing slowly.</p>
+
+  <h3><span class="arch">Engineer 05</span>The Power User</h3>
+  <p>He uses ChatGPT every day. He lives in Copilot. He writes good prompts and feels, reasonably, ahead of his peers. But he never crossed from <em>using</em> to <em>understanding</em> &mdash; never learned evaluation, retrieval, agent design, model behavior, fine-tuning, the actual engineering of AI products. And the gap between feeling productive and being productive turns out to be measurable: in a 2025 randomized trial, experienced developers using AI tools believed they were about 20 percent faster and were in fact about 19 percent slower on the task.<sup class="c">5</sup> Fluency with the tool produced a confident, wrong self-assessment. Using AI is not the same as understanding AI, and the era pays for the second one.</p>
+
+  <h3><span class="arch">Engineer 06</span>The AI Maximalist</h3>
+  <p>The opposite failure, and just as sincere. He believed everything should become AI. Every feature, every flow, every form &mdash; rip out the deterministic code and let the model do it. He ignored cost, latency, reliability, the boring correctness of plain software, and the fact that users often want a button, not a conversation. He shipped dazzling demos and almost no products. He had internalized the short-run half of Amara&rsquo;s Law as a mandate rather than a warning, and mistook the ceiling of the technology for its current floor.</p>
+
+  <h3><span class="arch">Engineer 07</span>The Framework Collector</h3>
+  <p>Every week a new one: LangChain, then CrewAI, then AutoGen, then MCP, then GraphRAG, then DSPy, this model, that model. He can compare any two of them fluently. He has built essentially nothing with any of them. Knowledge that never gets integrated into something real is not expertise; it is a very sophisticated form of entertainment. He is the most <em>current</em> person in every meeting and the least <em>compounding</em> &mdash; the individual-engineer version of the company that re-platforms every quarter and finishes the year three months into everything and done with nothing.</p>
+
+  <p>Notice what Movement B has in common with Movement A. The Craftsman over-invested in stability; the Collector under-invested in it. The Skeptic waited; the Maximalist sprinted. Opposite errors, identical result, because none of them produced the one thing that pays: a body of real, shipped, evaluated work that gets better with use.</p>
+</section>
+
+<!-- ===================== 04 — MOVEMENT C ===================== -->
+<section class="section" id="human">
+  <div class="sec-tag movC"><span class="num">&sect; 04</span> &middot; Movement C</div>
+  <h2>Those Who Lost the Human Game</h2>
+
+  <p class="lead">The last three failures are not technical at all. They are about influence, isolation, and the strange way that seniority quietly removes the conditions you need to keep learning.</p>
+
+  <h3><span class="arch">Engineer 08</span>The Silent Principal</h3>
+  <p>Perhaps the most tragic, because he saw it. He saw management making poor AI bets, saw the technical debt accumulating, saw the wrong horse being backed &mdash; and said nothing. Not from cowardice exactly. He didn&rsquo;t want the conflict. It wasn&rsquo;t formally his lane. There was politics, and there was fatigue. But a principal engineer is not measured only by the correctness of his private opinions; he is measured by his <em>influence</em>, by what he changed. When you are senior enough that your silence is itself a signal, silence becomes a technical decision &mdash; one you will be accountable for even though you never said a word.</p>
+
+  <h3><span class="arch">Engineer 09</span>The Lone Expert</h3>
+  <p>He spent fifteen years becoming the smartest engineer in every room. He won. Then AI arrived, and for the first time the smartest-person-in-the-room had no idea &mdash; and neither did anyone he could ask, because he had spent those years making sure he was always the one being asked. He suddenly needed mentors and discovered the market had quietly stopped supplying them to people at his level. The strange thing about becoming a principal is that eventually everyone asks you questions, and very few people ask you the kind of question that makes you better. The higher you climb, the fewer people can review your thinking &mdash; right at the moment when your thinking most needs review.</p>
+
+  <h3><span class="arch">Engineer 10</span>The Continuous Learner</h3>
+  <p>The one everyone assumes wins &mdash; and he might. But even here the era has a twist. He reads a paper a week, which a decade ago would have kept him comfortably at the frontier. In the AI era the frontier moved monthly, sometimes weekly, and a paper a week quietly fell behind. Learning itself became a full-time skill, with its own velocity requirement, and &ldquo;I&rsquo;m a continuous learner&rdquo; stopped being a finish line and became a treadmill whose speed you do not control. Diligence was necessary and no longer sufficient, which is a deeply unfair thing to discover about a virtue.</p>
+
+  <p class="aphorism">Every engineer eventually reaches a level where experience stops teaching and curiosity becomes the only mentor.</p>
+</section>
+
+<!-- ===================== 05 — THE BUILDER ===================== -->
+<section class="section" id="builder">
+  <div class="sec-tag"><span class="num">&sect; 05</span> &middot; The Survivor</div>
+  <h2>The One Who Probably Makes It</h2>
+
+  <p class="lead">There is a twelfth. He probably comes through &mdash; not because he knows the most, but because of the one sentence he is willing to say out loud.</p>
+
+  <h3><span class="arch">Engineer 11</span>The Builder</h3>
+  <p>He is not the most brilliant of the twelve. The Craftsman is a better engineer; the Architect has more depth; the Continuous Learner reads more. What the Builder has is a concession the others can&rsquo;t make: <em>&ldquo;I no longer know enough.&rdquo;</em> So he ships, measures, learns, changes, repeats &mdash; the build-measure-learn loop that Eric Ries described for startups, run on his own career.<sup class="c">6</sup> He treats his own expertise as a hypothesis to be tested against reality rather than a position to be defended. This is the practical antidote to cognitive entrenchment: Dane&rsquo;s own research suggests the way out of the expertise trap is to keep operating in a genuinely dynamic environment, where your schemas are forced to stay loose.<sup class="c">2</sup> The Builder lives there on purpose.</p>
+
+  <p>And notice the trap he avoids that the Optimizer fell into. The Builder is willing to ship something 80 percent right today and learn from it, because he is optimizing for <em>learning velocity</em>, not for a polished artifact. He is not reckless &mdash; he keeps the deterministic software deterministic and the costs honest, which is exactly where the Maximalist failed. He is simply playing the new game on its own terms: discovery over optimization, evidence over conviction, shipped over correct.</p>
+
+  <div class="note">
+    <div class="nl">Why this isn&rsquo;t just &ldquo;learn AI&rdquo;</div>
+    <p>The Continuous Learner also learns constantly and may still not make it. The Builder&rsquo;s edge is not consumption, it is <em>integration under feedback</em> &mdash; the willingness to be wrong in public, cheaply and often, and to let the result rather than his reputation decide what he believes next. That is a temperament before it is a skill.</p>
+  </div>
+</section>
+
+<!-- ===================== 06 — INVERSION ===================== -->
+<section class="section" id="inversion">
+  <div class="sec-tag"><span class="num">&sect; 06</span> &middot; The Cause</div>
+  <h2>The Inversion</h2>
+
+  <p class="lead">Hold all twelve together and the shared cause is not in any of them. It is in a quiet inversion of what the word &ldquo;good&rdquo; modified.</p>
+
+  <p>The AI era did not retire the old engineering values. It demoted them &mdash; from <em>the thing that wins</em> to <em>table stakes that no longer differentiate.</em> Precision still matters, but speed of learning is now the scarce thing. Architecture still matters, but experimentation is where the value moved. The list below is not &ldquo;old bad, new good.&rdquo; It is &ldquo;the left column used to be the bottleneck, and now the right column is.&rdquo; Every one of the twelve was excellent at something in the left column.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>What the old world rewarded</th><th class="b">What the AI world rewards</th></tr>
+      <tr><td class="bad">Precision</td><td class="good">Speed of learning</td></tr>
+      <tr><td class="bad">Architecture</td><td class="good">Experimentation</td></tr>
+      <tr><td class="bad">Certainty</td><td class="good">Working under probability</td></tr>
+      <tr><td class="bad">Best practices</td><td class="good">Fast adaptation</td></tr>
+      <tr><td class="bad">Deep expert knowledge</td><td class="good">Cross-domain thinking</td></tr>
+      <tr><td class="bad">Writing the code</td><td class="good">Evaluating the output</td></tr>
+      <tr><td class="bad">Optimization</td><td class="good">Discovery</td></tr>
+      <tr><td class="bad">Building the technology</td><td class="good">Producing the outcome</td></tr>
+    </table>
+  </div>
+
+  <p>That last row deserves its own name, because it is where the most senior people fall hardest. Call it the <strong>Product-Blind Engineer</strong> &mdash; the failure mode that runs through nearly all twelve. He is still optimizing the technology while the market has moved to optimizing the outcome. Customers never bought transformers, RAG, agents, or MCP. They bought time saved, money earned, risk reduced. Theodore Levitt said it in 1960 and it never stopped being true: people don&rsquo;t want a quarter-inch drill, they want a quarter-inch hole.<sup class="c">7</sup> The engineer who fell in love with the drill &mdash; with the elegance of the mechanism &mdash; optimized the one thing the customer was never buying.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 210" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two stacked bands. The lower band, the old bottleneck, reads precision, architecture, optimization. The upper band, the new bottleneck, reads learning speed, experimentation, outcomes. An arrow shows value relocating from the lower band to the upper.">
+      <text x="350" y="24" font-family="IBM Plex Mono, monospace" font-size="11" fill="#171C1A" text-anchor="middle" letter-spacing="0.5">WHERE THE BOTTLENECK MOVED</text>
+      <rect x="70" y="132" width="560" height="46" rx="6" fill="#F4E6DF" stroke="#B5563F"/>
+      <text x="350" y="160" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#8F3E2B" text-anchor="middle">precision &middot; architecture &middot; optimization &middot; certainty</text>
+      <text x="350" y="196" font-family="IBM Plex Mono, monospace" font-size="9" fill="#9A9E95" text-anchor="middle">the old bottleneck &mdash; now table stakes</text>
+      <rect x="70" y="52" width="560" height="46" rx="6" fill="#E3EEEA" stroke="#0F6E63"/>
+      <text x="350" y="80" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#0A5147" text-anchor="middle">learning speed &middot; experimentation &middot; evaluation &middot; outcomes</text>
+      <text x="350" y="44" font-family="IBM Plex Mono, monospace" font-size="9" fill="#9A9E95" text-anchor="middle">the new bottleneck &mdash; where value moved</text>
+      <line x1="350" y1="129" x2="350" y2="109" stroke="#9A7A2E" stroke-width="2"/>
+      <polygon points="350,100 343,112 357,112" fill="#9A7A2E"/>
+    </svg>
+    <figcaption><span class="fn">Figure 1.</span> The values in the lower band did not become worthless. They became the price of entry. The scarce, paid-for work moved to the upper band, and most of the twelve kept investing in the band they had already won.</figcaption>
+  </figure>
+</section>
+
+<!-- ===================== 07 — TWIST + MENTORS ===================== -->
+<section class="section" id="twist">
+  <div class="sec-tag"><span class="num">&sect; 07</span> &middot; The Twist</div>
+  <h2>The Twist, and the Mentor Problem</h2>
+
+  <p class="lead">Here is the uncomfortable part, the one a senior engineer feels in the stomach rather than the head.</p>
+
+  <p>None of these twelve people are bad engineers. Every one of them could have had a brilliant decade &mdash; in a slightly different market. The market simply started rewarding different traits, and did it faster than a career can turn. Which means the thing we most want to be true is not: <strong>your previous success does not guarantee your future relevance.</strong> The skills that earned you the title can become, without anyone noticing, an argument against learning the thing that would keep it. That is not a motivational poster. It is the actual mechanism by which good people are left behind.</p>
+
+  <p>And it is made worse by something we almost never talk about: <em>even principal engineers need mentors</em>, and the system stops giving them any. The higher your title, the less feedback reaches you. People assume you know. Managers trust you. Engineers follow you. Executives expect answers from you. Meanwhile you are privately trying to understand a technology that did not exist three years ago, with no one positioned to tell you where your thinking is wrong. The loneliness of senior engineering, which used to be a manageable cost, becomes an active competitive disadvantage in a discontinuity &mdash; because a discontinuity is exactly when you most need someone to review your assumptions, and seniority is exactly the condition that removes them.</p>
+
+  <blockquote class="pull">The higher you climb, the fewer people can review your thinking. In a stable field that is a small tax on the very senior. In a discontinuity it is the whole problem, because the assumptions that most need challenging are the ones no one around you is positioned to challenge.
+  <span class="who">On the mentor problem at the top</span></blockquote>
+
+  <p>This is the throughline under all three movements. The Craftsman&rsquo;s entrenchment, the Skeptic&rsquo;s patience, the Lone Expert&rsquo;s isolation &mdash; each is a different face of the same thing: a person whose model of &ldquo;what good looks like&rdquo; was correct, hardened by years of being correct, and then left unchallenged precisely when it needed to be challenged most.</p>
+</section>
+
+<!-- ===================== 08 — CODA ===================== -->
+<section class="section" id="coda">
+  <div class="sec-tag"><span class="num">&sect; 08</span> &middot; Coda</div>
+  <h2>Beginners Again</h2>
+
+  <p class="lead">So end not with &ldquo;learn AI,&rdquo; which is generic and useless, but with the actual selection pressure of the era, stated plainly.</p>
+
+  <p>The AI era is not selecting for the smartest engineers. The twelve in this essay were, by any normal measure, among the smartest. It is selecting for engineers willing to become <em>beginners again</em> &mdash; willing to set down a hard-won expertise and re-enter the discomfort of not knowing, on purpose, repeatedly. Shunryu Suzuki put the whole thing in nine words long before any of this: <em>&ldquo;In the beginner&rsquo;s mind there are many possibilities; in the expert&rsquo;s mind there are few.&rdquo;</em><sup class="c">8</sup> Cognitive entrenchment is just the modern, measured restatement of that line. The expert sees fewer possibilities not because he is dim but because his expertise has, very efficiently, closed the doors that turned out to matter.</p>
+
+  <div class="verdict">
+    <div class="vl">The verdict</div>
+    <p>Experience is still valuable &mdash; but only if it does not become an argument against learning. The market never promised to reward what made you successful yesterday. It only rewards what creates value today. There are <em>no villains</em> here, and no fools. There are twelve good engineers who played yesterday&rsquo;s game beautifully while the rules were quietly rewritten under their feet.</p>
+  </div>
+
+  <p>If you recognized yourself in one of the twelve &mdash; and most honest senior engineers will recognize themselves in at least two &mdash; the useful response is not panic and not a framework binge. It is the Builder&rsquo;s one sentence, said on purpose: <em>I no longer know enough.</em> Then ship something small, measure it, and let the result, not your reputation, decide what you believe next. The tragedy in this essay was never incompetence. It was competence aimed, with conviction, at a target that had already moved.</p>
+
+  <p class="aphorism">The era does not reward the engineer who knows the most. It rewards the one still willing to know nothing, on purpose, again.</p>
+</section>
+
+<!-- ===================== NOTES ===================== -->
+<section class="refs" id="notes">
+  <div class="sec-tag">Appendix</div>
+  <h2>Notes &amp; Sources</h2>
+  <p class="small">The twelve engineers are composites, drawn from patterns I have watched across teams and across my own career, not twelve named people. They are failure <em>modes</em>, not personalities &mdash; more than one can live in the same engineer at once. Cited findings are public; citation numbers in the text map to the list below, and exact wording varies by source release.</p>
+  <ol>
+    <li>Clayton M. Christensen &mdash; <em>The Innovator&rsquo;s Dilemma: When New Technologies Cause Great Firms to Fail</em> (Harvard Business School Press, 1997). The core finding: incumbents fail by doing everything &ldquo;right&rdquo; &mdash; listening to their best customers and investing in proven, sustaining technology. In his disk-drive study, ~92% of sustaining innovations came from incumbents and only ~6% of disruptive ones did. <a href="https://www.hbs.edu/faculty/Pages/item.aspx?num=46">hbs.edu</a></li>
+    <li>Erik Dane &mdash; &ldquo;Reconsidering the Trade-off Between Expertise and Flexibility: A Cognitive Entrenchment Perspective,&rdquo; <em>Academy of Management Review</em> 35(4), 2010. Deep expertise builds stable cognitive schemas that aid performance in stable domains but reduce flexibility in changing ones; remedies include operating in dynamic environments or attending to out-of-domain tasks. <a href="https://journals.aom.org/doi/10.5465/amr.35.4.zok579">journals.aom.org</a></li>
+    <li>IEEE estimates on the half-life of engineering knowledge (reported c. 1991): under ~5 years for engineers generally and under ~3 for software engineers; the term &ldquo;half-life of knowledge&rdquo; was coined by economist Fritz Machlup in 1962. <a href="https://spectrum.ieee.org/an-engineering-career-only-a-young-persons-game">spectrum.ieee.org</a></li>
+    <li>Roy Amara &mdash; Amara&rsquo;s Law (Institute for the Future, c. 1970s): &ldquo;We tend to overestimate the effect of a technology in the short run and underestimate the effect in the long run.&rdquo; Blockchain is the textbook short-run-overhype case; the long-run half is where the Skeptic&rsquo;s error lives. <a href="https://en.wikipedia.org/wiki/Roy_Amara">en.wikipedia.org/wiki/Roy_Amara</a></li>
+    <li>Becker et al. (METR) &mdash; <em>Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity</em> (2025). In a randomized trial, experienced developers expected AI tools to speed them up ~20% and were in fact ~19% slower; the gap between perceived and actual productivity is the &ldquo;using vs. understanding&rdquo; point. <a href="https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/">metr.org</a></li>
+    <li>Eric Ries &mdash; <em>The Lean Startup</em> (Crown Business, 2011). Build&ndash;Measure&ndash;Learn, the minimum viable product, validated learning, and pivot-or-persevere &mdash; here applied to an individual career rather than a company. <a href="https://theleanstartup.com/principles">theleanstartup.com/principles</a></li>
+    <li>Theodore Levitt &mdash; &ldquo;Marketing Myopia,&rdquo; <em>Harvard Business Review</em>, 1960, source of the &ldquo;people don&rsquo;t want a quarter-inch drill, they want a quarter-inch hole&rdquo; framing (later popularized by Christensen &amp; Cook, &ldquo;Marketing Malpractice,&rdquo; HBR 2005). Customers buy outcomes, not mechanisms. <a href="https://en.wikiquote.org/wiki/Theodore_Levitt">en.wikiquote.org/wiki/Theodore_Levitt</a></li>
+    <li>Shunryu Suzuki &mdash; <em>Zen Mind, Beginner&rsquo;s Mind</em> (Weatherhill, 1970): &ldquo;In the beginner&rsquo;s mind there are many possibilities, but in the expert&rsquo;s mind there are few.&rdquo; The Japanese term is <em>shoshin</em>. <a href="https://en.wikiquote.org/wiki/Shunryu_Suzuki">en.wikiquote.org/wiki/Shunryu_Suzuki</a></li>
+  </ol>
+  <p class="small">Companion context &mdash; the organizational version of this same discontinuity, with its own sourcing (MIT Project NANDA&rsquo;s ~95% &ldquo;no measurable return&rdquo; figure, BCG&rsquo;s 10&ndash;20&ndash;70 value split, S&amp;P Global&rsquo;s 42% project-abandonment number), is in <a href="/three-leaders-one-market/">Three Leaders, One Market</a>.</p>
+  <hr class="rule">
+  <p class="small">&copy; 2026 Anuj Sadani. Twelve failure modes of senior technical leadership during a discontinuity. No villains &mdash; only people who optimized, with conviction, for a reality that stopped existing.</p>
+</section>
+
+  <div class="share-cta">
+    If this was worth your time, send it to the most senior engineer you know &mdash; the one who is too good to admit they&rsquo;re a beginner again. Share it on <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fasadani.github.io%2Fthe-failed-engineer%2F" target="_blank" rel="noopener">LinkedIn</a>, or wherever your people are.
+  </div>
+
+</div><!-- /wrap -->
+
+<div class="print-foot">Anuj Sadani &middot; asadani.tech</div>
+
+<footer>
+  <div class="wrap" style="display:flex;justify-content:space-between;width:100%;padding:0 26px;">
+    <span>asadani.tech &middot; June 2026</span>
+    <a href="/">&larr; back to index</a>
+  </div>
+</footer>
+
+</body>
+</html>

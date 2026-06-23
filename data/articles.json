@@ -1,5 +1,22 @@
 [
   {
+    "slug": "the-failed-engineer",
+    "title": "The Engineers Who Didn't Make It Through AI",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "craft",
+      "models"
+    ],
+    "quote": "\"Every one of them was right. Every one of them still failed.\"",
+    "desc": "A companion to Three Leaders, One Market, turned on people instead of firms. Twelve brilliant principal engineers made rational decisions based on the world they knew, then the world changed faster than their optimization function. The Craftsman, the Skeptic, the Lone Expert, the Builder: twelve failure modes of senior technical leadership during a discontinuity, braided into one argument. No villains, only people who optimized for a reality that stopped existing.",
+    "date": "2026-06-23",
+    "dateDisplay": "June 23, 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/the-failed-engineer/"
+  },
+  {
     "slug": "the-monk-who-oversold-the-ai",
     "title": "The Monk Who Oversold the AI",
     "tags": [
