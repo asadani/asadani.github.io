@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Human Leverage Map: Finding Durable Human Value When Intelligence Becomes Abundant</title>
+<meta name="description" content="When intelligence becomes abundant and cheap, judgment becomes scarce. A two-axis map for finding the human value that survives AI: where your leverage goes when the machine can produce the answer, and how to keep the faculty that leverage depends on.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400;1,9..144,600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4F2EB;
+    --panel:#ECE9DF;
+    --surface:#FBFAF5;
+    --ink:#171C1A;
+    --body:#363C39;
+    --muted:#6B716C;
+    --faint:#9A9E95;
+    --line:#D9D5C8;
+    --line-soft:#E6E2D6;
+    --teal:#0F6E63;
+    --teal-deep:#0A5147;
+    --teal-wash:#E3EEEA;
+    --clay:#B5563F;
+    --clay-deep:#8F3E2B;
+    --clay-wash:#F4E6DF;
+    --gold:#9A7A2E;
+    --gold-deep:#7A5F20;
+    --gold-wash:#F1E9D4;
+    --display:'Fraunces',Georgia,serif;
+    --serif:'Spectral','Iowan Old Style',Georgia,serif;
+    --mono:'IBM Plex Mono','SFMono-Regular',Menlo,monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--body);
+    font-family:var(--serif);
+    font-size:18px;
+    line-height:1.66;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .wrap{max-width:740px;margin:0 auto;padding:0 26px;}
+
+  /* ---------- nav ---------- */
+  .nav{
+    position:sticky;top:0;z-index:40;
+    background:rgba(244,242,235,0.9);
+    backdrop-filter:blur(7px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:740px;margin:0 auto;padding:0 26px;height:50px;
+    display:flex;align-items:center;justify-content:space-between;
+    font-family:var(--mono);font-size:12px;letter-spacing:0.02em;
+  }
+  .nav-brand{color:var(--ink);text-decoration:none;font-weight:600;}
+  .nav-brand .d{color:var(--clay);}
+  .nav-right{display:flex;gap:16px;align-items:center;}
+  .nav-inner a.idx{color:var(--muted);text-decoration:none;}
+  .nav-inner a.idx:hover{color:var(--teal);}
+  .nav-dl{
+    color:#fff;background:var(--clay);text-decoration:none;font-weight:600;
+    padding:5px 12px;border-radius:20px;letter-spacing:0.02em;
+  }
+  .nav-dl:hover{background:var(--clay-deep);}
+
+  /* ---------- cover ---------- */
+  .cover{padding:62px 0 30px;}
+  .kicker{
+    font-family:var(--mono);font-size:12px;letter-spacing:0.32em;
+    text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:26px;
+  }
+  h1.title{
+    font-family:var(--display);
+    font-weight:800;
+    font-size:clamp(40px,8.4vw,74px);
+    line-height:0.98;
+    letter-spacing:-0.018em;
+    color:var(--ink);
+    margin:0 0 22px;
+  }
+  h1.title .amp{font-weight:400;font-style:italic;color:var(--clay);}
+  .dek{
+    font-family:var(--serif);font-size:clamp(19px,2.6vw,23px);
+    line-height:1.44;color:var(--muted);font-style:italic;
+    max-width:600px;margin:0 0 30px;
+  }
+  .memo{
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    padding:16px 0;margin:0 0 34px;
+    font-family:var(--mono);font-size:12.5px;line-height:1.9;color:var(--muted);
+  }
+  .memo b{color:var(--ink);font-weight:600;}
+  .memo .lbl{display:inline-block;width:62px;color:var(--clay);}
+
+  figure{margin:30px 0;text-align:center;}
+  figure svg{max-width:100%;height:auto;}
+  figcaption{
+    font-family:var(--mono);font-size:11.5px;line-height:1.6;color:var(--faint);
+    margin-top:12px;letter-spacing:0.01em;
+  }
+  figcaption .fn{color:var(--clay);font-weight:600;}
+
+  @media (min-width:840px){
+    figure{width:800px;max-width:94vw;margin-left:50%;transform:translateX(-50%);}
+  }
+
+  .cover-note{
+    font-family:var(--serif);font-size:15.5px;color:var(--muted);
+    border-left:3px solid var(--teal);padding:2px 0 2px 16px;margin-top:30px;
+  }
+  .cover-dl{
+    display:inline-block;margin-top:26px;
+    font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:0.02em;
+    color:#fff;background:var(--clay);padding:11px 20px;border-radius:24px;text-decoration:none;
+  }
+  .cover-dl:hover{background:var(--clay-deep);}
+  .cover-dl .ar{font-weight:400;opacity:0.85;}
+  .cover-foot{
+    margin-top:32px;padding-top:16px;border-top:1px solid var(--line);
+    font-family:var(--mono);font-size:12px;letter-spacing:0.04em;color:var(--muted);
+  }
+  .cover-foot b{color:var(--ink);font-weight:600;}
+
+  /* ---------- contents ---------- */
+  .contents{padding:30px 0;border-top:1px solid var(--line);margin-top:24px;}
+  .contents .clab{font-family:var(--mono);font-size:12px;letter-spacing:0.22em;text-transform:uppercase;color:var(--teal);margin-bottom:14px;}
+  .contents .part{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--clay);font-weight:600;margin:18px 0 4px;}
+  .contents ol{list-style:none;margin:0;padding:0;}
+  .contents li{display:flex;align-items:baseline;gap:14px;padding:8px 0;border-bottom:1px solid var(--line-soft);}
+  .contents .n{font-family:var(--mono);font-size:13px;color:var(--clay);width:34px;flex:none;font-weight:500;}
+  .contents .t{color:var(--ink);font-weight:500;}
+  .contents .t a{color:inherit;text-decoration:none;}
+  .contents .t a:hover{color:var(--teal);}
+  .contents .ds{color:var(--faint);font-size:14px;margin-left:auto;text-align:right;font-style:italic;}
+
+  /* ---------- sections ---------- */
+  .section{padding:54px 0 8px;}
+  .section + .section{border-top:1px solid var(--line);}
+  .sec-tag{
+    font-family:var(--mono);font-size:12px;letter-spacing:0.06em;color:var(--teal);
+    font-weight:600;margin-bottom:10px;
+  }
+  .sec-tag .num{color:var(--clay);}
+  h2{
+    font-family:var(--display);font-weight:600;
+    font-size:clamp(27px,4.4vw,38px);line-height:1.08;letter-spacing:-0.012em;
+    color:var(--ink);margin:0 0 22px;
+  }
+  h3{
+    font-family:var(--display);font-weight:600;font-size:21px;line-height:1.2;
+    color:var(--ink);margin:34px 0 8px;letter-spacing:-0.008em;
+  }
+  p{margin:0 0 18px;}
+  p.lead{font-size:21px;line-height:1.5;color:var(--ink);font-family:var(--serif);}
+  strong{font-weight:600;color:var(--ink);}
+  em{font-style:italic;}
+  a{color:var(--teal);text-decoration:none;border-bottom:1px solid var(--teal-wash);}
+  .lc{color:var(--clay-deep);font-weight:600;}
+  .lg{color:var(--gold-deep);font-weight:600;}
+  .lt{color:var(--teal-deep);font-weight:600;}
+
+  .beat{
+    font-family:var(--mono);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;
+    color:var(--clay);font-weight:600;margin:30px 0 8px;
+  }
+
+  /* ---------- pull quote ---------- */
+  blockquote.pull{
+    margin:30px 0;padding:0 0 0 22px;border-left:3px solid var(--clay);
+    font-family:var(--serif);font-weight:500;font-style:italic;
+    font-size:22px;line-height:1.45;color:var(--ink);
+  }
+  blockquote.pull .who{
+    display:block;margin-top:12px;font-family:var(--mono);font-style:normal;
+    font-size:11.5px;letter-spacing:0.04em;text-transform:uppercase;color:var(--faint);font-weight:500;
+  }
+  .aphorism{
+    text-align:center;font-family:var(--serif);font-style:italic;font-weight:500;
+    font-size:19px;line-height:1.5;color:var(--teal-deep);margin:34px auto;max-width:36ch;
+  }
+
+  /* ---------- stat strip ---------- */
+  .stats{
+    display:flex;flex-wrap:wrap;gap:0;margin:28px 0;
+    border:1px solid var(--line);border-radius:4px;background:var(--surface);overflow:hidden;
+  }
+  .stat{flex:1 1 33%;min-width:150px;padding:18px 20px;border-right:1px solid var(--line-soft);}
+  .stat:last-child{border-right:none;}
+  .stat .big{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;color:var(--clay);letter-spacing:-0.02em;}
+  .stat .big.teal{color:var(--teal);}
+  .stat .big.gold{color:var(--gold);}
+  .stat .sl{font-family:var(--mono);font-size:11.5px;line-height:1.5;color:var(--muted);margin-top:10px;}
+  sup.c{font-family:var(--mono);font-size:9.5px;color:var(--clay);font-weight:600;vertical-align:super;line-height:0;padding-left:1px;}
+  sup.c a{color:var(--clay);border:none;}
+
+  /* ---------- note / callout ---------- */
+  .note{
+    background:var(--teal-wash);border:1px solid #cfe2dc;border-left:3px solid var(--teal);
+    border-radius:4px;padding:16px 20px;margin:26px 0;
+  }
+  .note.warn{background:var(--clay-wash);border-color:#e6cabd;border-left-color:var(--clay);}
+  .note .nl{font-family:var(--mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--teal-deep);font-weight:600;margin-bottom:6px;}
+  .note.warn .nl{color:var(--clay-deep);}
+  .note p{margin:0;font-size:16.5px;line-height:1.55;}
+
+  /* ---------- axis reference block ---------- */
+  .axgrid{margin:2px 0 0;}
+  .axrow{padding:9px 0;border-top:1px solid var(--line-soft);}
+  .axrow:first-child{border-top:none;padding-top:2px;}
+  .axname{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--teal-deep);letter-spacing:0.02em;}
+  .axdir{font-family:var(--mono);font-size:10px;color:var(--faint);margin-left:9px;text-transform:uppercase;letter-spacing:0.06em;}
+  .axchain{font-family:var(--mono);font-size:12.5px;line-height:1.7;color:var(--body);margin-top:4px;}
+
+  /* ---------- table ---------- */
+  .tbl-wrap{margin:28px 0;overflow-x:auto;border:1px solid var(--line);border-radius:4px;}
+  table{width:100%;border-collapse:collapse;font-family:var(--serif);font-size:14.5px;}
+  th{
+    text-align:left;background:var(--ink);color:#F4F2EB;padding:11px 13px;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:0.04em;text-transform:uppercase;font-weight:500;
+  }
+  th.a{color:#E8A98E;} th.g{color:#D9B871;} th.b{color:#7FCDBE;}
+  td{padding:12px 13px;border-bottom:1px solid var(--line-soft);vertical-align:top;line-height:1.5;}
+  tr:last-child td{border-bottom:none;}
+  tr:nth-child(even) td{background:var(--surface);}
+  td.h{font-weight:600;color:var(--ink);font-family:var(--serif);}
+  td.bad{color:var(--clay-deep);} td.mid{color:var(--gold-deep);} td.good{color:var(--teal-deep);}
+
+  /* ---------- frame cards ---------- */
+  .frames{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:28px 0;}
+  .frames.three{grid-template-columns:1fr 1fr 1fr;}
+  .frame{border:1px solid var(--line);border-radius:5px;padding:18px 18px;background:var(--surface);}
+  .frame.old{border-top:3px solid var(--clay);}
+  .frame.mid{border-top:3px solid var(--gold);}
+  .frame.new{border-top:3px solid var(--teal);}
+  .frame .ft{font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;margin-bottom:10px;}
+  .frame.old .ft{color:var(--clay);}
+  .frame.mid .ft{color:var(--gold-deep);}
+  .frame.new .ft{color:var(--teal);}
+  .frame ul{margin:0;padding-left:17px;font-size:14.5px;line-height:1.5;color:var(--body);}
+  .frame li{margin-bottom:8px;}
+  .frame li::marker{color:var(--faint);}
+
+  /* ---------- verdict ---------- */
+  .verdict{
+    background:var(--ink);color:#E9E6DC;border-radius:6px;padding:30px 30px 26px;margin:34px 0;
+  }
+  .verdict .vl{font-family:var(--mono);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+  .verdict p{font-family:var(--serif);font-weight:500;font-style:italic;font-size:21px;line-height:1.5;color:#F4F2EB;margin:0;}
+  .verdict p em{color:#E8A98E;font-style:italic;}
+
+  /* ---------- checklist ---------- */
+  .checklist{margin:24px 0;}
+  .check{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line-soft);}
+  .check .cn{font-family:var(--mono);font-size:13px;color:var(--teal);font-weight:600;flex:none;width:30px;}
+  .check .ct{font-size:16px;line-height:1.5;}
+  .check .ct b{display:block;color:var(--ink);font-family:var(--display);font-weight:600;font-size:17px;margin-bottom:2px;}
+
+  /* ---------- references ---------- */
+  .refs{padding:50px 0 10px;border-top:1px solid var(--line);}
+  .refs ol{font-family:var(--mono);font-size:12.5px;line-height:1.6;color:var(--muted);padding-left:22px;}
+  .refs li{margin-bottom:10px;}
+  .refs a{word-break:break-word;}
+  .small{font-size:13px;color:var(--faint);font-family:var(--mono);line-height:1.6;}
+
+  /* ---------- footer ---------- */
+  footer{
+    border-top:1px solid var(--line);margin-top:40px;
+    padding:22px 0 60px;
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:var(--mono);font-size:12px;color:var(--faint);
+  }
+  footer a{color:var(--teal);text-decoration:none;}
+
+  hr.rule{border:none;border-top:1px solid var(--line);margin:34px 0;}
+
+  .share-cta{
+    border-top:1px solid var(--line);margin-top:6px;padding:26px 0 4px;
+    font-family:var(--serif);font-size:16px;line-height:1.55;color:var(--muted);
+  }
+  .share-cta a{font-weight:600;}
+
+  @media (max-width:560px){
+    body{font-size:17px;}
+    .frames,.frames.three{grid-template-columns:1fr;}
+    .stat{flex:1 1 100%;border-right:none;border-bottom:1px solid var(--line-soft);}
+    .stat:last-child{border-bottom:none;}
+    .contents .ds{display:none;}
+  }
+
+  .print-foot{display:none;}
+  @media print{
+    .nav,footer,.cover-dl,.share-cta{display:none!important;}
+    body{background:#fff;font-size:11pt;line-height:1.62;}
+    /* @page margins (set in CSS, honoured via preferCSSPageSize) give the
+       book its frame: room at top, and a reserved band at the bottom so the
+       running footer never collides with body copy. */
+    @page{
+      size:letter;
+      margin:20mm 22mm 22mm 22mm;
+    }
+    .wrap{max-width:none;padding:0;}
+    /* cover sits inside the same @page margin; let it breathe, then break. */
+    .cover{break-after:page;padding-top:0;}
+    .cover h1.title{font-size:40px;line-height:1.04;margin-bottom:16px;}
+    .cover .kicker{margin-bottom:14px;}
+    .cover .dek{font-size:15px;line-height:1.45;margin-bottom:16px;}
+    .cover .memo{margin:0 0 16px;padding:12px 0;line-height:1.7;}
+    .cover figure{margin:10px 0;}
+    .cover figure svg{width:100%;max-height:400px;}
+    .cover figcaption{font-size:10.5px;margin-top:8px;}
+    .cover .cover-note{margin-top:12px;font-size:12.5px;}
+    .cover-foot{margin-top:14px;}
+    .section{padding:18px 0 6px;}
+    /* each chapter opens on a fresh page; front matter flows after the contents */
+    .section{break-before:page;}
+    #locate{break-before:auto;}
+    .refs{break-before:page;}
+    /* keep headings attached to the text that follows them */
+    h2,h3{break-after:avoid;break-inside:avoid;}
+    .sec-tag,p.lead,.beat{break-after:avoid;break-inside:avoid;}
+    p{orphans:3;widows:3;}
+    li{orphans:2;widows:2;}
+    figure,.stats,.tbl-wrap,.verdict,.note,blockquote.pull,.check,.frames,.contents{break-inside:avoid;}
+    figure{width:auto;max-width:100%;margin-left:0;transform:none;}
+    a{color:var(--ink);border:none;}
+    .print-foot{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="/">asadani<span class="d">.tech</span></a>
+    <span class="nav-right">
+      <a class="nav-dl" href="https://ko-fi.com/s/2806feff25" target="_blank" rel="noopener">PDF on Ko-fi &nearr;</a>
+      <a class="idx" href="/">&larr; index</a>
+    </span>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ===================== COVER ===================== -->
+<header class="cover">
+  <div class="kicker">The Scarcity Inversion &middot; A Field Guide</div>
+  <h1 class="title">The Human <span class="amp">Leverage</span> Map</h1>
+  <p class="dek">When intelligence becomes abundant and cheap, judgment becomes scarce. This is a map for finding the value that survives AI &mdash; the part of what you create that doesn&rsquo;t collapse when the machine can produce the answer.</p>
+
+  <div class="memo">
+    <div><span class="lbl">TO</span> <b>Leaders, builders, and anyone whose work is being automated from the inside</b></div>
+    <div><span class="lbl">FROM</span> <b>Anuj Sadani</b> &middot; Principal SDE, builder of AI systems and the teams behind them</div>
+    <div><span class="lbl">RE</span> <b>Where uniquely human value goes when intelligence is abundant</b></div>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 760 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The Human Leverage Map: a two-by-two quadrant. The horizontal axis is AI Capability, rising from Ignore to AI-Native. The vertical axis is Human Leverage, rising from Survival to Stewardship. Bottom-left quadrant: The Resistant. Bottom-right: The Prompt Addict. Top-left: The Wise Expert. Top-right, shaded teal: The Amplifier, Steward of Intelligence. A dashed judgment waterline runs horizontally between Expertise and Judgment.">
+      <!-- top-right durable quadrant wash -->
+      <rect x="400" y="60" width="280" height="160" fill="#E3EEEA"/>
+      <!-- plot frame -->
+      <rect x="120" y="60" width="560" height="320" fill="none" stroke="#D9D5C8" stroke-width="1.4"/>
+      <!-- quadrant dividers -->
+      <line x1="400" y1="60" x2="400" y2="380" stroke="#D9D5C8" stroke-width="1.2"/>
+      <!-- judgment waterline -->
+      <line x1="120" y1="220" x2="680" y2="220" stroke="#0F6E63" stroke-width="1.6" stroke-dasharray="6 5"/>
+      <text x="676" y="212" font-family="IBM Plex Mono, monospace" font-size="10" fill="#0A5147" text-anchor="end" font-weight="600">judgment waterline</text>
+      <text x="124" y="236" font-family="IBM Plex Mono, monospace" font-size="9" fill="#9A9E95">expertise below &middot; judgment above</text>
+
+      <!-- quadrant labels -->
+      <text x="260" y="142" font-family="IBM Plex Mono, monospace" font-size="13" fill="#0A5147" text-anchor="middle" font-weight="600">The Wise Expert</text>
+      <text x="260" y="160" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6B716C" text-anchor="middle">low capability &middot; high leverage</text>
+
+      <text x="540" y="118" font-family="IBM Plex Mono, monospace" font-size="13" fill="#0F6E63" text-anchor="middle" font-weight="600">The Amplifier /</text>
+      <text x="540" y="136" font-family="IBM Plex Mono, monospace" font-size="13" fill="#0F6E63" text-anchor="middle" font-weight="600">Steward of Intelligence</text>
+      <text x="540" y="156" font-family="IBM Plex Mono, monospace" font-size="9" fill="#0A5147" text-anchor="middle">the durable summit</text>
+
+      <text x="260" y="306" font-family="IBM Plex Mono, monospace" font-size="13" fill="#8F3E2B" text-anchor="middle" font-weight="600">The Resistant</text>
+      <text x="260" y="324" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6B716C" text-anchor="middle">low capability &middot; low leverage</text>
+
+      <text x="540" y="306" font-family="IBM Plex Mono, monospace" font-size="13" fill="#7A5F20" text-anchor="middle" font-weight="600">The Prompt Addict</text>
+      <text x="540" y="324" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6B716C" text-anchor="middle">high capability &middot; low leverage</text>
+
+      <!-- Y axis -->
+      <line x1="120" y1="60" x2="120" y2="380" stroke="#171C1A" stroke-width="1.6"/>
+      <polygon points="120,52 116,64 124,64" fill="#171C1A"/>
+      <text x="92" y="220" font-family="IBM Plex Mono, monospace" font-size="11" fill="#171C1A" text-anchor="middle" font-weight="600" transform="rotate(-90 92 220)">Human Leverage &uarr;</text>
+      <text x="112" y="76" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#9A9E95" text-anchor="end">Stewardship</text>
+      <text x="112" y="376" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#9A9E95" text-anchor="end">Survival</text>
+
+      <!-- X axis -->
+      <line x1="120" y1="380" x2="680" y2="380" stroke="#171C1A" stroke-width="1.6"/>
+      <polygon points="688,380 676,376 676,384" fill="#171C1A"/>
+      <text x="400" y="406" font-family="IBM Plex Mono, monospace" font-size="11" fill="#171C1A" text-anchor="middle" font-weight="600">AI Capability &rarr;</text>
+      <text x="120" y="396" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#9A9E95" text-anchor="start">Ignore</text>
+      <text x="680" y="396" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#9A9E95" text-anchor="end">AI-Native</text>
+
+      <!-- hidden reading -->
+      <text x="400" y="438" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="#0A5147" text-anchor="middle">&#9679; hidden reading: Cognitive Sovereignty &mdash; what separates the upper half from the lower</text>
+    </svg>
+    <figcaption><span class="fn">The map.</span> Two axes, four positions. Reach runs left to right; leverage that survives AI runs bottom to top. The teal corner &mdash; high capability, high leverage &mdash; is the durable summit the book points toward.</figcaption>
+  </figure>
+
+  <p class="cover-note">Start with <strong>Locate Yourself</strong> to place your dot and your arrow. Then read the three parts: <strong>The Inversion</strong> (why value is migrating), <strong>The Map</strong> (where you stand in it), and <strong>The Defense</strong> (how to keep the faculty it all rests on).</p>
+
+  <a class="cover-dl" href="https://ko-fi.com/s/2806feff25" target="_blank" rel="noopener"><span class="ar">&nearr;</span>&nbsp; Get the full PDF on Ko-fi</a>
+
+  <div class="cover-foot">By <b>Anuj Sadani</b> &middot; asadani.tech &middot; June 2026</div>
+</header>
+
+<!-- ===================== CONTENTS ===================== -->
+<section class="contents">
+  <div class="clab">Contents</div>
+  <ol>
+    <li><span class="n">&mdash;</span><span class="t"><a href="#locate">Locate Yourself</a></span><span class="ds">place your dot and arrow</span></li>
+  </ol>
+  <div class="part">Part I &middot; The Inversion</div>
+  <ol>
+    <li><span class="n">01</span><span class="t"><a href="#faculty">The Faculty AI Automates</a></span><span class="ds">it climbed into our level</span></li>
+    <li><span class="n">02</span><span class="t"><a href="#inversion">The Scarcity Inversion</a></span><span class="ds">value moves to what stays scarce</span></li>
+    <li><span class="n">03</span><span class="t"><a href="#map">The Map, Not the Ladder</a></span><span class="ds">why it takes two axes</span></li>
+  </ol>
+  <div class="part">Part II &middot; The Map</div>
+  <ol>
+    <li><span class="n">04</span><span class="t"><a href="#xaxis">The AI Capability Axis</a></span><span class="ds">reach, and only reach</span></li>
+    <li><span class="n">05</span><span class="t"><a href="#yaxis">The Human Leverage Axis</a></span><span class="ds">value that survives abundance</span></li>
+    <li><span class="n">06</span><span class="t"><a href="#quadrants">The Four Quadrants</a></span><span class="ds">four ways of being worth something</span></li>
+    <li><span class="n">07</span><span class="t"><a href="#altitude">Altitude: The Purpose Axis</a></span><span class="ds">what any of it is for</span></li>
+  </ol>
+  <div class="part">Part III &middot; The Defense</div>
+  <ol>
+    <li><span class="n">08</span><span class="t"><a href="#sovereignty">Cognitive Sovereignty</a></span><span class="ds">staying the author of your thinking</span></li>
+    <li><span class="n">09</span><span class="t"><a href="#collapse">How Leverage Collapses</a></span><span class="ds">three vectors, one direction</span></li>
+    <li><span class="n">10</span><span class="t"><a href="#defend">Defending the Summit</a></span><span class="ds">a posture, not a checklist</span></li>
+    <li><span class="n">11</span><span class="t"><a href="#coda">Coda: The Steward of Intelligence</a></span><span class="ds">a stance you hold</span></li>
+  </ol>
+  <ol>
+    <li><span class="n">&mdash;</span><span class="t"><a href="#refs">References</a></span><span class="ds">twelve verified sources</span></li>
+  </ol>
+</section>
+
+<!-- ===================== FRONT MATTER ===================== -->
+<section class="section" id="locate">
+  <div class="sec-tag">Front Matter</div>
+  <h2>Locate Yourself</h2>
+
+  <p class="lead">Before Chapter 1, place yourself on the map. Three prompts. No scoring. No categories. Just a dot and an arrow.</p>
+
+  <p>Every chapter in this book refers back to the same two-axis diagram. The <strong>vertical axis &mdash; Human Leverage</strong> &mdash; measures what you bring that AI cannot replicate on demand: judgment, taste, relationships, accountability, the ability to ask the right question, and ultimately the wisdom to decide what to build and why. The <strong>horizontal axis &mdash; AI Capability</strong> &mdash; measures how fluently you work with AI tools: from ignoring them entirely, through casual consumption and skilled practice, toward building, orchestrating, and designing systems where humans and AI operate as a single unit.</p>
+
+  <p>The hidden reading is <strong>Cognitive Sovereignty</strong>: the degree to which you remain the author of your own thinking, rather than a downstream consumer of someone else&rsquo;s model. It lives in the vertical axis but is not reducible to any single level on it. The four personas are not types of people. They are positions &mdash; places on the map that each of us can occupy, leave, and return to depending on the domain, the moment, and the choices we make.</p>
+
+  <div class="checklist">
+    <div class="check"><div class="cn">01</div><div class="ct"><b>Where are you on AI Capability?</b>Pick the level that honestly describes your current everyday practice &mdash; not your aspirations. Ignore, Consumer, Practitioner, Collaborator, Builder, Orchestrator, or AI-Native. Place a dot. The useful dot is the accurate one.</div></div>
+    <div class="check"><div class="cn">02</div><div class="ct"><b>Where are you on Human Leverage?</b>This axis is subtler than seniority or years of experience. It is about what value you generate and why someone else cannot generate it in your place: Survival, Productivity, Execution, Expertise, Judgment, Leadership, Multiplication, or Stewardship. Place a second dot.</div></div>
+    <div class="check"><div class="cn">03</div><div class="ct"><b>Draw your vector.</b>Think about where you were roughly a year ago on each axis. Draw an arrow from then to now. Then ask: where is the arrow pointing from where you stand today? That direction is more important than the dot.</div></div>
+  </div>
+
+  <p>The book&rsquo;s argument: the Scarcity Inversion is already underway. AI capability is becoming abundant and cheap. Human Leverage &mdash; especially the Cognitive Sovereignty that anchors the upper half of the map &mdash; is becoming the scarce resource. The people who will matter most are not those with the highest AI Capability score, nor those who have insulated themselves from AI entirely. They are in the upper-right: The Amplifier, the Steward of Intelligence, the practitioner who uses AI fluently without surrendering their thinking to it.</p>
+
+  <h3>The axis glossary</h3>
+  <p><strong>The Scarcity Inversion</strong> &mdash; The reversal in which AI commoditizes execution and prediction, making raw output abundant and cheap, while distinctly human capacities &mdash; judgment, accountability, wisdom, context &mdash; become the scarcer and therefore more valuable resource.</p>
+  <p><strong>The Human Leverage Map</strong> &mdash; The two-axis framework at the center of this book: AI Capability on the horizontal, Human Leverage on the vertical, with four quadrant personas marking the positions that matter most.</p>
+  <p><strong>Cognitive Sovereignty</strong> &mdash; The quality of remaining the author of your own thinking: the capacity to reason independently, hold ambiguity, exercise judgment, and resist the pull of algorithmic substitution even when substitution is available and easy.</p>
+  <p><strong>Steward of Intelligence</strong> &mdash; The persona in the upper-right quadrant of the map: a leader or practitioner who commands AI capability fluently while operating at the level of judgment, accountability, and purpose that AI cannot replicate. Leverage that survives AI.</p>
+
+  <div class="note">
+    <div class="nl">Axis levels, for reference</div>
+    <div class="axgrid">
+      <div class="axrow">
+        <span class="axname">AI Capability</span><span class="axdir">left &rarr; right</span>
+        <div class="axchain">Ignore &rarr; Consumer &rarr; Practitioner &rarr; Collaborator &rarr; Builder &rarr; Orchestrator &rarr; AI-Native</div>
+      </div>
+      <div class="axrow">
+        <span class="axname">Human Leverage</span><span class="axdir">bottom &rarr; top</span>
+        <div class="axchain">Survival &rarr; Productivity &rarr; Execution &rarr; Expertise &rarr; Judgment &rarr; Leadership &rarr; Multiplication &rarr; Stewardship</div>
+      </div>
+      <div class="axrow">
+        <span class="axname">Purpose / Scope</span><span class="axdir">depth</span>
+        <div class="axchain">Self &rarr; Team &rarr; Org &rarr; Industry &rarr; Society &rarr; Humanity</div>
+      </div>
+    </div>
+  </div>
+
+  <p>Hold your dot and your arrow in mind as you read. The map will keep coming back.</p>
+</section>
+
+<!-- ===================== 01 ===================== -->
+<section class="section" id="faculty">
+  <div class="sec-tag"><span class="num">&sect; 01</span> &middot; Part I</div>
+  <h2>The Faculty AI Automates</h2>
+
+  <p class="lead">A machine has never replaced a human faculty cleanly. It has always replaced one and left the rest standing &mdash; which is why each new machine has felt, at first, like the last one we&rsquo;d ever need to worry about.</p>
+
+  <p>To understand why this moment is different, it helps to walk back through the others and notice what, precisely, each one took.</p>
+
+  <h3>What every epoch took</h3>
+  <p>Start with muscle. The defining trade of the industrial age was the substitution of mechanical power for human and animal strength. The loom, the steam engine, the assembly line did not make workers smarter or wiser. They made a single human&rsquo;s muscle irrelevant to the production of cloth, of travel, of goods. The faculty that was automated was physical effort. What survived was everything the machine couldn&rsquo;t do: deciding what to make, organizing the people who tended the machines, selling the output.</p>
+
+  <p>Then calculation. For most of human history, &ldquo;computer&rdquo; was a job title &mdash; a person who did arithmetic for a living: ballistics tables, census figures, actuarial columns. The electronic computer automated that faculty out of existence. Again, a specific capacity was absorbed, and what survived sat one level up: deciding which calculations were worth running, and what the answers meant.</p>
+
+  <p>Then recall. Before search, a large part of professional competence was simply knowing things &mdash; and knowing where things were. The lawyer who could cite the relevant case from memory, the doctor who carried the differential diagnosis in their head: their advantage was retrieval. The search engine automated retrieval. What survived, once more, was the layer above it: knowing which facts mattered, and what to do with the ones you found.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 200" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The epoch arc: four eras, each automating a faculty. Muscle in the industrial age, calculation in the computer age, recall in the search age, and intelligence in the AI age. A rising dashed line connects them, marked surviving value moves up.">
+      <text x="350" y="26" font-family="IBM Plex Mono, monospace" font-size="11" fill="#171C1A" text-anchor="middle" letter-spacing="0.5">EACH EPOCH AUTOMATED ONE FACULTY</text>
+      <line x1="60" y1="170" x2="668" y2="170" stroke="#D9D5C8" stroke-width="1.4"/>
+      <path d="M120,140 L280,116 L440,92 L612,64" fill="none" stroke="#0F6E63" stroke-width="1.6" stroke-dasharray="4 5"/>
+      <rect x="72" y="130" width="96" height="28" rx="5" fill="#ECE9DF" stroke="#D9D5C8"/><text x="120" y="148" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="#363C39" text-anchor="middle">muscle</text>
+      <rect x="232" y="106" width="96" height="28" rx="5" fill="#ECE9DF" stroke="#D9D5C8"/><text x="280" y="124" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="#363C39" text-anchor="middle">calculation</text>
+      <rect x="392" y="82" width="96" height="28" rx="5" fill="#ECE9DF" stroke="#D9D5C8"/><text x="440" y="100" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="#363C39" text-anchor="middle">recall</text>
+      <rect x="556" y="54" width="112" height="28" rx="5" fill="#E3EEEA" stroke="#0F6E63"/><text x="612" y="72" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="#0A5147" text-anchor="middle">intelligence</text>
+      <text x="120" y="188" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#9A9E95" text-anchor="middle">industrial age</text>
+      <text x="280" y="188" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#9A9E95" text-anchor="middle">computer age</text>
+      <text x="440" y="188" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#9A9E95" text-anchor="middle">search age</text>
+      <text x="612" y="188" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#9A9E95" text-anchor="middle">AI age</text>
+    </svg>
+    <figcaption><span class="fn">Figure 1.</span> Muscle, calculation, recall &mdash; three epochs, three faculties. Each wave pushed human value upward into something the machine couldn&rsquo;t reach. Intelligence is the first faculty that was the thinking itself.</figcaption>
+  </figure>
+
+  <p>Muscle. Calculation. Recall. Three epochs, three faculties, and in every case the same consolation: the machine took the lower-order capacity and left the higher-order one to humans. We built a quiet theory of progress on it: technology automates the periphery, and the human core moves up and stays safe.</p>
+
+  <h3>Where the pattern breaks</h3>
+  <p>Generative AI does not fit the theory. The faculties of the earlier epochs were peripheral to knowledge work. Strength, arithmetic, retrieval &mdash; these were inputs to thinking, scaffolding around it, but they were not the thinking itself. A knowledge worker&rsquo;s actual output has always been a different set of acts: reasoning through a problem, drafting the argument, synthesizing scattered inputs into a coherent position. That was the core. That was the part the machine couldn&rsquo;t touch.</p>
+
+  <p>It can touch it now. Ask a model to draft the contract, reconcile the conflicting reports, write the function, outline the strategy memo, and it produces a credible result in seconds. Not a calculation that feeds the reasoning &mdash; the reasoning. Not a fact that supports the draft &mdash; the draft. For the first time, the machine is automating the output we had been treating as the safe high ground. The escape route every prior generation relied on &mdash; &ldquo;move up a level, the machine can&rsquo;t follow&rdquo; &mdash; assumed there was always a level above the one being automated, and that humans held it. AI climbs into the level we thought was ours.</p>
+
+  <blockquote class="pull">Earlier tools automated the work that surrounds expert output. This one automates expert output directly.</blockquote>
+
+  <h3>The wrong question, and why it&rsquo;s wrong</h3>
+  <p>The argument most people are having about AI is an emotional one. It runs on a single axis with fear at one end and exhilaration at the other. Will it take my job, or ten-times my output? The question underneath all of it is some version of: <em>how do you feel about this?</em> It is a natural question. It is also the wrong one &mdash; not because feelings don&rsquo;t matter, but because these particular feelings have a short shelf life and a terrible track record.</p>
+
+  <p>We have run this cycle before. Electricity arrived as both miracle and menace; within a generation it was infrastructure no one had feelings about. The internet was going to either dissolve society or perfect it; mostly it became plumbing. In every case the emotional charge was real, loud, and completely perishable. Feelings about a new technology are a measure of its novelty, not its consequences. They expire. Any decision you anchor to them expires with them.</p>
+
+  <p>So set the emotional question down. It is the wrong altitude. The durable questions are structural, and they survive the mood: when a capability becomes abundant, what becomes scarce in its place? When the scarce thing moves, where does human value go? These questions held through muscle, through calculation, through recall &mdash; each time a faculty became abundant, something adjacent became scarce, and value migrated to wherever the scarcity went.</p>
+
+  <p>The same logic is about to run again, but with a twist the earlier epochs didn&rsquo;t have. This time the faculty going abundant is intelligence itself. If the machine can produce the answer, what exactly is left for the human to be scarce <em>at</em>? That is the question the rest of this book is built to answer. The short version has a name &mdash; the Scarcity Inversion &mdash; and it is the subject of the next chapter.</p>
+
+  <p class="aphorism">Not <em>how do you feel about AI</em>, but <em>what just became scarce, and where did your value go.</em></p>
+</section>
+
+<!-- ===================== 02 ===================== -->
+<section class="section" id="inversion">
+  <div class="sec-tag"><span class="num">&sect; 02</span> &middot; Part I</div>
+  <h2>The Scarcity Inversion</h2>
+
+  <p class="lead">Make any capability abundant and you do not destroy value. You move it. It drains out of the thing that just got cheap and pools around whatever is still hard to get.</p>
+
+  <p>Call that movement <strong>The Scarcity Inversion</strong>: when a capability becomes abundant, value inverts to whatever stays scarce. The capability going abundant right now is intelligence &mdash; not in the grand philosophical sense, but in the working sense that matters to your week: the production of competent reasoning, plausible drafts, decent predictions, serviceable analysis. That used to be the scarce, expensive thing. It is becoming the cheap, ambient thing. And by the logic of the inversion, the value that used to live inside it has to go somewhere else.</p>
+
+  <h3>The mechanism, in plain economics</h3>
+  <p>You do not have to take the inversion on faith. There is a clean economic account of why it happens, and it comes from the most useful reframing anyone has offered about this technology: that what AI actually does, underneath the marketing, is make prediction cheap.<sup class="c"><a href="#ref1">1</a></sup></p>
+
+  <p>That reframing does most of the work. When the price of something falls, two things happen at once. We use much more of it. The second part is the one people miss: the things that go <em>with</em> it, its complements, become more valuable. Cheap coffee makes a good caf&eacute; location worth more. When prediction gets cheap, demand shifts onto everything prediction needs in order to be useful.<sup class="c"><a href="#ref1">1</a></sup></p>
+
+  <p>So ask the concrete question. A prediction is just a statement about what is likely. It does not tell you what to do about it. To turn a probability into an action, someone has to supply two things the prediction itself never contains: the payoffs &mdash; what it actually costs you to be wrong in each direction &mdash; and the frame &mdash; which question was even worth asking. That deciding has a name. It is judgment. Here is the inversion in a single line: as prediction gets cheap, judgment becomes the scarce, valuable input.<sup class="c"><a href="#ref1">1</a></sup></p>
+
+  <p>A worked case. A bank used to pay well for analysts who could estimate the odds that a loan would default &mdash; that estimate <em>was</em> the expensive, scarce skill. A model now produces a sharper estimate for a fraction of a cent. The estimate has collapsed in value precisely because it became abundant. But the questions stacked on top of it have only grown heavier: how much risk should this institution carry, what does it owe a borrower the model rates poorly, which kinds of error are we willing to live with. The cheap part got cheaper. The expensive part got more expensive. That is not a side effect of cheap prediction. It is the mechanical consequence of it.</p>
+
+  <h3>Where the scarce value drifts</h3>
+  <p>Judgment is where the value lands first. It is not where it stops. Once you see scarcity as something that moves, you can watch it keep moving &mdash; not in a single jump but along a gradient, each rung scarcer and harder to automate than the last. It runs roughly like this: judgment &rarr; taste &rarr; trust &rarr; responsibility &rarr; meaning.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 360" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The Scarcity Inversion gradient: a rising arrow through five rungs. From the bottom up: judgment, taste, trust, responsibility, meaning. A label on the arrow reads scarcer, harder for AI to touch, going up.">
+      <text x="350" y="26" font-family="IBM Plex Mono, monospace" font-size="11" fill="#171C1A" text-anchor="middle" letter-spacing="0.5">THE SCARCITY INVERSION GRADIENT</text>
+      <!-- rising arrow -->
+      <line x1="120" y1="320" x2="120" y2="52" stroke="#0F6E63" stroke-width="2"/>
+      <polygon points="120,44 114,58 126,58" fill="#0F6E63"/>
+      <text x="100" y="190" font-family="IBM Plex Mono, monospace" font-size="10" fill="#0A5147" text-anchor="middle" font-weight="600" transform="rotate(-90 100 190)">scarcer &middot; harder for AI to touch &uarr;</text>
+      <!-- rungs -->
+      <rect x="150" y="296" width="380" height="34" rx="5" fill="#ECE9DF" stroke="#D9D5C8"/><text x="170" y="318" font-family="IBM Plex Mono, monospace" font-size="11" fill="#363C39">judgment</text><text x="514" y="318" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#9A9E95" text-anchor="end">choosing well under uncertainty</text>
+      <rect x="170" y="244" width="380" height="34" rx="5" fill="#ECE9DF" stroke="#D9D5C8"/><text x="190" y="266" font-family="IBM Plex Mono, monospace" font-size="11" fill="#363C39">taste</text><text x="534" y="266" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#9A9E95" text-anchor="end">telling right from merely plausible</text>
+      <rect x="190" y="192" width="380" height="34" rx="5" fill="#F1E9D4" stroke="#9A7A2E"/><text x="210" y="214" font-family="IBM Plex Mono, monospace" font-size="11" fill="#7A5F20">trust</text><text x="554" y="214" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#9A9E95" text-anchor="end">your name on the work</text>
+      <rect x="210" y="140" width="380" height="34" rx="5" fill="#F4E6DF" stroke="#B5563F"/><text x="230" y="162" font-family="IBM Plex Mono, monospace" font-size="11" fill="#8F3E2B">responsibility</text><text x="574" y="162" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#9A9E95" text-anchor="end">accountable when it&rsquo;s wrong</text>
+      <rect x="230" y="76" width="380" height="34" rx="5" fill="#E3EEEA" stroke="#0F6E63"/><text x="250" y="98" font-family="IBM Plex Mono, monospace" font-size="11" fill="#0A5147">meaning</text><text x="594" y="98" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#9A9E95" text-anchor="end">deciding what is worth doing</text>
+    </svg>
+    <figcaption><span class="fn">Figure 2.</span> The gradient the inversion runs along. Each rung is scarcer than the one below, and each depends on something a model structurally lacks: a stake in the outcome, a self that can be held to account.</figcaption>
+  </figure>
+
+  <p>Start where we already are. <strong>Judgment</strong> &mdash; choosing well among options under uncertainty &mdash; is the first complement to rise as prediction falls. But when anyone can generate a hundred competent drafts in an afternoon, the constraint is no longer making them. It is knowing which one is actually good. That is <strong>taste</strong>: the trained capacity to tell the right answer from the merely plausible one. As Itamar Medeiros argues, once execution is no longer scarce, taste and judgment become the bottleneck &mdash; the place the whole pipeline now narrows.<sup class="c"><a href="#ref2">2</a></sup> A flood of cheap output does not reduce the demand for discernment. It raises it.</p>
+
+  <p>Keep climbing. Past taste sits <strong>trust</strong> &mdash; the willingness of other people to rely on your word, your call, your name on the work. A model can generate the analysis; it cannot be the person a board believes when the analysis is contested. Past trust sits <strong>responsibility</strong> &mdash; being the one who is accountable when the decision turns out wrong, the human who absorbs the consequence rather than dissolving into &ldquo;the system recommended it.&rdquo; And at the top sits <strong>meaning</strong> &mdash; the act of deciding what is worth doing at all, and why, which is the one input no abundance of intelligence will ever supply, because it is a question about ends, and machines only ever optimize means.</p>
+
+  <p>Notice the direction. Each rung is scarcer than the one below it, and each is harder for an abundant intelligence to touch &mdash; not because the machine is weak there, but because each rung depends on something the machine structurally lacks: skin in the game, a stake in the outcome, a self that can be held to account. The faculty that became abundant was intelligence. The faculties that became scarce are the ones that decide what intelligence is <em>for</em>.</p>
+
+  <h3>Leverage that survives AI</h3>
+  <p>Now we can name the thing this whole book is built to find. Most of what you can do, AI can increasingly do too, or will soon, or can fake well enough that the difference stops paying. That capability is becoming common, and common things do not command a premium. Call it <strong>&ldquo;leverage that survives AI&rdquo;</strong>: the contribution that stays scarce precisely because it lives on the rungs the inversion is loading with value &mdash; your judgment, your taste, your trustworthiness, the responsibility you are willing to carry, your sense of what is worth building.</p>
+
+  <p>This is exactly what the vertical axis of the map measures. Not how much you produce &mdash; output is the commodity now. Not how fluent you are with the tools &mdash; that is the other axis, and it is necessary but not sufficient. The Human Leverage axis measures how much of your value sits above the waterline of abundance: how much of it would still be scarce in a world where competent intelligence is free.</p>
+
+  <p>You have the force. Now we find your place in it.</p>
+</section>
+
+<!-- ===================== 03 ===================== -->
+<section class="section" id="map">
+  <div class="sec-tag"><span class="num">&sect; 03</span> &middot; Part I</div>
+  <h2>The Map, Not the Ladder</h2>
+
+  <p class="lead">A ladder has one direction. The map you&rsquo;ve already met has four. That difference is not decorative. Getting it wrong is the most common way smart people misread the moment they&rsquo;re in.</p>
+
+  <h3>The pull toward the ladder</h3>
+  <p>When humans want to make sense of progress, we reach for a ladder. One axis, low to high, everyone climbing the same rungs in the same order. The instinct produces good tools. Maslow arranged human motivation as a hierarchy. The Dreyfus model describes skill acquisition as a march from novice to expert. The Gartner Hype Cycle plots a technology&rsquo;s maturity. Each of these is a single track, and each earns its place by describing a process that genuinely is, more or less, one-directional. So the ladder is not a mistake. The trouble starts when you take a shape built for one question and quietly use it to answer a different one.</p>
+
+  <p>And there is a sharper trouble waiting past that one: the ladder that promises more precision than it has. Consider David Hawkins&rsquo; &ldquo;Map of Consciousness,&rdquo; which assigns numbers to states of being. As a metaphor it has a certain poetry. But it is not a scientific instrument. Its central claims &mdash; that these levels can be measured, that muscle-testing can read a person&rsquo;s &ldquo;calibration&rdquo; off a numeric scale &mdash; do not survive scrutiny. A number printed next to a state of mind makes the whole thing feel measured when nothing was measured at all.</p>
+
+  <p>That is the failure mode this book is built to avoid. The moment you stamp a number on something as multi-dimensional as a person&rsquo;s relationship to their own work, you have traded honesty for the appearance of rigor. So this map has no scores. No calibrated levels, no single index of where you rank &mdash; because false precision about a human being is worse than admitted imprecision.</p>
+
+  <h3>Why one axis can&rsquo;t hold it</h3>
+  <p>Here is the test any single-axis model has to pass. Take two people standing at the exact same point on AI capability &mdash; equally fluent, equally tooled &mdash; and check whether that tells you what you need to know about either of them.</p>
+
+  <p>A brilliant AI researcher sits near the top of the capability axis. She builds the systems; she understands the models from the inside. But ask her which problems are worth solving, or whose interests a deployment serves, and she defers, or shrugs, or hasn&rsquo;t thought about it. High capability, thin judgment. Now a junior engineer who lives inside AI tools all day. He prompts constantly, ships fast, never writes a function from scratch anymore. Same high spot on the capability axis. But everything he produces is task-level: take the ticket, generate the answer, move on. He has never had to decide what the ticket should have been. Two people, one axis, one number &mdash; and it told you almost nothing.</p>
+
+  <p>Run the test the other way and the ladder breaks again. A master teacher who has barely touched an AI tool can hold enormous leverage: she shapes how a hundred students think, and that compounds for decades. A CEO who delegates every prompt still carries the judgment, the trust, and the accountability that no model will absorb for him. Low on AI capability, high on human leverage. On the capability ladder they look like laggards. In reality they hold exactly the thing the Scarcity Inversion is loading with value.</p>
+
+  <blockquote class="pull">One line can rank people. It takes a plane to locate them.</blockquote>
+
+  <h3>A position and a vector, not a label</h3>
+  <p>A point on a plane is still a snapshot &mdash; and a snapshot, left alone, hardens into a label. &ldquo;I&rsquo;m a high-capability, low-leverage person.&rdquo; That&rsquo;s the ladder sneaking back in through the side door, this time with two numbers instead of one. The map is built to resist it.</p>
+
+  <p>What the map actually shows is two things at once. A <strong>position</strong>: where your value sits today on each axis. And a <strong>vector</strong>: where you were, where you are now, and &mdash; the part that matters most &mdash; which way you&rsquo;re moving. The dot tells you the truth about this moment. The arrow tells you the truth about your trajectory, and trajectory is the more honest fact, because no position on this map is permanent.</p>
+
+  <p>This is why movement here isn&rsquo;t the single diagonal climb a ladder implies. You can move in any direction, and people do. The researcher can build the judgment she&rsquo;s missing and rise on leverage without touching her capability. The teacher can pick up the tools and move right without surrendering an inch of what makes her valuable. And &mdash; the warning the rest of the book keeps coming back to &mdash; you can slide <em>down</em>. Lean on the machine for the thinking, not just the typing, and your capability ticks right while your leverage quietly drifts left, the faculty eroding under the very tool that was supposed to extend it.</p>
+
+  <p>That is what an instrument does that a label never can. A label sorts you and stops. An instrument tells you where you stand, which way you&rsquo;re pointed, and what a different choice would move. The four positions are not verdicts about who you are; they are coordinates you can leave. We&rsquo;ve justified the plane. Now we start measuring it &mdash; beginning with the axis most people think they already understand: AI capability, the horizontal.</p>
+</section>
+
+<!-- ===================== 04 ===================== -->
+<section class="section" id="xaxis">
+  <div class="sec-tag"><span class="num">&sect; 04</span> &middot; Part II</div>
+  <h2>The AI Capability Axis</h2>
+
+  <p class="lead">Everyone thinks they know where they stand on this one. Almost no one does. The horizontal axis measures a single thing: how fluently you compose and direct non-human intelligence.</p>
+
+  <p>Not how smart you are. Not how much you care about doing good work. How well you can take a capability that now sits outside your skull &mdash; the model, the tool, the agent &mdash; and bend it toward an outcome you intend. This is the axis people fixate on, because it&rsquo;s the one that feels like progress. So let&rsquo;s measure it honestly, with one warning carried in from the start: position on this axis earns you reach, and nothing else. Moving right makes you more dangerous in both directions. Seven levels, left to right. To keep them concrete, watch one person move across them: Maya, a marketing manager at a mid-size company. She isn&rsquo;t special. That&rsquo;s the point.</p>
+
+  <h3>Ignore &rarr; Consumer &rarr; Practitioner</h3>
+  <p><strong>Ignore.</strong> AI is not in your workflow &mdash; often just as absence. Maya starts here. She&rsquo;s heard of ChatGPT; she has never opened it. There&rsquo;s no shame in this position, but it is a position, and the ground underneath it is moving.</p>
+  <p><strong>Consumer.</strong> You use AI products as an end user. It&rsquo;s a vending machine: insert request, receive output, walk away. Maya tries it on a Tuesday. &ldquo;Write me five subject lines for a summer sale.&rdquo; She gets five, picks one, closes the tab. She&rsquo;s a customer of the tool, the way she&rsquo;s a customer of a search engine.</p>
+  <p><strong>Practitioner.</strong> Now it&rsquo;s deliberate. You prompt with intent, you iterate, and &mdash; the real marker &mdash; you&rsquo;ve developed a feel for when AI helps and when it doesn&rsquo;t. Maya no longer asks for &ldquo;five subject lines.&rdquo; She pastes the brand voice guide, three past winners, the audience segment, and the offer, then asks for ten options in two registers. She also knows the jobs to keep off it &mdash; the sensitive client note still gets written by hand.</p>
+
+  <h3>Collaborator &rarr; Builder</h3>
+  <p><strong>Collaborator.</strong> You stop treating AI as a vending machine and start treating it as a working partner &mdash; something you brief like a colleague and think <em>with</em>, not just <em>at</em>. Maya is planning a product launch. She doesn&rsquo;t ask for a plan; she opens a conversation. &ldquo;Poke holes in my channel strategy.&rdquo; The model raises a segment she&rsquo;d ignored. She argues with it. An hour later she has a strategy that&rsquo;s genuinely been stress-tested.</p>
+  <p><strong>Builder.</strong> You stop using AI products and start building with AI as a component. APIs, tools, retrieval over your own data, agents, pipelines. Maya builds a small pipeline: it pulls every support ticket from the last quarter, runs each through a model to tag sentiment and theme, and drops a weekly summary into the team&rsquo;s channel. No one prompts it. It just runs. The unit of work is no longer the conversation; it&rsquo;s the system.</p>
+
+  <h3>Orchestrator &rarr; AI-Native</h3>
+  <p><strong>Orchestrator.</strong> You design systems where multiple AI components and humans work together, with deliberate handoffs and trust boundaries. Maya now runs a small operation: one agent drafts campaign copy; another checks it against legal and brand rules; a third schedules and posts; and a human &mdash; her &mdash; approves anything that touches a regulated claim. The trust boundaries are explicit. She&rsquo;s orchestrating a team of humans and machines, and her job is the choreography.</p>
+  <p><strong>AI-Native.</strong> The practice and the intelligence are inseparable. You operate one level up, on the questions that decide everything below them: <em>Should AI do this at all? What should this system be?</em> Maya, fully across, asks the prior question: does this marketing function need to exist in its current shape, or has the abundance of intelligence changed what the job even is? AI is not a tool she reaches for &mdash; it&rsquo;s the medium she works in, present in every decision and conspicuous in none.</p>
+
+  <h3>What the axis does and doesn&rsquo;t tell you</h3>
+  <p>Watch what each leap actually is. Consumer to Practitioner is intent. Practitioner to Collaborator is partnership. Collaborator to Builder is construction. Builder to Orchestrator is architecture. Orchestrator to AI-Native is altitude &mdash; you stop asking <em>how</em> and start asking <em>whether</em> and <em>what</em>. Each step buys you more reach over non-human intelligence.</p>
+
+  <p>And reach is all it buys. Maya at AI-Native can move ten times what Maya at Consumer could move &mdash; but the axis is silent on whether she&rsquo;s moving it anywhere worth going. A masterful Orchestrator can build a system that does the wrong thing at superhuman scale. High AI capability is necessary for serious leverage in this era; it is nowhere close to sufficient. The same fluency that lets you direct an army of agents can let you outsource the judgment that should have told you to stop.</p>
+
+  <div class="note warn">
+    <div class="nl">Reach is not virtue</div>
+    <p>Knowing how far right you sit tells you how much intelligence you can command. It tells you nothing about whether you&rsquo;d still be worth anything if that intelligence were free to everyone tomorrow &mdash; whether your value survives the abundance, or evaporates into it. That second question has its own axis.</p>
+  </div>
+</section>
+
+<!-- ===================== 05 ===================== -->
+<section class="section" id="yaxis">
+  <div class="sec-tag"><span class="num">&sect; 05</span> &middot; Part II</div>
+  <h2>The Human Leverage Axis</h2>
+
+  <p class="lead">The horizontal axis asks what you can command. This one asks what you&rsquo;re worth when everyone can command it too.</p>
+
+  <p>If the X-axis measures your reach over non-human intelligence, the Y-axis measures something the abundance can&rsquo;t touch as easily: the value you create that survives the commoditization of intelligence. This axis is the Scarcity Inversion&rsquo;s gradient turned into a ladder you can actually stand on. It does not measure how much you produce. Output is the commodity now. It measures how much of your contribution would still be scarce in a world where competent reasoning is free. Eight levels, bottom to top. Read each not as a job title but as a different question you answer.</p>
+
+  <h3>Below the waterline: Survival &rarr; Productivity &rarr; Execution</h3>
+  <p><strong>Survival.</strong> You execute what others define. The question you answer is the narrowest one: <em>did the thing get done?</em> The value lives entirely in the execution of someone else&rsquo;s intent &mdash; which is precisely the value an abundant intelligence is now learning to supply for a fraction of a cent.</p>
+  <p><strong>Productivity.</strong> You answer a sharper question: <em>how much, how fast, how reliably?</em> Your value is throughput. But efficiency at producing a known output is the single thing machines have always been best at, and the machines just got a lot better. The faster you are at the commodity, the more directly you compete with the thing that made it a commodity.</p>
+  <p><strong>Execution.</strong> Now you own the deliverable end to end. The question shifts from <em>did I do my part?</em> to <em>did the outcome happen?</em> This is a genuine step up. But the brief still comes from above, and much of that conversion &mdash; the drafting, the assembling, the wiring-together &mdash; is exactly what the X-axis is getting good at automating.</p>
+
+  <h3>Straddling the line: Expertise</h3>
+  <p><strong>Expertise.</strong> People bring you the hard question because you&rsquo;re the one who knows. This is the first level with real defensive depth &mdash; and also the first where the waterline runs straight through the middle of the work. Part of expertise is retrieval and pattern-matching: the recall, the precedent, the standard analysis. That part an abundant intelligence increasingly reproduces. The other part &mdash; knowing which precedent actually applies, when the textbook is wrong, what the question behind the question is &mdash; does not commoditize.</p>
+
+  <div class="note">
+    <div class="nl">Mark this line</div>
+    <p>Everything below it &mdash; Survival, Productivity, Execution, and the recall-and-procedure half of Expertise &mdash; is work an AI can increasingly substitute for, because it is the production of a defined output by a known method. Everything at and above the next level structurally resists substitution, for one reason: those levels don&rsquo;t produce means, they decide ends. The waterline of abundance runs right here, between Expertise and Judgment. This is the inflection the whole map turns on.</p>
+  </div>
+
+  <h3>Above the waterline: Judgment &rarr; Leadership &rarr; Multiplication &rarr; Stewardship</h3>
+  <p><strong>Judgment.</strong> You make consequential calls under uncertainty, and you own them. Your value is no longer what you know; it is the quality of your decisions when knowing isn&rsquo;t enough. Turning a prediction into a decision requires supplying the payoffs and the frame &mdash; and that supplying carries a stake the model cannot hold.</p>
+  <p><strong>Leadership.</strong> You stop answering the question and start setting it. Your value is that you shape the context other people work inside: what gets worked on at all, how the problem is framed, what &ldquo;good&rdquo; is allowed to mean. A room full of capable people pointed at the wrong problem produces excellent waste; Leadership is the faculty that points them at the right one. No abundance of intelligence sets your direction for you, because direction is a claim about ends.</p>
+  <p><strong>Multiplication.</strong> Your value stops being your own output and becomes everyone else&rsquo;s. You raise the leverage of the people around you. This is the first level whose value can&rsquo;t be located in any deliverable with your name on it; it shows up in other people&rsquo;s work. A tool can make one person more productive. It takes a person to make other people better.</p>
+  <p><strong>Stewardship.</strong> You carry responsibility for something larger than any deliverable: a direction, a standard, a future that outlasts your tenure. The question you answer is the one with no brief at all: <em>what is this for, and what do we owe the future of it?</em> This is the top of the axis because it is the purest form of skin in the game. It cannot be delegated to a thing that cannot be held to account, cannot be ashamed, cannot care what happens after the quarter closes.</p>
+
+  <h3>Why up is the only safe direction</h3>
+  <p>The X-axis is flooding. AI capability keeps rising and cheapening &mdash; every month the floor of what a machine can do for free moves up, and it moves up for everyone at once. Which means standing still on the Y-axis is not standing still. If your value sits at Productivity or Execution while the world&rsquo;s X-axis climbs underneath you, the gap between what you offer and what anyone can summon for free narrows every quarter &mdash; not because you got worse, but because the commodity got cheaper. Holding your position, in a rising tide of capability, is relative decline.</p>
+
+  <p>So there is exactly one direction that compounds instead of erodes: up. Each level above the waterline depends on something abundance doesn&rsquo;t supply &mdash; accountability, taste, a stake, a self that decides ends. Everything below the line is a race you&rsquo;re running against a machine that gets faster every day. Everything above it is a race only humans are in.</p>
+
+  <blockquote class="pull">Everything below the line is a race you&rsquo;re running against a machine that gets faster every day. Everything above it is a race only humans are in.</blockquote>
+</section>
+
+<!-- ===================== 06 ===================== -->
+<section class="section" id="quadrants">
+  <div class="sec-tag"><span class="num">&sect; 06</span> &middot; Part II</div>
+  <h2>The Four Quadrants</h2>
+
+  <p class="lead">Two axes don&rsquo;t describe four jobs. They describe four ways of being worth something &mdash; and the gap between them is the whole game.</p>
+
+  <p>Cross the axes and the map opens up. Reach runs left to right: how much non-human intelligence you can command. Leverage runs bottom to top: how much of your value survives once that intelligence is free. Where they intersect, you get four corners. Each one is a person you&rsquo;ve met. Each one believes something, does something, and is exposed to a particular kind of harm. Read them as personas, not verdicts.</p>
+
+  <h3>The Resistant &mdash; low capability, low leverage</h3>
+  <p>The Resistant has decided the wave will pass. AI is absent from how the work gets done, and the work itself is the kind anyone could do: defined tasks, known methods, output by the yard. What they believe: <em>this is a fad, and craft will be rewarded when the hype dies.</em> Their risk is disruption, and it is the bluntest risk on the map. They occupy the one corner where both axes are working against them at once: low reach in a world flooding with reach, low leverage in work a machine already does for a fraction of a cent. The Resistant isn&rsquo;t wrong that something is being lost. They&rsquo;re wrong that refusing to look will save it.</p>
+
+  <h3>The Prompt Addict &mdash; high capability, low leverage</h3>
+  <p>The Prompt Addict is the surprise of the map, because they look like the future. They are fluent. They generate images, ship apps over a weekend, post daily, spin up code on demand. What they believe: <em>output is leverage, and I am producing more than anyone.</em> What they almost never do is ask whether any of it would still matter if the tool that made it were handed to everyone tomorrow. That question is the trap, because the answer is usually no. The Prompt Addict has climbed the X-axis and mistaken the climb for the destination. The risk here is the subtlest one on the map: motion that feels exactly like progress. High reach, no stake. A loud, productive, exposed position.</p>
+
+  <h3>The Wise Expert &mdash; low capability, high leverage</h3>
+  <p>The Wise Expert barely touches AI and creates enormous value anyway. The master teacher whose students remember her for life. The negotiator everyone wants in the room. What they believe: <em>judgment is the job, and judgment was never about tools.</em> Their value sits high above the waterline, and abundance can&rsquo;t reach up there to substitute for it. The Wise Expert exists to prove a specific point: capability is not the whole story. But the risk is real, and quieter than it looks. Their leverage is genuine yet capped. They create enormous value by hand when they could amplify it tenfold. Ignore the X-axis long enough and the Wise Expert finds the field reshaped around tools they declined to learn &mdash; their judgment still rare, but reaching fewer and fewer people than it should.</p>
+
+  <h3>The Amplifier / Steward of Intelligence &mdash; high capability, high leverage</h3>
+  <p>This is the corner the book points toward. The Amplifier / Steward of Intelligence uses AI fluently &mdash; Builder, Orchestrator, AI-Native fluent &mdash; and never once hands it the wheel. The model drafts; they decide. The model proposes; they own the call. The reach is enormous and the stake stays human. They&rsquo;ve read both axes correctly and refused the trade the Prompt Addict made. They took the reach and kept the self. This is where durable leaders live &mdash; not because they&rsquo;re early or loud, but because they&rsquo;ve placed their value in the one corner where the rising tide lifts them instead of drowning them. The risk in this corner isn&rsquo;t the position. It&rsquo;s holding it.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th></th><th class="a">Believes</th><th class="g">Does</th><th class="b">Risk</th></tr>
+      <tr><td class="h">The Resistant</td><td class="bad">the wave will pass</td><td>produces the commodity by hand</td><td class="bad">disruption</td></tr>
+      <tr><td class="h">The Prompt Addict</td><td class="mid">output is leverage</td><td>produces constantly, in every direction</td><td class="mid">motion mistaken for progress</td></tr>
+      <tr><td class="h">The Wise Expert</td><td class="good">judgment is the job</td><td>decides, mentors, sets direction</td><td class="good">leverage capped, slowly outflanked</td></tr>
+      <tr><td class="h">The Steward</td><td class="good">value is what abundance can&rsquo;t do</td><td>directs AI, keeps the call</td><td class="good">holding the position</td></tr>
+    </table>
+  </div>
+
+  <h3>The label is not the point</h3>
+  <p>These four corners are not four kinds of people. There is no Prompt Addict gene, no Wise Expert tribe. Nobody is permanently anything. The quadrant is a snapshot &mdash; and a snapshot of a moving thing tells you almost nothing on its own. What tells you something is the vector. A Resistant who opened the tab last quarter and is climbing fast is a different person from a Resistant who&rsquo;s been dug in for a decade &mdash; even if today they share a corner.</p>
+
+  <p>And the arrow runs in every direction, including down. An Amplifier can decay into a Prompt Addict &mdash; keep the fluency, lose the judgment, slide from steward to operator without noticing the floor tilt. The reach stays high. The stake quietly drains out. From the outside they still look like the future, right up until they don&rsquo;t. That downward slide has a mechanism &mdash; Part III is where we take it apart. For now, hold only this: the corner you&rsquo;re in matters far less than the direction you&rsquo;re traveling, and the most dangerous direction is the one that still feels like winning.</p>
+
+  <p>But notice what the map is silent about. It can tell you the Amplifier is in the strongest corner. It cannot tell you whether they&rsquo;re amplifying anything worth amplifying. High reach and high leverage aimed at nothing that matters is just a more powerful kind of waste. The plane says nothing about altitude &mdash; about what any of it is <em>for</em>. That&rsquo;s the third axis, the one that turns a map into a compass.</p>
+</section>
+
+<!-- ===================== 07 ===================== -->
+<section class="section" id="altitude">
+  <div class="sec-tag"><span class="num">&sect; 07</span> &middot; Part II</div>
+  <h2>Altitude: The Purpose Axis</h2>
+
+  <p class="lead">Two people can stand on the exact same spot on the map and not be doing remotely the same thing. The plane can&rsquo;t see the difference. The third axis can.</p>
+
+  <p>So far we&rsquo;ve built a flat world. Reach runs left to right; leverage runs bottom to top. It&rsquo;s a good map. It tells you how much you can move and how much of what you build will last. It tells you nothing about who any of it is for.</p>
+
+  <h3>The Z-axis</h3>
+  <p>Picture two builders. Both are high on AI Capability and high on Human Leverage &mdash; top-right corner, the strong one. On the plane they are the same point. Now ask one question the map never asked. Who is your leverage <em>for</em>? One of them is using all that reach to make a single product better for one team inside one company. The other is using the same reach to widen access to something millions of people need. Same X. Same Y. Completely different radius of impact. That radius is the third dimension, and it has levels:</p>
+
+  <p style="text-align:center;font-family:var(--mono);font-size:14px;color:var(--teal-deep);font-weight:600;margin:8px 0 24px;">Self &rarr; Team &rarr; Org &rarr; Industry &rarr; Society &rarr; Humanity</p>
+
+  <p>That&rsquo;s the Purpose axis &mdash; altitude. At the bottom, your leverage serves you. Climb a level and it serves the people immediately around you. Climb again and it serves the Org, then reshapes an Industry, then reaches Society, then, at the top, Humanity &mdash; work whose benefit isn&rsquo;t bounded by any company, market, or generation. Altitude is not better-than. A founder keeping a five-person team employed is doing something real at the Team level. The point isn&rsquo;t that high altitude is virtuous and low altitude is shameful. The point is that altitude is a <em>separate measurement</em> &mdash; and the flat map was hiding it the whole time.</p>
+
+  <h3>The map becomes a compass</h3>
+  <p>Add the Z-axis and the chart stops being a chart. It starts behaving almost like Google Maps. Think about what that app actually gives you. A position &mdash; two coordinates on a plane. A vector &mdash; which way you&rsquo;re heading and how fast. And altitude &mdash; the dimension a flat street map throws away. The Human Leverage Map now does the same thing. Your position is (X, Y): your reach and your surviving leverage today. Your vector is the direction you&rsquo;re moving. And your altitude is Z: the scope of purpose your leverage serves, from Self all the way up to Humanity. Most people have never checked the third number. They&rsquo;ve been reading a flat map of a three-dimensional position.</p>
+
+  <h3>The contrast that makes altitude matter</h3>
+  <p>Builder A is high on AI Capability and high on Human Leverage. They&rsquo;ve wired a stack of models into a system that optimizes engagement &mdash; the whole machine pointed at attention for its own sake. The reach is enormous. Top-right corner, no question. Builder B is only moderate on AI Capability but high on Human Leverage and aimed somewhere else entirely: an AI tutor that reaches students who never had one, or a triage tool that extends a scarce doctor&rsquo;s reach into places that have none. Less raw fluency than Builder A. The same human stake. A radically higher altitude. Now the question, honestly: who is creating more <em>meaningful</em> leverage?</p>
+
+  <p>Notice what&rsquo;s actually happening, because it&rsquo;s easy to mistake. Altitude does not move Builder B up the plane. On X and Y, Builder A is still ahead. Purpose doesn&rsquo;t relocate your position. What it changes is what that position is <em>worth</em>. The plane measures the engine. Only the Z-axis measures the aim. A Steward of Intelligence pointed at the wrong end is still pointed at the wrong end &mdash; now with an army of agents behind them.</p>
+
+  <p>I&rsquo;m not handing you a verdict. Plenty of honest work lives at the Self and Team levels, and someone has to keep the lights on. But a map that can&rsquo;t even register altitude can&rsquo;t help you choose it &mdash; and choosing it is the part that turns out to matter most.</p>
+
+  <h3>The map is built</h3>
+  <p>That completes the instrument. Three axes: AI Capability, Human Leverage, and Purpose. A position on the plane, a vector through it, an altitude above it. Which is exactly when the floor gets interesting. Because nothing on this map is locked. The vector runs in every direction, including down, and the most dangerous slide is the one that still feels like winning &mdash; reach intact, altitude intact, judgment quietly draining out beneath both. The same AI that handed you the leverage can erode the faculty that leverage depends on, and it can do it while every number on your map still looks strong. The map is finished. Part III is about the ground giving way.</p>
+</section>
+
+<!-- ===================== 08 ===================== -->
+<section class="section" id="sovereignty">
+  <div class="sec-tag"><span class="num">&sect; 08</span> &middot; Part III</div>
+  <h2>Cognitive Sovereignty</h2>
+
+  <p class="lead">There is a fourth way to read the map, and it is the one nobody wants to look at. It says the most dangerous slide on the plane doesn&rsquo;t feel like losing. It feels like getting smarter.</p>
+
+  <p>Part II ended on a warning: an Amplifier can decay into a Prompt Addict without noticing the floor tilt. The reach stays high. The stake drains out. We promised a mechanism for that slide. The mechanism has a name, and a target. The target is judgment &mdash; the faculty the entire upper half of the map depends on. The name for keeping it is Cognitive Sovereignty.</p>
+
+  <h3>You are already a coupled system</h3>
+  <p>Your mind does not stop at your skull. When you do arithmetic on paper, the paper is doing part of the cognition; when you navigate by a map, the map holds knowledge you don&rsquo;t. The philosophers Andy Clark and David Chalmers called this the Extended Mind: a tool you rely on, fluently and habitually, becomes a genuine part of your cognitive process rather than a thing your &ldquo;real&rdquo; mind merely consults.<sup class="c"><a href="#ref3">3</a></sup> Edwin Hutchins made the parallel case from the deck of a ship &mdash; cognition is distributed across people, instruments, and artifacts, not locked inside one head.<sup class="c"><a href="#ref4">4</a></sup> Thinking has always been a team sport played with objects.</p>
+
+  <p>This is not a metaphor, and it matters here because of what it implies. When you think <em>with</em> AI &mdash; when you draft, decide, analyze, and frame problems through a model you trust and reach for without thinking &mdash; the AI is not a tool you consult. It is part of the cognitive process itself. That is exactly where its power comes from. It is also exactly the exposure. Whatever you let do your thinking, you can lose the ability to do yourself.</p>
+
+  <h3>System 0</h3>
+  <p>Kahneman gave us two systems. System 1 is fast, automatic, intuitive &mdash; the snap judgment. System 2 is slow, effortful, deliberate &mdash; the worked-through reasoning.<sup class="c"><a href="#ref5">5</a></sup> AI introduces a third layer, and it sits <em>underneath</em> both. Researchers have begun calling it System 0: an external, pre-cognitive layer that gathers, filters, and pre-structures the information environment before your own thinking begins.<sup class="c"><a href="#ref6">6</a></sup> By the time System 1 has a hunch or System 2 starts to reason, the model has already decided what&rsquo;s on the table &mdash; which options surfaced, which framing led, which considerations never appeared at all.</p>
+
+  <p>This is the subtle part. System 0 doesn&rsquo;t argue with your judgment. It runs before your judgment, and hands it a pre-arranged board. If the model frames the problem, you may never see the options it quietly excluded. The danger of a pre-cognitive layer is not that it thinks badly. It&rsquo;s that it thinks <em>first</em>, invisibly, and you experience its output as the natural shape of the problem.</p>
+
+  <h3>Use it or lose it</h3>
+  <p>So the AI is part of your thinking, and it frames the problem before you arrive. The third move is the one that closes the trap: the faculty you stop using fades. This is cognitive offloading &mdash; letting the tool carry the load you&rsquo;d otherwise carry yourself. Some offloading is fine; we offloaded arithmetic to calculators and survived. But the brain adapts to what you do and don&rsquo;t use. The evidence here is early and partial, and worth stating carefully &mdash; but it points one direction.</p>
+
+  <p>Start with the most direct probe. A 2025 MIT Media Lab study had people write essays either with an LLM or unaided while recording their brain activity; the LLM group showed reduced neural connectivity and engagement on EEG compared with those who wrote on their own.<sup class="c"><a href="#ref7">7</a></sup> It is a single preprint, small, measuring one task &mdash; not a settled finding. Treat it as a flare, not a verdict.</p>
+
+  <p>The deeper pattern is older and sturdier, and it comes from space, not text. Habitual reliance on turn-by-turn GPS is associated with worse spatial memory &mdash; people who outsource the map navigate worse on their own.<sup class="c"><a href="#ref8">8</a></sup> Run the same logic in reverse and you get London&rsquo;s taxi drivers, whose years of building &ldquo;the Knowledge&rdquo; of the city&rsquo;s streets correlated with measurable structural differences in the hippocampus, the brain&rsquo;s navigation center.<sup class="c"><a href="#ref9">9</a></sup> The brain grows the capacity you exercise and lets go of the one you outsource. There is no reason to think judgment is exempt.</p>
+
+  <p>And the faculty most at stake has its own early signal. A 2025 study found a negative correlation between heavy reliance on AI tools and measures of critical thinking, with cognitive offloading appearing as the mediator.<sup class="c"><a href="#ref10">10</a></sup> This is correlational. It does not prove the tools dull the mind. But it is precisely the pattern the extended-mind and use-it-or-lose-it accounts predict, and it lands on the exact faculty the upper half of the map is built on. None of these is proof on its own. Together they sketch a coherent and unflattering picture: think <em>through</em> the machine often enough, and the muscle you stopped using gets weaker.</p>
+
+  <h3>Epistemic Confinement</h3>
+  <p>Now put the three together. The AI is part of your cognitive system. It frames the problem before you consciously engage. And the more you let it, the less independent capacity you retain to frame it yourself. The end state has a quality worth naming: <strong>Epistemic Confinement</strong> &mdash; operating inside the model&rsquo;s framing of a problem while experiencing that framing as your own conclusion.</p>
+
+  <div class="note warn">
+    <div class="nl">The trap&rsquo;s cruelty</div>
+    <p>Confinement doesn&rsquo;t feel like confinement. You read the model&rsquo;s synthesis, nod, refine a phrase, and ship it &mdash; and the whole time it feels like thinking. You just engaged <em>downstream</em> of a frame you never built and can no longer see the edges of. You cannot deliberate your way out of confinement, because deliberation runs inside the frame. The confined mind feels sovereign. That feeling is the failure, not the alarm.</p>
+  </div>
+
+  <h3>Cognitive Sovereignty, defined</h3>
+  <p><strong>Cognitive Sovereignty</strong> is remaining the author of your own thinking. It is retaining the capacity to frame the problem yourself, to hold ambiguity without rushing to the machine&rsquo;s resolution, and to exercise independent judgment &mdash; even when AI substitution is available, fluent, and easier than thinking. It is not refusing the tool. The Wise Expert who won&rsquo;t touch AI keeps sovereignty by surrendering reach, and the map already showed why that&rsquo;s a losing trade. Sovereignty is using the coupled system fully while remaining the one who frames, decides, and owns the call.</p>
+
+  <p>It is the difference between an Amplifier who directs an army of agents and keeps the judgment, and a hollow imitation who has the same reach, the same fluency, the same output &mdash; and no longer the mind underneath. From the outside, on a snapshot, they are indistinguishable. The map can&rsquo;t tell them apart. Only the vector can. If you can lose the faculty without feeling the loss &mdash; if confinement feels like authorship &mdash; then the slide from steward to operator is not a cliff you&rsquo;d notice falling off. It&rsquo;s a grade so gentle it reads as flat. The next chapter walks that grade.</p>
+</section>
+
+<!-- ===================== 09 ===================== -->
+<section class="section" id="collapse">
+  <div class="sec-tag"><span class="num">&sect; 09</span> &middot; Part III</div>
+  <h2>How Leverage Collapses</h2>
+
+  <p class="lead">A cliff, you would notice. A grade is the dangerous one. A road that tilts a degree at a time reads as flat under your feet. By the time you feel the pull, you are a long way down.</p>
+
+  <p>This chapter walks the grade. Three transitions. Each is a vector on the map &mdash; pointing down, pointing right &mdash; and each one, from inside the moment, reads as a win. More delegation. More convergence. More polish. That is the whole problem. You don&rsquo;t course-correct on a road that feels level.</p>
+
+  <h3>Captive of Autonomy</h3>
+  <p>You begin as the operator. You write the prompt, read the output, decide what to keep. Then the tool gets better, so you let it do more. You stop reading every line and start reading the summary. You stop steering each step and start approving the plan. Then approving the result. Then, eventually, you stop approving and start being notified.</p>
+
+  <p>Researchers have mapped this exact staircase. Feng, McDonald, and Zhang lay out levels of autonomy for AI agents that run <strong>operator &rarr; collaborator &rarr; consultant &rarr; approver &rarr; observer</strong> &mdash; a spectrum from you doing the work with the tool&rsquo;s help to the tool doing the work with you watching.<sup class="c"><a href="#ref11">11</a></sup> It echoes a much older finding: Sheridan and Verplank described the same human-to-computer handoff as a graded scale back in 1978, long before the agents existed to climb it.<sup class="c"><a href="#ref12">12</a></sup> What&rsquo;s new is how fast and how invisibly a capable system pulls you up it.</p>
+
+  <p>Here is the trap. Every individual step is rational. Of course you delegate the part the machine does better. Each move buys you time and reach. But notice what migrates. As you move from operator toward observer, you don&rsquo;t just hand over the keystrokes. You hand over the <em>visibility</em>. Authority follows visibility. Your role shrinks from steering to rubber-stamping &mdash; from author of the decision to ratifier of someone else&rsquo;s, except there is no someone else, only an opaque process you can no longer inspect.</p>
+
+  <p>This is <strong>Captive of Autonomy</strong>: sliding toward observer of your own work without ever deciding to. Nobody chooses it. On the map, this is the Amplifier&rsquo;s specific way of hollowing out. The reach stays high &mdash; higher than ever, because the agents are doing more. But the leverage is hollow, because leverage was never the output; it was your grip on the output. A captive of autonomy has the reach of a steward and the authority of a spectator. Only the vector &mdash; pointing quietly toward observer &mdash; tells you which one you are.</p>
+
+  <h3>Algorithmic Monoculture</h3>
+  <p>The first transition happens inside one person. The second happens across all of them at once, and you cannot feel it from the inside at all, because it isn&rsquo;t a change in you. It&rsquo;s a change in everyone. Good judgment in a field comes not from any single expert being right, but from many people being wrong in <em>different</em> directions. The disagreement is the immune system. Bad ideas get caught because someone, somewhere, was standing at a different angle.</p>
+
+  <p>Now collapse the angles. When everyone in a field reaches for the same handful of frontier models to draft the memo, frame the strategy, screen the candidates, the outputs start to rhyme &mdash; because they all consulted the same oracle, and the oracle has a house style, a set of default framings. Ask a thousand people a question through the same model and you do not get a thousand independent judgments. You get one judgment, lightly reworded a thousand times.</p>
+
+  <p>This is algorithmic monoculture, and the agricultural metaphor is exact. A field planted with a single high-yield crop variety produces beautifully, right up until the one blight that variety can&rsquo;t resist. When a field shares a model, it shares the model&rsquo;s blind spots &mdash; and a blind spot held by one analyst is an error, while a blind spot held by everyone is a systemic fragility. And it feels like progress the entire way down. Convergence looks like consensus. You can&rsquo;t tell correlated judgment from independent agreement from the inside. So the very thing that should alarm you &mdash; everyone arriving at the same answer through the same machine &mdash; registers as reassurance.</p>
+
+  <h3>The Illusion of Competence</h3>
+  <p>The third transition is the one that makes the first two stick, because it disables the alarm that would have warned you about either. Fluent output inflates confidence faster than it builds skill. The model returns prose that is clean, structured, and assured &mdash; the surface signature of expertise. And because we have spent our whole lives using fluency as a proxy for competence, polished output makes you <em>feel</em> expert.</p>
+
+  <p>It usually isn&rsquo;t, or not as much as it feels. The more you offload the framing and the reasoning to the model, the thinner your own judgment runs underneath. The polish is real. The competence it advertises is borrowed. And the gap between the two is exactly what you cannot see, because the evidence you&rsquo;d use to check yourself &mdash; the rough draft, the wrong turn, the struggle that calibrates how well you actually understand &mdash; never happened. This is the correlational signal Chapter 8 already flagged: Gerlich found heavier reliance on AI tracking with lower critical-thinking scores, mediated by offloading.<sup class="c"><a href="#ref10">10</a></sup> Precisely the pattern you&rsquo;d expect if fluent output let people feel sharp while getting duller.</p>
+
+  <p>The illusion of competence is the most dangerous of the three because it is the one that turns off the warning light. Inflated confidence is precisely the state in which you don&rsquo;t notice the thinning, because feeling expert is the opposite of feeling at risk. And the danger isn&rsquo;t evenly spread. In the high-stakes domains &mdash; the diagnosis, the allocation, the strategic bet, the safety call &mdash; confident and hollow is the worst possible combination, and exactly where the person making the call is least likely to suspect anything is wrong.</p>
+
+  <h3>Three vectors, one direction</h3>
+  <p>A leader slides toward observer of his own work and calls it delegation. A field converges on one set of answers and calls it consensus. A practitioner&rsquo;s confidence outruns his skill and he calls it expertise. Three different transitions, three different scales &mdash; one person, one field, one mind &mdash; and the same downward tilt under all of them. Every vector registers, in the moment, as winning, because the faculty they erode is the same faculty you&rsquo;d need to notice the erosion.</p>
+
+  <p class="aphorism">By the time the leverage is visibly gone, you are well down the grade &mdash; holding more output than ever and less of the judgment it was supposed to rest on.</p>
+</section>
+
+<!-- ===================== 10 ===================== -->
+<section class="section" id="defend">
+  <div class="sec-tag"><span class="num">&sect; 10</span> &middot; Part III</div>
+  <h2>Defending the Summit</h2>
+
+  <p class="lead">The slide feels like winning. That is the whole problem, and it is also the whole defense.</p>
+
+  <p>If the grade read as a cliff, you wouldn&rsquo;t need a strategy &mdash; your stomach would warn you. But every transition arrives dressed as progress. So the defenses can&rsquo;t be alarms that wait for a bad feeling. The bad feeling never comes. The defenses have to be things you do on purpose, on the flat-feeling road, before any signal tells you to. Three levels &mdash; what you do as an individual, what you build into an organization, what you design into a product. Not a checklist. A posture.</p>
+
+  <h3>The individual: build the frame before you ask</h3>
+  <p>The first failure to defend against is the Illusion of Competence, and underneath it, Epistemic Confinement. Both have the same root: you let the machine think first. So don&rsquo;t. Build your own frame before you consult the model. This is deliberate cognitive friction, and it is the single highest-leverage habit in the book. Before you open the chat, write down &mdash; in your own words, badly &mdash; how you see the problem. Five minutes of unaided, ugly first-draft thinking. Then bring the AI in. Frame first, then consult, and the model becomes a sparring partner for a view you already hold. Consult first, and your &ldquo;thinking&rdquo; is just narrating its layout.</p>
+
+  <p>The second individual defense answers the monoculture at the scale of one mind. When you consult a single model, you inherit a single frame. So don&rsquo;t run one. Run two or three, and run them adversarially. Ask the same question through different models and read the disagreement, not the consensus. Better still, instruct one to attack the answer another gave. The point isn&rsquo;t to average them &mdash; averaging just relocates the monoculture. Where they diverge is where the framing was a choice and not a fact. That divergence is the immune system you&rsquo;d otherwise have lost, rebuilt by hand.</p>
+
+  <p>The third individual defense is the simplest and the most resented. Protect device-free cycles where judgment is exercised, not outsourced. Deep, uninterrupted stretches &mdash; no chat window open &mdash; where you sit with a hard problem and let your own System 2 grind. Not as a digital detox. As maintenance on the faculty everything else depends on. One principle ties the three together: offload execution, never offload the framing and the final call. Hand the model the drafting, the searching, the structuring, the grind. Keep the two acts that define authorship &mdash; how the problem is framed, and who owns the decision.</p>
+
+  <h3>The organization: choose the autonomy level on purpose</h3>
+  <p>The organizational failure is Captive of Autonomy. The slide has no natural stopping point because every step up the spectrum is locally rational. The defense, then, is to put the stopping points in deliberately. Start by naming where you are. The autonomy spectrum is mapped: operator, collaborator, consultant, approver, observer.<sup class="c"><a href="#ref11">11</a></sup> The same graded human-to-computer handoff was described decades before the agents existed to climb it.<sup class="c"><a href="#ref12">12</a></sup> For each task, choose a level on purpose and write it down, rather than drifting to the maximum the tool allows.</p>
+
+  <p>This is the whole move. Choosing the level converts a drift into a decision. A reversible, low-stakes, high-volume task can sit at observer. A high-consequence, hard-to-reverse call stays at approver or below, and stays there even when the tool has been right a hundred times &mdash; because the cost of being captive isn&rsquo;t the routine case, it&rsquo;s the rare one where the opaque process is wrong and no one is positioned to catch it. Make the ownership explicit. A responsibility matrix that survives contact with AI agents names three things for every consequential decision: who owns the call, who can override the system, and where the escalation gate sits. Then build for reversibility and audit. An audit trail is how you tell delegation from abdication after the fact.</p>
+
+  <h3>The builder: design for sovereignty, not just seamlessness</h3>
+  <p>If you build these tools, you sit upstream of every defense above, because your product decides whether sovereignty is easy or impossible to keep. Most products optimize for seamlessness &mdash; the frictionless path from question to confident answer. That is precisely the path that produces captives, monocultures, and the illusion of competence. Seamless is the failure mode, polished. Design for sovereignty instead, and accept that it costs friction.</p>
+
+  <p>Prompt the user to state their own view first. Before surfacing the answer, ask what they think &mdash; anything that makes them build a frame before they see yours. Put verification prompts on high-consequence steps: when the stakes are high and the action is hard to reverse, interrupt, and make the user confirm they&rsquo;ve checked the reasoning, not just the conclusion. And make System 0 visible. Surface what&rsquo;s normally hidden: confidence levels, sources, and above all what was excluded &mdash; the considerations the model set aside, the framings it didn&rsquo;t take. That is what designing for an author rather than a consumer looks like. Name the tension honestly: friction trades against convenience, and the market mostly rewards convenience. The convenient product and the sovereignty-preserving product are often different products, and most teams ship the wrong one without noticing they chose.</p>
+
+  <h3>The posture, not the checklist</h3>
+  <p>Read these as a list and they&rsquo;re a dozen tactics. Read them right and they&rsquo;re one stance. Frame before you consult. Run the angles, not the oracle. Guard the cycles where judgment is exercised. Choose the autonomy level on purpose. Name who owns the call. Build friction where the stakes are high. Underneath every one of them is the same refusal: I will use the full reach of these tools, and I will not let them do my framing or make my final call.</p>
+
+  <blockquote class="pull">The collapses were all the same motion &mdash; judgment quietly migrating out while output stayed high. The defenses are the same motion run in reverse: keeping the judgment in, on purpose, while the output climbs.</blockquote>
+</section>
+
+<!-- ===================== 11 ===================== -->
+<section class="section" id="coda">
+  <div class="sec-tag"><span class="num">&sect; 11</span> &middot; Part III</div>
+  <h2>Coda: The Steward of Intelligence</h2>
+
+  <p class="lead">You do not arrive here. That is the first thing to know about the corner this whole book has been pointing at.</p>
+
+  <p>The map has a strongest position, and we named it early: the upper-right, the Amplifier, the Steward of Intelligence. It is easy to read that as a destination &mdash; a place you climb to, plant a flag, and rest. But there is no flag, and there is no resting. The slide back down feels like winning the entire way. A position you have to keep re-earning, on purpose, against a current that never lets up, is not a destination. It is a posture. A destination asks, <em>am I there yet?</em> A posture asks, <em>am I still holding it today?</em> Only the second question has a useful answer.</p>
+
+  <h3>The portrait</h3>
+  <p>Picture the person who holds it. She uses AI constantly &mdash; not cautiously, not as a novelty, but as the working surface of her day. She drafts through it, reasons against it, runs three models at once and reads the disagreement. By the standard of a few years ago she would look like an addict. She neither worships the tools nor fears them. The worship and the fear are the same mistake from two directions: both hand the machine an authority it has not earned. She commands the capability fluently and keeps her hands on the two things that were never the machine&rsquo;s to hold &mdash; the framing of the problem, and the final call.</p>
+
+  <p>She is hard to place in an org chart because what she carries does not show up as a title. She understands people and what moves them. She understands incentives, and reads a system by what it rewards. She understands ethics as a live constraint, not a compliance slide. She understands the business &mdash; what it is for, what it owes, what would end it. And she understands the technology well enough to know exactly where its competence stops and her judgment has to begin. None of these is the AI&rsquo;s domain. All of them are the ground she stands on while she directs it.</p>
+
+  <p>Underneath all of it sits one belief, and it is the belief this book was written to leave you with. The scarcest resource in a world of abundant intelligence is not intelligence. It is judgment &mdash; and past judgment, taste, trust, the responsibility she is willing to carry, and finally wisdom: knowing what is actually worth doing. The machine can answer almost any question now. It cannot tell her which question was worth asking.</p>
+
+  <h3>Leadership, redefined</h3>
+  <p>Here is the quiet redefinition the AI era forces on the word <em>leadership</em>. It used to mean directing people. Then, for a while, it meant directing people who used tools. Now it means something the old definition has no room for: governing human and machine intelligence as a single coupled system, and remaining the one who decides and is held to account for where that system goes.</p>
+
+  <p>The leader of the AI era is not commanding a team or commanding a model. She is steering both at once &mdash; a hybrid of judgment and computation that thinks faster than any human and decides nothing on its own. Her job is to point it, to know when it is wrong, and to be the human whose name is on the outcome when it executes. That last part is the load-bearing one. A system that cannot be blamed, sued, or shamed cannot lead, no matter how capable it gets. Someone has to absorb the consequence. Leadership is the willingness to be that someone.</p>
+
+  <div class="verdict">
+    <div class="vl">The highest rung</div>
+    <p>The highest rung of the map was never measured by how much AI you use. Capability is the horizontal axis, and the horizontal axis alone never lifted anyone. The vertical climb is measured by how much responsibility you are willing to accept for directing intelligence. <em>Reach is cheap now. Accountability is the scarce thing</em>, and the person who takes the most of it, on purpose, climbs the highest.</p>
+  </div>
+
+  <h3>Your dot, your vector</h3>
+  <p>Go back to the very beginning, before Chapter 1, where we asked you to place yourself on the map. A dot for where your AI capability honestly sits. A second dot for your leverage. And then an arrow. Everything since has been an argument about that arrow. Not your dot. Your dot is a snapshot of a moving thing, and a snapshot of a moving thing tells you almost nothing. There are Amplifiers drifting quietly down and Resistants climbing fast, and on any given day they share a corner. What separates them is which way they are pointed, and whether they are keeping the one faculty the upper half of the map is built on &mdash; the Cognitive Sovereignty that decides whether you remain the author of your own thinking or become a downstream consumer of someone else&rsquo;s.</p>
+
+  <p>That is the whole book in a sentence, returned now to where it started. When intelligence becomes abundant, judgment becomes scarce &mdash; and the same AI that grants you leverage can quietly erode the faculty that leverage depends on. The Scarcity Inversion is the force. The map is how you find your place in it. The Steward of Intelligence is what it looks like to hold your ground while the current pulls.</p>
+
+  <p>So the question the book leaves you with is not <em>where am I?</em> It is the one the front matter asked and the one you will answer with your next thousand small choices: <em>which way am I pointed, and am I keeping the faculty the top of the map depends on?</em></p>
+
+  <p class="aphorism">The machines will keep getting better at supplying the answers. Stay the one who decides what is worth asking. That is the leverage that survives AI. It was never going to be anything else.</p>
+</section>
+
+<!-- ===================== REFERENCES ===================== -->
+<section class="refs" id="refs">
+  <div class="sec-tag">Appendix</div>
+  <h2>References</h2>
+  <p class="small">Twelve verified sources, numbered by order of first appearance in the text. Each was confirmed via live search and URL resolution. No statistic appears in this book by design; the citations support framing and concepts, not numbers.</p>
+  <ol>
+    <li id="ref1">Agrawal, A., Gans, J., &amp; Goldfarb, A. (2018). <em>Prediction Machines: The Simple Economics of Artificial Intelligence</em>. Harvard Business Review Press. <a href="https://agrawal.ca/prediction-machines-book">agrawal.ca/prediction-machines-book</a></li>
+    <li id="ref2">Medeiros, I. (2026, February 1). &ldquo;Taste Is the New Bottleneck: Design, Strategy, and Judgment in the Age of Agents and Vibe-Coding.&rdquo; <em>designative.info</em>. <a href="https://www.designative.info/2026/02/01/taste-is-the-new-bottleneck-design-strategy-and-judgment-in-the-age-of-agents-and-vibe-coding/">designative.info</a></li>
+    <li id="ref3">Clark, A., &amp; Chalmers, D. (1998). &ldquo;The Extended Mind.&rdquo; <em>Analysis</em>, 58(1), 7&ndash;19. <a href="https://academic.oup.com/analysis/article-abstract/58/1/7/153111">academic.oup.com</a></li>
+    <li id="ref4">Hutchins, E. (1995). <em>Cognition in the Wild</em>. MIT Press. <a href="https://mitpress.mit.edu/9780262581462/cognition-in-the-wild/">mitpress.mit.edu</a></li>
+    <li id="ref5">Kahneman, D. (2011). <em>Thinking, Fast and Slow</em>. Farrar, Straus and Giroux. <a href="https://us.macmillan.com/books/9780374533557/thinkingfastandslow/">us.macmillan.com</a></li>
+    <li id="ref6">Chiriatti, M., Ganapini, M. B., Panai, E., Ubiali, M., &amp; Riva, G. (2024). &ldquo;The case for human&ndash;AI interaction as system 0 thinking.&rdquo; <em>Nature Human Behaviour</em>, 8(10), 1829&ndash;1830. <a href="https://www.nature.com/articles/s41562-024-01995-5">nature.com</a></li>
+    <li id="ref7">Kosmyna, N., Hauptmann, E., Yuan, Y. T., Situ, J., Liao, X.-H., Beresnitzky, A. V., Braunstein, I., &amp; Maes, P. (2025). &ldquo;Your Brain on ChatGPT: Accumulation of Cognitive Debt when Using an AI Assistant for Essay Writing Task.&rdquo; <em>arXiv preprint</em> arXiv:2506.08872. MIT Media Lab. <a href="https://arxiv.org/abs/2506.08872">arxiv.org/abs/2506.08872</a></li>
+    <li id="ref8">Dahmani, L., &amp; Bohbot, V. D. (2020). &ldquo;Habitual use of GPS negatively impacts spatial memory during self-guided navigation.&rdquo; <em>Scientific Reports</em>, 10, 6310. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7156656/">pmc.ncbi.nlm.nih.gov</a></li>
+    <li id="ref9">Maguire, E. A., Gadian, D. G., Johnsrude, I. S., Good, C. D., Ashburner, J., Frackowiak, R. S., &amp; Frith, C. D. (2000). &ldquo;Navigation-related structural change in the hippocampi of taxi drivers.&rdquo; <em>Proceedings of the National Academy of Sciences</em>, 97(8), 4398&ndash;4403. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC18253/">pmc.ncbi.nlm.nih.gov</a></li>
+    <li id="ref10">Gerlich, M. (2025). &ldquo;AI Tools in Society: Impacts on Cognitive Offloading and the Future of Critical Thinking.&rdquo; <em>Societies</em>, 15(1), Article 6. <a href="https://www.mdpi.com/2075-4698/15/1/6">mdpi.com</a></li>
+    <li id="ref11">Feng, K. J. K., McDonald, D. W., &amp; Zhang, A. X. (2025). &ldquo;Levels of Autonomy for AI Agents.&rdquo; <em>Knight First Amendment Institute at Columbia University</em>. arXiv:2506.12469. <a href="https://knightcolumbia.org/content/levels-of-autonomy-for-ai-agents-1">knightcolumbia.org</a></li>
+    <li id="ref12">Sheridan, T. B., &amp; Verplank, W. L. (1978). <em>Human and Computer Control of Undersea Teleoperators</em>. MIT Man-Machine Systems Laboratory. <a href="https://ntrs.nasa.gov/citations/19790007441">ntrs.nasa.gov</a></li>
+  </ol>
+  <hr class="rule">
+  <p class="small">&copy; 2026 Anuj Sadani. <em>The Human Leverage Map</em> &mdash; finding durable human value when intelligence becomes abundant. The framework coinages (the Scarcity Inversion, the Human Leverage Map, Cognitive Sovereignty, the Steward of Intelligence, Epistemic Confinement, Captive of Autonomy) are the author&rsquo;s own and carry no citation.</p>
+</section>
+
+  <div class="share-cta">
+    If this was worth your time, pass it to someone whose work is being automated from the inside. Share it on <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fasadani.tech%2Fthe-human-leverage-map%2F" target="_blank" rel="noopener">LinkedIn</a>, or wherever your people are.
+  </div>
+
+</div><!-- /wrap -->
+
+<div class="print-foot">Anuj Sadani &middot; asadani.tech</div>
+
+<footer>
+  <div class="wrap" style="display:flex;justify-content:space-between;width:100%;padding:0 26px;">
+    <span>asadani.tech &middot; June 2026</span>
+    <a href="/">&larr; back to index</a>
+  </div>
+</footer>
+
+</body>
+</html>

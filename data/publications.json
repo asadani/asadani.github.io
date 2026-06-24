@@ -65,6 +65,12 @@
   ],
   "digital": [
     {
+      "title": "The Human Leverage Map: Finding Durable Human Value When Intelligence Becomes Abundant",
+      "desc": "When intelligence becomes abundant and cheap, judgment becomes scarce. A two-axis map for finding the human value that survives AI: where your leverage goes when the machine can produce the answer, how that leverage collapses without anyone noticing, and how to defend the faculty it depends on. The full designed PDF.",
+      "image": "/the-human-leverage-map/the-human-leverage-map.png",
+      "url": "https://ko-fi.com/s/2806feff25"
+    },
+    {
       "title": "The Engineers Who Didn't Make It Through AI",
       "desc": "Twelve brilliant principal engineers made rational decisions based on the world they knew, then the world changed faster than their optimization function. The Craftsman, the Skeptic, the Lone Expert, the Builder: twelve failure modes of senior technical leadership during a discontinuity, braided into one argument. A companion to Three Leaders, One Market, turned on people instead of firms. No villains, only people who optimized for a reality that stopped existing.",
       "image": "/the-failed-engineer/the-failed-engineer-cover.png",

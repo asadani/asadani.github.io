@@ -1,5 +1,22 @@
 [
   {
+    "slug": "the-human-leverage-map",
+    "title": "The Human Leverage Map",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "craft",
+      "research"
+    ],
+    "quote": "\"When intelligence becomes abundant, judgment becomes scarce.\"",
+    "desc": "When intelligence becomes abundant and cheap, judgment becomes the scarce thing. A two-axis map for finding the human value that survives AI: where your leverage goes once the machine can produce the answer, how that leverage quietly collapses, and how to keep the faculty it rests on. A field guide to staying the one who decides what is worth asking.",
+    "date": "2026-06-24",
+    "dateDisplay": "June 24, 2026",
+    "cta": "Read",
+    "shareUrl": "https://asadani.github.io/the-human-leverage-map/"
+  },
+  {
     "slug": "the-failed-engineer",
     "title": "The Engineers Who Didn't Make It Through AI",
     "tags": [
