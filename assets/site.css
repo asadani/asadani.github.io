@@ -506,16 +506,19 @@
 .pillar-link { font-family: var(--sans); font-size: 11.5px; font-weight: 600; color: var(--accent); margin-top: auto; }
 
 /* ─── PUBLICATION FLIP CARDS ──────────────────────────── */
-.flip-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 8px; }
-@media (max-width: 900px) { .flip-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .flip-grid { grid-template-columns: 1fr; } }
+/* one consistent thumbnail-sized grid for every bucket (books, papers, digital) */
+.flip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 172px)); justify-content: start; gap: 14px; margin-bottom: 8px; }
 
 .flipcard { perspective: 1000px; }
 .flipcard-inner {
-  position: relative; width: 100%; aspect-ratio: 3 / 4;
+  position: relative; width: 100%; height: 100%;
   transition: transform 0.5s; transform-style: preserve-3d;
 }
 .flipcard.is-flipped .flipcard-inner { transform: rotateY(180deg); }
+/* The front face sits in-flow so its content (2:3 cover + caption, or the title panel)
+   defines the card height; the back face is absolutely overlaid. Every card in a row
+   then stretches to equal height so covers line up at the top and links at the bottom. */
+.flipcard-inner .flipcard-front { position: relative; height: 100%; }
 
 .flipcard-face {
   position: absolute; inset: 0; display: flex; flex-direction: column;
@@ -531,17 +534,17 @@
   cursor: pointer; text-align: left; font: inherit; color: inherit;
 }
 .flipcard-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
-.flipcard--text .flipcard-front .flipcard-toggle { padding: 20px 16px; justify-content: center; align-items: center; text-align: center; gap: 10px; }
+.flipcard--text .flipcard-front .flipcard-toggle { padding: 14px 12px; justify-content: center; align-items: center; text-align: center; gap: 8px; }
 .flipcard-back .flipcard-toggle { padding: 16px; gap: 8px; justify-content: flex-start; }
 
 /* front: media (cover + caption) */
-.flipcard-cover { width: 100%; flex: 1; min-height: 0; object-fit: cover; background: var(--bg-alt); }
+.flipcard-cover { width: 100%; aspect-ratio: 2 / 3; flex: none; object-fit: cover; background: var(--surface); }
 .flipcard-caption { flex-shrink: 0; padding: 10px 14px; font-family: var(--serif); font-size: 14px; font-weight: 600; line-height: 1.3; color: var(--text); }
 
 /* front: paper title panel */
-.flipcard-panel-venue { font-family: var(--mono); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); }
-.flipcard-paneltitle { font-family: var(--serif); font-size: 18px; font-weight: 600; line-height: 1.3; color: var(--text); }
-.flipcard-panel-cat { font-family: var(--mono); font-size: 10.5px; color: var(--text-muted); }
+.flipcard-panel-venue { font-family: var(--mono); font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); }
+.flipcard-paneltitle { font-family: var(--serif); font-size: 13.5px; font-weight: 600; line-height: 1.32; color: var(--text); }
+.flipcard-panel-cat { font-family: var(--mono); font-size: 10px; color: var(--text-muted); }
 .flipcard--text.venue-arxiv .flipcard-front { background: var(--red-bg); }
 .flipcard--text.venue-arxiv .flipcard-panel-venue { color: var(--red); }
 .flipcard--text.venue-ssrn .flipcard-front { background: var(--blue-bg); }

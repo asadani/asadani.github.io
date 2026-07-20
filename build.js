@@ -82,7 +82,7 @@ function renderFlipCard(item, type){
         <span class="flipcard-paneltitle">${esc(item.title)}</span>${cat}`;
   } else {
     const src = type === 'books' ? item.cover : item.image;
-    front = `<img class="flipcard-cover" src="${escAttr(src)}" alt="${escAttr(item.title)} cover">
+    front = `<img class="flipcard-cover" src="${escAttr(src)}" alt="${escAttr(item.title)} cover" loading="lazy" decoding="async">
         <span class="flipcard-caption">${esc(item.title)}</span>`;
   }
 

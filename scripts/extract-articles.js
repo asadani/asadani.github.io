@@ -39,7 +39,7 @@ while((m = rowRe.exec(region))){
   const dateDisplay = grab(block, /<span class="art-date">([\s\S]*?)<\/span>/);
   const ctaRaw = grab(block, /<span class="art-link">([\s\S]*?)<\/span>/);
   const cta = ctaRaw.replace(/\s*(&rarr;|→)\s*$/,'').trim();
-  const shareUrl = grab(block, /data-url="([^"]*)"/) || `https://asadani.github.io/${slug}/`;
+  const shareUrl = grab(block, /data-url="([^"]*)"/) || `https://tech.anujsadani.in/${slug}/`;
   articles.push({ slug, title, tags, flavors, quote, desc, date: parseISO(dateDisplay), dateDisplay, cta, shareUrl });
 }
 
