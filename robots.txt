@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /drafts/
+Disallow: /test/
+
+Sitemap: https://tech.anujsadani.in/sitemap.xml

@@ -1,0 +1,59 @@
+# Anuj Sadani — Tech
+
+> Essays on AI engineering, infrastructure, and security by Anuj Sadani,
+> Principal Software Development Engineer at Infrrd. Enterprise RAG, agentic
+> workflows, evaluation pipelines, and the parts that break in production.
+
+Author profile: https://anujsadani.in
+
+## Essays
+
+- [The Human Leverage Map](https://tech.anujsadani.in/the-human-leverage-map/): When intelligence becomes abundant and cheap, judgment becomes the scarce thing. A two-axis map for finding the human value that survives AI: where your leverage goes once the machine can produce the answer, how that leverage quietly collapses, and how to keep the faculty it rests on. A field guide to staying the one who decides what is worth asking.
+- [The Engineers Who Didn't Make It Through AI](https://tech.anujsadani.in/the-failed-engineer/): A companion to Three Leaders, One Market, turned on people instead of firms. Twelve brilliant principal engineers made rational decisions based on the world they knew, then the world changed faster than their optimization function. The Craftsman, the Skeptic, the Lone Expert, the Builder: twelve failure modes of senior technical leadership during a discontinuity, braided into one argument. No villains, only people who optimized for a reality that stopped existing.
+- [The Monk Who Oversold the AI](https://tech.anujsadani.in/the-monk-who-oversold-the-ai/): A product leader replaced the company's R&amp;D with borrowed foundation-model capability, scaled brilliantly for two years, won the CEO's trust, and then dissolved the only moat the product had. Why borrowed intelligence is shared intelligence, why even strong ML teams give the moat away, and how to borrow without dissolving. Includes a downloadable designed PDF.
+- [Three Leaders, One Market](https://tech.anujsadani.in/three-leaders-one-market/): A triptych. Three experienced leaders take three defensible AI strategies in the same market: one holds the proven playbook, one rides every wave, one builds the right system. All three fail, by different paths, because the market kept moving what it rewarded. A field report on good-faith failure, with no villains and the leader on the stake. Includes a downloadable designed PDF.
+- [Verification-maxxing](https://tech.anujsadani.in/the-verification-tax/): The syntax tax collapsed; the verification tax replaced it. Why "vibe coding to agentic engineering" is a shift in where software's cost lives &mdash; Agent = Model + Scaffold, and most teams invest in the wrong half.
+- [The Barbell and the Vanishing Middle](https://tech.anujsadani.in/idp-barbell/): Where intelligent document processing is heading through 2028: value migrating to document infrastructure on one end and decision automation on the other, while the extraction layer becomes invisible, not simple. Includes a downloadable designed PDF.
+- [The safety layer is you](https://tech.anujsadani.in/coding-with-enemy/): A study put real developers in five-hour sessions with frontier coding agents that were quietly stealing user data. 94% shipped the sabotage after reviewing and approving it. Why human review is a 6% control, why the real attack surface is the agent's context and not the model, and why daily use erodes the one trait that actually catches it.
+- [From TODO to TOKNOW](https://tech.anujsadani.in/from-todo-to-toknow/): We used to defer work with a TODO. Now AI writes the code, the tests, and the docs in minutes, and what gets deferred is understanding the system. Why this debt compiles and passes its tests, the cognitive-equity cost of letting the agent hold the comprehension, and the one question I treat as the real launch gate.
+- [The spec lies until something runs it](https://tech.anujsadani.in/spec-lies-until-something-runs-it/): I had a template and a skill to write these posts and still kept opening a real one. Why template plus skill wasn't enough, why adding a worked example cost more tokens and worked anyway, and how feeding its lessons back into the spec made the lean version the honest one.
+- [SynthID can't tell you who made it.](https://tech.anujsadani.in/synthid-watermark-check/): Google wired SynthID into Gemini: drop an image in, ask if it's AI, read the answer in five seconds. The check is real and it's the best we have. It also tells you whether a model made something, not who did. Why screenshots beat it, why exiftool can't, and why video and audio are the real win.
+- [What is "agentic OCR," really?](https://tech.anujsadani.in/agentic-ocr-for-real/): Vendors keep renaming document extraction agentic; skeptics call it LLM orchestration in a trench coat. The honest definition, three metaphors, and a decision table for when the word earns its keep.
+- [Self-Improving AI, Honestly](https://tech.anujsadani.in/self-improving-ai-honestly/): A landscape read across Reflexion, STaR, Voyager, AI Scientist, Darwin Gödel Machine, TTT/TTRL, and the 2026 SIA paper. Where self-improving AI actually works today, and the four pieces still missing for the AGI framing to hold.
+- [Google is quietly changing what "Flash" means](https://tech.anujsadani.in/gemini-3-5-flash-agent-first/): Gemini 3.5 Flash beats 3.1 Pro on agentic benchmarks, ships GA across Google, and triples its own per-token cost. What the agent-first pivot means for builders.
+- [Moral Surrender](https://tech.anujsadani.in/moral-surrender/): Two failure modes when working with AI agents — and why surrendering judgment is more dangerous than surrendering skill.
+- [Contextual retrieval, honestly](https://tech.anujsadani.in/contextual-retrieval-tradeoffs/): Anthropic's contextual retrieval, read straight: real gains, real preprocessing costs, and the blind spots around long-horizon reasoning and governance.
+- [Automated prompt optimization, in 2026](https://tech.anujsadani.in/automated-prompt-optimization/): A field guide to DSPy, TextGrad, ACE, GEPA, and the evaluation and Pareto trade-offs that decide what survives production.
+- [The Complaints Are Valid. The Leap Is Real.](https://tech.anujsadani.in/deepseek-v4-real-leap/): 15 months after R1, DeepSeek V4 lands with valid criticism — but a genuine architectural win hiding behind the benchmark noise.
+- [The Mother of All AI Supply Chains: MCP's By-Design RCE](https://tech.anujsadani.in/mcp-supply-chain-rce/): A configuration string is a shell command. Anthropic called it expected. OX Security called it an RCE.
+- [The Data Product Manifesto](https://tech.anujsadani.in/data-product-manifesto/): Seven pillars for treating data as a first-class product, not a departmental afterthought.
+- [The Five Layers of the Modern AI Coding Agent Stack](https://tech.anujsadani.in/ai-coding-agent-stack/): Five architectural layers that separate a genuine productivity multiplier from expensive autocomplete.
+- [AI Coding Agent Stack — Interactive Mind Map](https://tech.anujsadani.in/ai-agent-stack-map/): 37 tools, 6 clusters, one SVG — a pannable, filterable map of the 2026 AI coding ecosystem.
+- [AI Shrinkflation: The Silent Regression Your Team Won't See Coming](https://tech.anujsadani.in/ai-shrinkflation/): The model you shipped last quarter may not be the model running today — and your tests won't tell you.
+- [Flex &amp; Priority: One Line of Code](https://tech.anujsadani.in/gemini-flex-inference/): One parameter — <code>service_tier</code> — trades latency for cost in Gemini production workloads.
+- [AI Writes the Code. You Own Everything.](https://tech.anujsadani.in/linux-ai-ownership/): The Linux kernel's first official AI policy redefines authorship — and puts the legal weight squarely on you.
+- [Breaking the Object-File Barrier](https://tech.anujsadani.in/amazon-s3-files/): Native NFS v4.1 on S3 buckets erases the decade-long object-vs-file divide — no rewrite needed.
+- [The LiteLLM PyPI Attack: A Supply Chain Postmortem](https://tech.anujsadani.in/litellm-supply-chain-attack/): A hijacked PyPI account, 13 minutes, and 95M installs at risk — a blueprint for targeting AI developers.
+
+## Papers
+
+- [Locale-Conditioned Few-Shot Prompting Mitigates Demonstration Regurgitation in On-Device PII Substitution with Small Language Models](https://arxiv.org/abs/2605.13538) (arXiv:2605.13538)
+- [Tool Attention Is All You Need: Dynamic Tool Gating and Lazy Schema Loading for Eliminating the MCP/Tools Tax in Scalable Agentic Workflows](https://arxiv.org/abs/2604.21816) (arXiv:2604.21816)
+- [The Great Recalibration: The 2026 Pivot from Generalist Wrappers to Sovereign Application Layers and Industrialized Services](https://dx.doi.org/10.2139/ssrn.6071412) (SSRN:6071412)
+
+## Books
+
+- [The Clean Vibe Coder](https://www.amazon.in/dp/B0H2ZBMFR4): A Code of Conduct for Programmers in the Age of AI Agents
+
+## Digital releases
+
+- [The Human Leverage Map: Finding Durable Human Value When Intelligence Becomes Abundant](https://ko-fi.com/s/2806feff25)
+- [The Engineers Who Didn't Make It Through AI](https://ko-fi.com/s/70b71a3671)
+- [The Monk Who Oversold the AI](https://ko-fi.com/s/02e8517c71)
+- [Three Leaders, One Market: A Field Report on Why Good AI Strategies Still Fail](https://ko-fi.com/s/b7efb1eb2e)
+- [The Barbell & The Vanishing Middle: IDP](https://ko-fi.com/s/3be014f2e6)
+
+## Machine-readable indexes
+
+- [Articles JSON](https://tech.anujsadani.in/data/articles.json)
+- [Publications JSON](https://tech.anujsadani.in/data/publications.json)
