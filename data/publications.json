@@ -65,6 +65,12 @@
   ],
   "digital": [
     {
+      "title": "Abundant and Uncurated",
+      "desc": "Machine judgement already beats human annotation on accuracy and cost, so the case for keeping people in the loop cannot rest on being better. A model that verifies its own synthetic data plateaus at what it already knows, and evaluation criteria cannot be fixed before you look at the outputs. Machines apply judgement; humans form the criteria and supply the signal from outside the system. Every claim bound to a quoted source, including the two that failed.",
+      "image": "/assets/covers/abundant-and-uncurated.jpg",
+      "url": "https://ko-fi.com/s/000d383639"
+    },
+    {
       "title": "The Human Leverage Map: Finding Durable Human Value When Intelligence Becomes Abundant",
       "desc": "When intelligence becomes abundant and cheap, judgment becomes scarce. A two-axis map for finding the human value that survives AI: where your leverage goes when the machine can produce the answer, how that leverage collapses without anyone noticing, and how to defend the faculty it depends on. The full designed PDF.",
       "image": "/assets/covers/the-human-leverage-map.jpg",
