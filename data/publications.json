@@ -65,6 +65,12 @@
   ],
   "digital": [
     {
+      "title": "Speed Is the Moat",
+      "desc": "Once token cost is understood, the claim goes, inference speed is the next durable advantage. It isn't — speed is a lead with a half-life of one to two months, with inference software delivering up to 2x more throughput on unchanged silicon inside a single month. What survives is narrower: latency is a priced contract term, not an engineering win. The cover states the proposition; the book is the audit.",
+      "image": "/assets/covers/speed-is-the-moat.jpg",
+      "url": "https://ko-fi.com/s/17808b2e0b"
+    },
+    {
       "title": "Abundant and Uncurated",
       "desc": "Machine judgement already beats human annotation on accuracy and cost, so the case for keeping people in the loop cannot rest on being better. A model that verifies its own synthetic data plateaus at what it already knows, and evaluation criteria cannot be fixed before you look at the outputs. Machines apply judgement; humans form the criteria and supply the signal from outside the system. Every claim bound to a quoted source, including the two that failed.",
       "image": "/assets/covers/abundant-and-uncurated.jpg",
