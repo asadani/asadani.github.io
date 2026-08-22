@@ -13,7 +13,6 @@
     "then wikidata (feeds Google's Knowledge Graph and LLM training data), then",
     "the author profiles."
   ],
-
   "name": "Anuj Sadani",
   "givenName": "Anuj",
   "familyName": "Sadani",
@@ -25,9 +24,7 @@
   "url": "https://anujsadani.in/",
   "image": "https://tech.anujsadani.in/assets/profile-pic.png",
   "homeLocation": "Pune, India",
-
   "description": "Anuj Sadani is a Principal Software Development Engineer at Infrrd in Pune, India. He builds enterprise generative-AI systems -- RAG platforms, agentic workflows, and evaluation pipelines -- leads the engineers who build them, and owns the organisation-wide Python stack. He writes about AI engineering, infrastructure, and security, and is the author of The Clean Vibe Coder.",
-
   "knowsAbout": [
     "AI engineering",
     "Retrieval-augmented generation",
@@ -37,11 +34,9 @@
     "Machine learning infrastructure",
     "Software engineering leadership"
   ],
-
   "alumniOf": "Government College of Engineering, Amravati",
-
   "identifier": {
-    "orcid": null,
+    "orcid": "0009-0001-0124-3181",
     "wikidata": null,
     "googleScholar": null,
     "semanticScholar": null,
@@ -49,7 +44,6 @@
     "openLibrary": null,
     "arxivAuthor": null
   },
-
   "_sameAs_comment": [
     "Pages that REPRESENT the person, not pages that mention him. A book's",
     "product page is not sameAs its author -- an Amazon Author Central page",
