@@ -6,3 +6,11 @@ the-monk-who-oversold-the-ai/the-monk-who-oversold-the-ai.pdf
 three-leaders-one-market/three-leaders-one-market.pdf
 idp-barbell/idp-barbell.pdf
 the-human-leverage-map/the-human-leverage-map.pdf
+
+# Working scratch, never part of the published site.
+.superpowers/
+drafts/
+self-improve/
+colleague-skill/
+*.pdf
+!speed-is-the-moat/*.pdf
