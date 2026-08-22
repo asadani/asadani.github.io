@@ -12,5 +12,8 @@ the-human-leverage-map/the-human-leverage-map.pdf
 drafts/
 self-improve/
 colleague-skill/
-*.pdf
-!speed-is-the-moat/*.pdf
+
+# Downloaded reference papers that landed in article folders. Book PDFs the
+# site actually serves are tracked, so this is deliberately not a blanket
+# *.pdf rule.
+coding-with-enemy/2606.05647v1.pdf
