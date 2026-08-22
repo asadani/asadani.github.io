@@ -1,0 +1,425 @@
+### COMMITS (1a8a0bb..HEAD)
+0a5439d Unify publication renderers into renderPublicationCard + venueFor
+
+### DIFF STAT
+ build.js                       | 100 +++++++++++++++++-----------------
+ index.html                     | 121 ++++++++++++++++++++---------------------
+ test/build.test.js             |  46 +++++++++++++---
+ test/publications-data.test.js |  11 ++--
+ 4 files changed, 152 insertions(+), 126 deletions(-)
+
+### FULL DIFF (-U10)
+diff --git a/build.js b/build.js
+index 653b46b..b287108 100644
+--- a/build.js
++++ b/build.js
+@@ -53,79 +53,77 @@ function renderArticleRow(a){
+           </div>
+         </div>
+       </a>`;
+ }
+ 
+ // Stable sort by ISO date descending; equal dates keep input order.
+ function renderArticlesList(arts){
+   return arts.slice().sort((x,y)=> String(y.date).localeCompare(String(x.date))).map(renderArticleRow).join('\n\n');
+ }
+ 
+-function renderBookCard(b){
+-  return `    <a class="book-card" href="${escAttr(b.url)}" target="_blank" rel="noopener">
+-      <div class="book-strip"></div>
+-      <img class="book-cover" src="${escAttr(b.cover)}" alt="${escAttr(b.title)} book cover">
+-      <div class="book-body">
+-        <div class="book-title">${esc(b.title)}</div>
+-        <div class="book-sub">${esc(b.subtitle)} &middot; <span class="pub-self" style="color:var(--accent);font-weight:600">${esc(b.author)}</span></div>
+-        <div class="book-desc">${esc(b.desc)}</div>
+-        <div class="book-footer">
+-          <span class="book-meta">${esc(b.meta)}</span>
+-          <span class="book-cta">Buy on Amazon ↗</span>
+-        </div>
+-      </div>
+-    </a>`;
++function venueFor(type, item){
++  if(type === 'books')   return { key:'amazon', label:'Amazon' };
++  if(type === 'digital') return { key:'kofi',   label:'Ko-fi' };
++  return item.badge === 'SSRN' ? { key:'ssrn', label:'SSRN' } : { key:'arxiv', label:'arXiv' };
+ }
+ 
+-function renderPubCard(p){
+-  const cat = p.cat ? `\n          <span class="pub-cat">${esc(p.cat)}</span>` : '';
+-  const authors = p.authors.map(a => a.self
+-    ? `<span class="pub-self">${esc(a.name)}</span>` : esc(a.name)).join(', ');
+-  return `    <a class="pub-card" href="${escAttr(p.url)}" target="_blank" rel="noopener">
+-      <div class="pub-strip"></div>
+-      <div class="pub-body">
+-        <div class="pub-top">
+-          <span class="pub-badge">${esc(p.badge)}</span>${cat}
+-          <span class="pub-id">${esc(p.id)}</span>
+-        </div>
+-        <div class="pub-title">${esc(p.title)}</div>
+-        <div class="pub-authors">${authors}</div>
+-        <div class="pub-footer">
+-          <span class="pub-date">${formatDate(p.date)}</span>
+-          <span class="pub-link">Read on ${esc(p.badge)} ↗</span>
+-        </div>
+-      </div>
+-    </a>`;
+-}
++function renderPublicationCard(item, type){
++  const v = venueFor(type, item);
++
++  let media;
++  if(type === 'papers'){
++    const cat = item.cat ? `\n        <span class="pubcard-panel-cat">${esc(item.cat)}</span>` : '';
++    media = `<div class="pubcard-panel venue-${v.key}">
++        <span class="pubcard-panel-venue">${esc(v.label)}</span>${cat}
++      </div>`;
++  } else {
++    const src = type === 'books' ? item.cover : item.image;
++    media = `<img class="pubcard-cover" src="${escAttr(src)}" alt="${escAttr(item.title)} cover">`;
++  }
++
++  let sub = '';
++  if(type === 'books'){
++    sub = `\n        <div class="pubcard-sub">${esc(item.subtitle)} &middot; <span class="pub-self">${esc(item.author)}</span></div>`;
++  } else if(type === 'papers'){
++    const authors = item.authors.map(a => a.self
++      ? `<span class="pub-self">${esc(a.name)}</span>` : esc(a.name)).join(', ');
++    sub = `\n        <div class="pubcard-sub">${authors}</div>`;
++  }
++
++  const desc = (type === 'books' || type === 'digital')
++    ? `\n        <div class="pubcard-desc">${esc(item.desc)}</div>` : '';
++
++  let meta = '';
++  if(type === 'books') meta = item.meta;
++  else if(type === 'papers') meta = formatDate(item.date);
++  const metaSpan = meta ? `\n          <span class="pubcard-meta">&middot; ${esc(meta)}</span>` : '';
+ 
+-function renderStoreCard(d){
+-  return `    <a class="store-card" href="${escAttr(d.url)}" target="_blank" rel="noopener">
+-      <div class="store-strip"></div>
+-      <img class="store-cover" src="${escAttr(d.image)}" alt="${escAttr(d.title)} cover">
+-      <div class="store-body">
+-        <span class="store-badge">Ko-fi</span>
+-        <div class="store-title">${esc(d.title)}</div>
+-        <div class="store-desc">${esc(d.desc)}</div>
+-        <div class="store-footer">
+-          <span class="store-cta">View on Ko-fi ↗</span>
++  return `    <a class="pubcard" href="${escAttr(item.url)}" target="_blank" rel="noopener">
++      <div class="pubcard-media">${media}</div>
++      <div class="pubcard-body">
++        <div class="pubcard-title">${esc(item.title)}</div>${sub}${desc}
++        <div class="pubcard-foot">
++          <span class="venue-badge venue-${v.key}">${esc(v.label)}</span>${metaSpan}
++          <span class="pubcard-arrow">↗</span>
+         </div>
+       </div>
+     </a>`;
+ }
+ 
+ function renderPublications(pubs){
+-  const bucket = (label, items, fn) =>
+-    `    <div class="pub-bucket-label">${esc(label)}</div>\n` + items.map(fn).join('\n');
++  const bucket = (label, items, type) =>
++    `    <div class="pub-bucket-label">${esc(label)}</div>\n` +
++    items.map(it => renderPublicationCard(it, type)).join('\n');
+   return [
+-    bucket('Books', pubs.books, renderBookCard),
+-    bucket('Papers', pubs.papers, renderPubCard),
+-    bucket('Digital', pubs.digital, renderStoreCard),
++    bucket('Books', pubs.books, 'books'),
++    bucket('Papers', pubs.papers, 'papers'),
++    bucket('Digital', pubs.digital, 'digital'),
+   ].join('\n\n');
+ }
+ 
+ function renderPillars(c){
+   const cards = [
+     { label:'Writing', count:c.writing, meta:'essays & field notes', href:'#articles' },
+     { label:'Papers', count:c.papers, meta:'arXiv / SSRN', href:'#research' },
+     { label:'Books & Digital', count:c.booksDigital, meta:'books & Ko-fi', href:'#research' },
+   ];
+   return `<div class="pillars">\n` + cards.map(p =>
+@@ -164,12 +162,12 @@ function build(){
+   // only inject it when present so the pipeline works before and after that change.
+   if(/<!-- BUILD:pillars -->/.test(template)) blocks.pillars = renderPillars(counts);
+   const out = injectBlocks(template, blocks);
+   fs.writeFileSync(path.join(ROOT,'index.html'), out);
+   return out;
+ }
+ 
+ if (require.main === module) build();
+ 
+ module.exports = { esc, escAttr, formatDate, TOPICS,
+-  renderArticleRow, renderArticlesList, renderBookCard, renderPubCard,
+-  renderStoreCard, renderPublications, renderPillars, injectBlocks, build };
++  renderArticleRow, renderArticlesList, venueFor, renderPublicationCard,
++  renderPublications, renderPillars, injectBlocks, build };
+diff --git a/index.html b/index.html
+index da4c9ca..980b630 100644
+--- a/index.html
++++ b/index.html
+@@ -575,102 +575,97 @@
+ 
+   </section>
+ 
+   <!-- ── RESEARCH ───────────────────────────────────────────── -->
+   <div class="section-wrap section-anchor" id="research">
+     <div class="section-label">Research</div>
+     <div class="section-heading">Publications</div>
+ 
+     <!-- BUILD:publications -->
+     <div class="pub-bucket-label">Books</div>
+-    <a class="book-card" href="https://www.amazon.in/dp/B0H2ZBMFR4" target="_blank" rel="noopener">
+-      <div class="book-strip"></div>
+-      <img class="book-cover" src="/assets/clean-vibe-coder-cover.jpg" alt="The Clean Vibe Coder book cover">
+-      <div class="book-body">
+-        <div class="book-title">The Clean Vibe Coder</div>
+-        <div class="book-sub">A Code of Conduct for Programmers in the Age of AI Agents &middot; <span class="pub-self" style="color:var(--accent);font-weight:600">Anuj Sadani</span></div>
+-        <div class="book-desc">A field guide for the working engineer when a stochastic, non-deterministic teammate writes a substantial fraction of the code — and the human at the keyboard still owns every commit that ships under their name. An updated professional ethic for the agent era: the orchestrator role, verification duty, provenance as part of the artifact, and concrete practices you can apply on Monday. A chapter-for-chapter response, fifteen years on, to The Clean Coder.</div>
+-        <div class="book-footer">
+-          <span class="book-meta">Kindle · 134 pages · May 26, 2026</span>
+-          <span class="book-cta">Buy on Amazon ↗</span>
++    <a class="pubcard" href="https://www.amazon.in/dp/B0H2ZBMFR4" target="_blank" rel="noopener">
++      <div class="pubcard-media"><img class="pubcard-cover" src="/assets/clean-vibe-coder-cover.jpg" alt="The Clean Vibe Coder cover"></div>
++      <div class="pubcard-body">
++        <div class="pubcard-title">The Clean Vibe Coder</div>
++        <div class="pubcard-sub">A Code of Conduct for Programmers in the Age of AI Agents &middot; <span class="pub-self">Anuj Sadani</span></div>
++        <div class="pubcard-desc">A field guide for the working engineer when a stochastic, non-deterministic teammate writes a substantial fraction of the code — and the human at the keyboard still owns every commit that ships under their name. An updated professional ethic for the agent era: the orchestrator role, verification duty, provenance as part of the artifact, and concrete practices you can apply on Monday. A chapter-for-chapter response, fifteen years on, to The Clean Coder.</div>
++        <div class="pubcard-foot">
++          <span class="venue-badge venue-amazon">Amazon</span>
++          <span class="pubcard-meta">&middot; Kindle · 134 pages · May 26, 2026</span>
++          <span class="pubcard-arrow">↗</span>
+         </div>
+       </div>
+     </a>
+ 
+     <div class="pub-bucket-label">Papers</div>
+-    <a class="pub-card" href="https://arxiv.org/abs/2605.13538" target="_blank" rel="noopener">
+-      <div class="pub-strip"></div>
+-      <div class="pub-body">
+-        <div class="pub-top">
+-          <span class="pub-badge">arXiv</span>
+-          <span class="pub-cat">cs.CL</span>
+-          <span class="pub-id">arXiv:2605.13538</span>
+-        </div>
+-        <div class="pub-title">Locale-Conditioned Few-Shot Prompting Mitigates Demonstration Regurgitation in On-Device PII Substitution with Small Language Models</div>
+-        <div class="pub-authors"><span class="pub-self">Anuj Sadani</span>, Deepak Kumar</div>
+-        <div class="pub-footer">
+-          <span class="pub-date">May 13, 2026</span>
+-          <span class="pub-link">Read on arXiv ↗</span>
++    <a class="pubcard" href="https://arxiv.org/abs/2605.13538" target="_blank" rel="noopener">
++      <div class="pubcard-media"><div class="pubcard-panel venue-arxiv">
++        <span class="pubcard-panel-venue">arXiv</span>
++        <span class="pubcard-panel-cat">cs.CL</span>
++      </div></div>
++      <div class="pubcard-body">
++        <div class="pubcard-title">Locale-Conditioned Few-Shot Prompting Mitigates Demonstration Regurgitation in On-Device PII Substitution with Small Language Models</div>
++        <div class="pubcard-sub"><span class="pub-self">Anuj Sadani</span>, Deepak Kumar</div>
++        <div class="pubcard-foot">
++          <span class="venue-badge venue-arxiv">arXiv</span>
++          <span class="pubcard-meta">&middot; May 13, 2026</span>
++          <span class="pubcard-arrow">↗</span>
+         </div>
+       </div>
+     </a>
+-    <a class="pub-card" href="https://arxiv.org/abs/2604.21816" target="_blank" rel="noopener">
+-      <div class="pub-strip"></div>
+-      <div class="pub-body">
+-        <div class="pub-top">
+-          <span class="pub-badge">arXiv</span>
+-          <span class="pub-cat">cs.AI</span>
+-          <span class="pub-id">arXiv:2604.21816</span>
+-        </div>
+-        <div class="pub-title">Tool Attention Is All You Need: Dynamic Tool Gating and Lazy Schema Loading for Eliminating the MCP/Tools Tax in Scalable Agentic Workflows</div>
+-        <div class="pub-authors"><span class="pub-self">Anuj Sadani</span>, Deepak Kumar</div>
+-        <div class="pub-footer">
+-          <span class="pub-date">April 23, 2026</span>
+-          <span class="pub-link">Read on arXiv ↗</span>
++    <a class="pubcard" href="https://arxiv.org/abs/2604.21816" target="_blank" rel="noopener">
++      <div class="pubcard-media"><div class="pubcard-panel venue-arxiv">
++        <span class="pubcard-panel-venue">arXiv</span>
++        <span class="pubcard-panel-cat">cs.AI</span>
++      </div></div>
++      <div class="pubcard-body">
++        <div class="pubcard-title">Tool Attention Is All You Need: Dynamic Tool Gating and Lazy Schema Loading for Eliminating the MCP/Tools Tax in Scalable Agentic Workflows</div>
++        <div class="pubcard-sub"><span class="pub-self">Anuj Sadani</span>, Deepak Kumar</div>
++        <div class="pubcard-foot">
++          <span class="venue-badge venue-arxiv">arXiv</span>
++          <span class="pubcard-meta">&middot; April 23, 2026</span>
++          <span class="pubcard-arrow">↗</span>
+         </div>
+       </div>
+     </a>
+ 
+     <div class="pub-bucket-label">Digital</div>
+-    <a class="store-card" href="https://ko-fi.com/s/02e8517c71" target="_blank" rel="noopener">
+-      <div class="store-strip"></div>
+-      <img class="store-cover" src="/the-monk-who-oversold-the-ai/the-monk-who-oversold-the-ai.png" alt="The Monk Who Oversold the AI cover">
+-      <div class="store-body">
+-        <span class="store-badge">Ko-fi</span>
+-        <div class="store-title">The Monk Who Oversold the AI</div>
+-        <div class="store-desc">Why borrowed foundation-model capability is shared capability — how a product leader scales on it for two years and still dissolves the only moat the product had.</div>
+-        <div class="store-footer">
+-          <span class="store-cta">View on Ko-fi ↗</span>
++    <a class="pubcard" href="https://ko-fi.com/s/02e8517c71" target="_blank" rel="noopener">
++      <div class="pubcard-media"><img class="pubcard-cover" src="/the-monk-who-oversold-the-ai/the-monk-who-oversold-the-ai.png" alt="The Monk Who Oversold the AI cover"></div>
++      <div class="pubcard-body">
++        <div class="pubcard-title">The Monk Who Oversold the AI</div>
++        <div class="pubcard-desc">Why borrowed foundation-model capability is shared capability — how a product leader scales on it for two years and still dissolves the only moat the product had.</div>
++        <div class="pubcard-foot">
++          <span class="venue-badge venue-kofi">Ko-fi</span>
++          <span class="pubcard-arrow">↗</span>
+         </div>
+       </div>
+     </a>
+-    <a class="store-card" href="https://ko-fi.com/s/b7efb1eb2e" target="_blank" rel="noopener">
+-      <div class="store-strip"></div>
+-      <img class="store-cover" src="/three-leaders-one-market/three-leader.png" alt="Three Leaders, One Market: A Field Report on Why Good AI Strategies Still Fail cover">
+-      <div class="store-body">
+-        <span class="store-badge">Ko-fi</span>
+-        <div class="store-title">Three Leaders, One Market: A Field Report on Why Good AI Strategies Still Fail</div>
+-        <div class="store-desc">A field report on good-faith failure: three experienced leaders, three defensible AI strategies in one market, and why all three fail as the market keeps moving what it rewards.</div>
+-        <div class="store-footer">
+-          <span class="store-cta">View on Ko-fi ↗</span>
++    <a class="pubcard" href="https://ko-fi.com/s/b7efb1eb2e" target="_blank" rel="noopener">
++      <div class="pubcard-media"><img class="pubcard-cover" src="/three-leaders-one-market/three-leader.png" alt="Three Leaders, One Market: A Field Report on Why Good AI Strategies Still Fail cover"></div>
++      <div class="pubcard-body">
++        <div class="pubcard-title">Three Leaders, One Market: A Field Report on Why Good AI Strategies Still Fail</div>
++        <div class="pubcard-desc">A field report on good-faith failure: three experienced leaders, three defensible AI strategies in one market, and why all three fail as the market keeps moving what it rewards.</div>
++        <div class="pubcard-foot">
++          <span class="venue-badge venue-kofi">Ko-fi</span>
++          <span class="pubcard-arrow">↗</span>
+         </div>
+       </div>
+     </a>
+-    <a class="store-card" href="https://ko-fi.com/s/3be014f2e6" target="_blank" rel="noopener">
+-      <div class="store-strip"></div>
+-      <img class="store-cover" src="/idp-barbell/the-idp-barbell.png" alt="The Barbell &amp; The Vanishing Middle: IDP cover">
+-      <div class="store-body">
+-        <span class="store-badge">Ko-fi</span>
+-        <div class="store-title">The Barbell &amp; The Vanishing Middle: IDP</div>
+-        <div class="store-desc">Where intelligent document processing is heading through 2028 — value migrating to infrastructure and decision automation while the extraction middle becomes invisible, not simple.</div>
+-        <div class="store-footer">
+-          <span class="store-cta">View on Ko-fi ↗</span>
++    <a class="pubcard" href="https://ko-fi.com/s/3be014f2e6" target="_blank" rel="noopener">
++      <div class="pubcard-media"><img class="pubcard-cover" src="/idp-barbell/the-idp-barbell.png" alt="The Barbell &amp; The Vanishing Middle: IDP cover"></div>
++      <div class="pubcard-body">
++        <div class="pubcard-title">The Barbell &amp; The Vanishing Middle: IDP</div>
++        <div class="pubcard-desc">Where intelligent document processing is heading through 2028 — value migrating to infrastructure and decision automation while the extraction middle becomes invisible, not simple.</div>
++        <div class="pubcard-foot">
++          <span class="venue-badge venue-kofi">Ko-fi</span>
++          <span class="pubcard-arrow">↗</span>
+         </div>
+       </div>
+     </a>
+ <!-- /BUILD:publications -->
+   </div>
+ 
+     <!-- ── ABOUT ──────────────────────────────────────────────── -->
+   <div class="section-anchor" id="about">
+     <div class="section-label">About</div>
+     <div class="section-heading">About Anuj</div>
+diff --git a/test/build.test.js b/test/build.test.js
+index e7c7206..4a278e2 100644
+--- a/test/build.test.js
++++ b/test/build.test.js
+@@ -51,28 +51,58 @@ test('renderArticleRow omits flavors markup when there are none', () => {
+ });
+ 
+ test('renderArticleRow supports multi-tag rows and custom CTA', () => {
+   const html = b.renderArticleRow(ART({ tags:['interactive','ai-engineering'], cta:'Explore' }));
+   assert.match(html, /class="art-row art-interactive"/);
+   assert.match(html, /class="art-badge badge-interactive">Interactive</);
+   assert.match(html, /data-tags="interactive ai-engineering"/);
+   assert.match(html, /class="art-link">Explore →</);
+ });
+ 
+-test('renderStoreCard is a Ko-fi card with image and CTA', () => {
+-  const d = { title:'Monk', desc:'A note', image:'/m/m.png', url:'https://ko-fi.com/s/x' };
+-  const html = b.renderStoreCard(d);
+-  assert.match(html, /class="store-card"/);
+-  assert.match(html, /class="store-badge">Ko-fi</);
+-  assert.match(html, /src="\/m\/m\.png"/);
+-  assert.match(html, /View on Ko-fi ↗/);
+-  assert.match(html, /href="https:\/\/ko-fi\.com\/s\/x"/);
++test('venueFor derives venue from type + paper badge', () => {
++  assert.deepStrictEqual(b.venueFor('books', {}),   { key:'amazon', label:'Amazon' });
++  assert.deepStrictEqual(b.venueFor('digital', {}), { key:'kofi',   label:'Ko-fi' });
++  assert.deepStrictEqual(b.venueFor('papers', { badge:'arXiv' }), { key:'arxiv', label:'arXiv' });
++  assert.deepStrictEqual(b.venueFor('papers', { badge:'SSRN' }),  { key:'ssrn',  label:'SSRN' });
++});
++
++test('renderPublicationCard: paper uses a venue panel + chip, no cover image', () => {
++  const p = { badge:'arXiv', cat:'cs.CL', title:'On Things', date:'2026-05-13',
++    authors:[{name:'Anuj Sadani',self:true},{name:'Deepak Kumar'}], url:'https://arxiv.org/abs/x' };
++  const html = b.renderPublicationCard(p, 'papers');
++  assert.match(html, /class="pubcard"/);
++  assert.match(html, /class="pubcard-panel venue-arxiv"/);
++  assert.match(html, /class="pubcard-panel-venue">arXiv</);
++  assert.match(html, /class="venue-badge venue-arxiv">arXiv</);
++  assert.ok(!/pubcard-cover/.test(html), 'paper has no cover image');
++  assert.match(html, /class="pubcard-meta">&middot; May 13, 2026</);
++  assert.match(html, /<span class="pub-self">Anuj Sadani<\/span>, Deepak Kumar/);
++});
++
++test('renderPublicationCard: book uses cover + Amazon chip + subtitle/author + desc', () => {
++  const bk = { title:'The Clean Vibe Coder', subtitle:'A Code of Conduct', author:'Anuj Sadani',
++    desc:'A field guide.', cover:'/assets/c.jpg', meta:'Kindle · 134 pages', url:'https://amazon/x' };
++  const html = b.renderPublicationCard(bk, 'books');
++  assert.match(html, /class="pubcard-cover" src="\/assets\/c\.jpg"/);
++  assert.match(html, /class="venue-badge venue-amazon">Amazon</);
++  assert.match(html, /class="pubcard-sub">A Code of Conduct &middot; <span class="pub-self">Anuj Sadani<\/span><\/div>/);
++  assert.match(html, /class="pubcard-desc">A field guide.<\/div>/);
++  assert.match(html, /class="pubcard-meta">&middot; Kindle · 134 pages</);
++});
++
++test('renderPublicationCard: digital uses image + Ko-fi chip + desc, no meta', () => {
++  const d = { title:'Monk', desc:'A note.', image:'/m/m.png', url:'https://ko-fi.com/s/x' };
++  const html = b.renderPublicationCard(d, 'digital');
++  assert.match(html, /class="pubcard-cover" src="\/m\/m\.png"/);
++  assert.match(html, /class="venue-badge venue-kofi">Ko-fi</);
++  assert.match(html, /class="pubcard-desc">A note.<\/div>/);
++  assert.ok(!/pubcard-meta/.test(html), 'digital has no meta line');
+ });
+ 
+ test('renderPillars emits three cards with counts', () => {
+   const html = b.renderPillars({ writing:25, papers:3, booksDigital:4 });
+   assert.match(html, /class="pillar-count">25</);
+   assert.match(html, /class="pillar-count">3</);
+   assert.match(html, /class="pillar-count">4</);
+   assert.match(html, /Books &amp; Digital/);
+ });
+ 
+diff --git a/test/publications-data.test.js b/test/publications-data.test.js
+index 3a79686..4862bac 100644
+--- a/test/publications-data.test.js
++++ b/test/publications-data.test.js
+@@ -26,20 +26,23 @@ test('all three Ko-fi products have image + non-empty description', () => {
+   const urls = pubs.digital.map(d=>d.url);
+   assert.ok(urls.includes('https://ko-fi.com/s/02e8517c71'));
+   assert.ok(urls.includes('https://ko-fi.com/s/b7efb1eb2e'));
+   assert.ok(urls.includes('https://ko-fi.com/s/3be014f2e6'));
+   for(const d of pubs.digital){
+     assert.ok(d.image && d.image.endsWith('.png'), `missing image on ${d.url}`);
+     assert.ok(d.desc && d.desc.trim().length > 0, `empty desc on ${d.url}`);
+   }
+ });
+ 
+-test('publications render without throwing and emit all three buckets', () => {
++test('publications render as unified pubcards across three buckets', () => {
+   let html;
+   assert.doesNotThrow(() => { html = b.renderPublications(pubs); });
+   assert.match(html, /pub-bucket-label">Books</);
+   assert.match(html, /pub-bucket-label">Papers</);
+   assert.match(html, /pub-bucket-label">Digital</);
+-  assert.match(html, /class="store-card"/);
+-  assert.match(html, /class="book-card"/);
+-  assert.match(html, /class="pub-card"/);
++  const cards = (html.match(/class="pubcard"/g) || []).length;
++  assert.strictEqual(cards, pubs.books.length + pubs.papers.length + pubs.digital.length);
++  assert.match(html, /venue-badge venue-amazon/);
++  assert.match(html, /venue-badge venue-arxiv/);
++  assert.match(html, /venue-badge venue-kofi/);
++  assert.match(html, /class="pubcard-panel venue-arxiv"/);
+ });

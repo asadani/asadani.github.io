@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A Screenshot Beats Google's AI Watermark. exiftool Doesn't.</title>
+<style>
+  /* Decorative only — Medium strips CSS on paste. For browser preview legibility. */
+  body { max-width: 720px; margin: 40px auto; padding: 0 20px;
+         font: 18px/1.6 Georgia, serif; color: #222; }
+  h1 { font-size: 34px; line-height: 1.2; }
+  h2 { font-size: 26px; margin-top: 1.6em; }
+  code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.9em; }
+  pre { background: #f5f5f5; padding: 16px; overflow-x: auto; border-radius: 6px; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
+  blockquote { color: #555; border-left: 3px solid #ccc; margin: 0; padding-left: 16px; }
+</style>
+</head>
+<body>
+
+<h1>A Screenshot Beats Google's AI Watermark. exiftool Doesn't.</h1>
+
+<p><em>Google wired SynthID into Gemini, so you can check any image in five seconds. The counterintuitive part is what survives editing, what doesn't, and the one question it never answers: who actually made this.</em></p>
+
+<p>Strip every byte of metadata from an AI-generated image and the watermark stays. Take a screenshot of that same image and the watermark dies. That inversion runs against most people's intuition, and it is the whole story of SynthID. Once you understand why a screenshot beats it but <code>exiftool</code> cannot touch it, you understand exactly what the new five-second AI check can and cannot tell you.</p>
+
+<p>I have been digging into how Google's detector actually works, because the framing going around ("just ask Gemini if it's AI") is true but quietly misleading. The check is real. It also answers a narrower question than the headline suggests.</p>
+
+<h2>The five-second check is real, and placement beat the model</h2>
+
+<p>The workflow is genuinely four steps: open Gemini, drop the image in, ask "is this made with AI?", read the answer. No portal, no upload to a forensics service, no wait.</p>
+
+<p>That sounds trivial, and the triviality is the point. I have watched good detection tools die because they lived one tab away from where the doubt actually happened. A check that fires inside the chat you already have open is a check people will use. Google says the Gemini verification flow has already been run around <a href="https://blog.google/innovation-and-ai/products/identifying-ai-generated-media-online/">50 million times</a>, and at I/O 2026 it confirmed it is expanding both Content Credentials and SynthID verification to Search and Chrome. The friction was always the product. The math was never the hard part.</p>
+
+<h2>What SynthID actually is: a signal, not a label</h2>
+
+<p>SynthID embeds a statistical pattern into the content itself at generation time. For images and video, it nudges pixels in a way that survives common edits like cropping, filters, frame-rate changes, and lossy compression. For audio, it shifts the waveform in a band you cannot hear, and Google says it holds up through MP3 compression, added noise, and speed changes. For text, it biases the token probabilities the model samples from, so the wording carries a faint signature (<a href="https://deepmind.google/models/synthid/">Google DeepMind, SynthID</a>).</p>
+
+<p>The key word is <em>signal</em>. The mark is not a field you can read in a hex editor. It is spread across the content the way a watermark is spread across a banknote. That is why ordinary edits do not remove it, and also why the detector returns a confidence rather than a clean yes or no. Read the output as "likely AI-generated, at this confidence," not a verdict.</p>
+
+<h2>The inversion: exiftool can't strip it, a screenshot can</h2>
+
+<p>This is the part engineers get wrong on first contact, so it is worth being concrete. The instinct is to reach for <code>exiftool</code> and scrub the file. But <code>exiftool</code> edits metadata, and SynthID does not live in metadata.</p>
+
+<pre><code># Wipe every scrap of metadata from the file
+$ exiftool -all= photo.png
+
+# EXIF camera tags ...... gone
+# XMP / IPTC fields ..... gone
+# C2PA content manifest . gone (it was metadata)
+# SynthID signal ........ still in the pixels</code></pre>
+
+<p>So the obvious attack misses the target. There are three separate layers of "where the truth about a file lives," and they fail to different attacks:</p>
+
+<pre><code>Layer    Lives in  exiftool?  Answers
+-------  --------  ---------  --------------
+EXIF     metadata  Yes        camera + edits
+C2PA CC  manifest  Yes        who made it
+SynthID  pixels    No         was a model?</code></pre>
+
+<p>(C2PA CC = C2PA Content Credentials.)</p>
+
+<p>A screenshot defeats SynthID precisely because it is not an edit. It is a re-capture. The original gets rendered to a screen, recomposited by the OS, and re-rasterized into a new file at a new resolution. Each step adds noise, and the watermark is a faint pattern trying to stay above a confidence threshold. Push it down far enough and the detector stops trusting it.</p>
+
+<p>The cheaper evasion does not even bother with the watermark. The mark is only present if a participating model wrote it, so an image from a model that never adopted SynthID has nothing to detect. The result comes back clean. That gives you an asymmetry to internalize: a positive is strong, because the signature is hard to forge, while a negative is weak, because it only rules out the marked tools, and the marked tools are a shrinking slice of everything out there.</p>
+
+<h2>The question it never answers: who made this</h2>
+
+<p>Here is where the popular framing needs correcting. The dream people describe is one check that confirms an image is "real human work" versus AI. SynthID does not do that, and by design it never will. It only sees its own ink. It is blind to a photo a human actually took, because there is no mark to find, and a clean result there proves nothing about authenticity.</p>
+
+<p>"Who made this, and can I trust them" is a provenance question, and provenance needs identity, not a watermark. That is the job of C2PA Content Credentials: a manifest signed by the camera, the editor, or the publisher, binding the file to an issuer you can verify. Sketched out, a capture-time manifest looks roughly like this:</p>
+
+<pre><code>{
+  "claim_generator": "Pixel 10 Camera",
+  "assertions": [
+    { "label": "c2pa.actions",
+      "data": { "actions": [{ "action": "c2pa.created" }] } },
+    { "label": "c2pa.hash.data", "alg": "sha256" }
+  ],
+  "signature": { "issuer": "Google", "alg": "ps256" }
+}</code></pre>
+
+<p>That is a signed statement of origin: this frame was created on this device, the pixels hash to this value, and a named issuer vouches for it. Google is already shipping this side, not just the watermark. The Pixel 10 camera writes Content Credentials at capture, so a photo can carry a signed claim that it came off a real lens and was never edited, marking a frame as an <a href="https://blog.google/innovation-and-ai/products/identifying-ai-generated-media-online/">unaltered original</a>. That signed-at-capture identity is the "authentic human work" signal SynthID structurally cannot provide, because a watermark only knows about its own ink and a real camera leaves none. The instinct that we need central, identity-bound verification is the right one. It is just not SynthID's job.</p>
+
+<h2>Where the watermark actually holds: video and audio</h2>
+
+<p>The screenshot loophole is mostly an image problem, and it largely dissolves for video and audio. You can grab one frame of a clip, but you cannot screenshot motion or sound. SynthID's mark is carried across the temporal signal, re-stamped frame after frame and second after second, so capturing a usable copy means re-recording the stream rather than snapping a still.</p>
+
+<p>Re-recording is a far taller fence than a screenshot. Run a watermarked clip through a screen-and-mic recapture and you keep the temporal structure the detector keys on while picking up new noise, rather than cleanly erasing the mark. For audio especially, a watermark that lives in an inaudible band and survives MP3 compression means the obvious laundering paths leave it intact.</p>
+
+<p>This is the part I would underline hardest. For static images, watermarking is a useful but leaky check. For synthetic video and cloned voice, which is exactly where deepfakes do the real damage, the watermark has the most room to work, because the signal you would have to destroy is spread across time and a single frame cannot capture it.</p>
+
+<h2>What still beats it today</h2>
+
+<p>I would rather state the limits plainly than oversell the check. Here is what gets past SynthID right now:</p>
+
+<ul>
+  <li><strong>Generate with a non-participating model.</strong> No mark written, nothing to detect. The simplest evasion, and it needs zero skill.</li>
+  <li><strong>Screenshot or re-capture a still image.</strong> Re-rasterizing pushes the signal below the detector's confidence on a single frame.</li>
+  <li><strong>Heavy generative editing.</strong> Run the image through a second, unmarked model that repaints it, and you dilute the original mark.</li>
+  <li><strong>The analog hole.</strong> Print it and photograph it, or aggressively crop and rescale, and a faint image watermark can drop out.</li>
+</ul>
+
+<p>It is also worth naming what Google has not published: I have not seen disclosed false-positive or false-negative rates for the detector. None of this makes the check worthless. It makes it a filter, not a verdict, and a filter that catches the lazy majority of synthetic media is genuinely valuable, as long as nobody reads a clean result as proof of a human hand.</p>
+
+<h2>The two-layer check I'd actually trust</h2>
+
+<p>If the goal is "tell me whether to trust what I am looking at," no single watermark gets there. What I want is two layers verified together at the point of viewing, and the logic is small enough to write down:</p>
+
+<pre><code>def how_much_to_trust(asset):
+    machine = synthid_detect(asset)   # confidence the pixels are model-made
+    signer  = c2pa_verify(asset)      # verified issuer, or None
+
+    if signer:                        # someone is accountable for this file
+        return f"signed by {signer}"
+    if machine > 0.9:                 # strong positive: a model almost certainly made it
+        return "AI-generated"
+    return "unverified"               # no mark, no signature: most of the internet</code></pre>
+
+<p>Layer one is the statistical watermark, SynthID and its industry siblings, answering "did a machine make this" with a confidence. It is the robust, low-information layer that survives ordinary handling. The adoption numbers are what make it matter: Google says SynthID has <a href="https://blog.google/innovation-and-ai/sundar-pichai-io-2026/">now watermarked</a> over 100 billion images and videos plus 60,000 years of audio, with OpenAI, Kakao, and ElevenLabs named as adopters at I/O 2026. A watermark one lab honors is a marketing line. A watermark several major labs write is closer to infrastructure.</p>
+
+<p>Layer two is signed provenance, C2PA bound to a real issuer identity, answering "who captured or published this." It is the high-information, fragile layer that carries the meaning, and it is the only branch in that function that returns accountability. The state most files land in is the last one: <code>unverified</code>. That is where we sit for most of what we scroll past, and it is the honest default until provenance is the boring norm rather than the exception.</p>
+
+<h2>The Short Version</h2>
+
+<p>Strip the metadata and SynthID survives. Screenshot the image and it dies. That inversion tells you the watermark lives in the signal, which is why <code>exiftool</code> cannot remove it and why a re-capture or an unmarked model walks right past it.</p>
+
+<p>It answers "did a machine make this," not "who made this" or "is this authentic." The second question needs signed provenance like C2PA, and the two layers only add up to trust when they work together.</p>
+
+<p>For images, treat a hit as strong and a miss as nearly meaningless. For video and voice, take it more seriously, because the mark rides the whole stream and you cannot screenshot your way out. Check before you share. Just know exactly what the check did and did not tell you.</p>
+
+<hr>
+
+<p><em>Sources: <a href="https://deepmind.google/models/synthid/">Google DeepMind, SynthID</a>; <a href="https://blog.google/innovation-and-ai/sundar-pichai-io-2026/">Sundar Pichai, Google I/O 2026 keynote</a>; <a href="https://blog.google/innovation-and-ai/products/identifying-ai-generated-media-online/">Google, identifying AI-generated media online</a>; C2PA Content Credentials spec. Code blocks are illustrative sketches, not Google's actual API.</em></p>
+
+</body>
+</html>

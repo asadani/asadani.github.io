@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The spec lies until something runs it — templates, skills, and the sample</title>
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #F5F1EB;
+    --bg-alt:       #EDEAE3;
+    --surface:      #FFFFFF;
+    --surface-tint: #FAF8F5;
+    --border:       #DDD9D0;
+    --border-light: #EAE7E0;
+    --text:         #1A1714;
+    --text-body:    #3D3A35;
+    --text-muted:   #6B6760;
+    --text-subtle:  #9B9892;
+    --accent:       #C85C2D;
+    --accent-light: #E8895D;
+    --accent-bg:    #FDF1EB;
+    --accent-border:#F0C4A8;
+    --green:        #2A7A4B;
+    --green-bg:     #EAF5EF;
+    --green-border: #A8D9BC;
+    --blue:         #2563A8;
+    --blue-bg:      #EAF1FA;
+    --blue-border:  #A8C5E8;
+    --red:          #B83535;
+    --red-bg:       #FAEBEB;
+    --red-border:   #E8AAAA;
+    --code-bg:      #1A1714;  /* code blocks stay dark in BOTH modes */
+    --shadow:       rgba(200,92,45,0.08);
+    --serif:        'Newsreader', Georgia, serif;
+    --sans:         'Inter', system-ui, sans-serif;
+    --mono:         'JetBrains Mono', 'Courier New', monospace;
+    color-scheme: light;
+  }
+
+  /* ─── DARK MODE ───────────────────────────────────────── */
+  /* Same design, dark palette. Toggled via [data-theme] on <html>
+     (nav button + OS default + localStorage — see scripts). Warm dark,
+     not pure black; the terracotta accent brightens so it reads on dark. */
+  [data-theme="dark"] {
+    --bg:           #14110D;
+    --bg-alt:       #1E1A14;
+    --surface:      #1A1611;
+    --surface-tint: #211C16;
+    --border:       #332C24;
+    --border-light: #2A241D;
+    --text:         #F2EEE7;
+    --text-body:    #D8D2C8;
+    --text-muted:   #A39C90;
+    --text-subtle:  #7A7468;
+    --accent:       #E8895D;
+    --accent-light: #F0A079;
+    --accent-bg:    #2C1E14;
+    --accent-border:#5A3826;
+    --green:        #5FD699;
+    --green-bg:     #14241B;
+    --green-border: #2E5640;
+    --blue:         #6FB0F0;
+    --blue-bg:      #142233;
+    --blue-border:  #2C4A6E;
+    --red:          #F08585;
+    --red-bg:       #2E1717;
+    --red-border:   #663434;
+    --code-bg:      #0E0B08;
+    --shadow:       rgba(0,0,0,0.45);
+    color-scheme: dark;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-body);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .nav-tag {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+  }
+  /* Light/dark toggle — shows the moon in light mode (click → dark) and
+     the sun in dark mode (click → light). */
+  .theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .theme-toggle:hover { color: var(--accent); border-color: var(--accent-border); }
+  .theme-icon-sun { display: none; }
+  [data-theme="dark"] .theme-icon-sun  { display: inline; }
+  [data-theme="dark"] .theme-icon-moon { display: none; }
+
+  /* ─── LAYOUT ──────────────────────────────────────────── */
+  .page-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-deck {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 640px;
+    font-weight: 300;
+  }
+  .hero-meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-family: var(--mono);
+  }
+  .hero-meta-sep { color: var(--border); }
+
+  /* ─── BODY TEXT ───────────────────────────────────────── */
+  .prose p {
+    color: var(--text-body);
+    margin-bottom: 20px;
+    font-size: 17px;
+    line-height: 1.78;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); font-weight: 600; }
+  em { font-style: italic; color: var(--text-body); }
+
+  /* ─── SECTION HEADING ─────────────────────────────────── */
+  /* scroll-margin-top keeps the sticky 52px nav from covering the heading
+     when you jump to a #anchor. */
+  .section { margin-top: 56px; scroll-margin-top: 72px; }
+  .section-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section-label a { color: inherit; text-decoration: none; transition: color 0.15s; }
+  .section-label a:hover { color: var(--text); }
+  .section h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+  /* Self-linking heading: the whole H2 is an anchor to its own section,
+     and a '#' affordance appears on hover. */
+  .section h2 a.anchor { color: inherit; text-decoration: none; position: relative; }
+  .section h2 a.anchor:hover::before {
+    content: '#';
+    position: absolute;
+    left: -22px;
+    color: var(--accent);
+    font-weight: 400;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 32px 0 14px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── CODE BLOCK ──────────────────────────────────────── */
+  .code-block {
+    background: var(--code-bg);
+    border-radius: 7px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .code-block .cb-label {
+    padding: 9px 16px;
+    background: rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .code-block pre {
+    padding: 20px;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #e8e8e8;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-block .tok-key  { color: #fdba74; }
+  .code-block .tok-val  { color: #86efac; }
+  .code-block .tok-cmt  { color: #6b7280; font-style: italic; }
+  .code-block .tok-str  { color: #93c5fd; }
+  .code-block .tok-acc  { color: #fde047; }
+
+  /* ─── CALLOUT ─────────────────────────────────────────── */
+  .callout {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+  .callout .callout-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout p { font-size: 15px; color: var(--text-muted); margin: 0; line-height: 1.7; }
+
+  /* ─── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-refs { font-size: 12px; color: var(--text-subtle); }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 40px 0 36px; }
+    .page-wrap { padding: 0 16px 60px; }
+    footer { padding: 16px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">asadani.tech</a>
+  <div class="nav-right">
+    <span>Engineering</span>
+    <span class="nav-tag">MAY 2026</span>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <span class="theme-icon-moon" aria-hidden="true">&#9790;</span><!-- ☾ shown in light mode -->
+      <span class="theme-icon-sun" aria-hidden="true">&#9728;</span><!-- ☀ shown in dark mode -->
+    </button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">On Abstractions</div>
+    <h1>The spec lies until something runs it</h1>
+    <p class="hero-deck">A template and a skill should have been enough to write these posts. They were not. A real example fixed it and cost more to run, and then it showed me how to make the template and the skill better.</p>
+    <div class="hero-meta">
+      <span>asadani.tech</span>
+      <span class="hero-meta-sep">/</span>
+      <span>May 2026</span>
+      <span class="hero-meta-sep">/</span>
+      <span>6 min read</span>
+    </div>
+  </header>
+
+  <!-- SECTION 1 -->
+  <div class="section" id="the-setup">
+    <div class="section-label">The Setup</div>
+    <h2><a class="anchor" href="#the-setup">I had the spec. I still wanted the example.</a></h2>
+    <div class="prose">
+      <p>I built myself a shortcut this week. Then I refused to use it the way I had designed it.</p>
+      <p>By the end of a rebuild I had two things that, on paper, were enough to write any future post without looking at anything else. A template: one HTML file with every component, every class name, all the CSS, the exact structure. And a skill: a written procedure for filling it. What to write, in what order, in what voice.</p>
+      <p>That should be the whole job. The <em>what</em> and the <em>how</em>, both written down and sitting in front of me.</p>
+      <p>And every time I went to actually produce a post, I did the same thing. I opened a real, published article and read it first. The shortcut was right there and I kept walking past it. That nagged at me enough to stop and ask why.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section" id="two-specs">
+    <div class="section-label">The Artifacts</div>
+    <h2><a class="anchor" href="#two-specs">Two kinds of spec, both lossy</a></h2>
+    <div class="prose">
+      <p>A template tells you what exists. It is the grammar. Here are the components, here is the markup, here are the class names. A skill tells you how to proceed. It is the procedure. Start with the hero, write eight sections, hold the voice steady, run these checks before you ship.</p>
+      <p>Between them they cover the what and the how. That feels like the entire job. It is not.</p>
+      <p>Both are generalizations, and generalizations are lossy on purpose. A template is the distilled shape of every post that could exist, which makes it the shape of no post that does. The skill is the distilled method, lifted away from any particular topic. Neither one has ever met a real sentence. That gap stays invisible right up until it doesn't.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section" id="the-proof">
+    <div class="section-label">The Proof</div>
+    <h2><a class="anchor" href="#the-proof">Two bugs the clean version could not show</a></h2>
+    <div class="prose">
+      <p>My template had a list component. In the skeleton, each item was a short, plain string, and it looked perfect. Then a real article used a list where every item opened with a bold lead-in and continued into a sentence. The list rule was built on flexbox. Flex took the arrow, the bold lead-in, and the body text, treated them as three children, and laid them out as three columns. The bold part wrapped in a cramped gutter on the left and the sentence floated off to the right. The whole thing read like a broken table.</p>
+    </div>
+    <div class="code-block">
+      <div class="cb-label">the bug the skeleton couldn't surface</div>
+<pre><span class="tok-cmt">/* the list rule the clean skeleton shipped */</span>
+ul.dl li { <span class="tok-key">display</span>: <span class="tok-val">flex</span>; }
+
+<span class="tok-cmt">/* a real article opened each item with a bold lead-in */</span>
+&lt;li&gt;&lt;strong&gt;Generate with a model.&lt;/strong&gt; No mark written.&lt;/li&gt;
+
+<span class="tok-cmt">/* flex counted three children, so it drew three columns: */</span>
+[ &rarr; ][ <span class="tok-acc">Generate with a model.</span> ][ No mark written. ]
+          bold lead-in, boxed off      body text, floated away
+
+<span class="tok-cmt">/* fix: drop flex, use a gutter and an absolute arrow */</span>
+ul.dl li { <span class="tok-key">position</span>: <span class="tok-val">relative</span>; <span class="tok-key">padding-left</span>: <span class="tok-val">34px</span>; }</pre>
+    </div>
+    <div class="prose">
+      <p>The skeleton never had a bold lead-in inside a list item, so the bug could not appear there. It was invisible by construction.</p>
+      <p>The table had the same shape of problem. In the template it looked clean. A real post set explicit column widths through a <code>colgroup</code>, and the columns still came out uneven, because the layout mode quietly ignores those widths unless you ask for fixed layout. One line fixes it. The template was not wrong. It was untested, because nothing real had ever run through it.</p>
+    </div>
+  </div>
+
+  <!-- SECTION: THE TRADE -->
+  <div class="section" id="the-trade">
+    <div class="section-label">The Trade</div>
+    <h2><a class="anchor" href="#the-trade">The example cost more, and it worked</a></h2>
+    <div class="prose">
+      <p>Here is the part I resisted at first. Reading a real article into the context before writing is not free. A finished post runs about two and a half times the size of the skeleton, so handing the model a full sample is the expensive path: more tokens to read, more to hold in working memory than a clean template and a short list of steps.</p>
+      <p>I kept choosing it anyway, because the cheap path kept producing posts that were quietly wrong and the expensive path did not. Template plus skill gave me the grammar and the procedure. Template plus skill plus a real example gave me output that actually held together, because the example carried the one thing the other two could not: what the components look like once they meet real content, including the exact places they fall apart.</p>
+      <p>So for a while the scoreboard was blunt. The lean version was elegant and incomplete. The heavy version cost more and shipped. I paid the tokens and stopped pretending the clean inputs were enough.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section" id="spec-vs-impl">
+    <div class="section-label">The Pattern</div>
+    <h2><a class="anchor" href="#spec-vs-impl">A spec is not a reference implementation</a></h2>
+    <div class="prose">
+      <p>This is not a CSS story. It is the oldest gap in engineering wearing new clothes.</p>
+      <p>A statute is not case law. A recipe is not the plated dish. The rule reads clean and general, and the moment it touches a real case it sprouts exceptions nobody wrote down. Case law exists precisely because statutes are lossy. You only find out what the rule meant when a real dispute forces the question.</p>
+      <p>Models behave the same way, which is why a few-shot example so often beats a paragraph of instructions. The instruction is the spec. The example is the spec after it has survived an actual input. One of them has been tested. The other only sounds like it has.</p>
+    </div>
+    <div class="callout">
+      <div class="callout-lbl">The Reframe</div>
+      <p>A worked sample is not a teaching aid you reach for when the docs are thin. It is a test fixture. It is the one artifact in the room that has already met real content and lived to tell you where it bent.</p>
+    </div>
+  </div>
+
+  <!-- SECTION: THE FEEDBACK -->
+  <div class="section" id="the-feedback">
+    <div class="section-label">The Fix That Lasts</div>
+    <h2><a class="anchor" href="#the-feedback">Then I fed the lessons back</a></h2>
+    <div class="prose">
+      <p>Paying that tax on every future post is not a strategy. It works, but it is rent, and you keep paying it. The better move arrived once I stopped treating the example as a permanent crutch and started reading it as a report on what the spec had been missing all along.</p>
+      <p>So I went back and changed the spec itself. The list rule that broke under a bold lead-in lost its flexbox and got a plain gutter, so the next post inherits the fix instead of rediscovering the bug. I added a note to the table component spelling out that explicit column widths need fixed layout or the browser throws them away. The assembly rules that had been living only in my head, and in the sample, went into the design doc in writing. And the procedure stopped asking me questions that a real example had already answered.</p>
+      <p>Each of those moved a piece of knowledge out of the example and into the template and the skill. The spec got heavier, in the right way. The example got less necessary, not because I stopped trusting it, but because it had already done its work and I had finally written down what it taught me. The cheap path got cheaper precisely because the expensive path had run first.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 6 -->
+  <div class="section" id="short-version">
+    <div class="section-label">The Short Version</div>
+    <h2><a class="anchor" href="#short-version">The short version</a></h2>
+    <div class="prose">
+      <p>The sequence is the whole lesson. Template and skill were not enough. Template and skill and a real example worked, and cost more to run. Then I spent that cost back down by folding what the example exposed into the template and the skill, until the lean version was finally the honest one.</p>
+      <p>So I no longer treat a worked example as a teaching aid or a crutch. It is the diff between what I wrote down and what reality does with it. Run it once, read the diff, and promote the difference into the spec. The spec you can finally trust is the one that has already eaten its examples.</p>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <span>asadani.tech · May 2026</span>
+  <div class="footer-refs">
+    <a href="/">← back to index</a>
+  </div>
+</footer>
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
+
+</body>
+</html>

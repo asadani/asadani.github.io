@@ -22,6 +22,9 @@ const SITE = 'https://tech.anujsadani.in';
 const HOME = 'https://anujsadani.in';
 const OG_IMAGE = SITE + '/assets/profile-pic.png';
 const DRY = process.argv.includes('--dry-run');
+// Re-tag pages that predate the SEO:HEAD markers, so an identity change
+// (a new ORCID, say) reaches every page rather than only untagged ones.
+const REFRESH = process.argv.includes('--refresh');
 
 const read = (p) => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const readJSON = (p) => JSON.parse(read(p));
@@ -46,8 +49,66 @@ const articles = readJSON('data/articles.json')
   .slice()
   .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 const pubs = readJSON('data/publications.json');
+const identity = readJSON('data/identity.json');
 
 const urlOf = (a) => `${SITE}/${a.slug}/`;
+
+/* Books with a readable edition hosted here. These are NOT in articles.json --
+   they are book-forge output, not template articles -- so nothing else in this
+   file would have found them, and they were missing from the sitemap. */
+const hostedBooks = (pubs.digital || [])
+  .filter((b) => b.hosted)
+  .map((b) => Object.assign({}, b, {
+    slug: b.hosted.replace(/^\/|\/$/g, ''),
+    loc: SITE + b.hosted,
+  }));
+
+/* ── the Person, emitted on every page ────────────────────────────────────
+   One weak assertion becomes 35 consistent ones. Search and answer engines
+   merge an entity when independent sources carry the same identifiers, so the
+   value is in the repetition and in the reciprocal links from each profile. */
+function personNode() {
+  const ids = identity.identifier || {};
+  const idUrls = [
+    ids.orcid && `https://orcid.org/${ids.orcid}`,
+    ids.wikidata && `https://www.wikidata.org/wiki/${ids.wikidata}`,
+    ids.googleScholar && `https://scholar.google.com/citations?user=${ids.googleScholar}`,
+    ids.semanticScholar && `https://www.semanticscholar.org/author/${ids.semanticScholar}`,
+    ids.amazonAuthor && `https://www.amazon.in/stores/author/${ids.amazonAuthor}`,
+    ids.openLibrary && `https://openlibrary.org/authors/${ids.openLibrary}`,
+    ids.arxivAuthor && `https://arxiv.org/a/${ids.arxivAuthor}`,
+  ].filter(Boolean);
+
+  const node = {
+    '@type': 'Person',
+    '@id': HOME + '/#person',
+    name: identity.name,
+    givenName: identity.givenName,
+    familyName: identity.familyName,
+    url: identity.url,
+    image: identity.image,
+    jobTitle: identity.jobTitle,
+    description: identity.description,
+    sameAs: (identity.sameAs || []).concat(idUrls),
+  };
+  if (identity.worksFor) {
+    node.worksFor = { '@type': 'Organization', name: identity.worksFor.name,
+                      url: identity.worksFor.url };
+  }
+  if (identity.alumniOf) {
+    node.alumniOf = { '@type': 'CollegeOrUniversity', name: identity.alumniOf };
+  }
+  if (identity.homeLocation) {
+    node.homeLocation = { '@type': 'Place', name: identity.homeLocation };
+  }
+  if (Array.isArray(identity.knowsAbout)) node.knowsAbout = identity.knowsAbout;
+  // ORCID is the one identifier academic graphs resolve on; state it as such.
+  if (ids.orcid) {
+    node.identifier = { '@type': 'PropertyValue', propertyID: 'ORCID',
+                        value: ids.orcid };
+  }
+  return node;
+}
 
 /* ── sitemap.xml ──────────────────────────────────────────────────────── */
 function sitemap() {
@@ -56,6 +117,11 @@ function sitemap() {
     { loc: SITE + '/', lastmod: newest, changefreq: 'weekly', priority: '1.0' },
     ...articles.map((a) => ({
       loc: urlOf(a), lastmod: a.date, changefreq: 'yearly', priority: '0.8',
+    })),
+    // Book editions rank above ordinary essays: they are the long-form work
+    // and the pages most worth surfacing.
+    ...hostedBooks.map((b) => ({
+      loc: b.loc, lastmod: b.datePublished, changefreq: 'yearly', priority: '0.9',
     })),
   ];
   const body = entries.map((e) => [
@@ -123,7 +189,17 @@ function llms() {
     lines.push('');
     lines.push('## Digital releases');
     lines.push('');
-    pubs.digital.forEach((g) => lines.push(`- [${g.title}](${g.url})`));
+    // Point at the readable edition where one exists -- an answer engine can
+    // use that; it cannot use a Ko-fi checkout page.
+    pubs.digital.forEach((g) => {
+      const desc = (g.desc || '').replace(/\s+/g, ' ').trim();
+      if (g.hosted) {
+        lines.push(`- [${g.title}](${SITE}${g.hosted}): ${desc} ` +
+                   `Full text online; PDF at ${g.url}.`);
+      } else {
+        lines.push(`- [${g.title}](${g.url})${desc ? ': ' + desc : ''}`);
+      }
+    });
   }
 
   lines.push('');
@@ -158,34 +234,156 @@ function headBlock(a, opts) {
   out.push('<meta name="twitter:card" content="summary_large_image">');
   out.push('');
 
-  const json = {
-    '@context': 'https://schema.org',
+  const post = {
     '@type': 'BlogPosting',
     headline: a.title,
     url,
     mainEntityOfPage: url,
     inLanguage: 'en',
     isPartOf: { '@id': SITE + '/#blog' },
-    author: {
-      '@type': 'Person',
-      '@id': HOME + '/#person',
-      name: 'Anuj Sadani',
-      url: HOME + '/',
-    },
+    author: { '@id': HOME + '/#person' },
+    publisher: { '@id': HOME + '/#person' },
   };
-  if (desc) json.description = desc;
-  if (a.date) json.datePublished = a.date;
-  if (Array.isArray(a.tags) && a.tags.length) json.keywords = a.tags.join(', ');
+  if (desc) post.description = desc;
+  if (a.date) post.datePublished = a.date;
+  if (Array.isArray(a.tags) && a.tags.length) post.keywords = a.tags.join(', ');
 
   out.push('<script type="application/ld+json">');
-  out.push(ld(json));
+  out.push(ld({ '@context': 'https://schema.org', '@graph': [personNode(), post] }));
   out.push('</script>');
   return out.join('\n');
 }
 
+/* ── head tags for a hosted book edition ──────────────────────────────────
+   Book, not BlogPosting: these are long-form works sold as books, and the
+   distinction is what lets an answer engine say "Anuj Sadani wrote X" rather
+   than "a blog mentioned X". The Ko-fi listing rides along as an Offer. */
+function bookHeadBlock(b, opts) {
+  const url = b.loc;
+  const desc = (b.desc || '').replace(/\s+/g, ' ').trim();
+  const out = [];
+
+  if (opts.needsDescription && desc) {
+    out.push(`<meta name="description" content="${attr(desc)}">`);
+  }
+  out.push('<meta name="author" content="Anuj Sadani">');
+  out.push(`<link rel="canonical" href="${url}">`);
+  out.push('');
+  out.push('<meta property="og:type" content="book">');
+  out.push(`<meta property="og:url" content="${url}">`);
+  out.push('<meta property="og:site_name" content="Anuj Sadani | Tech">');
+  out.push(`<meta property="og:title" content="${attr(b.title)}">`);
+  if (desc) out.push(`<meta property="og:description" content="${attr(desc)}">`);
+  out.push(`<meta property="og:image" content="${SITE}${b.image || '/assets/profile-pic.png'}">`);
+  if (b.datePublished) {
+    out.push(`<meta property="book:release_date" content="${b.datePublished}">`);
+  }
+  out.push('<meta property="book:author" content="Anuj Sadani">');
+  out.push('<meta name="twitter:card" content="summary_large_image">');
+  out.push('');
+
+  const book = {
+    '@type': 'Book',
+    '@id': url + '#book',
+    name: b.title,
+    url,
+    mainEntityOfPage: url,
+    inLanguage: 'en',
+    bookFormat: 'https://schema.org/EBook',
+    author: { '@id': HOME + '/#person' },
+    publisher: { '@id': HOME + '/#person' },
+  };
+  if (desc) book.description = desc;
+  if (b.datePublished) book.datePublished = b.datePublished;
+  if (b.pages) book.numberOfPages = b.pages;
+  if (b.isbn) book.isbn = b.isbn;
+  if (b.image) book.image = SITE + b.image;
+  if (b.url) {
+    book.offers = { '@type': 'Offer', url: b.url,
+                    availability: 'https://schema.org/InStock' };
+  }
+
+  out.push('<script type="application/ld+json">');
+  out.push(ld({ '@context': 'https://schema.org', '@graph': [personNode(), book] }));
+  out.push('</script>');
+  return out.join('\n');
+}
+
+/* ── injected-block markers ───────────────────────────────────────────────
+   Wrapping the block makes re-running an update rather than a skip, which
+   matters: when an ORCID or Wikidata id is added to identity.json, every page
+   has to pick it up. Pages tagged before markers existed are migrated by
+   --refresh, which replaces the old contiguous block after </title>. */
+const MARK_OPEN = '<!-- SEO:HEAD -->';
+const MARK_CLOSE = '<!-- /SEO:HEAD -->';
+const MARK_RE = /<!-- SEO:HEAD -->[\s\S]*?<!-- \/SEO:HEAD -->/;
+
+function wrapBlock(block) {
+  return `${MARK_OPEN}\n${block}\n${MARK_CLOSE}`;
+}
+
+/** Replace a marked block, migrate a legacy one, or inject fresh. */
+function applyHead(html, block, opts) {
+  const wrapped = wrapBlock(block);
+
+  if (MARK_RE.test(html)) {
+    return { html: html.replace(MARK_RE, wrapped), how: 'updated' };
+  }
+
+  const hasLegacy = /property=["']og:url["']/.test(html);
+  if (hasLegacy && !opts.refresh) return { html, how: 'skipped' };
+
+  const closeTitle = html.indexOf('</title>');
+  if (closeTitle === -1) return { html, how: 'no-title' };
+  const at = closeTitle + '</title>'.length;
+
+  if (hasLegacy) {
+    // Migrate: the old block ran from </title> to the end of its ld+json
+    // script. Only replace when the span really is that block.
+    const endTag = '</script>';
+    const end = html.indexOf(endTag, at);
+    const span = end === -1 ? '' : html.slice(at, end + endTag.length);
+    if (end !== -1 && /og:url/.test(span) && /application\/ld\+json/.test(span)) {
+      return { html: html.slice(0, at) + '\n' + wrapped + html.slice(end + endTag.length),
+               how: 'migrated' };
+    }
+    return { html, how: 'skipped' };
+  }
+
+  return { html: html.slice(0, at) + '\n' + wrapped + html.slice(at), how: 'patched' };
+}
+
+/* ── back-fill hosted book pages ──────────────────────────────────────────
+   These are book-forge output, not articles, so nothing here found them
+   before: they carried no canonical, no og tags and no JSON-LD, and were
+   absent from the sitemap. `bf build` overwrites them, so this must be
+   re-runnable -- hence the markers. */
+function patchBooks() {
+  const report = { patched: [], updated: [], skipped: [], missing: [] };
+
+  hostedBooks.forEach((b) => {
+    const abs = path.join(ROOT, b.slug, 'index.html');
+    if (!fs.existsSync(abs)) { report.missing.push(b.slug); return; }
+
+    let html = fs.readFileSync(abs, 'utf8');
+    const block = bookHeadBlock(b, {
+      needsDescription: !/<meta\s+name=["']description["']/i.test(html),
+    });
+    const res = applyHead(html, block, { refresh: true });
+    if (res.how === 'no-title') { report.missing.push(b.slug + ' (no <title>)'); return; }
+    if (res.how === 'skipped') { report.skipped.push(b.slug); return; }
+
+    if (!DRY) fs.writeFileSync(abs, res.html);
+    (res.how === 'updated' || res.how === 'migrated'
+      ? report.updated : report.patched).push(b.slug);
+  });
+
+  return report;
+}
+
 /* ── back-fill existing article pages ─────────────────────────────────── */
 function patchArticles() {
-  const report = { patched: [], skipped: [], missing: [] };
+  const report = { patched: [], updated: [], skipped: [], missing: [] };
 
   articles.forEach((a) => {
     const rel = path.join(a.slug, 'index.html');
@@ -193,19 +391,16 @@ function patchArticles() {
     if (!fs.existsSync(abs)) { report.missing.push(a.slug); return; }
 
     let html = fs.readFileSync(abs, 'utf8');
-    if (/property=["']og:url["']/.test(html)) { report.skipped.push(a.slug); return; }
-
-    const closeTitle = html.indexOf('</title>');
-    if (closeTitle === -1) { report.missing.push(a.slug + ' (no <title>)'); return; }
-
     const block = headBlock(a, {
       needsDescription: !/<meta\s+name=["']description["']/i.test(html),
     });
-    const at = closeTitle + '</title>'.length;
-    html = html.slice(0, at) + '\n' + block + html.slice(at);
+    const res = applyHead(html, block, { refresh: REFRESH });
+    if (res.how === 'no-title') { report.missing.push(a.slug + ' (no <title>)'); return; }
+    if (res.how === 'skipped') { report.skipped.push(a.slug); return; }
 
-    if (!DRY) fs.writeFileSync(abs, html);
-    report.patched.push(a.slug);
+    if (!DRY) fs.writeFileSync(abs, res.html);
+    (res.how === 'updated' || res.how === 'migrated'
+      ? report.updated : report.patched).push(a.slug);
   });
 
   return report;
@@ -221,8 +416,18 @@ write('sitemap.xml', sitemap());
 write('robots.txt', robots());
 write('llms.txt', llms());
 
-const r = patchArticles();
-console.log(`\narticles: ${r.patched.length} ${DRY ? 'to patch' : 'patched'}, ` +
-            `${r.skipped.length} already tagged, ${r.missing.length} missing`);
-if (r.patched.length) console.log('  patched: ' + r.patched.join(', '));
-if (r.missing.length) console.log('  MISSING: ' + r.missing.join(', '));
+function report(label, r) {
+  console.log(`\n${label}: ${r.patched.length} ${DRY ? 'to patch' : 'patched'}, ` +
+              `${r.updated.length} updated, ${r.skipped.length} untouched, ` +
+              `${r.missing.length} missing`);
+  if (r.patched.length) console.log('  patched: ' + r.patched.join(', '));
+  if (r.updated.length) console.log('  updated: ' + r.updated.join(', '));
+  if (r.missing.length) console.log('  MISSING: ' + r.missing.join(', '));
+}
+
+report('books', patchBooks());
+report('articles', patchArticles());
+if (!REFRESH) {
+  console.log('\n  (pages tagged before the SEO:HEAD markers are left alone;');
+  console.log('   run with --refresh to migrate them onto the shared identity)');
+}

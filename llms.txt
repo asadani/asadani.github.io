@@ -47,13 +47,13 @@ Author profile: https://anujsadani.in
 
 ## Digital releases
 
-- [Speed Is the Moat](https://ko-fi.com/s/17808b2e0b)
-- [Abundant and Uncurated](https://ko-fi.com/s/000d383639)
-- [The Human Leverage Map: Finding Durable Human Value When Intelligence Becomes Abundant](https://ko-fi.com/s/2806feff25)
-- [The Engineers Who Didn't Make It Through AI](https://ko-fi.com/s/70b71a3671)
-- [The Monk Who Oversold the AI](https://ko-fi.com/s/02e8517c71)
-- [Three Leaders, One Market: A Field Report on Why Good AI Strategies Still Fail](https://ko-fi.com/s/b7efb1eb2e)
-- [The Barbell & The Vanishing Middle: IDP](https://ko-fi.com/s/3be014f2e6)
+- [Speed Is the Moat](https://tech.anujsadani.in/speed-is-the-moat/): Once token cost is understood, the claim goes, inference speed is the next durable advantage. It isn't — speed is a lead with a half-life of one to two months, with inference software delivering up to 2x more throughput on unchanged silicon inside a single month. What survives is narrower: latency is a priced contract term, not an engineering win. The cover states the proposition; the book is the audit. Full text online; PDF at https://ko-fi.com/s/17808b2e0b.
+- [Abundant and Uncurated](https://tech.anujsadani.in/abundant-and-uncurated/): Machine judgement already beats human annotation on accuracy and cost, so the case for keeping people in the loop cannot rest on being better. A model that verifies its own synthetic data plateaus at what it already knows, and evaluation criteria cannot be fixed before you look at the outputs. Machines apply judgement; humans form the criteria and supply the signal from outside the system. Every claim bound to a quoted source, including the two that failed. Full text online; PDF at https://ko-fi.com/s/000d383639.
+- [The Human Leverage Map: Finding Durable Human Value When Intelligence Becomes Abundant](https://ko-fi.com/s/2806feff25): When intelligence becomes abundant and cheap, judgment becomes scarce. A two-axis map for finding the human value that survives AI: where your leverage goes when the machine can produce the answer, how that leverage collapses without anyone noticing, and how to defend the faculty it depends on. The full designed PDF.
+- [The Engineers Who Didn't Make It Through AI](https://ko-fi.com/s/70b71a3671): Twelve brilliant principal engineers made rational decisions based on the world they knew, then the world changed faster than their optimization function. The Craftsman, the Skeptic, the Lone Expert, the Builder: twelve failure modes of senior technical leadership during a discontinuity, braided into one argument. A companion to Three Leaders, One Market, turned on people instead of firms. No villains, only people who optimized for a reality that stopped existing.
+- [The Monk Who Oversold the AI](https://ko-fi.com/s/02e8517c71): Why borrowed foundation-model capability is shared capability — how a product leader scales on it for two years and still dissolves the only moat the product had.
+- [Three Leaders, One Market: A Field Report on Why Good AI Strategies Still Fail](https://ko-fi.com/s/b7efb1eb2e): A field report on good-faith failure: three experienced leaders, three defensible AI strategies in one market, and why all three fail as the market keeps moving what it rewards.
+- [The Barbell & The Vanishing Middle: IDP](https://ko-fi.com/s/3be014f2e6): Where intelligent document processing is heading through 2028 — value migrating to infrastructure and decision automation while the extraction middle becomes invisible, not simple.
 
 ## Machine-readable indexes
 

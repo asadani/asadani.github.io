@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SynthID can't tell you who made it: the 5-second AI check and what it misses</title>
-<meta name="description" content="Google wired SynthID into Gemini: drop an image in, ask if it's AI, read the answer in five seconds. The check is real and it's the best we have. It also tells you whether a model made something, not who did. Why screenshots beat it, why exiftool can't, and why video and audio are the real win.">
+<!-- SEO:HEAD -->
 <meta name="author" content="Anuj Sadani">
 <link rel="canonical" href="https://tech.anujsadani.in/synthid-watermark-check/">
 
@@ -21,25 +21,72 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "SynthID can't tell you who made it.",
-  "url": "https://tech.anujsadani.in/synthid-watermark-check/",
-  "mainEntityOfPage": "https://tech.anujsadani.in/synthid-watermark-check/",
-  "inLanguage": "en",
-  "isPartOf": {
-    "@id": "https://tech.anujsadani.in/#blog"
-  },
-  "author": {
-    "@type": "Person",
-    "@id": "https://anujsadani.in/#person",
-    "name": "Anuj Sadani",
-    "url": "https://anujsadani.in/"
-  },
-  "description": "Google wired SynthID into Gemini: drop an image in, ask if it's AI, read the answer in five seconds. The check is real and it's the best we have. It also tells you whether a model made something, not who did. Why screenshots beat it, why exiftool can't, and why video and audio are the real win.",
-  "datePublished": "2026-05-29",
-  "keywords": "ai-engineering"
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://anujsadani.in/#person",
+      "name": "Anuj Sadani",
+      "givenName": "Anuj",
+      "familyName": "Sadani",
+      "url": "https://anujsadani.in/",
+      "image": "https://tech.anujsadani.in/assets/profile-pic.png",
+      "jobTitle": "Principal Software Development Engineer",
+      "description": "Anuj Sadani is a Principal Software Development Engineer at Infrrd in Pune, India. He builds enterprise generative-AI systems -- RAG platforms, agentic workflows, and evaluation pipelines -- leads the engineers who build them, and owns the organisation-wide Python stack. He writes about AI engineering, infrastructure, and security, and is the author of The Clean Vibe Coder.",
+      "sameAs": [
+        "https://anujsadani.in/",
+        "https://tech.anujsadani.in/",
+        "https://github.com/asadani",
+        "https://linkedin.com/in/anujsadani",
+        "https://medium.com/@anuj.sadani",
+        "https://devpandaandvibedragon.substack.com/",
+        "https://ko-fi.com/anujsadani"
+      ],
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Infrrd",
+        "url": "https://www.infrrd.ai/"
+      },
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "Government College of Engineering, Amravati"
+      },
+      "homeLocation": {
+        "@type": "Place",
+        "name": "Pune, India"
+      },
+      "knowsAbout": [
+        "AI engineering",
+        "Retrieval-augmented generation",
+        "Agentic workflows",
+        "LLM evaluation",
+        "Intelligent document processing",
+        "Machine learning infrastructure",
+        "Software engineering leadership"
+      ]
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "SynthID can't tell you who made it.",
+      "url": "https://tech.anujsadani.in/synthid-watermark-check/",
+      "mainEntityOfPage": "https://tech.anujsadani.in/synthid-watermark-check/",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://tech.anujsadani.in/#blog"
+      },
+      "author": {
+        "@id": "https://anujsadani.in/#person"
+      },
+      "publisher": {
+        "@id": "https://anujsadani.in/#person"
+      },
+      "description": "Google wired SynthID into Gemini: drop an image in, ask if it's AI, read the answer in five seconds. The check is real and it's the best we have. It also tells you whether a model made something, not who did. Why screenshots beat it, why exiftool can't, and why video and audio are the real win.",
+      "datePublished": "2026-05-29",
+      "keywords": "ai-engineering"
+    }
+  ]
 }
 </script>
+<!-- /SEO:HEAD -->
 <!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
 <script>
   (function () {
