@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <title>Abundant and Uncurated</title>
 <!-- SEO:HEAD -->
+<meta name="description" content="Machine judgement already beats human annotation on accuracy and cost, so the case for keeping people in the loop cannot rest on being better. A model that verifies its own synthetic data plateaus at what it already knows, and evaluation criteria cannot be fixed before you look at the outputs. Machines apply judgement; humans form the criteria and supply the signal from outside the system. Every claim bound to a quoted source, including the two that failed.">
 <meta name="author" content="Anuj Sadani">
 <link rel="canonical" href="https://tech.anujsadani.in/abundant-and-uncurated/">
 
@@ -39,6 +40,7 @@
         "https://medium.com/@anuj.sadani",
         "https://devpandaandvibedragon.substack.com/",
         "https://ko-fi.com/anujsadani",
+        "https://www.amazon.com/stores/Anuj-Sadani/author/B0H34JHLSB",
         "https://orcid.org/0009-0001-0124-3181"
       ],
       "worksFor": {
@@ -432,7 +434,7 @@
     section.cover { height: auto; min-height: 0; padding: 76px 72px; }
     section.cover .meta { margin-top: 64px; }
   }
-<!-- BOOK-FORGE:MATTER-CSS v1 sha=c8f9a577ebd9 -->
+/* BOOK-FORGE:MATTER-CSS v1 sha=54d2d29db345 */
 /* book-forge matter -- flow mode.
  *
  * Injected into essays that were never built as books. Each has its own
@@ -460,7 +462,6 @@
   --bf-rule:   var(--rule, #D8DCE3);
   --bf-paper:  var(--paper, #FFFFFF);
   --bf-accent: var(--accent, var(--crimson, #9E2B3A));
-  --bf-measure: 34rem;
 
   box-sizing: border-box;
   color: var(--bf-ink);
@@ -472,12 +473,19 @@
 .bf-matter *::before,
 .bf-matter *::after { box-sizing: border-box; }
 
-/* Flow hosts have no @page geometry and lay their content out in a .wrap,
-   so the matter supplies its own page breaks and measure. */
+/* Do NOT impose a width or padding by default. Every host already lays its
+   own content out -- a bare `section` card at 820px in one, a `.wrap` at 740px
+   in another -- and overriding that made the matter render at a different
+   measure from the book it sits in, which reads as a different document.
+   Set matter.measure in meta.yaml only for a host that constrains nothing. */
+/* Deliberately declares NO max-width. `.bf-flow` outranks a host's bare
+   `section { max-width: 820px }`, so declaring one here -- even
+   `var(--bf-measure, none)` -- overrides the host and renders the matter at a
+   different width from the book around it. Hosts that constrain nothing can
+   opt in with matter.measure in meta.yaml, which appends a rule below. */
 .bf-flow {
-  max-width: var(--bf-measure);
-  margin: 0 auto;
-  padding: 10mm 0 6mm;
+  margin-left: auto;
+  margin-right: auto;
 }
 @media print {
   .bf-flow { break-before: page; page-break-before: always; padding-top: 0; }
@@ -600,7 +608,7 @@
   color: var(--bf-faint);
 }
 .bf-matter .colophon b { color: var(--bf-soft); }
-<!-- /BOOK-FORGE:MATTER-CSS -->
+/* /BOOK-FORGE:MATTER-CSS */
 
 </style>
 </head>

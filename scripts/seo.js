@@ -74,7 +74,8 @@ function personNode() {
     ids.wikidata && `https://www.wikidata.org/wiki/${ids.wikidata}`,
     ids.googleScholar && `https://scholar.google.com/citations?user=${ids.googleScholar}`,
     ids.semanticScholar && `https://www.semanticscholar.org/author/${ids.semanticScholar}`,
-    ids.amazonAuthor && `https://www.amazon.in/stores/author/${ids.amazonAuthor}`,
+    // Amazon store URLs embed a name slug, so they cannot be synthesised from
+    // the id alone -- the real page is listed in sameAs instead.
     ids.openLibrary && `https://openlibrary.org/authors/${ids.openLibrary}`,
     ids.arxivAuthor && `https://arxiv.org/a/${ids.arxivAuthor}`,
   ].filter(Boolean);
