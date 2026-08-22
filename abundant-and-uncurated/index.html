@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Abundant and Uncurated</title>
+<style>
+  /* ---------- Page ---------- */
+  @page {
+    size: A4;
+    margin: 22mm 20mm 20mm 20mm;
+    @bottom-center { content: counter(page); }
+  }
+  @page :first { margin: 0; }
+
+  :root {
+    --ink: #1b1b1d;
+    --soft: #4a4a4f;
+    --faint: #8a8a90;
+    --rule: #d9d6cf;
+    --paper: #ffffff;
+    --human: #8a642a;      /* human / curated */
+    --machine: #1c3a5e;    /* synthetic / generated */
+    --mid: #6c6f76;
+    --crimson: #9c2235;
+    --human-wash: #f7f1e2;
+    --machine-wash: #ecf0f6;
+    --mid-wash: #f0efed;
+    --link: #1c3a5e;
+  }
+
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  body {
+    font-family: "Iowan Old Style", "Palatino Linotype", "Palatino", Georgia, "Times New Roman", serif;
+    color: var(--ink);
+    background: var(--paper);
+    font-size: 11.2pt;
+    line-height: 1.62;
+    margin: 0;
+  }
+
+  /* ---------- Cover ---------- */
+  .cover {
+    height: 297mm;
+    box-sizing: border-box;
+    padding: 46mm 26mm 26mm 26mm;
+    background: linear-gradient(180deg, #fbfaf7 0%, #f3f1ea 100%);
+    display: flex;
+    flex-direction: column;
+    break-after: page;
+    position: relative;
+  }
+  .cover .kicker {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    font-size: 9.5pt;
+    color: var(--crimson);
+    font-weight: 700;
+    margin-bottom: 20mm;
+  }
+  .cover h1 {
+    font-size: 40pt;
+    line-height: 1.04;
+    font-weight: 700;
+    margin: 0 0 8mm 0;
+    letter-spacing: -0.01em;
+  }
+  .cover h1 .em { color: var(--human); font-style: italic; }
+  .cover .sub {
+    font-size: 15pt;
+    color: var(--soft);
+    font-style: italic;
+    max-width: 130mm;
+    line-height: 1.4;
+  }
+  .cover .byline {
+    margin-top: 8mm;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 11.5pt;
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .cover .preface {
+    margin-top: 4mm;
+    font-style: italic;
+    font-size: 11pt;
+    color: var(--soft);
+    max-width: 118mm;
+    line-height: 1.42;
+    border-left: 2px solid var(--crimson);
+    padding-left: 5mm;
+  }
+  .cover .meta {
+    margin-top: auto;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 9.5pt;
+    color: var(--faint);
+    letter-spacing: 0.04em;
+    border-top: 1px solid var(--rule);
+    padding-top: 6mm;
+  }
+  .cover .meta strong { color: var(--soft); font-weight: 600; }
+  .cover-svg { margin: 14mm 0 0 0; }
+
+  /* ---------- Typography ---------- */
+  h2.part {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 10pt;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--crimson);
+    font-weight: 700;
+    margin: 0 0 2mm 0;
+  }
+  h2.chapter-title {
+    font-size: 23pt;
+    line-height: 1.1;
+    font-weight: 700;
+    margin: 0 0 7mm 0;
+    letter-spacing: -0.01em;
+  }
+  .chapter { break-before: page; }
+  .chapter-num {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 60pt;
+    font-weight: 800;
+    color: #eceae3;
+    line-height: 0.8;
+    margin: 0 0 -6mm 0;
+    letter-spacing: -0.04em;
+  }
+  h3 {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 12.5pt;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 9mm 0 2mm 0;
+  }
+  p { margin: 0 0 3.4mm 0; }
+  p.lead { font-size: 13pt; line-height: 1.5; color: var(--soft); }
+  .dropcap::first-letter {
+    initial-letter: 2;
+    -webkit-initial-letter: 2;
+    font-weight: 700;
+    color: var(--crimson);
+    margin-right: 2mm;
+  }
+  strong { font-weight: 700; }
+  a { color: var(--link); text-decoration: none; }
+
+  sup.cite {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 7pt;
+    color: var(--crimson);
+    font-weight: 700;
+    vertical-align: super;
+    line-height: 0;
+    padding-left: 0.5pt;
+  }
+
+  /* ---------- Pull quote ---------- */
+  blockquote.pull {
+    margin: 7mm 0;
+    padding: 0 0 0 7mm;
+    border-left: 3px solid var(--crimson);
+    font-size: 15pt;
+    line-height: 1.34;
+    font-style: italic;
+    color: var(--ink);
+  }
+  blockquote.pull .who {
+    display: block;
+    margin-top: 3mm;
+    font-size: 9.5pt;
+    font-style: normal;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    letter-spacing: 0.04em;
+    color: var(--faint);
+    text-transform: uppercase;
+  }
+  .aphorism {
+    text-align: center;
+    font-size: 13.5pt;
+    font-style: italic;
+    color: var(--mid);
+    margin: 8mm auto;
+    max-width: 120mm;
+    line-height: 1.4;
+  }
+
+  /* ---------- Figures ---------- */
+  figure { margin: 8mm 0; break-inside: avoid; text-align: center; }
+  figure svg { max-width: 100%; height: auto; }
+  figcaption {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 8.6pt;
+    color: var(--faint);
+    margin-top: 3mm;
+    text-align: center;
+  }
+  figcaption .fnum { color: var(--crimson); font-weight: 700; }
+
+  /* ---------- Tables ---------- */
+  table {
+    width: 100%; border-collapse: collapse; font-size: 9.4pt;
+    margin: 6mm 0; break-inside: avoid;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+  }
+  th {
+    text-align: left; background: #2b2b2e; color: #fff;
+    padding: 2.4mm 3mm; font-weight: 600; font-size: 8.6pt;
+  }
+  td { padding: 2.4mm 3mm; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.4; }
+  tr:nth-child(even) td { background: #faf9f6; }
+  td.h { color: var(--human); font-weight: 600; }
+  td.m { color: var(--machine); font-weight: 600; }
+
+  /* ---------- Callout ---------- */
+  .data {
+    background: var(--mid-wash); border: 1px solid var(--rule);
+    border-radius: 2mm; padding: 5mm 6mm; margin: 7mm 0; break-inside: avoid;
+  }
+  .data h4 {
+    font-family: "Helvetica Neue", Arial, sans-serif; margin: 0 0 3mm 0;
+    font-size: 8.6pt; letter-spacing: 0.18em; text-transform: uppercase; color: var(--crimson);
+  }
+  .data .row { display: flex; gap: 6mm; flex-wrap: wrap; }
+  .data .stat { flex: 1 1 38mm; }
+  .data .big {
+    font-family: "Helvetica Neue", Arial, sans-serif; font-size: 19pt;
+    font-weight: 800; color: var(--ink); line-height: 1.08;
+  }
+  .data .nb { white-space: nowrap; }
+  .data .lbl {
+    font-family: "Helvetica Neue", Arial, sans-serif; font-size: 8pt;
+    color: var(--soft); margin-top: 1.5mm; line-height: 1.3;
+  }
+
+  /* ---------- Overture ---------- */
+  .overture { break-before: page; }
+  .overture .script { font-size: 12.4pt; line-height: 1.66; }
+  .overture .script p { margin-bottom: 4.6mm; }
+  .beat {
+    font-family: "Helvetica Neue", Arial, sans-serif; font-size: 8pt;
+    letter-spacing: 0.22em; text-transform: uppercase; color: var(--crimson);
+    font-weight: 700; margin: 8mm 0 2mm 0;
+  }
+
+  /* ---------- TOC ---------- */
+  .toc { break-before: page; }
+  .toc ol { list-style: none; padding: 0; margin: 6mm 0 0 0; }
+  .toc li {
+    display: flex; align-items: baseline; padding: 2.6mm 0;
+    border-bottom: 1px solid #eceae3;
+    font-family: "Helvetica Neue", Arial, sans-serif; font-size: 10.5pt;
+  }
+  .toc .n { color: var(--crimson); font-weight: 700; width: 14mm; }
+  .toc .t { color: var(--ink); font-weight: 600; }
+  .toc .d { color: var(--faint); font-size: 9pt; margin-left: 4mm; font-weight: 400; }
+
+  /* ---------- References ---------- */
+  .refs { break-before: page; }
+  .refs ol { font-size: 8.8pt; line-height: 1.45; color: var(--soft); padding-left: 8mm; }
+  .refs li { margin-bottom: 1.8mm; }
+  .refs a { color: var(--link); word-break: break-all; }
+  .refs .tier {
+    font-family: "Helvetica Neue", Arial, sans-serif; font-size: 7.4pt;
+    font-weight: 700; color: var(--faint); letter-spacing: 0.06em;
+  }
+
+  .rule { border: none; border-top: 1px solid var(--rule); margin: 8mm 0; }
+  .small { font-size: 9pt; color: var(--faint); }
+
+  /* ---------- Cards / strata ---------- */
+  .cards { display: flex; flex-wrap: wrap; gap: 4mm; margin: 6mm 0; }
+  .card {
+    flex: 1 1 50mm; border: 1px solid var(--rule); border-radius: 2.4mm;
+    padding: 4mm 4.5mm; background: #fcfbf8; break-inside: avoid;
+  }
+  .card .role {
+    font-family: "Helvetica Neue", Arial, sans-serif; font-size: 8pt;
+    letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700;
+    color: var(--crimson); margin-bottom: 1.8mm;
+  }
+  .card p { margin: 0; font-size: 9.5pt; line-height: 1.5; color: var(--soft); }
+
+  .stratum { border-radius: 2.4mm; padding: 4mm 4.5mm; margin-bottom: 3.4mm; break-inside: avoid; }
+  .stratum.hu { background: var(--human-wash); border: 1px solid var(--human); }
+  .stratum.mi { background: var(--mid-wash); border: 1px solid var(--mid); }
+  .stratum.ma { background: var(--machine-wash); border: 1px solid var(--machine); }
+  .stratum .hd { font-family: "Helvetica Neue", Arial, sans-serif; font-weight: 700; font-size: 11pt; }
+  .stratum.hu .hd { color: var(--human); }
+  .stratum.mi .hd { color: #54565c; }
+  .stratum.ma .hd { color: #16304a; }
+  .stratum .sub2 { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 8.2pt; color: var(--faint); margin-top: 0.6mm; }
+  .chips { display: flex; flex-wrap: wrap; gap: 2mm; margin-top: 3mm; }
+  .chip {
+    font-family: "Helvetica Neue", Arial, sans-serif; font-size: 8.3pt;
+    background: #fff; border: 1px solid var(--rule); border-radius: 12mm;
+    padding: 1.3mm 3mm; color: var(--soft);
+  }
+
+  .twocol { display: flex; gap: 4mm; margin: 6mm 0; break-inside: avoid; }
+  .twocol .col { flex: 1 1 0; border: 1px solid var(--rule); border-radius: 2.4mm; padding: 4mm 4.5mm; }
+  .twocol .keep { background: var(--human-wash); }
+  .twocol .give { background: var(--machine-wash); }
+  .twocol h5 {
+    font-family: "Helvetica Neue", Arial, sans-serif; margin: 0 0 2.5mm;
+    font-size: 9pt; letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .twocol .keep h5 { color: var(--human); }
+  .twocol .give h5 { color: var(--machine); }
+  .twocol ul { margin: 0; padding-left: 4.5mm; font-size: 9.3pt; line-height: 1.48; color: var(--soft); }
+  .twocol li { margin-bottom: 2mm; }
+
+  /* ---------- Verification ledger box ---------- */
+  .ledger {
+    border: 1px solid var(--crimson); border-radius: 2mm;
+    background: #fdf7f8; padding: 5mm 6mm; margin: 7mm 0; break-inside: avoid;
+  }
+  .ledger h4 {
+    font-family: "Helvetica Neue", Arial, sans-serif; margin: 0 0 3mm 0;
+    font-size: 8.6pt; letter-spacing: 0.18em; text-transform: uppercase; color: var(--crimson);
+  }
+  .ledger p { font-size: 9.6pt; line-height: 1.5; color: var(--soft); margin-bottom: 2mm; }
+  .ledger p:last-child { margin-bottom: 0; }
+
+  /* ---------- Screen view ---------- */
+  @media screen {
+    body { background: #d9d7d0; padding: 28px 14px; }
+    section {
+      max-width: 820px; margin: 0 auto 26px auto; padding: 60px 72px;
+      box-sizing: border-box; background: var(--paper);
+      box-shadow: 0 2px 16px rgba(0,0,0,0.13); border-radius: 2px;
+    }
+    section.cover { height: auto; min-height: 0; padding: 76px 72px; }
+    section.cover .meta { margin-top: 64px; }
+  }
+<!-- BOOK-FORGE:MATTER-CSS v1 sha=c8f9a577ebd9 -->
+/* book-forge matter -- flow mode.
+ *
+ * Injected into essays that were never built as books. Each has its own
+ * stylesheet, and they collide in specific, verified ways:
+ *
+ *   - they reuse `rule`, `lead`, `card`, `meta`, `small`, `cover`, `beat`,
+ *     `kicker`, `num`, `refs` for their own purposes, and two of them define
+ *     `preface` to mean a pull-quote. So every selector here is scoped under
+ *     .bf-matter and nothing is styled by element alone at document scope.
+ *
+ *   - they define the SAME custom property names with different values, and
+ *     idp-barbell has --crimson with no --accent at all. So the tokens below
+ *     are declared on .bf-matter (never :root, which a host's later :root
+ *     block would win) and each falls back through the names the hosts
+ *     actually use before reaching a literal.
+ *
+ * Type is deliberately NOT set: font-family inherits from the host, so the
+ * matter reads as part of the book it is bound into rather than as a graft.
+ */
+
+.bf-matter {
+  --bf-ink:    var(--ink, #161A21);
+  --bf-soft:   var(--ink-soft, var(--soft, #4E5665));
+  --bf-faint:  var(--ink-faint, var(--faint, #7C8593));
+  --bf-rule:   var(--rule, #D8DCE3);
+  --bf-paper:  var(--paper, #FFFFFF);
+  --bf-accent: var(--accent, var(--crimson, #9E2B3A));
+  --bf-measure: 34rem;
+
+  box-sizing: border-box;
+  color: var(--bf-ink);
+  text-align: left;
+  font-style: normal;
+}
+
+.bf-matter *,
+.bf-matter *::before,
+.bf-matter *::after { box-sizing: border-box; }
+
+/* Flow hosts have no @page geometry and lay their content out in a .wrap,
+   so the matter supplies its own page breaks and measure. */
+.bf-flow {
+  max-width: var(--bf-measure);
+  margin: 0 auto;
+  padding: 10mm 0 6mm;
+}
+@media print {
+  .bf-flow { break-before: page; page-break-before: always; padding-top: 0; }
+}
+
+.bf-matter h2 {
+  margin: 0 0 6mm;
+  padding: 0 0 3mm;
+  border-bottom: 1px solid var(--bf-rule);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  color: var(--bf-ink);
+}
+
+.bf-matter h3 {
+  margin: 7mm 0 3mm;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--bf-ink);
+}
+
+.bf-matter p {
+  margin: 0 0 3.5mm;
+  font-size: 0.94rem;
+  line-height: 1.6;
+  color: var(--bf-soft);
+}
+
+.bf-matter b { font-weight: 600; color: var(--bf-ink); }
+.bf-matter i { font-style: italic; }
+
+.bf-matter .work {
+  color: var(--bf-ink);
+  font-size: 1rem;
+}
+
+.bf-matter .grant {
+  margin: 5mm 0;
+  padding: 4mm 5mm;
+  border-left: 3px solid var(--bf-accent);
+  background: var(--bf-paper);
+}
+.bf-matter .grant p:last-child { margin-bottom: 0; }
+
+.bf-matter .signoff {
+  margin-top: 5mm;
+  color: var(--bf-faint);
+}
+
+.bf-matter .imprint {
+  margin-top: 7mm;
+  padding-top: 3mm;
+  border-top: 1px solid var(--bf-rule);
+  font-size: 0.8rem;
+  color: var(--bf-faint);
+}
+
+/* --- about the author ------------------------------------------------- */
+
+.bf-matter .bio p:last-child { margin-bottom: 0; }
+
+.bf-matter .qrpanel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6mm;
+  margin: 8mm 0 0;
+}
+@media (max-width: 34rem) {
+  .bf-matter .qrpanel { grid-template-columns: 1fr; }
+}
+
+.bf-matter .qrcard {
+  display: flex;
+  gap: 4mm;
+  align-items: flex-start;
+  padding: 4mm;
+  border: 1px solid var(--bf-rule);
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+/* The host may style a bare .code; this is more specific, so it wins. */
+.bf-matter .qrcard .code {
+  flex: 0 0 auto;
+  width: 24mm;
+  background: none;
+  padding: 0;
+  border: 0;
+}
+.bf-matter .qrcard .code svg,
+.bf-matter .qr { display: block; width: 24mm; height: 24mm; }
+
+.bf-matter .qrcard .what {
+  display: flex;
+  flex-direction: column;
+  gap: 1mm;
+  min-width: 0;
+}
+.bf-matter .qrcard .what b { font-size: 0.9rem; }
+.bf-matter .qrcard .what span {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--bf-soft);
+}
+.bf-matter .qrcard .what code {
+  font-size: 0.78rem;
+  color: var(--bf-accent);
+  background: none;
+  padding: 0;
+}
+
+.bf-matter .colophon {
+  margin-top: 9mm;
+  padding-top: 4mm;
+  border-top: 1px solid var(--bf-rule);
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--bf-faint);
+}
+.bf-matter .colophon b { color: var(--bf-soft); }
+<!-- /BOOK-FORGE:MATTER-CSS -->
+
+</style>
+</head>
+<body>
+
+<!-- ============================ COVER ============================ -->
+<section class="cover">
+  <div class="kicker">An Essay on Data and Judgement &middot; 2026</div>
+  <h1>Abundant and <span class="em">Uncurated</span></h1>
+  <div class="sub">Why synthetic data scales human judgement &mdash; and why it cannot become its source</div>
+  <div class="byline">Anuj Sadani</div>
+  <div class="preface">
+    Data has never been more plentiful or less trustworthy. The interesting question is not
+    whether machines can generate more of it. They can. The question is what happens to a
+    system that learns only from itself &mdash; and what, precisely, a human is still for.
+  </div>
+
+  <div class="cover-svg">
+    <svg viewBox="0 0 660 190" width="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arw" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#9c2235"/>
+        </marker>
+      </defs>
+      <!-- closed loop -->
+      <circle cx="170" cy="95" r="62" fill="#ecf0f6" stroke="#1c3a5e" stroke-width="1.4"/>
+      <path d="M170,33 A62,62 0 1,1 108,95" fill="none" stroke="#1c3a5e" stroke-width="2" marker-end="url(#arw)"/>
+      <text x="170" y="90" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="12" font-weight="700" fill="#16304a">MODEL</text>
+      <text x="170" y="106" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="12" font-weight="700" fill="#16304a">LOOP</text>
+      <text x="170" y="176" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="9" fill="#8a8a90">converges on what it already knows</text>
+
+      <!-- exogenous signal -->
+      <line x1="420" y1="95" x2="245" y2="95" stroke="#9c2235" stroke-width="2" marker-end="url(#arw)"/>
+      <text x="333" y="86" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="9" font-weight="700" fill="#9c2235">EXOGENOUS SIGNAL</text>
+
+      <rect x="430" y="52" width="180" height="86" rx="6" fill="#f7f1e2" stroke="#8a642a" stroke-width="1.4"/>
+      <text x="520" y="90" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="12" font-weight="700" fill="#8a642a">HUMAN</text>
+      <text x="520" y="106" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="12" font-weight="700" fill="#8a642a">JUDGEMENT</text>
+      <text x="520" y="176" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="9" fill="#8a8a90">the only unbounded source</text>
+    </svg>
+  </div>
+
+  <div class="meta">
+    <strong>A verified essay.</strong> Every factual claim in this text is bound to a quoted
+    passage in a source captured to disk and checked by hash.
+    <strong>45 claims</strong> in the ledger &middot; <strong>43</strong> cited here &middot;
+    <strong>2</strong> rejected in verification and reported as such &middot;
+    <strong>22</strong> distinct works &middot; <strong>57</strong> quoted bindings, zero mismatches.
+  </div>
+</section>
+
+<!-- ============================ OVERTURE ============================ -->
+<!-- BOOK-FORGE:FRONT-MATTER v1 sha=848386cb0b77 -->
+<section class="bf-matter bf-front bf-flow">
+  <h2>Copyright, permissions, and how this was made</h2>
+
+  <div class="legal">
+    <p class="work">Abundant and Uncurated &mdash; a verified inquiry into whether synthetic data can become the source of the judgement it scales.</p>
+
+    <p>Copyright &copy; 2026 Anuj Sadani.</p>
+
+    <div class="grant">
+      <p><b>Read it and pass it on.</b> Share it whole, quote it, teach from it.
+          The one thing asked in return is attribution: name <b>Anuj Sadani</b>
+          and <i>Abundant and Uncurated</i>, with a link where the format allows one.</p>
+        <p>Commercial use and derivative works are not granted here &mdash; if you
+          want either, ask. Released under Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International
+          (CC BY-NC-ND 4.0).</p>
+    </div>
+
+    <h3>A note on how this book was written</h3>
+
+    <p>An AI system drafted this book. Not "assisted with" &mdash; drafted it,
+      from the research through to the prose you are reading. I set the question
+      and its boundaries, made the judgment calls, argued with the drafts, and
+      put my name on the result. The errors are mine; the model does not get to
+      share the blame.</p>
+
+    <p>If that makes you wince, I understand the reflex. The internet is full of
+      confident, sourceless, frictionless text, and the reasonable response has
+      been to distrust anything that reads too smoothly. But the objection worth
+      taking seriously is not that a machine wrote it. It is that nobody checked
+      it.</p>
+
+    <p>So this book was built the other way round. Sources were captured to disk
+      and hashed before a word was drafted. Every factual sentence is bound to an
+      exact quotation inside one of those files, and a verification gate refused
+      to let the text ship until each binding checked out. The superscripts are
+      not decoration &mdash; they are the audit trail, and you can walk it
+      yourself in an afternoon.</p>
+
+    <p>That is the arrangement I would like to see become normal: let the machine
+      draft, and make the drafting answer for itself. If you compose every
+      sentence by hand, full respect &mdash; the craft shows. And if you notice
+      the em-dashes, they are mine. I have always written this way. Make your
+      peace with them.</p>
+
+    <p class="signoff">&mdash; A.S.</p>
+
+    <p class="imprint">First edition &middot; August 2026</p>
+  </div>
+
+</section>
+<!-- /BOOK-FORGE:FRONT-MATTER -->
+
+<!-- BOOK-FORGE:AFTER-COVER -->
+
+<section class="overture">
+  <h2 class="part">Overture</h2>
+  <h2 class="chapter-title">The Argument in Five Minutes</h2>
+
+  <div class="script">
+    <p class="lead dropcap">Everyone agrees that data is abundant and that good data is scarce.
+    The usual explanation is that curation is slow, expensive and unglamorous, and that better
+    tooling will eventually fix it. That explanation is comfortable and it is wrong in an
+    important way.</p>
+
+    <p>Start with the received wisdom, because it collapses quickly. The popular case for keeping
+    humans in the loop is that human judgement is simply better. It is not. In a peer-reviewed
+    comparison, a language model beat crowd workers on annotation accuracy by roughly twenty-five
+    percentage points, at under a third of a cent per annotation &mdash; about thirty times
+    cheaper than the human alternative.<sup class="cite">22</sup> Strong model judges agree with
+    human preferences more than eighty per cent of the time, which is the rate at which humans
+    agree with each other.<sup class="cite">7</sup> Any argument for the human that rests on
+    comparative accuracy has already lost.</p>
+
+    <div class="beat">The argument that survives</div>
+
+    <p>Two mechanisms, neither about accuracy, hold the line.</p>
+
+    <p><strong>The first is informational.</strong> A synthetic loop that verifies itself with a
+    model converges on what that verifier already knows &mdash; the retraining process drives the
+    estimate toward the verifier&rsquo;s own knowledge centre, and gains plateau or reverse unless
+    the verifier is perfectly reliable.<sup class="cite">16</sup> A closed loop of models
+    redistributes information. It does not create any. The human is not in the loop as a quality
+    check. The human is in the loop as the only unbounded source of new information.</p>
+
+    <p><strong>The second is structural.</strong> Evaluation criteria cannot be fully specified
+    before a human has looked at outputs.<sup class="cite">8</sup> The dependency is circular:
+    you need criteria in order to grade, and grading is how you discover the criteria. Every
+    result showing machines matching humans measures performance against a <em>fixed rubric</em>
+    &mdash; and the rubric is precisely the artefact that cannot be fixed in advance. A better
+    model makes the applying cheaper. It does not remove the step that comes first.</p>
+
+    <div class="beat">Why curation stays expensive</div>
+
+    <p>Curation resists automation for reasons that better tooling does not touch. Its failures
+    are invisible at the time of the work: data cascades are opaque and delayed, with poor
+    indicators and metrics,<sup class="cite">13</sup> which means there is no contemporaneous
+    quality signal to automate against. And curation is normative rather than clerical &mdash;
+    annotation instructions reproduce and normalise the worldviews of whoever commissioned
+    them.<sup class="cite">18</sup> It encodes a position on what the right answer is. That is not
+    a transcription task, and it never becomes one.</p>
+
+    <div class="beat">The verdict</div>
+
+    <blockquote class="pull">Machines should absorb the application of judgement, where they are
+    demonstrably accurate and radically cheaper. Humans own two things that cannot be delegated:
+    the formation of the criteria, and the supply of signal from outside the system.
+    <span class="who">The thesis &mdash; and the counter-evidence is real</span></blockquote>
+
+    <p>The honest counter-case is not hypothetical. One system reached state-of-the-art reasoning
+    performance trained by self-play with no human-curated data at all.<sup class="cite">17</sup>
+    That result is addressed head-on in Chapter III rather than managed. Its margin is
+    0.3 percentage points, and it works because a code executor hands it free ground truth
+    &mdash; a luxury that exists for arithmetic and does not exist for tone.</p>
+  </div>
+</section>
+
+<!-- ============================ TOC ============================ -->
+<section class="toc">
+  <h2 class="part">Contents</h2>
+  <h2 class="chapter-title">What&rsquo;s inside</h2>
+  <ol>
+    <li><span class="n">&mdash;</span><span class="t">Overture: The Argument in Five Minutes</span><span class="d">the whole case, compressed</span></li>
+    <li><span class="n">I</span><span class="t">The Collapse That Wasn&rsquo;t</span><span class="d">a regime, not a fact about synthetic data</span></li>
+    <li><span class="n">II</span><span class="t">The Verifier&rsquo;s Knowledge Centre</span><span class="d">why a model cannot bootstrap itself</span></li>
+    <li><span class="n">III</span><span class="t">Where Synthetic Earns Its Place</span><span class="d">and the strongest case against this essay</span></li>
+    <li><span class="n">IV</span><span class="t">The Price of Judgement</span><span class="d">why curation resists automation</span></li>
+    <li><span class="n">V</span><span class="t">The Rubric Problem</span><span class="d">what machines can and cannot take over</span></li>
+    <li><span class="n">VI</span><span class="t">A Scarcity of Permission</span><span class="d">the data is not running out the way you think</span></li>
+    <li><span class="n">VII</span><span class="t">The Division of Labour</span><span class="d">the verdict, and what would break it</span></li>
+    <li><span class="n">A</span><span class="t">Appendix: What Did Not Survive</span><span class="d">the method, and two rejected claims</span></li>
+    <li><span class="n">&mdash;</span><span class="t">Notes &amp; Sources</span><span class="d">twenty-two works, tiered</span></li>
+  </ol>
+</section>
+
+<!-- ============================ CH I ============================ -->
+<section class="chapter">
+  <div class="chapter-num">I</div>
+  <h2 class="part">Chapter One</h2>
+  <h2 class="chapter-title">The Collapse That Wasn&rsquo;t</h2>
+
+  <p class="dropcap">In July 2024, <em>Nature</em> published a result that gave the field a
+  nightmare with a name. Indiscriminately training generative models on data produced by other
+  models causes model collapse: the models progressively forget the true underlying data
+  distribution, even when that distribution is not itself changing.<sup class="cite">1</sup> The
+  characteristic symptom is elegant and grim &mdash; the tails of the original content
+  distribution disappear.<sup class="cite">1</sup> The rare things go first.</p>
+
+  <p>The finding travelled fast, and it travelled stripped of its conditions. It became a
+  general claim about synthetic data, which is not what the paper demonstrates.</p>
+
+  <h3>Replace versus accumulate</h3>
+
+  <p>Later work qualified the result heavily. When each generation&rsquo;s real data is
+  <em>replaced</em> by synthetic data, test error does rise with every model-fitting
+  iteration.<sup class="cite">3</sup> But when synthetic data <em>accumulates</em> alongside the
+  original real data, collapse is avoided.<sup class="cite">3</sup> Same phenomenon, opposite
+  outcome, and the only difference is what happens to the old data.</p>
+
+  <figure>
+    <svg viewBox="0 0 680 210" xmlns="http://www.w3.org/2000/svg">
+      <text x="8" y="16" font-family="Helvetica Neue,Arial" font-size="9.5" font-weight="700" fill="#9c2235">REPLACE</text>
+      <text x="8" y="118" font-family="Helvetica Neue,Arial" font-size="9.5" font-weight="700" fill="#8a642a">ACCUMULATE</text>
+      <!-- replace row -->
+      <g>
+        <rect x="80" y="24" width="86" height="34" rx="3" fill="#f7f1e2" stroke="#8a642a"/>
+        <text x="123" y="45" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="9" fill="#8a642a">real</text>
+        <rect x="200" y="24" width="86" height="34" rx="3" fill="#ecf0f6" stroke="#1c3a5e"/>
+        <text x="243" y="45" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="9" fill="#16304a">synth 1</text>
+        <rect x="320" y="24" width="86" height="34" rx="3" fill="#ecf0f6" stroke="#1c3a5e"/>
+        <text x="363" y="45" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="9" fill="#16304a">synth 2</text>
+        <rect x="440" y="24" width="86" height="34" rx="3" fill="#ecf0f6" stroke="#1c3a5e"/>
+        <text x="483" y="45" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="9" fill="#16304a">synth 3</text>
+        <text x="560" y="45" font-family="Helvetica Neue,Arial" font-size="9" font-weight="700" fill="#9c2235">error &uarr;</text>
+        <text x="80" y="76" font-family="Helvetica Neue,Arial" font-size="8.4" fill="#8a8a90">proportion of real data hits zero after the first iteration</text>
+      </g>
+      <!-- accumulate row -->
+      <g>
+        <rect x="80" y="126" width="86" height="34" rx="3" fill="#f7f1e2" stroke="#8a642a"/>
+        <text x="123" y="147" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="9" fill="#8a642a">real</text>
+        <rect x="200" y="126" width="86" height="34" rx="3" fill="#f7f1e2" stroke="#8a642a"/>
+        <text x="243" y="141" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="8" fill="#8a642a">real +</text>
+        <text x="243" y="153" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="8" fill="#16304a">synth 1</text>
+        <rect x="320" y="126" width="86" height="34" rx="3" fill="#f7f1e2" stroke="#8a642a"/>
+        <text x="363" y="141" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="8" fill="#8a642a">real +</text>
+        <text x="363" y="153" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="8" fill="#16304a">synth 1&ndash;2</text>
+        <rect x="440" y="126" width="86" height="34" rx="3" fill="#f7f1e2" stroke="#8a642a"/>
+        <text x="483" y="141" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="8" fill="#8a642a">real +</text>
+        <text x="483" y="153" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="8" fill="#16304a">synth 1&ndash;3</text>
+        <text x="560" y="147" font-family="Helvetica Neue,Arial" font-size="9" font-weight="700" fill="#8a642a">bounded</text>
+        <text x="80" y="178" font-family="Helvetica Neue,Arial" font-size="8.4" fill="#8a8a90">real data is diluted but never removed &mdash; collapse is avoided</text>
+      </g>
+    </svg>
+    <figcaption><span class="fnum">Fig. 1</span> &mdash; The two regimes. Only one of them describes a real training pipeline.</figcaption>
+  </figure>
+
+  <p>A position paper pushes the criticism further on two fronts. First, the literature is
+  arguing about eight different definitions of degradation rather than one.<sup class="cite">4</sup>
+  Second, and more damagingly, the replace paradigm drives the proportion of real data to zero
+  immediately after the first iteration<sup class="cite">4</sup> &mdash; a condition that
+  describes no training pipeline anyone actually operates.</p>
+
+  <h3>A tier inversion worth noticing</h3>
+
+  <p>These are not contradictory findings. They are findings about different setups, and the later
+  work simply ran an arm the earlier work did not.<sup class="cite">3,4</sup> But something about
+  how they are shelved deserves comment, because it will mislead a careful reader who is being
+  careful in the usual way.</p>
+
+  <p>The peer-reviewed paper carries the <em>less</em> qualified claim. The preprints carry the more
+  careful one.<sup class="cite">1,3,4</sup> A reader who weights sources by venue &mdash; the
+  ordinary, sensible heuristic &mdash; gets this backwards. In a field moving this fast, recency
+  can outrank review status, and citing only the peer-reviewed framing produces a more alarming
+  account than the literature supports.</p>
+
+  <p>One housekeeping note, because a heavily cited paper carrying a correction invites suspicion.
+  The <em>Nature</em> paper does carry a 2025 Author Correction, amending text in its Theoretical
+  intuition section.<sup class="cite">2</sup> It is a symbol substitution. It is not a retraction
+  and it does not disturb the findings.</p>
+
+  <p class="aphorism">Model collapse is real.<br>It is also a description of a laboratory
+  condition that nobody trains in.</p>
+</section>
+
+<!-- ============================ CH II ============================ -->
+<section class="chapter">
+  <div class="chapter-num">II</div>
+  <h2 class="part">Chapter Two</h2>
+  <h2 class="chapter-title">The Verifier&rsquo;s Knowledge Centre</h2>
+
+  <p class="dropcap">Underneath the argument about regimes sits a mechanism that generalises
+  better than either result, and it is the load-bearing wall of this essay. It also very nearly
+  went unnoticed, for reasons worth admitting.</p>
+
+  <p>Continual improvement requires that data be curated in a way that injects signal
+  <em>exogenous to the system that produced the original data</em>.<sup class="cite">11</sup>
+  Without such curation, performance can plateau or collapse after many
+  iterations.<sup class="cite">11</sup></p>
+
+  <p>Read that carefully. It specifies <strong>exogenous</strong> signal. It does not specify
+  <strong>human</strong> signal. And at first pass, the distinction appears to dissolve the case
+  for the human entirely: a verifier &ldquo;whether a human or a better model&rdquo; is sufficient
+  to prevent collapse.<sup class="cite">16</sup> On that reading, a stronger model substitutes
+  cleanly for a person, and the whole hand-wringing about human data is a transitional worry.</p>
+
+  <div class="beat">Two sentences later</div>
+
+  <p>It does not substitute, and the qualification is decisive. Where a model rather than a human
+  supplies the verification, early gains plateau and may reverse unless that verifier is perfectly
+  reliable.<sup class="cite">16</sup> More fundamentally, verifier-guided retraining ultimately
+  drives the parameter estimate toward the verifier&rsquo;s own knowledge
+  centre.<sup class="cite">16</sup></p>
+
+  <p>That is the whole argument in one clause. A model verifier does not add information to the
+  system. It <em>transfers</em> information the verifier already holds, and then the process
+  terminates. You can distil a stronger model into a weaker one indefinitely and never exceed the
+  stronger one. The ceiling is not a training problem. It is an information-theoretic one.</p>
+
+  <figure>
+    <svg viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg">
+      <!-- bounded -->
+      <circle cx="150" cy="100" r="70" fill="#ecf0f6" stroke="#1c3a5e" stroke-width="1.3" stroke-dasharray="4 3"/>
+      <circle cx="150" cy="100" r="34" fill="#fff" stroke="#1c3a5e" stroke-width="1.6"/>
+      <text x="150" y="97" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="8.6" font-weight="700" fill="#16304a">verifier&rsquo;s</text>
+      <text x="150" y="108" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="8.6" font-weight="700" fill="#16304a">knowledge</text>
+      <path d="M150,170 L150,140" stroke="#1c3a5e" stroke-width="1.6"/>
+      <text x="150" y="190" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="9" fill="#8a8a90">model verifier &mdash; converges inward</text>
+
+      <line x1="330" y1="40" x2="330" y2="170" stroke="#d9d6cf" stroke-width="1"/>
+
+      <!-- unbounded -->
+      <circle cx="500" cy="100" r="34" fill="#fff" stroke="#8a642a" stroke-width="1.6"/>
+      <text x="500" y="103" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="8.6" font-weight="700" fill="#8a642a">model</text>
+      <path d="M430,45 L470,80" stroke="#8a642a" stroke-width="1.4"/>
+      <path d="M570,45 L530,80" stroke="#8a642a" stroke-width="1.4"/>
+      <path d="M430,155 L470,120" stroke="#8a642a" stroke-width="1.4"/>
+      <path d="M570,155 L530,120" stroke="#8a642a" stroke-width="1.4"/>
+      <text x="500" y="190" text-anchor="middle" font-family="Helvetica Neue,Arial" font-size="9" fill="#8a8a90">human signal &mdash; arrives from outside</text>
+    </svg>
+    <figcaption><span class="fnum">Fig. 2</span> &mdash; A model verifier bounds the system at its own knowledge. Nothing inside the loop can exceed it.</figcaption>
+  </figure>
+
+  <div class="ledger">
+    <h4>Where this claim is weak</h4>
+    <p>This is the most important argument in the essay and the least corroborated. The
+    knowledge-centre result rests on a <strong>single preprint</strong> whose long-run analysis is
+    theoretical &mdash; demonstrated on linear regression, a variational autoencoder on MNIST, and
+    a 135-million-parameter language model.<sup class="cite">16</sup> It has not been shown at
+    frontier scale.</p>
+    <p>If that source fails to replicate, this chapter weakens from a formal result to a
+    plausibility argument. Readers should know which brick the wall is resting on.</p>
+  </div>
+
+  <p class="aphorism">A system that learns only from itself<br>is not learning. It is settling.</p>
+</section>
+
+<!-- ============================ CH III ============================ -->
+<section class="chapter">
+  <div class="chapter-num">III</div>
+  <h2 class="part">Chapter Three</h2>
+  <h2 class="chapter-title">Where Synthetic Earns Its Place</h2>
+
+  <p class="dropcap">None of this makes synthetic data a mistake. It makes it a tool with
+  conditions, and the conditions are more interesting than the tool. Synthetic data improves models
+  <em>conditionally</em> rather than generally, and the binding condition is the strength of the
+  verification applied to it &mdash; not the volume generated.<sup class="cite">10,14</sup></p>
+
+  <h3>Filtering is not automatically virtuous</h3>
+
+  <p>The practitioner consensus holds that a judge filter is the critical step, and that an
+  unfiltered synthetic dataset is worse than a smaller filtered one. Half of that is supported.
+  Filtering enhances learning <strong>only</strong> when the underlying verification is strong
+  enough to supply a high-resolution correctness signal.<sup class="cite">10</sup></p>
+
+  <p>The corollary is routinely omitted, and it is the useful half: naive or rigid
+  verification filtering has been observed to produce <em>no improvement at
+  all</em>.<sup class="cite">10</sup> Weak filtering is theatre. And over-strict filtering is
+  actively harmful, because it strips out the diversity that measurably correlates with both
+  pre-training and supervised fine-tuning performance.<sup class="cite">21</sup></p>
+
+  <p>There is a related finding that looks like good news and is really a relocation of the
+  problem. The quality of the <em>seed</em> data fed to a generator matters more to downstream
+  performance than whether the generated knowledge is novel.<sup class="cite">14</sup> Which is to
+  say: synthetic data inherits its quality from curated data. The curation did not disappear. It
+  moved upstream, where it is easier not to look at.</p>
+
+  <h3>One place synthetic genuinely holds up</h3>
+
+  <p>Synthetic test data has been found as effective as hand-crafted data both for refining
+  evaluation criteria and for aligning with user expectations.<sup class="cite">9</sup> This is a
+  real result and it deserves stating precisely, because it is routinely over-read. It concerns
+  the refinement of <em>judge criteria</em>, not the quality of training data, and it rests on a
+  preprint with twenty-four participants.</p>
+
+  <p>The companion figure gets quoted more often than the finding: eighty-three per cent of those
+  participants preferred the synthetic-generation tool to creating or selecting test cases by
+  hand.<sup class="cite">9</sup> That measures perceived workload and tool preference. It is
+  evidence that people would rather not hand-write test cases &mdash; a genuine finding about the
+  economics of curation effort, and not evidence that synthetic data is good.</p>
+
+  <div class="beat">The strongest case against this essay</div>
+
+  <p>Now the part that should worry me. One system, trained by self-play with no human-curated
+  data whatsoever, outperformed models trained on expert-curated human data in the coding
+  category.<sup class="cite">17</sup> It is a spotlight result at a top venue. If a model can
+  bootstrap state-of-the-art reasoning from nothing, the thesis of this essay is in serious
+  trouble.</p>
+
+  <p>Three considerations bound it. None of them dismisses it.</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="role">The margin</div>
+      <p>0.3 absolute percentage points, on one category.<sup class="cite">17</sup> A near-tie, not
+      a rout &mdash; and the abstract-level framing obscures this completely.</p>
+    </div>
+    <div class="card">
+      <div class="role">The scope</div>
+      <p>It works because a code executor supplies validation and verifiable
+      feedback.<sup class="cite">17</sup> Free ground truth exists for code and mathematics. It
+      does not exist for tone, safety or appropriateness.</p>
+    </div>
+    <div class="card">
+      <div class="role">The missing experiment</div>
+      <p>A domain with no formal correctness oracle, where self-generated data improves a model
+      across many generations with no human signal at any point. That experiment has not been
+      run.</p>
+    </div>
+  </div>
+
+  <div class="ledger">
+    <h4>Confidence: low</h4>
+    <p>This chapter is held at <strong>low</strong> confidence, set by its weakest link rather than
+    its average. The seed-quality finding is vendor-authored by a company selling data curation,
+    whose commercial interest points the same direction as its result.<sup class="cite">14</sup></p>
+    <p>And the strongest filtering evidence comes from the code domain, where a compiler supplies
+    ground truth for free<sup class="cite">10</sup> &mdash; the setting most favourable to automated
+    verification and least representative of the judgements that are actually hard.</p>
+  </div>
+</section>
+
+<!-- ============================ CH IV ============================ -->
+<section class="chapter">
+  <div class="chapter-num">IV</div>
+  <h2 class="part">Chapter Four</h2>
+  <h2 class="chapter-title">The Price of Judgement</h2>
+
+  <p class="dropcap">Human curation is costly for structural reasons rather than temporary ones.
+  This matters because the two diagnoses lead to opposite strategies. If curation is expensive
+  because tooling is immature, you wait. If it is expensive because of what it fundamentally is,
+  you budget for it permanently.</p>
+
+  <div class="data">
+    <h4>The shape of the cost</h4>
+    <div class="row">
+      <div class="stat"><div class="big"><span class="nb">1M+</span> <span class="nb">/ week</span></div><div class="lbl">Binary model-generation comparisons collected on a weekly basis in one frontier alignment pipeline.<sup class="cite">19</sup></div></div>
+      <div class="stat"><div class="big"><span class="nb">92%</span></div><div class="lbl">Of AI practitioners surveyed (n=53) reported experiencing at least one data cascade.<sup class="cite">13</sup></div></div>
+      <div class="stat"><div class="big"><span class="nb">cents</span></div><div class="lbl">Per task, for data workers producing training data &mdash; typically without employment protections.<sup class="cite">18</sup></div></div>
+    </div>
+  </div>
+
+  <h3>Volume is the least interesting half</h3>
+
+  <p>The scale is genuinely large. One frontier alignment pipeline collected human preference data
+  on a weekly basis, comprising over one million binary model-generation
+  comparisons.<sup class="cite">19</sup> That is not a dataset assembled once and amortised. It is
+  a standing operation with a payroll.</p>
+
+  <p>But volume is the part that tooling <em>can</em> attack, and focusing on it is what makes
+  people predict that curation costs are about to fall. Two other findings explain why they do
+  not.</p>
+
+  <h3>Failure is invisible until late</h3>
+
+  <p>Data cascades &mdash; compounding downstream failures originating in data problems &mdash;
+  are opaque and delayed, with poor indicators and metrics for detecting
+  them.<sup class="cite">13</sup> Ninety-two per cent of the practitioners surveyed reported
+  experiencing at least one.<sup class="cite">13</sup></p>
+
+  <p>This is the load-bearing explanation for why curation resists automation, and it is a
+  chicken-and-egg problem rather than an engineering gap. Automated quality control needs a
+  quality signal to optimise against. A process whose defects surface only far downstream does not
+  emit one at the time the work is being done. You cannot cheaply automate against a signal that
+  does not yet exist.</p>
+
+  <h3>Curation is normative, not clerical</h3>
+
+  <p>The second reason is less discussed and more fundamental. Annotation instruction documents
+  reproduce and normalise the worldviews of the parties commissioning the
+  data.<sup class="cite">18</sup> Curation is not transcription that a cheaper worker could perform
+  equally well. It encodes a position on what the right answer <em>is</em>.</p>
+
+  <p>This is why quality standards are expensive to write and contested to apply. It also explains
+  something the industry prefers not to name: the cost has largely been <em>displaced</em> rather
+  than removed. Data workers producing training data are paid as little as a few cents per task
+  and typically lack the social protections attached to
+  employment.<sup class="cite">18</sup> The field&rsquo;s own account of itself is that data is the
+  most under-valued and de-glamorised aspect of AI practice.<sup class="cite">13</sup></p>
+
+  <blockquote class="pull">Curation looks like a clerical cost because we have arranged for
+  someone else, somewhere else, to absorb it.
+  <span class="who">On the economics of not looking</span></blockquote>
+
+  <div class="ledger">
+    <h4>A gap in this chapter</h4>
+    <p>No peer-reviewed cost-per-label figure for <strong>expert</strong> curation was found. The
+    available comparison uses crowd workers on classification tasks as the human
+    baseline<sup class="cite">22</sup> &mdash; not the expert judgement this chapter is about.
+    This is the thinnest evidence in the essay, and it is thin in the direction that would most
+    strengthen the argument if filled.</p>
+    <p>The wage figures come from fieldwork in Venezuela and Argentina<sup class="cite">18</sup>
+    and should not be generalised to expert annotation in high-income markets.</p>
+  </div>
+</section>
+
+<!-- ============================ CH V ============================ -->
+<section class="chapter">
+  <div class="chapter-num">V</div>
+  <h2 class="part">Chapter Five</h2>
+  <h2 class="chapter-title">The Rubric Problem</h2>
+
+  <p class="dropcap">Here is where the sources genuinely disagree, so the disagreement goes first
+  and the reconciliation second. Anything else would be advocacy.</p>
+
+  <h3>The case against the human</h3>
+
+  <p>It is strong. Model judges match human-human agreement rates, exceeding eighty per
+  cent.<sup class="cite">7</sup> Models beat crowd workers on annotation accuracy by roughly
+  twenty-five percentage points.<sup class="cite">22</sup> And they do it at under a third of a
+  cent per annotation, about thirty times cheaper than the human
+  alternative.<sup class="cite">22</sup></p>
+
+  <div class="data">
+    <h4>What automation demonstrably wins</h4>
+    <div class="row">
+      <div class="stat"><div class="big"><span class="nb">&gt;80%</span></div><div class="lbl">Judge&ndash;human agreement, matching the rate at which humans agree with each other.<sup class="cite">7</sup></div></div>
+      <div class="stat"><div class="big"><span class="nb">+25pp</span></div><div class="lbl">Annotation accuracy over crowd workers, across four datasets of tweets and news articles.<sup class="cite">22</sup></div></div>
+      <div class="stat"><div class="big"><span class="nb">30&times;</span></div><div class="lbl">Cheaper per annotation than the crowd-work baseline.<sup class="cite">22</sup></div></div>
+    </div>
+  </div>
+
+  <h3>The case for the human</h3>
+
+  <p>It rests on one finding, and the finding is structural rather than comparative. It is
+  <em>impossible</em> to completely determine evaluation criteria prior to human judging of model
+  outputs.<sup class="cite">8</sup> The circularity has a name &mdash; criteria drift: users need
+  criteria in order to grade outputs, and grading outputs is what allows them to define the
+  criteria.<sup class="cite">8</sup></p>
+
+  <p>The obvious objection is to grade first and specify afterwards. It was tested, and it does not
+  hold: participants who graded before specifying criteria still refined those criteria on further
+  grading.<sup class="cite">8</sup> The loop does not terminate by reordering it.</p>
+
+  <div class="beat">The reconciliation</div>
+
+  <p>The two bodies of evidence are not in conflict, because they measure different things. Every
+  result favouring automation measures performance <em>against a fixed rubric</em>. And the rubric
+  is precisely the artefact that cannot be fixed in advance.<sup class="cite">8</sup></p>
+
+  <div class="twocol">
+    <div class="col keep">
+      <h5>Cannot be delegated</h5>
+      <ul>
+        <li><strong>Criteria formation</strong> &mdash; discovering what should be measured at all, which requires looking at outputs first.<sup class="cite">8</sup></li>
+        <li><strong>Exogenous signal</strong> &mdash; supplying information the system does not already contain.<sup class="cite">11,16</sup></li>
+      </ul>
+    </div>
+    <div class="col give">
+      <h5>Should be delegated</h5>
+      <ul>
+        <li><strong>Criteria application</strong> &mdash; grading at volume against a settled rubric, where machines match human agreement rates.<sup class="cite">7</sup></li>
+        <li><strong>First-pass labelling</strong> &mdash; where accuracy is higher and cost is thirtyfold lower.<sup class="cite">22</sup></li>
+      </ul>
+    </div>
+  </div>
+
+  <p>This distinction is worth holding onto because it is a claim about logic, not about capability.
+  It does not say models are not yet good enough at judging. It says the specification of what
+  counts as good cannot be completed before the examining happens. A more capable model makes the
+  applying cheaper; it does not remove the step that precedes it. The conclusion would fall if
+  someone demonstrated stable criteria formation without human grading &mdash; and that is the
+  experiment to watch for.</p>
+
+  <h3>A note on citation hygiene</h3>
+
+  <p>The paper reporting agreement above eighty per cent<sup class="cite">7</sup> is the same paper
+  documenting that model judges exhibit position bias, verbosity bias, self-enhancement bias and
+  limited reasoning ability.<sup class="cite">7</sup> The headline figure and the failure taxonomy
+  come from one source. They should always travel together, and in practice the first travels
+  alone.</p>
+</section>
+
+<!-- ============================ CH VI ============================ -->
+<section class="chapter">
+  <div class="chapter-num">VI</div>
+  <h2 class="part">Chapter Six</h2>
+  <h2 class="chapter-title">A Scarcity of Permission</h2>
+
+  <p class="dropcap">The premise underneath all of this is that high-quality human data is running
+  out. It is worth checking, because the claim blends two different phenomena that call for
+  opposite responses.</p>
+
+  <p><strong>The forecast.</strong> If current trends continue, models will be trained on datasets
+  roughly equal in size to the stock of public human text data between 2026 and 2032, or slightly
+  earlier if models are overtrained.<sup class="cite">5</sup> This is a projection rather than an
+  observation, and its authors are an organisation whose visibility depends on scaling forecasts
+  being newsworthy.<sup class="cite">5,6</sup> It has not happened yet.</p>
+
+  <p><strong>The measurement.</strong> More than twenty-eight per cent of the most actively
+  maintained, critical sources in the C4 corpus have become fully restricted from use through
+  robots.txt.<sup class="cite">15</sup> This is not a forecast. It is an audit of something that
+  already occurred.</p>
+
+  <div class="data">
+    <h4>Two different shortages</h4>
+    <div class="row">
+      <div class="stat"><div class="big"><span class="nb">2026&ndash;2032</span></div><div class="lbl">Projected window in which training-set size meets the stock of public human text.<sup class="cite">5</sup> A forecast.</div></div>
+      <div class="stat"><div class="big"><span class="nb">28%+</span></div><div class="lbl">Of the most actively maintained critical C4 sources, now fully restricted via robots.txt.<sup class="cite">15</sup> A measurement.</div></div>
+    </div>
+  </div>
+
+  <p>These should not be blended, because only one of them is a data problem. Exhaustion is a
+  supply constraint that better curation could in principle address &mdash; more efficient use of
+  what exists. Consent withdrawal is a governance phenomenon that curation effort cannot touch at
+  all, because the data still exists in full and is simply no longer permitted.</p>
+
+  <p>Which reframes the essay&rsquo;s own premise. A significant part of the scarcity in
+  &ldquo;abundant but uncurated&rdquo; is not scarcity of text. It is scarcity of
+  <em>permission</em><sup class="cite">15</sup> &mdash; and the response to that is legal and
+  commercial, not technical.</p>
+
+  <p class="aphorism">The web did not run out of words.<br>It started saying no.</p>
+</section>
+
+<!-- ============================ CH VII ============================ -->
+<section class="chapter">
+  <div class="chapter-num">VII</div>
+  <h2 class="part">Chapter Seven</h2>
+  <h2 class="chapter-title">The Division of Labour</h2>
+
+  <p class="dropcap">The proposition that data is abundant while high-quality curated data is
+  scarce is correct. The reasons are more structural than the usual account of effort and process
+  suggests, and the prescription that follows is narrower than &ldquo;keep humans in the
+  loop.&rdquo;</p>
+
+  <p>Curation is expensive because its failures are undetectable at the time of the
+  work<sup class="cite">13</sup> and because it encodes contested judgement rather than recording
+  facts.<sup class="cite">18</sup> Neither of those is fixed by better tooling, which is why the
+  cost has stayed stubborn while everything around it got cheaper.</p>
+
+  <div class="beat">The verdict</div>
+
+  <blockquote class="pull">Machines should absorb the application of judgement at scale, where they
+  are demonstrably accurate and radically cheaper. Humans should own two things that cannot be
+  delegated: the formation of the criteria, because criteria cannot be specified before outputs
+  are examined; and the supply of exogenous signal, because a loop verified by models converges on
+  what those models already know.
+  <span class="who">Held at moderate confidence &mdash; and contested</span></blockquote>
+
+  <p>Two independent mechanisms converge on this, which is the main reason to believe it. A
+  synthetic loop guided by a model verifier converges on that verifier&rsquo;s knowledge
+  centre,<sup class="cite">16</sup> so a closed system of models redistributes information without
+  creating any. And evaluation criteria cannot be fully specified before outputs are
+  examined,<sup class="cite">8</sup> so the definition of quality cannot be handed over in advance.
+  The first is informational; the second is logical. They do not depend on each other, and they
+  point the same way.</p>
+
+  <h3>What this changes in practice</h3>
+
+  <div class="cards">
+    <div class="card">
+      <div class="role">Budget</div>
+      <p>Treat curation as a permanent operating cost, not a capital project that finishes. The
+      weekly cadence of frontier preference collection<sup class="cite">19</sup> is the shape to
+      plan for.</p>
+    </div>
+    <div class="card">
+      <div class="role">Pipeline</div>
+      <p>Put humans where criteria are formed, not where labels are produced. Machines are better
+      and cheaper at application;<sup class="cite">7,22</sup> they cannot do formation at all.</p>
+    </div>
+    <div class="card">
+      <div class="role">Synthetic data</div>
+      <p>Generate freely, but assume the gain is bounded by verification
+      strength.<sup class="cite">10</sup> Unfiltered volume is not an asset, and weak filtering is
+      not verification.</p>
+    </div>
+    <div class="card">
+      <div class="role">Access</div>
+      <p>Treat the consent withdrawal as a first-order constraint.<sup class="cite">15</sup> No
+      amount of curation skill recovers data you are not permitted to use.</p>
+    </div>
+  </div>
+
+  <div class="beat">What would break this</div>
+
+  <p>The conclusion is held at moderate confidence and it is formally contested. The strongest
+  counter-evidence &mdash; state-of-the-art reasoning learned with no human data
+  &mdash; is real.<sup class="cite">17</sup> Its scope condition, a code executor providing ground
+  truth,<sup class="cite">17</sup> is exactly the condition that does not hold in the domains where
+  curation is hardest. But that is a bound, not a refutation, and the bound could be loosened by
+  better automated verifiers in domains that currently have none.</p>
+
+  <p>The falsifying experiment is specific: a domain with no formal correctness oracle, in which
+  self-generated data improves a model across many generations with no human signal at any point.
+  If that lands, this essay is wrong, and the honest thing is to say so in advance rather than
+  after.</p>
+
+  <p class="aphorism">The machine can tell you whether the answer fits the rule.<br>It cannot tell
+  you the rule was worth having.</p>
+</section>
+
+<!-- ============================ APPENDIX ============================ -->
+<section class="chapter">
+  <div class="chapter-num">A</div>
+  <h2 class="part">Appendix</h2>
+  <h2 class="chapter-title">What Did Not Survive</h2>
+
+  <p class="dropcap">This essay was assembled under a verification discipline, and the discipline
+  is worth describing because it changed the argument twice and rejected two claims outright.</p>
+
+  <h3>The method</h3>
+
+  <p>Every source was captured to disk before being cited, and hashed. Every factual claim was
+  bound to an exact quoted passage inside one of those captured files, and the binding was checked
+  mechanically &mdash; not against the live URL, and not against memory of the page. Claims that
+  could not be bound were marked failed and kept in the ledger rather than quietly dropped.</p>
+
+  <p>Forty-five claims were written; forty-three passed and are cited here. Fifty-seven bindings
+  were checked against twenty-seven captured snapshots, with zero mismatches. Twenty-two distinct
+  works underpin the essay: nine peer-reviewed, thirteen preprints or conference papers, no press
+  coverage, and &mdash; importantly &mdash; no systematic review with a registered protocol.
+  Nothing here carries meta-analytic support.</p>
+
+  <h3>Two claims were rejected</h3>
+
+  <div class="cards">
+    <div class="card">
+      <div class="role">Rejected</div>
+      <p><strong>&ldquo;Golden datasets built from production traces reflect real usage in a way
+      synthetic test cases cannot.&rdquo;</strong> Widely repeated in practitioner writing. The
+      nearest captured source runs the other way, noting that real-world data is noisy and
+      unbalanced and may overlook rare but critical edge cases.<sup class="cite">9</sup></p>
+    </div>
+    <div class="card">
+      <div class="role">Rejected</div>
+      <p><strong>&ldquo;A layered LLM-annotator, judge, synthetic gap-fill and human-review
+      pipeline is now standard practice.&rdquo;</strong> &ldquo;Standard&rdquo; is an empirical
+      claim about industry adoption. It would need a practitioner survey, and none exists in this
+      corpus.</p>
+    </div>
+  </div>
+
+  <h3>Two findings emerged only from reading past the abstract</h3>
+
+  <p>Both changed the argument. The paper stating that a verifier &ldquo;whether a human or a
+  better model&rdquo; prevents collapse reads, at abstract level, as though the two are
+  interchangeable. Two sentences later it states that gains plateau or reverse unless the verifier
+  is perfectly reliable, and that retraining converges on the verifier&rsquo;s knowledge
+  centre.<sup class="cite">16</sup> That inversion became Chapter II.</p>
+
+  <p>And the self-play result that beats expert-curated human data does so by 0.3 absolute
+  percentage points.<sup class="cite">17</sup> The headline survives; the decisiveness does not.
+  A summary that stopped at the abstract would have reported a rout.</p>
+
+  <h3>Known limits</h3>
+
+  <div class="cards">
+    <div class="card">
+      <div class="role">Single-source</div>
+      <p>The knowledge-centre bound &mdash; the formal basis of Chapter II &mdash; rests on one
+      preprint at small scale.<sup class="cite">16</sup></p>
+    </div>
+    <div class="card">
+      <div class="role">Domain skew</div>
+      <p>The strongest verification evidence is from code, where ground truth is
+      free.<sup class="cite">10</sup> Generalisation to tone and safety is directional, not
+      established.</p>
+    </div>
+    <div class="card">
+      <div class="role">Out of scope</div>
+      <p>Copyright and licensing; privacy regulation; non-text modalities; data-market economics.
+      The common claim that synthetic data wins in health and finance was <em>not assessed</em> and
+      should not be inferred from this text.</p>
+    </div>
+    <div class="card">
+      <div class="role">Unretrieved</div>
+      <p>Aroyo and Welty (2015), the standard treatment of annotator disagreement as signal rather
+      than noise, was paywalled and could not be obtained. It is not cited, and Chapter IV is
+      weaker for its absence.</p>
+    </div>
+  </div>
+
+  <p class="small">Unknowable from public sources: what frontier labs currently spend on human
+  data, and the present ratio of synthetic to human data in frontier training mixes. The closest
+  public figure<sup class="cite">19</sup> is self-reported and three years old.</p>
+</section>
+
+<!-- ============================ REFERENCES ============================ -->
+<section class="refs">
+  <h2 class="part">Appendix</h2>
+  <h2 class="chapter-title">Notes &amp; Sources</h2>
+  <p class="small">Twenty-two works. Tier labels follow an academic source standard: <strong>T2</strong>
+  peer-reviewed primary studies and proceedings; <strong>T3</strong> preprints, conference papers and
+  lab technical reports, which is where the frontier of this particular literature lives. All sources
+  were captured to disk and accessed 2026-08-16. Citation numbers in the text map to this list.</p>
+  <ol>
+    <li>Shumailov, I., Shumaylov, Z., Zhao, Y., Papernot, N., Anderson, R., &amp; Gal, Y. &mdash; <em>AI models collapse when trained on recursively generated data.</em> Nature, 24 Jul 2024. <a href="https://www.nature.com/articles/s41586-024-07566-y">nature.com</a> <span class="tier">[T2]</span></li>
+    <li>Shumailov, I., et al. &mdash; <em>Author Correction: AI models collapse when trained on recursively generated data.</em> Nature 640, E6, 21 Mar 2025. <a href="https://www.nature.com/articles/s41586-025-08905-3">nature.com</a> <span class="tier">[T2 &mdash; correction; symbol substitution, not a retraction]</span></li>
+    <li>Gerstgrasser, M., Schaeffer, R., Dey, A., Rafailov, R., et al. &mdash; <em>Is Model Collapse Inevitable? Breaking the Curse of Recursion by Accumulating Real and Synthetic Data.</em> arXiv:2404.01413, Apr 2024. <a href="https://arxiv.org/abs/2404.01413">arxiv.org</a> <span class="tier">[T3]</span></li>
+    <li>Schaeffer, R., et al. &mdash; <em>Position: Model Collapse Does Not Mean What You Think.</em> arXiv:2503.03150, Mar 2025. <a href="https://arxiv.org/html/2503.03150">arxiv.org</a> <span class="tier">[T3]</span></li>
+    <li>Villalobos, P., Ho, A., Sevilla, J., Besiroglu, T., Heim, L., &amp; Hobbhahn, M. &mdash; <em>Position: Will we run out of data? Limits of LLM scaling based on human-generated data.</em> ICML 2024 / arXiv:2211.04325. <a href="https://proceedings.mlr.press/v235/villalobos24a.html">proceedings.mlr.press</a> <span class="tier">[T2 &mdash; Epoch AI authors]</span></li>
+    <li>Epoch AI &mdash; <em>Will we run out of data to train large language models?</em> Jun 2024. <a href="https://epoch.ai/publications/will-we-run-out-of-data-limits-of-llm-scaling-based-on-human-generated-data">epoch.ai</a> <span class="tier">[T3 &mdash; publisher&rsquo;s own summary of 5]</span></li>
+    <li>Zheng, L., Chiang, W.-L., Sheng, Y., et al. &mdash; <em>Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena.</em> NeurIPS 2023 Datasets &amp; Benchmarks. <a href="https://arxiv.org/abs/2306.05685">arxiv.org</a> <span class="tier">[T2]</span></li>
+    <li>Shankar, S., Zamfirescu-Pereira, J.D., Hartmann, B., Parameswaran, A.G., &amp; Arawjo, I. &mdash; <em>Who Validates the Validators? Aligning LLM-Assisted Evaluation of LLM Outputs with Human Preferences.</em> ACM UIST 2024 / arXiv:2404.12272. <a href="https://arxiv.org/html/2404.12272v1">arxiv.org</a> <span class="tier">[T2]</span></li>
+    <li><em>Generate, Evaluate, Iterate: Synthetic Data for Human-in-the-Loop Refinement of LLM Judges.</em> arXiv:2511.04478, Nov 2025. <a href="https://arxiv.org/html/2511.04478v1">arxiv.org</a> <span class="tier">[T3 &mdash; preprint, N=24 user study]</span></li>
+    <li><em>Verification Limits Code LLM Training.</em> arXiv:2509.20837, Sep 2025. <a href="https://arxiv.org/html/2509.20837">arxiv.org</a> <span class="tier">[T3 &mdash; code domain only]</span></li>
+    <li><em>Escaping Collapse: The Strength of Weak Data for Large Language Model Training.</em> arXiv:2502.08924, Feb 2025. <a href="https://arxiv.org/html/2502.08924">arxiv.org</a> <span class="tier">[T3]</span></li>
+    <li>Lee, H., Phatale, S., Mansoor, H., et al. &mdash; <em>RLAIF vs. RLHF: Scaling Reinforcement Learning from Human Feedback with AI Feedback.</em> arXiv:2309.00267. <a href="https://arxiv.org/html/2309.00267v3">arxiv.org</a> <span class="tier">[T3 &mdash; Google Research; disconfirming source]</span></li>
+    <li>Sambasivan, N., Kapania, S., Highfill, H., Akrong, D., Paritosh, P., &amp; Aroyo, L. &mdash; <em>&ldquo;Everyone wants to do the model work, not the data work&rdquo;: Data Cascades in High-Stakes AI.</em> ACM CHI 2021. <a href="https://dl.acm.org/doi/10.1145/3411764.3445518">dl.acm.org</a> <span class="tier">[T2 &mdash; n=53 practitioners; Google Research authors]</span></li>
+    <li><em>BeyondWeb: Lessons from Scaling Synthetic Data for Trillion-scale Pretraining.</em> arXiv:2508.10975, Aug 2025. <a href="https://arxiv.org/html/2508.10975">arxiv.org</a> <span class="tier">[T3 &mdash; DatologyAI; commercial interest in the finding]</span></li>
+    <li>Longpre, S., et al. (Data Provenance Initiative, MIT) &mdash; <em>Consent in Crisis: The Rapid Decline of the AI Data Commons.</em> NeurIPS 2024 D&amp;B / arXiv:2407.14933. <a href="https://arxiv.org/html/2407.14933">arxiv.org</a> <span class="tier">[T2 &mdash; audit of 14,000 domains]</span></li>
+    <li><em>Escaping Model Collapse via Synthetic Data Verification: Near-term Improvements and Long-term Convergence.</em> arXiv:2510.16657, Oct 2025. <a href="https://arxiv.org/html/2510.16657v2">arxiv.org</a> <span class="tier">[T3 &mdash; single-source basis for Ch. II]</span></li>
+    <li>Zhao, A., et al. (LeapLab, Tsinghua) &mdash; <em>Absolute Zero: Reinforced Self-play Reasoning with Zero Data.</em> NeurIPS 2025 spotlight / arXiv:2505.03335. <a href="https://arxiv.org/html/2505.03335">arxiv.org</a> <span class="tier">[T3 &mdash; strongest disconfirming result]</span></li>
+    <li>Miceli, M., &amp; Posada, J. &mdash; <em>The Data-Production Dispositif.</em> Proc. ACM Human-Computer Interaction, CSCW 2022 / arXiv:2205.11963. <a href="https://arxiv.org/abs/2205.11963">arxiv.org</a> <span class="tier">[T2 &mdash; 210 instruction documents, 55 interviews]</span></li>
+    <li>Touvron, H., et al. (Meta AI) &mdash; <em>Llama 2: Open Foundation and Fine-Tuned Chat Models.</em> arXiv:2307.09288, Jul 2023. <a href="https://arxiv.org/abs/2307.09288">arxiv.org</a> <span class="tier">[T3 &mdash; self-reported lab technical report]</span></li>
+    <li>Long, L., Wang, R., Liu, R., et al. &mdash; <em>On LLMs-Driven Synthetic Data Generation, Curation, and Evaluation: A Survey.</em> arXiv:2406.15126, Jun 2024. <a href="https://arxiv.org/html/2406.15126">arxiv.org</a> <span class="tier">[T3 &mdash; narrative survey, not a systematic review]</span></li>
+    <li><em>On the Diversity of Synthetic Data and its Impact on Training Large Language Models.</em> arXiv:2410.15226, Oct 2024. <a href="https://arxiv.org/html/2410.15226">arxiv.org</a> <span class="tier">[T3]</span></li>
+    <li>Gilardi, F., Alizadeh, M., &amp; Kubli, M. &mdash; <em>ChatGPT outperforms crowd workers for text-annotation tasks.</em> PNAS 120(30), 2023 / arXiv:2303.15056. <a href="https://arxiv.org/pdf/2303.15056">arxiv.org</a> <span class="tier">[T2 &mdash; disconfirming source; crowd-worker baseline]</span></li>
+  </ol>
+
+  <hr class="rule">
+  <p class="small"><strong>On the essay&rsquo;s own limits.</strong> The verification workspace
+  &mdash; the claims ledger with every quoted binding, the source ledger with URLs and content
+  hashes, the synthesis, and the gate&rsquo;s verdict &mdash; is published alongside this essay.
+  The captured snapshots themselves are held back, being third-party copyrighted full text; the
+  hashes let anyone re-capture from the original URLs and confirm the match. Three of the seven conclusions are
+  formally mixed-stance, meaning the underlying sources disagree; each is presented above with the
+  disagreement rather than a chosen side. A claim-auditing pass using an independent reviewer that
+  never sees the narrative was not run; load-bearing claims were audited by re-reading surrounding
+  passages instead, which is a weaker check and is recorded as one.</p>
+
+  <p class="small">&copy; 2026 Anuj Sadani. This essay is licensed under
+  <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a> &mdash;
+  share it with credit, not commercially, and without redistributing modified versions.
+  Quoted passages from the works listed above remain the property of their publishers and
+  are reproduced here for citation and verification. Source ledgers and the typeset edition:
+  <a href="https://github.com/asadani/abundant-and-uncurated">github.com/asadani/abundant-and-uncurated</a>.</p>
+</section>
+
+<!-- BOOK-FORGE:ABOUT v1 sha=b29b1a24c0d2 -->
+<section class="bf-matter bf-about bf-flow">
+  <h2>About the author</h2>
+
+  <div class="bio">
+    <p>Anuj Sadani builds AI systems and the teams that build them. He spent a
+      decade at NVIDIA, has worked inside AI-first organizations, and has led
+      multicultural engineering pods across Europe &mdash; sixteen-plus years,
+      most of them on the AI era's unglamorous half: turning hype into systems
+      that ship, and systems that ship into outcomes that hold up in production.
+      That work has fed into industry recognition from Gartner and Everest Group,
+      and an Innovator of the Year nod.</p>
+
+    <p>He is the author of <i>The Clean Vibe Coder: A Code of Conduct for
+      Programmers in the Age of AI Agents</i> and <i>Borrow the Line. Own the
+      Move.</i>, and writes about engineering, leadership, and what stays human
+      when the tools get good. He still believes the best technology is the kind
+      that makes the people around it braver.</p>
+  </div>
+
+  <div class="qrpanel">
+    <div class="qrcard">
+      <div class="code"><svg class="bf-qr" role="img" aria-label="QR code for https://anujsadani.in" shape-rendering="crispEdges" viewBox="0 0 29 29" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"><path stroke="#161a21" d="M0 0.5h7m2 0h3m2 0h1m3 0h2m2 0h7m-29 1h1m5 0h1m1 0h2m2 0h1m1 0h1m5 0h1m1 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m4 0h2m4 0h4m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h4m2 0h2m1 0h3m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m4 0h2m3 0h1m1 0h1m3 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m1 0h1m1 0h2m2 0h2m2 0h3m1 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h2m1 0h4m1 0h5m-17 1h4m2 0h5m3 0h1m1 0h1m1 0h2m3 0h1m-27 1h2m1 0h2m1 0h2m2 0h7m1 0h2m1 0h1m1 0h5m-26 1h1m1 0h3m5 0h1m1 0h4m2 0h1m3 0h1m2 0h1m-27 1h2m3 0h3m1 0h2m1 0h1m1 0h1m1 0h1m2 0h1m1 0h3m1 0h2m-25 1h4m3 0h2m6 0h2m2 0h1m1 0h1m2 0h1m-29 1h1m4 0h1m4 0h1m2 0h2m1 0h1m5 0h1m1 0h1m1 0h1m1 0h1m-28 1h1m2 0h7m1 0h1m1 0h2m1 0h1m2 0h1m3 0h1m3 0h1m-29 1h1m3 0h1m2 0h1m2 0h1m1 0h1m1 0h1m6 0h1m1 0h1m1 0h1m-26 1h1m3 0h5m1 0h1m1 0h10m-22 1h2m2 0h2m1 0h1m1 0h1m2 0h5m2 0h2m1 0h3m1 0h1m1 0h1m-27 1h1m3 0h1m1 0h2m1 0h1m1 0h3m2 0h1m4 0h2m3 0h1m-27 1h3m3 0h1m1 0h1m1 0h1m6 0h2m3 0h2m2 0h1m-29 1h2m2 0h1m1 0h3m1 0h1m3 0h3m1 0h1m1 0h6m1 0h1m-20 1h1m2 0h1m1 0h5m1 0h2m3 0h1m1 0h3m-29 1h7m1 0h4m1 0h1m1 0h1m3 0h2m1 0h1m1 0h1m3 0h1m-29 1h1m5 0h1m1 0h2m3 0h2m3 0h3m3 0h2m1 0h1m-28 1h1m1 0h3m1 0h1m1 0h2m1 0h2m1 0h2m3 0h6m3 0h1m-29 1h1m1 0h3m1 0h1m6 0h1m2 0h3m4 0h1m1 0h3m-28 1h1m1 0h3m1 0h1m2 0h1m1 0h2m2 0h1m3 0h3m3 0h1m1 0h2m-29 1h1m5 0h1m3 0h3m2 0h3m2 0h2m1 0h1m1 0h1m1 0h2m-29 1h7m7 0h2m1 0h2m1 0h2m2 0h2m1 0h1"/></svg></div>
+      <div class="what">
+        <b>Writing and work</b>
+        <span>Essays, books, and what he is building.</span>
+        <code>anujsadani.in</code>
+      </div>
+    </div>
+    <div class="qrcard">
+      <div class="code"><svg class="bf-qr" role="img" aria-label="QR code for https://tech.anujsadani.in/" shape-rendering="crispEdges" viewBox="0 0 33 33" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"><path stroke="#161a21" d="M0 0.5h7m1 0h1m6 0h2m3 0h5m1 0h7m-33 1h1m5 0h1m5 0h3m1 0h3m3 0h2m2 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m4 0h2m4 0h1m2 0h1m1 0h3m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h1m2 0h1m1 0h1m2 0h1m2 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m4 0h2m2 0h1m1 0h1m3 0h1m2 0h1m1 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m2 0h1m1 0h2m4 0h1m4 0h3m1 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-23 1h5m2 0h1m2 0h2m1 0h1m-22 1h1m1 0h3m1 0h1m1 0h1m5 0h1m4 0h1m2 0h2m3 0h1m2 0h1m-33 1h1m1 0h1m4 0h1m3 0h1m3 0h1m1 0h1m1 0h2m5 0h1m2 0h1m1 0h2m-29 1h1m1 0h1m1 0h1m5 0h3m2 0h1m1 0h1m6 0h2m1 0h2m-32 1h2m1 0h2m1 0h1m2 0h1m1 0h4m1 0h4m2 0h1m1 0h1m5 0h1m-29 1h1m1 0h5m1 0h1m3 0h1m1 0h2m1 0h1m2 0h2m1 0h1m1 0h1m2 0h2m-33 1h2m2 0h2m2 0h1m2 0h3m2 0h2m2 0h1m3 0h3m1 0h1m1 0h3m-31 1h6m1 0h3m3 0h1m2 0h4m4 0h1m2 0h1m1 0h2m-30 1h3m1 0h2m1 0h2m1 0h3m3 0h5m4 0h2m2 0h1m-33 1h1m1 0h1m2 0h2m5 0h1m3 0h2m3 0h2m2 0h2m3 0h1m-30 1h2m1 0h2m3 0h1m4 0h2m1 0h1m1 0h3m3 0h2m2 0h4m-31 1h2m2 0h3m2 0h1m5 0h3m6 0h1m1 0h1m1 0h1m1 0h1m-33 1h3m2 0h1m5 0h1m2 0h4m1 0h1m1 0h2m8 0h2m-33 1h3m1 0h3m2 0h2m2 0h2m2 0h1m1 0h1m1 0h1m2 0h1m1 0h1m2 0h1m1 0h1m-31 1h1m1 0h2m2 0h2m1 0h1m1 0h1m1 0h4m1 0h2m2 0h2m7 0h1m-33 1h1m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m3 0h1m1 0h3m1 0h2m1 0h4m-32 1h1m6 0h2m4 0h1m1 0h1m2 0h1m1 0h2m1 0h2m1 0h1m3 0h2m-33 1h1m1 0h2m2 0h1m1 0h1m1 0h1m1 0h4m4 0h2m1 0h6m-21 1h1m1 0h1m1 0h3m2 0h2m1 0h2m1 0h2m3 0h2m2 0h1m-33 1h7m2 0h2m3 0h3m5 0h3m1 0h1m1 0h5m-33 1h1m5 0h1m1 0h1m1 0h2m2 0h4m1 0h4m1 0h1m3 0h1m3 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m3 0h4m3 0h1m2 0h1m1 0h5m2 0h1m-32 1h1m1 0h3m1 0h1m6 0h2m2 0h1m2 0h1m1 0h3m3 0h2m-30 1h1m1 0h3m1 0h1m1 0h3m2 0h4m3 0h2m1 0h1m1 0h1m1 0h2m1 0h1m1 0h1m-33 1h1m5 0h1m6 0h1m1 0h2m4 0h4m1 0h2m1 0h1m1 0h1m-32 1h7m3 0h1m1 0h1m2 0h1m3 0h1m1 0h1m1 0h2m2 0h2m1 0h3"/></svg></div>
+      <div class="what">
+        <b>This book, and the evidence</b>
+        <span>Essays, the source ledgers, and the rest of the shelf.</span>
+        <code>tech.anujsadani.in</code>
+      </div>
+    </div>
+  </div>
+
+  <div class="colophon">
+    <b>Abundant and Uncurated</b> &mdash; a verified inquiry by Anuj Sadani, 2026.<br>
+      Repository, claim ledger, and verification workspace:
+      <b>github.com/asadani/abundant-and-uncurated</b><br>
+      Built on 45 claims bound to exact quotations; two failed verification and
+      are disclosed rather than dropped.<br>
+      Text licensed CC BY-NC-ND 4.0. Quoted passages remain the property of
+      their publishers and are reproduced for citation and verification.
+  </div>
+
+</section>
+<!-- /BOOK-FORGE:ABOUT -->
+
+<!-- BOOK-FORGE:BEFORE-END -->
+</body>
+</html>
