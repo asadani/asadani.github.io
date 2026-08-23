@@ -238,9 +238,6 @@
      ARTICLE LIST  (one per row, rectangular)
   ════════════════════════════════════════════════════════ */
   .filter-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 0; }
-  .filter-pill { font-family: var(--sans); font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
-  .filter-pill:hover { border-color: var(--accent); color: var(--accent); }
-  .filter-pill.active { background: var(--accent); color: #fff; border-color: var(--accent); }
   /* search box */
   .article-search { width: 100%; box-sizing: border-box; font-family: var(--sans); font-size: 13px; padding: 9px 14px; margin-bottom: 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text-body); transition: border-color 0.15s; }
   .article-search::placeholder { color: var(--text-subtle); }

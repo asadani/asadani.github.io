@@ -359,7 +359,10 @@
     "tags": [
       "data"
     ],
-    "flavors": [],
+    "flavors": [
+      "craft",
+      "provenance"
+    ],
     "quote": "\"Data is the new oil. Valuable, messy, and everyone's hands are dirty.\"",
     "desc": "Seven pillars for treating data as a first-class product, not a departmental afterthought.",
     "date": "2026-04-15",
@@ -455,7 +458,9 @@
     "tags": [
       "infrastructure"
     ],
-    "flavors": [],
+    "flavors": [
+      "craft"
+    ],
     "quote": "\"For ten years, object storage and file systems refused to share a table. AWS finally sat them down.\"",
     "desc": "Native NFS v4.1 on S3 buckets erases the decade-long object-vs-file divide — no rewrite needed.",
     "date": "2026-04-07",

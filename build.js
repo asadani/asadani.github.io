@@ -133,6 +133,24 @@ const BUCKET_NOTES = {
   Digital: 'Sold on Ko-fi to support the work — and every one is also free to read in full on this site. Same book, same text.',
 };
 
+// The flavour bar used to be hand-maintained in the template, with a comment
+// begging future edits to keep it in sync with the data. Generate it instead.
+// Flavours carried by fewer than MIN_FLAVOR articles are left out: a chip that
+// returns one or two rows advertises a dead end rather than a filter.
+const MIN_FLAVOR = 3;
+
+function renderFlavorBar(articles){
+  const count = new Map();
+  articles.forEach(a => (a.flavors || []).forEach(f =>
+    count.set(f, (count.get(f) || 0) + 1)));
+  const kept = [...count.entries()]
+    .filter(([, n]) => n >= MIN_FLAVOR)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  return kept.map(([f, n]) =>
+    `        <button class="flavor-chip" data-flavor="${escAttr(f)}" `
+    + `title="${n} article${n === 1 ? '' : 's'}">${esc(f)}</button>`).join('\n');
+}
+
 function renderPublications(pubs){
   const bucket = (label, items, type) =>
     `    <div class="pub-bucket-label">${esc(label)}</div>\n` +
@@ -188,6 +206,7 @@ function build(){
   const blocks = {
     publications: renderPublications(pubs),
     articles: renderArticlesList(articles),
+    flavorbar: renderFlavorBar(articles),
   };
   // The pillars marker is added to the template in the landing rework (Task 6);
   // only inject it when present so the pipeline works before and after that change.
@@ -200,5 +219,5 @@ function build(){
 if (require.main === module) build();
 
 module.exports = { esc, escAttr, formatDate, TOPICS,
-  renderArticleRow, renderArticlesList, venueFor, venueLink, renderFlipCard,
+  renderArticleRow, renderArticlesList, renderFlavorBar, venueFor, venueLink, renderFlipCard,
   renderPublications, renderPillars, injectBlocks, build };

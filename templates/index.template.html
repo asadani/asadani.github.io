@@ -104,44 +104,27 @@
 
     <input type="search" id="article-search" class="article-search" placeholder="Search articles by title, description, or tag…" aria-label="Search articles" autocomplete="off">
 
-    <div class="filter-row">
-      <span class="filter-lead">Topic</span>
-      <div class="filter-bar">
-        <button class="filter-pill active" data-filter="all">All</button>
-        <button class="filter-pill" data-filter="ai-engineering">AI Engineering</button>
-        <button class="filter-pill" data-filter="security">Security</button>
-        <button class="filter-pill" data-filter="infrastructure">Infrastructure</button>
-        <button class="filter-pill" data-filter="policy">Policy</button>
-        <button class="filter-pill" data-filter="data">Data</button>
-        <button class="filter-pill" data-filter="interactive">Interactive</button>
-      </div>
-    </div>
 
     <div class="filter-row">
-      <span class="filter-lead">Flavor</span>
+      <span class="filter-lead">Filter</span>
       <div class="flavor-bar">
-        <button class="flavor-chip" data-flavor="agents">agents</button>
-        <button class="flavor-chip" data-flavor="agentic-coding">agentic-coding</button>
-        <button class="flavor-chip" data-flavor="models">models</button>
-        <button class="flavor-chip" data-flavor="evals">evals</button>
-        <button class="flavor-chip" data-flavor="craft">craft</button>
-        <button class="flavor-chip" data-flavor="prompting">prompting</button>
-        <button class="flavor-chip" data-flavor="cost-latency">cost-latency</button>
-        <button class="flavor-chip" data-flavor="supply-chain">supply-chain</button>
-        <button class="flavor-chip" data-flavor="provenance">provenance</button>
-        <button class="flavor-chip" data-flavor="rag">rag</button>
-        <button class="flavor-chip" data-flavor="research">research</button>
+<!-- BUILD:flavorbar -->
+<!-- /BUILD:flavorbar -->
       </div>
     </div>
 
     <!--
-      Article tagging: each .art-row carries data-tags (broad category, drives the Topic pills)
-      and data-flavors (space-separated cross-cutting flavors, drives the Flavor chips + the
-      visible .card-flavors chips). Flavor vocabulary (keep in sync with the .flavor-bar buttons):
-        agents · agentic-coding · models · evals · craft · prompting ·
-        cost-latency · supply-chain · provenance · rag · research
-      A new flavor must be added to (a) this list, (b) a .flavor-chip button in the .flavor-bar,
-      and (c) the row's data-flavors + .card-flavors chips.
+      Article tagging: each .art-row carries data-tags (kept for the coloured
+      topic badge) and data-flavors, which drive the filter chips and the visible
+      .card-flavors chips.
+
+      The chip list is GENERATED from data/articles.json by build.js, so a new
+      flavour needs no edit here -- add it to the article and rebuild. Flavours
+      carried by fewer than three articles are left out of the bar on purpose.
+
+      The Topic row was removed: 22 of 29 articles were ai-engineering, so the
+      pill returned three quarters of the list while five others returned one or
+      two rows each. The topic still colours the row badge.
     -->
     <div class="articles-list">
 
@@ -496,11 +479,9 @@
   /* ── Article filter + pagination ── */
   const ARTICLES_PER_PAGE = 10;
   let currentPage = 1;
-  let currentFilter = 'all';
   let currentFlavor = null;
   let currentSearch = '';
   const allRows     = Array.from(document.querySelectorAll('.articles-list .art-row'));
-  const pills       = document.querySelectorAll('.filter-pill');
   const flavorChips = document.querySelectorAll('.flavor-chip');
   const searchInput = document.getElementById('article-search');
   const paginationInfo   = document.getElementById('pagination-info');
@@ -509,10 +490,7 @@
   const prevBtn          = document.getElementById('prev-btn');
   const nextBtn          = document.getElementById('next-btn');
 
-  function matchesCategory(r) {
-    return currentFilter === 'all'
-      || (r.dataset.tags || '').split(' ').includes(currentFilter);
-  }
+
   function matchesFlavor(r) {
     return !currentFlavor
       || (r.dataset.flavors || '').split(' ').includes(currentFlavor);
@@ -522,7 +500,7 @@
     return r.textContent.toLowerCase().includes(currentSearch);
   }
   function filteredRows() {
-    return allRows.filter(r => matchesCategory(r) && matchesFlavor(r) && matchesSearch(r));
+    return allRows.filter(r => matchesFlavor(r) && matchesSearch(r));
   }
 
   function renderPage(page) {
@@ -557,15 +535,6 @@
 
     paginationCtrls.style.display = totalPages <= 1 ? 'none' : 'flex';
   }
-
-  pills.forEach(pill => {
-    pill.addEventListener('click', () => {
-      pills.forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
-      currentFilter = pill.dataset.filter;
-      renderPage(1);
-    });
-  });
 
   flavorChips.forEach(chip => {
     chip.addEventListener('click', () => {
