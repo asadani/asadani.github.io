@@ -65,6 +65,15 @@
   ],
   "digital": [
     {
+      "title": "Onboarding Slop",
+      "desc": "Onboarding a new engineer quietly became a link to a knowledge base and a link to an assistant — ask it anything. The feedback loop that would catch the cost is broken in a known direction: two unrelated studies found what people report about an AI tool comes apart from what measurement shows they learned, and the error favours whatever felt smoothest. The studies that test understanding run for an hour; the ones that run for weeks count merged code; nothing occupies the space between. The mistake is not adopting AI. It is adopting autonomy.",
+      "image": "/assets/covers/onboarding-slop.jpg",
+      "url": "https://ko-fi.com/s/c0d90b0885",
+      "hosted": "/onboarding-slop/",
+      "pages": 60,
+      "datePublished": "2026-08-23"
+    },
+    {
       "title": "Speed Is the Moat",
       "desc": "Once token cost is understood, the claim goes, inference speed is the next durable advantage. It isn't — speed is a lead with a half-life of one to two months, with inference software delivering up to 2x more throughput on unchanged silicon inside a single month. What survives is narrower: latency is a priced contract term, not an engineering win. The cover states the proposition; the book is the audit.",
       "image": "/assets/covers/speed-is-the-moat.jpg",
