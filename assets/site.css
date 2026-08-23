@@ -569,6 +569,26 @@
 .venue-ssrn .flipcard-link { color: var(--blue); }
 .venue-ssrn .flipcard-link:hover { background: var(--blue-bg); }
 
+/* digital cards carry two links: the free reading edition, and Ko-fi.
+   The row owns the top border so the pair reads as one strip. */
+.flipcard-linkrow {
+  flex-shrink: 0; display: flex; border-top: 1px solid var(--border-light);
+}
+.flipcard-linkrow .flipcard-link {
+  flex: 1 1 50%; border-top: 0; justify-content: center; min-width: 0;
+}
+.flipcard-linkrow .flipcard-link + .flipcard-link {
+  border-left: 1px solid var(--border-light);
+}
+.flipcard-link--free { color: var(--text-body); }
+.flipcard-link--free:hover { background: var(--border-light); }
+
+.pub-bucket-note {
+  margin: -4px 0 14px; max-width: 62ch;
+  font-family: var(--sans); font-size: 12.5px; line-height: 1.5;
+  color: var(--text-muted);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .flipcard-inner { transform: none !important; transition: none; }
   .flipcard-face { -webkit-backface-visibility: visible; backface-visibility: visible; transition: opacity 0.1s; }

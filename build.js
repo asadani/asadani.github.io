@@ -70,6 +70,16 @@ function venueLink(v, url){
   return `<a class="flipcard-link" href="${escAttr(url)}" target="_blank" rel="noopener">${esc(v.label)} ↗</a>`;
 }
 
+// Digital titles are sold on Ko-fi and are also readable free on this site.
+// Where a hosted edition exists the card offers both, so the paid link reads
+// as a way to support the work rather than the only way through.
+function linkStrip(v, item, type){
+  const paid = venueLink(v, item.url);
+  if(type !== 'digital' || !item.hosted) return paid;
+  const free = `<a class="flipcard-link flipcard-link--free" href="${escAttr(item.hosted)}">Read free ↗</a>`;
+  return `<div class="flipcard-linkrow">${free}${paid}</div>`;
+}
+
 function renderFlipCard(item, type){
   const v = venueFor(type, item);
   const isText = (type === 'papers');
@@ -99,7 +109,7 @@ function renderFlipCard(item, type){
     back = `<span class="flipcard-desc">${esc(item.desc)}</span>`;
   }
 
-  const link = venueLink(v, item.url);
+  const link = linkStrip(v, item, type);
   const t = escAttr(item.title);
   return `      <div class="flipcard venue-${v.key} ${variant}">
         <div class="flipcard-inner">
@@ -119,9 +129,15 @@ function renderFlipCard(item, type){
       </div>`;
 }
 
+const BUCKET_NOTES = {
+  Digital: 'Sold on Ko-fi to support the work — and every one is also free to read in full on this site. Same book, same text.',
+};
+
 function renderPublications(pubs){
   const bucket = (label, items, type) =>
     `    <div class="pub-bucket-label">${esc(label)}</div>\n` +
+    (BUCKET_NOTES[label] ? `    <p class="pub-bucket-note">${esc(BUCKET_NOTES[label])}</p>
+` : '') +
     `    <div class="flip-grid">\n` +
     items.map(it => renderFlipCard(it, type)).join('\n') +
     `\n    </div>`;
