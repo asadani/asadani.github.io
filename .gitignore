@@ -17,3 +17,10 @@ colleague-skill/
 # site actually serves are tracked, so this is deliberately not a blanket
 # *.pdf rule.
 coding-with-enemy/2606.05647v1.pdf
+
+# Local render checks, never part of the site
+live*.png
+full.png
+map.png
+shot*.png
+shot*.html
