@@ -76,7 +76,7 @@ function venueLink(v, url){
 function linkStrip(v, item, type){
   const paid = venueLink(v, item.url);
   if(type !== 'digital' || !item.hosted) return paid;
-  const free = `<a class="flipcard-link flipcard-link--free" href="${escAttr(item.hosted)}">Read free ↗</a>`;
+  const free = `<a class="flipcard-link flipcard-link--free" href="${escAttr(item.hosted)}">Read ↗</a>`;
   return `<div class="flipcard-linkrow">${free}${paid}</div>`;
 }
 
