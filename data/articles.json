@@ -1,5 +1,56 @@
 [
   {
+    "slug": "onboarding-slop",
+    "title": "Onboarding Slop",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "craft",
+      "evals"
+    ],
+    "quote": "\"Here is the knowledge base, here is the assistant, ask it anything.\"",
+    "desc": "Onboarding a new engineer quietly became a link and a chatbot, and the loop that would catch the cost is broken in a known direction: two unrelated studies found what people report about an AI tool comes apart from what measurement shows they learned. The studies that test understanding run for an hour, the ones that run for weeks count merged code, and nothing occupies the space between. The mistake is not adopting AI. It is adopting autonomy. 22 captured sources, 54 claims bound to exact quotations.",
+    "date": "2026-08-23",
+    "dateDisplay": "August 23, 2026",
+    "cta": "Read",
+    "shareUrl": "https://tech.anujsadani.in/onboarding-slop/"
+  },
+  {
+    "slug": "speed-is-the-moat",
+    "title": "Speed Is the Moat",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "cost-latency",
+      "evals"
+    ],
+    "quote": "\"A moat is not an advantage. It is an advantage a competitor cannot cross.\"",
+    "desc": "Once token cost is understood, the claim goes, inference speed is the next durable advantage. It is not. The dispersion in speed is real and larger than most assume, but a lead inside it has a measured half-life of one to two months, latency turns out to be a priced contract term rather than an engineering win, and the one controlled experiment on interactive latency found users rating the faster answer as the worse one. Every claim bound to a captured source.",
+    "date": "2026-08-21",
+    "dateDisplay": "August 21, 2026",
+    "cta": "Read",
+    "shareUrl": "https://tech.anujsadani.in/speed-is-the-moat/"
+  },
+  {
+    "slug": "abundant-and-uncurated",
+    "title": "Abundant and Uncurated",
+    "tags": [
+      "data"
+    ],
+    "flavors": [
+      "evals",
+      "provenance"
+    ],
+    "quote": "\"Machines apply judgement. Humans form the criteria.\"",
+    "desc": "Machine judgement already beats human annotation on accuracy and cost, so the case for keeping people in the loop cannot rest on being better at the task. A model that verifies its own synthetic data plateaus at what it already knows, and evaluation criteria cannot be fixed before you have looked at the outputs. What survives is narrower and more durable: humans form the criteria and supply the signal from outside the system. Every claim bound to a quoted source, including the two that failed.",
+    "date": "2026-08-16",
+    "dateDisplay": "August 16, 2026",
+    "cta": "Read",
+    "shareUrl": "https://tech.anujsadani.in/abundant-and-uncurated/"
+  },
+  {
     "slug": "the-human-leverage-map",
     "title": "The Human Leverage Map",
     "tags": [
