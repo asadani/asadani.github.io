@@ -576,6 +576,8 @@
 }
 .flipcard-linkrow .flipcard-link {
   flex: 1 1 50%; border-top: 0; justify-content: center; min-width: 0;
+  /* half a card is narrow: keep each label and its arrow on one line */
+  padding-left: 8px; padding-right: 8px; white-space: nowrap;
 }
 .flipcard-linkrow .flipcard-link + .flipcard-link {
   border-left: 1px solid var(--border-light);
