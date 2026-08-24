@@ -14,7 +14,9 @@
     "date": "2026-08-24",
     "dateDisplay": "August 24, 2026",
     "cta": "Read",
-    "shareUrl": "https://tech.anujsadani.in/monolith-wearing-a-transformer/"
+    "shareUrl": "https://tech.anujsadani.in/monolith-wearing-a-transformer/",
+    "summary": true,
+    "pages": 29
   },
   {
     "slug": "onboarding-slop",

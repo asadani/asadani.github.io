@@ -36,6 +36,34 @@ function renderArticleRow(a){
     ? `<span class="card-flavors">${a.flavors.map(f => `<span class="card-flavor">${esc(f)}</span>`).join('')}</span>`
     : '';
   const shareTitle = String(a.title).replace(/"/g,'&quot;');
+
+  // Long-form pieces carry a condensed companion. Those rows become a <div>
+  // with a stretched title link, because a row that offers two destinations
+  // cannot be one <a> -- nested anchors are invalid and browsers unnest them.
+  // Whole-row click goes to the summary (the quick way in); both destinations
+  // are also spelled out, raised above the stretched link by z-index.
+  if (a.summary) {
+    const pages = a.pages ? `${a.pages} pp` : 'full';
+    return `      <div class="art-row ${t.row} has-summary" data-tags="${escAttr(a.tags.join(' '))}"${flavorsAttr}>
+        <div class="art-strip"></div>
+        <div class="art-body">
+          <div class="art-top"><span class="art-badge ${t.badge}">${esc(t.label)}</span><a class="art-title art-title-link" href="/${a.slug}/summary/">${a.title}</a>${flavorsSpan}</div>
+          <div class="art-quote">${a.quote}</div>
+          <div class="art-desc">${a.desc}</div>
+        </div>
+        <div class="art-meta">
+          <span class="art-date">${a.dateDisplay}</span>
+          <div class="art-actions">
+            <button class="share-btn" aria-label="Share" data-url="${escAttr(a.shareUrl)}" data-title="${shareTitle}">
+              ${SHARE_SVG}
+            </button>
+            <a class="art-link" href="/${a.slug}/summary/">Summary</a>
+            <a class="art-link alt" href="/${a.slug}/">Full · ${esc(pages)}</a>
+          </div>
+        </div>
+      </div>`;
+  }
+
   return `      <a class="art-row ${t.row}" href="/${a.slug}/" data-tags="${escAttr(a.tags.join(' '))}"${flavorsAttr}>
         <div class="art-strip"></div>
         <div class="art-body">

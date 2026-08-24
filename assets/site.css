@@ -315,6 +315,21 @@
   .art-date { font-family: var(--mono); font-size: 10px; color: var(--text-subtle); white-space: nowrap; }
   .art-actions { display: flex; align-items: center; gap: 8px; }
   .art-link { font-size: 13px; font-weight: 600; color: var(--accent); white-space: nowrap; }
+  .art-link { text-decoration: none; }
+  .art-link:hover { text-decoration: underline; }
+  .art-link.alt { color: var(--text-muted); font-weight: 500; }
+  .art-link.alt:hover { color: var(--accent); }
+
+  /* Rows that offer a summary AND the full piece. The title link is stretched
+     over the whole row so the card still behaves like one clickable object;
+     the explicit links sit above it so they stay independently clickable. */
+  .art-row.has-summary { position: relative; }
+  .art-title-link { text-decoration: none; color: var(--text); }
+  .art-title-link::after { content: ""; position: absolute; inset: 0; z-index: 0; }
+  .art-row.has-summary:hover .art-title-link { color: var(--accent); }
+  .art-row.has-summary .art-actions { position: relative; z-index: 1; }
+  .art-row.has-summary .art-meta { min-width: 150px; }
+  .art-title-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
   /* share button (reused) */
   .share-btn { background: none; border: 1px solid var(--border); border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-subtle); transition: all 0.15s; padding: 0; }
