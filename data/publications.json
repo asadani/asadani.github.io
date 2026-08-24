@@ -65,6 +65,15 @@
   ],
   "digital": [
     {
+      "title": "A Monolith Wearing a Transformer",
+      "desc": "A payments company announced a transformer trained on four billion transactions, and a research document proposed that routing, fraud, risk and checkout all be served from it — specifying an inference budget of 29 milliseconds, cited four times, that appears in none of the company's own materials. This paper takes the architecture seriously anyway. Service boundaries were blast-radius machinery: a shared backbone removes the compartment the bulkhead pattern exists to create, which makes its failure a single point of failure by construction rather than by misconfiguration. Nobody has benchmarked the thing being argued about. A domain foundation model is a strong supporting system and a poor primary one.",
+      "image": "/assets/covers/monolith-wearing-a-transformer.jpg",
+      "url": "https://ko-fi.com/s/93e24c2638",
+      "hosted": "/monolith-wearing-a-transformer/",
+      "pages": 29,
+      "datePublished": "2026-08-24"
+    },
+    {
       "title": "Onboarding Slop",
       "desc": "Onboarding a new engineer quietly became a link to a knowledge base and a link to an assistant — ask it anything. The feedback loop that would catch the cost is broken in a known direction: two unrelated studies found what people report about an AI tool comes apart from what measurement shows they learned, and the error favours whatever felt smoothest. The studies that test understanding run for an hour; the ones that run for weeks count merged code; nothing occupies the space between. The mistake is not adopting AI. It is adopting autonomy.",
       "image": "/assets/covers/onboarding-slop.jpg",
