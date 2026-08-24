@@ -1,5 +1,22 @@
 [
   {
+    "slug": "monolith-wearing-a-transformer",
+    "title": "A Monolith Wearing a Transformer",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "models",
+      "evals"
+    ],
+    "quote": "\"The number does not exist.\"",
+    "desc": "A research document proposed that routing, fraud, risk and checkout all be served from one payments foundation model, and specified its inference budget at 29 milliseconds — cited four times, and present in none of the vendor's own materials. The architecture deserves a serious hearing anyway. Service boundaries were blast-radius machinery: a shared backbone removes the compartment the bulkhead pattern exists to create, which makes its failure a single point of failure by construction rather than by misconfiguration. One company published an attempt and reported it failing on latency and uptime in a critical flow — and said it intends to try again. Nobody has benchmarked the thing being argued about. 19 captured sources, 31 claims bound to exact quotations.",
+    "date": "2026-08-24",
+    "dateDisplay": "August 24, 2026",
+    "cta": "Read",
+    "shareUrl": "https://tech.anujsadani.in/monolith-wearing-a-transformer/"
+  },
+  {
     "slug": "onboarding-slop",
     "title": "Onboarding Slop",
     "tags": [
