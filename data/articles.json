@@ -33,7 +33,9 @@
     "date": "2026-08-23",
     "dateDisplay": "August 23, 2026",
     "cta": "Read",
-    "shareUrl": "https://tech.anujsadani.in/onboarding-slop/"
+    "shareUrl": "https://tech.anujsadani.in/onboarding-slop/",
+    "summary": true,
+    "pages": 59
   },
   {
     "slug": "speed-is-the-moat",
@@ -50,7 +52,9 @@
     "date": "2026-08-21",
     "dateDisplay": "August 21, 2026",
     "cta": "Read",
-    "shareUrl": "https://tech.anujsadani.in/speed-is-the-moat/"
+    "shareUrl": "https://tech.anujsadani.in/speed-is-the-moat/",
+    "summary": true,
+    "pages": 26
   },
   {
     "slug": "abundant-and-uncurated",
@@ -67,7 +71,9 @@
     "date": "2026-08-16",
     "dateDisplay": "August 16, 2026",
     "cta": "Read",
-    "shareUrl": "https://tech.anujsadani.in/abundant-and-uncurated/"
+    "shareUrl": "https://tech.anujsadani.in/abundant-and-uncurated/",
+    "summary": true,
+    "pages": 24
   },
   {
     "slug": "the-human-leverage-map",
