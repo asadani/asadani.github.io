@@ -38,12 +38,11 @@ function renderArticleRow(a){
   const shareTitle = String(a.title).replace(/"/g,'&quot;');
 
   // Long-form pieces carry a condensed companion. Those rows become a <div>
-  // with a stretched title link, because a row that offers two destinations
-  // cannot be one <a> -- nested anchors are invalid and browsers unnest them.
-  // Whole-row click goes to the summary (the quick way in); both destinations
-  // are also spelled out, raised above the stretched link by z-index.
+  // with a stretched title link, because the title needs its own href -- a
+  // nested anchor inside an <a> row is invalid and browsers unnest it.
+  // The row reads like every other card: one "Read" that goes to the summary.
+  // The full edition is reached from the summary, not from this list.
   if (a.summary) {
-    const pages = a.pages ? `${a.pages} pp` : 'full';
     return `      <div class="art-row ${t.row} has-summary" data-tags="${escAttr(a.tags.join(' '))}"${flavorsAttr}>
         <div class="art-strip"></div>
         <div class="art-body">
@@ -57,8 +56,7 @@ function renderArticleRow(a){
             <button class="share-btn" aria-label="Share" data-url="${escAttr(a.shareUrl)}" data-title="${shareTitle}">
               ${SHARE_SVG}
             </button>
-            <a class="art-link" href="/${a.slug}/summary/">Summary</a>
-            <a class="art-link alt" href="/${a.slug}/">Full · ${esc(pages)}</a>
+            <span class="art-link">${esc(a.cta)} →</span>
           </div>
         </div>
       </div>`;

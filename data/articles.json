@@ -10,7 +10,7 @@
       "evals"
     ],
     "quote": "\"The token is the meter. The dollar is still the money.\"",
-    "desc": "A payments company agreed to buy a router for a price it never disclosed, and its chief executive justified it by calling tokens the central currency of companies building with AI. The company that was bought does not agree in the only place that counts: its own documentation says the credit balance is denominated in US dollars. A unit of account has to mean the same thing to both parties at the moment they agree to a trade, and a token does not — providers serving the identical open-weight model differ threefold in price, selection is a weighted draw so the cost of a request is a distribution rather than a number when you press send, and a cache write can cost more than an ordinary input token with the sign of the adjustment varying by vendor. Every AI credit that ships is a per-model conversion layer over dollars. 38 captured sources, 77 claims bound to exact quotations, and the strongest case against the argument presented without rebuttal.",
+    "desc": "A payments company bought a router for a price it never disclosed, and its chief executive justified it by calling tokens the central currency of companies building with AI. The company being bought does not agree in the only place that counts: its own documentation says the credit balance is denominated in US dollars. A token is a meter reading, not a unit of account, and every AI credit that ships is a conversion layer over dollars.",
     "date": "2026-08-27",
     "dateDisplay": "August 27, 2026",
     "cta": "Read",
@@ -29,7 +29,7 @@
       "evals"
     ],
     "quote": "\"The number does not exist.\"",
-    "desc": "A research document proposed that routing, fraud, risk and checkout all be served from one payments foundation model, and specified its inference budget at 29 milliseconds — cited four times, and present in none of the vendor's own materials. The architecture deserves a serious hearing anyway. Service boundaries were blast-radius machinery: a shared backbone removes the compartment the bulkhead pattern exists to create, which makes its failure a single point of failure by construction rather than by misconfiguration. One company published an attempt and reported it failing on latency and uptime in a critical flow — and said it intends to try again. Nobody has benchmarked the thing being argued about. 19 captured sources, 31 claims bound to exact quotations.",
+    "desc": "A research document proposed that routing, fraud, risk and checkout all be served from one payments foundation model, and specified its inference budget at 29 milliseconds — cited four times, and present in none of the vendor's own materials. The architecture deserves a serious hearing anyway: service boundaries were blast-radius machinery, and a shared backbone removes the compartment the bulkhead pattern exists to create. A domain foundation model is a strong supporting system and a poor primary one.",
     "date": "2026-08-24",
     "dateDisplay": "August 24, 2026",
     "cta": "Read",
@@ -48,7 +48,7 @@
       "evals"
     ],
     "quote": "\"Here is the knowledge base, here is the assistant, ask it anything.\"",
-    "desc": "Onboarding a new engineer quietly became a link and a chatbot, and the loop that would catch the cost is broken in a known direction: two unrelated studies found what people report about an AI tool comes apart from what measurement shows they learned. The studies that test understanding run for an hour, the ones that run for weeks count merged code, and nothing occupies the space between. The mistake is not adopting AI. It is adopting autonomy. 22 captured sources, 54 claims bound to exact quotations.",
+    "desc": "Onboarding a new engineer quietly became a link and a chatbot, and the loop that would catch the cost is broken in a known direction: two unrelated studies found what people report about an AI tool comes apart from what measurement shows they learned. The studies that test understanding run for an hour, the ones that run for weeks count merged code, and nothing occupies the space between. The mistake is not adopting AI. It is adopting autonomy.",
     "date": "2026-08-23",
     "dateDisplay": "August 23, 2026",
     "cta": "Read",
@@ -156,7 +156,7 @@
       "craft"
     ],
     "quote": "\"There are no villains. When the company fails, the leader is the one left on the stake.\"",
-    "desc": "A triptych. Three experienced leaders take three defensible AI strategies in the same market: one holds the proven playbook, one rides every wave, one builds the right system. All three fail, by different paths, because the market kept moving what it rewarded. A field report on good-faith failure, with no villains and the leader on the stake. Includes a downloadable designed PDF.",
+    "desc": "A triptych. Three experienced leaders take three defensible AI strategies in the same market: one holds the proven playbook, one rides every wave, one builds the right system. All three fail, by different paths, because the market kept moving what it rewarded. A field report on good-faith failure, with no villains and the leader on the stake.",
     "date": "2026-06-18",
     "dateDisplay": "June 18, 2026",
     "cta": "Read",
