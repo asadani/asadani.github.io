@@ -42,6 +42,11 @@ function renderArticleRow(a){
   // nested anchor inside an <a> row is invalid and browsers unnest it.
   // The row reads like every other card: one "Read" that goes to the summary.
   // The full edition is reached from the summary, not from this list.
+  //
+  // "Read" must be a real <a>, not the <span> the plain rows use. .art-actions
+  // is raised above the stretched link (z-index:1) so the share button stays
+  // clickable, which means a <span> there would sit on top of the stretched
+  // link and swallow the click instead of passing it through.
   if (a.summary) {
     return `      <div class="art-row ${t.row} has-summary" data-tags="${escAttr(a.tags.join(' '))}"${flavorsAttr}>
         <div class="art-strip"></div>
@@ -56,7 +61,7 @@ function renderArticleRow(a){
             <button class="share-btn" aria-label="Share" data-url="${escAttr(a.shareUrl)}" data-title="${shareTitle}">
               ${SHARE_SVG}
             </button>
-            <span class="art-link">${esc(a.cta)} →</span>
+            <a class="art-link" href="/${a.slug}/summary/">${esc(a.cta)} →</a>
           </div>
         </div>
       </div>`;
