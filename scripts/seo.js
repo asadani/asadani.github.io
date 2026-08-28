@@ -120,10 +120,14 @@ function sitemap() {
       loc: urlOf(a), lastmod: a.date, changefreq: 'yearly', priority: '0.8',
     })),
     // Book editions rank above ordinary essays: they are the long-form work
-    // and the pages most worth surfacing.
-    ...hostedBooks.map((b) => ({
-      loc: b.loc, lastmod: b.datePublished, changefreq: 'yearly', priority: '0.9',
-    })),
+    // and the pages most worth surfacing. Books are now listed in
+    // articles.json as well, so drop any that the articles pass already
+    // emitted -- otherwise every book lands in the sitemap twice.
+    ...hostedBooks
+      .filter((b) => !articles.some((a) => urlOf(a) === b.loc))
+      .map((b) => ({
+        loc: b.loc, lastmod: b.datePublished, changefreq: 'yearly', priority: '0.9',
+      })),
   ];
   const body = entries.map((e) => [
     '  <url>',
@@ -192,11 +196,17 @@ function llms() {
     lines.push('');
     // Point at the readable edition where one exists -- an answer engine can
     // use that; it cannot use a Ko-fi checkout page.
+    //
+    // Books that are also listed in articles.json already appear under Essays
+    // above. Repeat the title here only to carry the Ko-fi link, and drop the
+    // duplicated blurb: the same URL described twice is noise to a crawler.
     pubs.digital.forEach((g) => {
       const desc = (g.desc || '').replace(/\s+/g, ' ').trim();
       if (g.hosted) {
-        lines.push(`- [${g.title}](${SITE}${g.hosted}): ${desc} ` +
-                   `Full text online; PDF at ${g.url}.`);
+        const listedAsEssay = articles.some((a) => urlOf(a) === SITE + g.hosted);
+        lines.push(listedAsEssay
+          ? `- [${g.title}](${SITE}${g.hosted}): listed under Essays above. PDF at ${g.url}.`
+          : `- [${g.title}](${SITE}${g.hosted}): ${desc} Full text online; PDF at ${g.url}.`);
       } else {
         lines.push(`- [${g.title}](${g.url})${desc ? ': ' + desc : ''}`);
       }
@@ -368,7 +378,7 @@ function patchBooks() {
 
     let html = fs.readFileSync(abs, 'utf8');
     const block = bookHeadBlock(b, {
-      needsDescription: !/<meta\s+name=["']description["']/i.test(html),
+      needsDescription: !/<meta\s+name=["']description["']/i.test(html.replace(MARK_RE, '')),
     });
     const res = applyHead(html, block, { refresh: true });
     if (res.how === 'no-title') { report.missing.push(b.slug + ' (no <title>)'); return; }
@@ -392,8 +402,11 @@ function patchArticles() {
     if (!fs.existsSync(abs)) { report.missing.push(a.slug); return; }
 
     let html = fs.readFileSync(abs, 'utf8');
+    // Test for an existing description OUTSIDE the managed block. Testing the
+    // whole document finds the one this script itself wrote last run, judges it
+    // already present, omits it from the replacement block, and deletes it.
     const block = headBlock(a, {
-      needsDescription: !/<meta\s+name=["']description["']/i.test(html),
+      needsDescription: !/<meta\s+name=["']description["']/i.test(html.replace(MARK_RE, '')),
     });
     const res = applyHead(html, block, { refresh: REFRESH });
     if (res.how === 'no-title') { report.missing.push(a.slug + ' (no <title>)'); return; }

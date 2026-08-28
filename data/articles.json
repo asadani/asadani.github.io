@@ -1,5 +1,24 @@
 [
   {
+    "slug": "the-meter-is-not-the-money",
+    "title": "The Meter Is Not the Money",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "models",
+      "evals"
+    ],
+    "quote": "\"The token is the meter. The dollar is still the money.\"",
+    "desc": "A payments company agreed to buy a router for a price it never disclosed, and its chief executive justified it by calling tokens the central currency of companies building with AI. The company that was bought does not agree in the only place that counts: its own documentation says the credit balance is denominated in US dollars. A unit of account has to mean the same thing to both parties at the moment they agree to a trade, and a token does not — providers serving the identical open-weight model differ threefold in price, selection is a weighted draw so the cost of a request is a distribution rather than a number when you press send, and a cache write can cost more than an ordinary input token with the sign of the adjustment varying by vendor. Every AI credit that ships is a per-model conversion layer over dollars. 38 captured sources, 77 claims bound to exact quotations, and the strongest case against the argument presented without rebuttal.",
+    "date": "2026-08-27",
+    "dateDisplay": "August 27, 2026",
+    "cta": "Read",
+    "shareUrl": "https://tech.anujsadani.in/the-meter-is-not-the-money/",
+    "summary": true,
+    "pages": 30
+  },
+  {
     "slug": "monolith-wearing-a-transformer",
     "title": "A Monolith Wearing a Transformer",
     "tags": [
