@@ -13,6 +13,15 @@ When creating a new article, copy `_template/article.html` to `<topic-slug>/inde
 
 After adding an article to `data/articles.json`, run **`node scripts/seo.js`** — it regenerates `sitemap.xml`, `robots.txt`, and `llms.txt`, and back-fills the head tags on any article page still missing them. It skips pages that already carry an `og:url`, so it is safe to re-run. `--dry-run` reports without writing.
 
+**Every reader-facing page carries the site header.** The `<nav>` with
+`.nav-brand` linking to `/` is not optional decoration — a reader arriving from
+a search result or a shared link needs a way back to the index. This applies to
+article pages here *and* to the book pages and condensed summaries served from
+their own repos at `tech.anujsadani.in/<slug>/`. Book repos build their PDF from
+the same HTML, so their header is hidden with `@media print`; `bf verify`
+enforces both halves. Five book pages shipped with no header at all because
+nothing checked for one.
+
 **Theming rules:**
 - Colors come entirely from CSS variables. Light is the `:root` default; dark is the `[data-theme="dark"]` override. **Never hardcode a color that must differ between modes** — add/use a variable instead.
 - Theme is chosen before first paint by an inline `<head>` script: saved `localStorage.theme` wins, else the reader's OS `prefers-color-scheme`. A nav `.theme-toggle` button flips `data-theme` on `<html>` and persists the choice. **Keep both scripts and the toggle button intact** when filling the template.
