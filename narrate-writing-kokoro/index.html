@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Narrating your writing with Kokoro — 45 minutes of audio in 6</title>
+<meta name="description" content="Kokoro renders 45 minutes of narration in 24 minutes on a laptop CPU and 6 on a 4 GB GPU. Measured numbers, voice blending, the acronym tables, and the PATH bug that makes CUDA look broken.">
+<meta name="author" content="Anuj Sadani">
+<link rel="canonical" href="https://tech.anujsadani.in/narrate-writing-kokoro/">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tech.anujsadani.in/narrate-writing-kokoro/">
+<meta property="og:site_name" content="Anuj Sadani | Tech">
+<meta property="og:title" content="Narrating your writing with Kokoro">
+<meta property="og:description" content="Kokoro renders 45 minutes of narration in 24 minutes on a laptop CPU and 6 on a 4 GB GPU. Measured numbers, voice blending, the acronym tables, and the PATH bug that makes CUDA look broken.">
+<meta property="og:image" content="https://tech.anujsadani.in/assets/profile-pic.png">
+<meta property="article:published_time" content="2026-09-03">
+<meta property="article:author" content="Anuj Sadani">
+<meta name="twitter:card" content="summary_large_image">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Narrating your writing with Kokoro",
+  "description": "Kokoro renders 45 minutes of narration in 24 minutes on a laptop CPU and 6 on a 4 GB GPU. Measured numbers, voice blending, the acronym tables, and the PATH bug that makes CUDA look broken.",
+  "datePublished": "2026-09-03",
+  "url": "https://tech.anujsadani.in/narrate-writing-kokoro/",
+  "mainEntityOfPage": "https://tech.anujsadani.in/narrate-writing-kokoro/",
+  "inLanguage": "en",
+  "isPartOf": { "@id": "https://tech.anujsadani.in/#blog" },
+  "author": {
+    "@type": "Person",
+    "@id": "https://anujsadani.in/#person",
+    "name": "Anuj Sadani",
+    "url": "https://anujsadani.in/"
+  }
+}
+</script>
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/article.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">Anuj Sadani | Tech</a>
+  <div class="nav-right">
+    <span>Local Models</span>
+    <span class="nav-tag">SEP 2026</span>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <span class="theme-icon-moon" aria-hidden="true">&#9790;</span>
+      <span class="theme-icon-sun" aria-hidden="true">&#9728;</span>
+    </button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">Text To Speech, Measured</div>
+    <h1>Narrating your writing with Kokoro</h1>
+    <p class="hero-deck">Forty-five minutes of narration costs 24 minutes of laptop CPU, or 6 minutes on a four-gigabyte GPU. I measured both. The interesting parts are the acronym tables and a PATH bug that makes CUDA look impossible.</p>
+    <div class="hero-meta">
+      <span>September 2026</span>
+      <span class="hero-meta-sep">/</span>
+      <span>Kokoro 82M / ONNX / GTX 1650</span>
+    </div>
+  </header>
+
+  <div class="banner">
+    <span class="banner-badge">PART 1 OF 2</span>
+    <p>This post covers narrating with a synthetic voice. Part two covers cloning your own, which is a harder problem with worse economics and a better payoff.</p>
+  </div>
+
+  <div class="plain-english">
+    <div class="pe-label">In Plain English</div>
+    <ul class="pe-list">
+      <li>
+        <span class="pe-num">1</span>
+        <div><strong>It runs on your laptop.</strong> Kokoro is 82 million parameters. It renders roughly twice as fast as you can listen, on CPU alone, with no account and no per-character billing.</div>
+      </li>
+      <li>
+        <span class="pe-num">2</span>
+        <div><strong>The model is the easy part.</strong> Almost everything that makes narration listenable happens in text preparation and silence, not in the model.</div>
+      </li>
+      <li>
+        <span class="pe-num">3</span>
+        <div><strong>A GPU is optional but real.</strong> CUDA cuts the render 4.3x. Most of the difficulty is convincing onnxruntime to actually use it.</div>
+      </li>
+    </ul>
+  </div>
+
+  <nav class="toc" aria-label="Jump to section">
+    <div class="toc-label">Jump to</div>
+    <ol class="toc-list">
+      <li><span class="toc-num">01</span><a href="#the-number">The number that decided it</a></li>
+      <li><span class="toc-num">02</span><a href="#what-it-is">What Kokoro actually is</a></li>
+      <li><span class="toc-num">03</span><a href="#blending">Voices are vectors, so blend them</a></li>
+      <li><span class="toc-num">04</span><a href="#acronyms">The text your model reads</a></li>
+      <li><span class="toc-num">05</span><a href="#silence">Silence is a parameter</a></li>
+      <li><span class="toc-num">06</span><a href="#cpu-gpu">CPU or GPU</a></li>
+      <li><span class="toc-num">07</span><a href="#path-bug">Why CUDA looks broken</a></li>
+      <li><span class="toc-num">08</span><a href="#directml">The DirectML detour</a></li>
+      <li><span class="toc-num">09</span><a href="#caching">Making re-renders free</a></li>
+      <li><span class="toc-num">10</span><a href="#short-version">The short version</a></li>
+    </ol>
+  </nav>
+
+  <div class="section" id="the-number">
+    <div class="section-label">Where This Started</div>
+    <h2><a class="anchor" href="#the-number">The number that decided it</a></h2>
+    <div class="prose">
+      <p>I had eighteen chapters of written course material and wanted an audio track for it. The obvious route was a hosted TTS API. I priced it, then tried the local option first, because I wanted to know what I was giving up.</p>
+      <p>Kokoro rendered 118.5 seconds of narration in 63.4 seconds of CPU time. That is a real-time factor of 0.53, on a four-core laptop with no GPU involved. The whole 45-minute track took 24 minutes.</p>
+      <p>That number is what makes the tool useful, and it has nothing to do with quality. At 0.53x a re-render is a coffee break. I stopped treating audio as a thing I generate once and started treating it as a build artifact. Fix a sentence, run it again, done.</p>
+    </div>
+  </div>
+
+  <div class="section" id="what-it-is">
+    <div class="section-label">The Model</div>
+    <h2><a class="anchor" href="#what-it-is">What Kokoro actually is</a></h2>
+    <div class="prose">
+      <p>82 million parameters, shipped as ONNX, Apache 2.0 weights. Two files totalling 354 MB that you keep next to your project.</p>
+      <p>For scale, the voice-cloning model in part two is 0.6 billion parameters and needs a GPU to be practical. Kokoro is roughly a seventh the size and runs a single forward pass rather than sampling token by token. That architectural difference is the entire performance story.</p>
+      <p>Pin the expected byte sizes in your fetch script and verify after download. A truncated ONNX file fails deep inside session creation with an error that tells you nothing useful about the actual problem.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">fetch, with a size check that saves an hour</div>
+      <pre><span class="tok-cmt"># kokoro-v1.0.onnx   325,532,387 bytes</span>
+<span class="tok-cmt"># voices-v1.0.bin     28,214,398 bytes</span>
+
+urllib.request.urlretrieve(BASE + name, target)
+got = target.stat().st_size
+<span class="tok-key">if</span> got != size:
+    target.unlink()
+    sys.exit(<span class="tok-str">"%s downloaded %d bytes, expected %d"</span> % (name, got, size))</pre>
+    </div>
+  </div>
+
+  <div class="section" id="blending">
+    <div class="section-label">Voice Selection</div>
+    <h2><a class="anchor" href="#blending">Voices are vectors, so blend them</a></h2>
+    <div class="prose">
+      <p>This is the part I nearly missed, and it turned out to matter more than any other setting.</p>
+      <p>Kokoro's voices are not separate models. They are style vectors, which means they average. A weighted blend of two presets is a real voice that no single preset gives you.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">blending two voices into one</div>
+      <pre>blend = <span class="tok-val">None</span>
+<span class="tok-key">for</span> name, weight <span class="tok-key">in</span> zip(names, weights):
+    term = kokoro.get_voice_style(name) * (weight / total)
+    blend = term <span class="tok-key">if</span> blend <span class="tok-key">is</span> <span class="tok-val">None</span> <span class="tok-key">else</span> np.add(blend, term)</pre>
+    </div>
+
+    <div class="prose">
+      <p>Which lets you write this:</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">on the command line</div>
+      <pre><span class="tok-cmt"># even mix of two British male voices</span>
+--voice <span class="tok-str">bm_george+bm_fable</span>
+
+<span class="tok-cmt"># weighted, if you want one to dominate</span>
+--voice <span class="tok-str">bf_emma*0.6+af_heart*0.4</span></pre>
+    </div>
+
+    <div class="prose">
+      <p>Spend ten minutes here. Single presets tend to carry one distracting quality, some vowel or cadence that you stop being able to unhear around minute twenty of a long track. Averaging two voices sands that off. I shipped on <code>bm_george+bm_fable</code> after trying maybe six combinations, and the blend was better than either component.</p>
+    </div>
+  </div>
+
+  <div class="section" id="acronyms">
+    <div class="section-label">Text Preparation</div>
+    <h2><a class="anchor" href="#acronyms">The text your model reads</a></h2>
+    <div class="prose">
+      <p>Kokoro's frontend is espeak-based. It will spell technical acronyms letter by letter, and it will do it wrong. You cannot prompt your way out of this. You fix it with a substitution table applied before the model ever sees the text.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">phonetic spellings, tuned for espeak</div>
+      <pre>SPOKEN_ACRONYMS = [
+    (r<span class="tok-str">"\bAPI\b"</span>,      <span class="tok-str">"ay pee eye"</span>),
+    (r<span class="tok-str">"\bJSON-RPC\b"</span>, <span class="tok-str">"jayson arr pee see"</span>),
+    (r<span class="tok-str">"\bJSON\b"</span>,     <span class="tok-str">"jayson"</span>),
+    (r<span class="tok-str">"\bOAuth\b"</span>,    <span class="tok-str">"oh-auth"</span>),
+    (r<span class="tok-str">"\bHMAC\b"</span>,     <span class="tok-str">"aitch-mack"</span>),
+    (r<span class="tok-str">"\bstdio\b"</span>,    <span class="tok-str">"standard eye-oh"</span>),
+]</pre>
+    </div>
+
+    <div class="prose">
+      <p>Keep those separate from your punctuation rules. I learned this the second time round, when I added a neural-frontend engine and discovered it says "MCP" correctly on its own. Feeding it "em see pee" actively made things worse. The phonetic table is engine-specific. The punctuation table is not.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">engine-neutral, always applied</div>
+      <pre>SPOKEN_TYPOGRAPHY = [
+    (r<span class="tok-str">"\s*—\s*"</span>, <span class="tok-str">", "</span>),      <span class="tok-cmt"># em dash becomes a real clause pause</span>
+    (r<span class="tok-str">"\s+([,.;:])"</span>, r<span class="tok-str">"\1"</span>),
+    (r<span class="tok-str">"\s+"</span>, <span class="tok-str">" "</span>),
+]</pre>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">Write numbers as words in the source</div>
+      <p>"JSON-RPC two point zero", not "JSON-RPC 2.0". Do it in the script itself rather than in a substitution rule. You will read the script aloud to check it, and you want to be reading exactly what the model reads. Every layer of transformation between your eyes and the model's input is a place for a surprise to hide.</p>
+    </div>
+  </div>
+
+  <div class="section" id="silence">
+    <div class="section-label">Structure</div>
+    <h2><a class="anchor" href="#silence">Silence is a parameter</a></h2>
+    <div class="prose">
+      <p>Feed the model one paragraph at a time and insert the gaps yourself. Synthesised pauses are inconsistent in length. Concatenated silence is exact, and you can tune it.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">two constants that outperform every model setting</div>
+      <pre>GAP_PARAGRAPH = <span class="tok-val">0.55</span>   <span class="tok-cmt"># between paragraphs</span>
+GAP_OPENING   = <span class="tok-val">0.85</span>   <span class="tok-cmt"># a longer beat after "Chapter nine."</span>
+
+<span class="tok-key">for</span> i, block <span class="tok-key">in</span> enumerate(blocks):
+    samples, rate = kokoro.create(block, voice=voice, speed=speed, lang=lang)
+    pieces.append(samples)
+    <span class="tok-key">if</span> i &lt; len(blocks) - 1:
+        gap = GAP_OPENING <span class="tok-key">if</span> i == 0 <span class="tok-key">else</span> GAP_PARAGRAPH
+        pieces.append(np.zeros(int(rate * gap), dtype=samples.dtype))</pre>
+    </div>
+
+    <div class="prose">
+      <p>I moved those two numbers more than anything else in the pipeline. A slightly long pause reads as thinking. A slightly short one reads as rushing. There is no model parameter that gives you that control.</p>
+      <p>One more setting that matters at this level. Kokoro's default speed of 1.0 lands near 195 words per minute, which is brisk for anything explanatory. I ship at 0.9, around 170 wpm. Listeners who want it faster have a speed control in their player. Listeners who want it slower usually do not.</p>
+    </div>
+  </div>
+
+  <div class="section" id="cpu-gpu">
+    <div class="section-label">Benchmark</div>
+    <h2><a class="anchor" href="#cpu-gpu">CPU or GPU</a></h2>
+    <div class="prose">
+      <p>Kokoro does not need a GPU, which is most of its appeal. It will use one, and the gap is bigger than the "you don't need it" framing suggests. Same machine, same model file, same text. Only the ONNX execution provider changes.</p>
+    </div>
+
+    <div class="data-table">
+      <table class="fixed">
+        <colgroup>
+          <col style="width:26%">
+          <col style="width:20%">
+          <col style="width:18%">
+          <col style="width:18%">
+          <col style="width:18%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Provider</th>
+            <th class="num">Session load</th>
+            <th class="num">Audio</th>
+            <th class="num">Compute</th>
+            <th class="num">RTF</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>CPU</td>
+            <td class="num">1.1 s</td>
+            <td class="num">118.5 s</td>
+            <td class="num">63.4 s</td>
+            <td class="num">0.53x</td>
+          </tr>
+          <tr>
+            <td>CUDA</td>
+            <td class="num">5.0 s</td>
+            <td class="num">118.5 s</td>
+            <td class="num">14.7 s</td>
+            <td class="num td-mono">0.12x</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>A 4.3x speedup. On the full course that is 24 minutes down to 6, on a GTX 1650 that cost less than a hosted API subscription.</p>
+      <p>Look at the load column before you reach for the GPU, though. CUDA costs 5 seconds of session setup against 1.1 for CPU. For a single short article the CPU finishes first. The GPU only starts winning past a couple of minutes of text, which is exactly the regime where you stopped caring about the wait.</p>
+    </div>
+  </div>
+
+  <div class="section" id="path-bug">
+    <div class="section-label">The Bug Worth Knowing</div>
+    <h2><a class="anchor" href="#path-bug">Why CUDA looks broken</a></h2>
+    <div class="prose">
+      <p>I spent longer on this than on everything else in the pipeline combined, and the fix is two lines.</p>
+      <p>The pip <code>nvidia-*</code> wheels put their DLLs in <code>site-packages/nvidia/*/bin</code>. The documented way to make those visible on Windows is <code>os.add_dll_directory()</code>. That is not sufficient. onnxruntime loads its provider DLL through a route that searches the real <code>PATH</code>, so the provider silently fails to load and falls back to CPU. No exception. No warning at default log level. Your job just runs four times slower than it should and you assume that is what the hardware does.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">register the CUDA libraries before importing onnxruntime</div>
+      <pre>root = Path(importlib.util.find_spec(<span class="tok-str">"nvidia"</span>).origin).parent
+<span class="tok-key">for</span> sub <span class="tok-key">in</span> sorted(root.rglob(<span class="tok-str">"bin"</span>)):
+    <span class="tok-key">if</span> sub.is_dir():
+        os.environ[<span class="tok-str">"PATH"</span>] = str(sub) + os.pathsep + os.environ[<span class="tok-str">"PATH"</span>]
+        os.add_dll_directory(str(sub))   <span class="tok-cmt"># helps, insufficient alone</span></pre>
+    </div>
+
+    <div class="prose">
+      <p>Two more things in the same area. Match the CUDA major version to your onnxruntime release: 1.29 wants CUDA 13 and looks for <code>cublasLt64_13.dll</code>, while 1.22 wants CUDA 12. Install the wrong <code>nvidia-*-cu1x</code> wheels and you get a missing-DLL error naming a file you have never heard of. On Windows, the CUDA 13 wheels had no builds at all when I tried, so I pinned <code>onnxruntime-gpu==1.22.0</code> and used the CUDA 12 set.</p>
+      <p>And make an explicit device request an assertion. If <code>--device cuda</code> quietly falls back, you find out an hour later. Let <code>auto</code> degrade silently. Make anything explicit fail loudly.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">fail loudly on an explicit request</div>
+      <pre>active = session.get_providers()[<span class="tok-val">0</span>]
+<span class="tok-key">if</span> device == <span class="tok-str">"cuda"</span> <span class="tok-key">and</span> <span class="tok-str">"CUDA"</span> <span class="tok-key">not in</span> active:
+    sys.exit(<span class="tok-str">"Asked for CUDA but got %s"</span> % active)</pre>
+    </div>
+  </div>
+
+  <div class="section" id="directml">
+    <div class="section-label">A Dead End</div>
+    <h2><a class="anchor" href="#directml">The DirectML detour</a></h2>
+    <div class="prose">
+      <p>Before I got CUDA working I tried DirectML, because it needs no CUDA toolkit and runs on any DirectX 12 GPU. It is the obviously attractive option on a Windows laptop.</p>
+      <p><code>onnxruntime-directml</code> advertises the provider, claims the node, and then dies inside Kokoro's F0 encoder on <code>ConvTranspose</code> with error <code>80070057</code>. Because it has already claimed the node there is no CPU fallback. Nothing renders at all. It also installs over <code>onnxruntime</code>, since both provide the same module, so testing the alternative means uninstalling one first.</p>
+      <p>I wrote it off as "GPU acceleration does not work here" and moved on. That conclusion was wrong, and it cost me a day. DirectML does not work with this model. CUDA does. Those are different claims and I collapsed them.</p>
+    </div>
+  </div>
+
+  <div class="section" id="caching">
+    <div class="section-label">Ergonomics</div>
+    <h2><a class="anchor" href="#caching">Making re-renders free</a></h2>
+    <div class="prose">
+      <p>The change that made this pleasant to live with. Hash everything that affects the output, and skip any file whose hash has not moved.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">content-addressed skipping</div>
+      <pre>key = hashlib.sha256(
+    (<span class="tok-str">"\x00"</span>.join(blocks) + <span class="tok-str">"|%s|%s|%s"</span> % (voice, speed, lang)
+     ).encode(<span class="tok-str">"utf-8"</span>)).hexdigest()[:<span class="tok-val">16</span>]
+
+<span class="tok-key">if</span> <span class="tok-key">not</span> force <span class="tok-key">and</span> mp3.exists() <span class="tok-key">and</span> stamps.get(cid, {}).get(<span class="tok-str">"k"</span>) == key:
+    print(<span class="tok-str">"%s  unchanged, skipping"</span> % cid)
+    <span class="tok-key">continue</span></pre>
+    </div>
+
+    <div class="prose">
+      <p>Fix a typo in chapter twelve and only chapter twelve re-renders. Change the voice and everything does, correctly, because the voice is in the key.</p>
+      <p>One detail I got wrong first time: write the stamp file after each chapter, not at the end of the run. I wrote it once at the end, an interrupted run lost every marker it had earned, and the next run redid work it had already finished. Two lines moved, problem gone.</p>
+      <p>The last piece is normalisation. Chapters rendered separately drift in loudness, so normalise each to the same peak. A listener reaching for the volume between chapters notices; a listener who never has to does not notice anything, which is the goal.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">even loudness, then encode</div>
+      <pre>audio = np.concatenate(pieces)
+peak = float(np.max(np.abs(audio))) <span class="tok-key">or</span> <span class="tok-val">1.0</span>
+audio = (audio / peak) * <span class="tok-val">0.89</span>
+
+sf.write(mp3, audio, <span class="tok-val">24_000</span>, format=<span class="tok-str">"MP3"</span>,
+         bitrate_mode=<span class="tok-str">"VARIABLE"</span>, compression_level=<span class="tok-val">0.4</span>)</pre>
+    </div>
+
+    <div class="prose">
+      <p>That lands around 1 MB per two and a half minutes of speech. Small enough to serve from a static site without thinking about it.</p>
+    </div>
+  </div>
+
+  <div class="section" id="short-version">
+    <div class="section-label">Closing</div>
+    <h2><a class="anchor" href="#short-version">The short version</a></h2>
+    <div class="prose">
+      <p>Kokoro gives you a good voice for 24 minutes of laptop CPU per 45 minutes of writing, or 6 minutes if you get CUDA loaded. No account, no per-character billing, Apache 2.0 weights, nothing leaves your machine.</p>
+      <p>The model is the easy part. Your time goes into the acronym table, the two gap constants, and one afternoon convincing onnxruntime that the GPU exists.</p>
+      <p>What you do not get is your own voice. Kokoro cannot do it at any setting. That needs a cloning model, a careful recording, and roughly twenty times the compute. Whether that trade is worth it is part two.</p>
+    </div>
+
+    <ul class="dl">
+      <li>Blend two voices. Single presets wear thin over a long track.</li>
+      <li>Write numbers as words in the source, not in a substitution rule.</li>
+      <li>Tune the paragraph gaps before you tune anything else.</li>
+      <li>If CUDA "does not work", check PATH before you believe it.</li>
+      <li>Hash your inputs so a re-render costs only what changed.</li>
+    </ul>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <span>asadani.tech / September 2026</span>
+  <div class="footer-refs">
+    <a href="https://github.com/asadani/narrate-your-writing">narrate-your-writing</a>
+    <a href="/">&larr; back to index</a>
+  </div>
+</footer>
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
+</body>
+</html>

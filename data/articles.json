@@ -1,5 +1,41 @@
 [
   {
+    "slug": "narrate-writing-kokoro",
+    "title": "Narrating Your Writing With Kokoro",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "models",
+      "cost-latency",
+      "craft"
+    ],
+    "quote": "\"At 0.53x real time a re-render is a coffee break.\"",
+    "desc": "Forty-five minutes of narration costs 24 minutes of laptop CPU, or 6 minutes on a four-gigabyte GPU. Measured numbers for Kokoro 82M on both, plus the parts that actually decide whether a track is listenable: blending voices as style vectors, the espeak acronym tables, two silence constants, and the PATH bug that makes onnxruntime fall back to CPU without telling you.",
+    "date": "2026-09-03",
+    "dateDisplay": "September 3, 2026",
+    "cta": "Read",
+    "shareUrl": "https://tech.anujsadani.in/narrate-writing-kokoro/"
+  },
+  {
+    "slug": "clone-your-voice-qwen3-tts",
+    "title": "Cloning Your Own Voice With Qwen3-TTS",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "models",
+      "cost-latency",
+      "craft"
+    ],
+    "quote": "\"A 4.5 second reference beat an 85 second one, and it was not close.\"",
+    "desc": "Fifty minutes of narration in my own voice on a GTX 1650, entirely offline. The model was the straightforward part. Three recording sessions went to discovering that Bluetooth headsets and laptop array mics both cap you at 8 kHz while the file still claims 48, and the reference recording needed to be twenty times shorter than I assumed.",
+    "date": "2026-09-03",
+    "dateDisplay": "September 3, 2026",
+    "cta": "Read",
+    "shareUrl": "https://tech.anujsadani.in/clone-your-voice-qwen3-tts/"
+  },
+  {
     "slug": "the-meter-is-not-the-money",
     "title": "The Meter Is Not the Money",
     "tags": [

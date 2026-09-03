@@ -98,7 +98,7 @@
 <div class="pillars">
       <a class="pillar-card" href="#articles">
         <span class="pillar-label">Writing</span>
-        <span class="pillar-count">31</span>
+        <span class="pillar-count">33</span>
         <span class="pillar-meta">essays &amp; field notes</span>
         <span class="pillar-link">Browse &rarr;</span>
       </a>
@@ -130,13 +130,13 @@
       <span class="filter-lead">Filter</span>
       <div class="flavor-bar">
 <!-- BUILD:flavorbar -->
-        <button class="flavor-chip" data-flavor="craft" title="11 articles">craft</button>
+        <button class="flavor-chip" data-flavor="craft" title="13 articles">craft</button>
+        <button class="flavor-chip" data-flavor="models" title="10 articles">models</button>
         <button class="flavor-chip" data-flavor="evals" title="8 articles">evals</button>
-        <button class="flavor-chip" data-flavor="models" title="8 articles">models</button>
         <button class="flavor-chip" data-flavor="agents" title="6 articles">agents</button>
+        <button class="flavor-chip" data-flavor="cost-latency" title="5 articles">cost-latency</button>
         <button class="flavor-chip" data-flavor="provenance" title="4 articles">provenance</button>
         <button class="flavor-chip" data-flavor="agentic-coding" title="3 articles">agentic-coding</button>
-        <button class="flavor-chip" data-flavor="cost-latency" title="3 articles">cost-latency</button>
         <button class="flavor-chip" data-flavor="research" title="3 articles">research</button>
         <button class="flavor-chip" data-flavor="supply-chain" title="3 articles">supply-chain</button>
 <!-- /BUILD:flavorbar -->
@@ -159,6 +159,42 @@
     <div class="articles-list">
 
       <!-- BUILD:articles -->
+      <a class="art-row art-ai" href="/narrate-writing-kokoro/" data-tags="ai-engineering" data-flavors="models cost-latency craft">
+        <div class="art-strip"></div>
+        <div class="art-body">
+          <div class="art-top"><span class="art-badge badge-ai">AI Engineering</span><span class="art-title">Narrating Your Writing With Kokoro</span><span class="card-flavors"><span class="card-flavor">models</span><span class="card-flavor">cost-latency</span><span class="card-flavor">craft</span></span></div>
+          <div class="art-quote">"At 0.53x real time a re-render is a coffee break."</div>
+          <div class="art-desc">Forty-five minutes of narration costs 24 minutes of laptop CPU, or 6 minutes on a four-gigabyte GPU. Measured numbers for Kokoro 82M on both, plus the parts that actually decide whether a track is listenable: blending voices as style vectors, the espeak acronym tables, two silence constants, and the PATH bug that makes onnxruntime fall back to CPU without telling you.</div>
+        </div>
+        <div class="art-meta">
+          <span class="art-date">September 3, 2026</span>
+          <div class="art-actions">
+            <button class="share-btn" aria-label="Share" data-url="https://tech.anujsadani.in/narrate-writing-kokoro/" data-title="Narrating Your Writing With Kokoro">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            </button>
+            <span class="art-link">Read →</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="art-row art-ai" href="/clone-your-voice-qwen3-tts/" data-tags="ai-engineering" data-flavors="models cost-latency craft">
+        <div class="art-strip"></div>
+        <div class="art-body">
+          <div class="art-top"><span class="art-badge badge-ai">AI Engineering</span><span class="art-title">Cloning Your Own Voice With Qwen3-TTS</span><span class="card-flavors"><span class="card-flavor">models</span><span class="card-flavor">cost-latency</span><span class="card-flavor">craft</span></span></div>
+          <div class="art-quote">"A 4.5 second reference beat an 85 second one, and it was not close."</div>
+          <div class="art-desc">Fifty minutes of narration in my own voice on a GTX 1650, entirely offline. The model was the straightforward part. Three recording sessions went to discovering that Bluetooth headsets and laptop array mics both cap you at 8 kHz while the file still claims 48, and the reference recording needed to be twenty times shorter than I assumed.</div>
+        </div>
+        <div class="art-meta">
+          <span class="art-date">September 3, 2026</span>
+          <div class="art-actions">
+            <button class="share-btn" aria-label="Share" data-url="https://tech.anujsadani.in/clone-your-voice-qwen3-tts/" data-title="Cloning Your Own Voice With Qwen3-TTS">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            </button>
+            <span class="art-link">Read →</span>
+          </div>
+        </div>
+      </a>
+
       <div class="art-row art-ai has-summary" data-tags="ai-engineering" data-flavors="models evals">
         <div class="art-strip"></div>
         <div class="art-body">
