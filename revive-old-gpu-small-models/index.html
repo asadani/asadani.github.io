@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reviving a six-year-old GPU for small models</title>
+<meta name="description" content="A GTX 1650 with 4 GB of VRAM still runs useful models in 2026. The driver, the CPU wheel pip hands you, the PATH bug that makes CUDA look broken, bf16 over fp16 on Turing, and tuning batch size against memory instead of the clock.">
+<meta name="author" content="Anuj Sadani">
+<link rel="canonical" href="https://tech.anujsadani.in/revive-old-gpu-small-models/">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tech.anujsadani.in/revive-old-gpu-small-models/">
+<meta property="og:site_name" content="Anuj Sadani | Tech">
+<meta property="og:title" content="Reviving a six-year-old GPU for small models">
+<meta property="og:description" content="A GTX 1650 with 4 GB of VRAM still runs useful models in 2026. The driver, the CPU wheel pip hands you, the PATH bug that makes CUDA look broken, bf16 over fp16 on Turing, and tuning batch size against memory instead of the clock.">
+<meta property="og:image" content="https://tech.anujsadani.in/assets/profile-pic.png">
+<meta property="article:published_time" content="2026-09-03">
+<meta property="article:author" content="Anuj Sadani">
+<meta name="twitter:card" content="summary_large_image">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Reviving a six-year-old GPU for small models",
+  "description": "A GTX 1650 with 4 GB of VRAM still runs useful models in 2026. The driver, the CPU wheel pip hands you, the PATH bug that makes CUDA look broken, bf16 over fp16 on Turing, and tuning batch size against memory instead of the clock.",
+  "datePublished": "2026-09-03",
+  "url": "https://tech.anujsadani.in/revive-old-gpu-small-models/",
+  "mainEntityOfPage": "https://tech.anujsadani.in/revive-old-gpu-small-models/",
+  "inLanguage": "en",
+  "isPartOf": { "@id": "https://tech.anujsadani.in/#blog" },
+  "author": {
+    "@type": "Person",
+    "@id": "https://anujsadani.in/#person",
+    "name": "Anuj Sadani",
+    "url": "https://anujsadani.in/"
+  }
+}
+</script>
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/article.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">Anuj Sadani | Tech</a>
+  <div class="nav-right">
+    <span>Infrastructure</span>
+    <span class="nav-tag">SEP 2026</span>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <span class="theme-icon-moon" aria-hidden="true">&#9790;</span>
+      <span class="theme-icon-sun" aria-hidden="true">&#9728;</span>
+    </button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">Old Hardware, New Models</div>
+    <h1>Reviving a six-year-old GPU for small models</h1>
+    <p class="hero-deck">A GTX 1650 with 4 GB of VRAM, no tensor cores, and a driver five years out of date. It now runs speech models faster than my CPU by a factor of four. Everything that stood in the way, in the order it stood there.</p>
+    <div class="hero-meta">
+      <span>September 2026</span>
+      <span class="hero-meta-sep">/</span>
+      <span>Part three of three</span>
+    </div>
+  </header>
+
+  <div class="banner">
+    <span class="banner-badge">SERIES</span>
+    <p>This is the troubleshooting half of two posts about narrating writing with local speech models. Parts one and two are about the voice. This one is about the machine.</p>
+  </div>
+
+  <div class="plain-english">
+    <div class="pe-label">In Plain English</div>
+    <ul class="pe-list">
+      <li>
+        <span class="pe-num">1</span>
+        <div><strong>Small models moved toward old hardware.</strong> A 4 GB card that could not touch a large language model runs a 0.6B speech model comfortably.</div>
+      </li>
+      <li>
+        <span class="pe-num">2</span>
+        <div><strong>Most failures are plumbing.</strong> A CPU-only wheel, a missing PATH entry, a dtype mismatch. Almost none of it is the model.</div>
+      </li>
+      <li>
+        <span class="pe-num">3</span>
+        <div><strong>Tune against memory, not the clock.</strong> The setting that looked fastest was the one quietly spilling into system RAM.</div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="section" id="the-card">
+    <div class="section-label"><a href="#the-card">01 &mdash; The premise</a></div>
+    <h2><a class="anchor" href="#the-card">The card nobody recommends</a></h2>
+    <div class="prose">
+      <p>A GTX 1650: 4 GB of VRAM, Turing generation, compute capability 7.5, and no tensor cores at all. It is the cut-down Turing part, without the hardware that makes newer cards fast at low precision. Every "run models locally" guide assumes something better.</p>
+      <p>I kept using it anyway, because the interesting shift of the last two years is not that models got bigger. It is that the useful small ones got small enough to matter. A 0.6-billion-parameter speech model occupies 2.2 GB and does real work. That is a size this card can hold.</p>
+      <p>Everything below is what stood between the card and that work. Almost none of it was performance. It was plumbing.</p>
+    </div>
+  </div>
+
+  <div class="section" id="driver">
+    <div class="section-label"><a href="#driver">02 &mdash; Start here</a></div>
+    <h2><a class="anchor" href="#driver">The driver is probably ancient</a></h2>
+    <div class="prose">
+      <p>Mine was version 462.30, shipped February 2021. Five years stale, and it caps you at the CUDA 11.2 runtime, which no current PyTorch wheel targets. Every downstream thing I tried would have failed against it for reasons that had nothing to do with the real problem.</p>
+      <p>Check this before anything else:</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">the first thing to run</div>
+      <pre>nvidia-smi
+
+<span class="tok-cmt"># Driver Version: 462.30    CUDA Version: 11.2   &lt;- five years old</span>
+<span class="tok-cmt"># Driver Version: 616.56    CUDA Version: 13.4   &lt;- after updating</span></pre>
+    </div>
+
+    <div class="prose">
+      <p>One practical note if your machine still has GeForce Experience on it: that client was retired, and its driver-download backend no longer serves the old builds. Express Install will sit there doing nothing forever and tell you nothing. Download the driver directly instead, take the Studio branch, and choose the custom install so you can decline the extra background services on a memory-constrained machine.</p>
+      <p>You do not need the CUDA Toolkit. Modern PyTorch wheels bundle their own runtime, and on a machine with 8.5 GB of RAM the toolkit is three gigabytes you will never use.</p>
+    </div>
+  </div>
+
+  <div class="section" id="cpu-wheel">
+    <div class="section-label"><a href="#cpu-wheel">03 &mdash; Trap one</a></div>
+    <h2><a class="anchor" href="#cpu-wheel">The CPU wheel pip hands you</a></h2>
+    <div class="prose">
+      <p>Install almost any library that depends on torch and pip will resolve a CPU-only build. Silently. It has now cost me an afternoon twice, so it is the first thing I check after any install that touches torch.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">check, then repair</div>
+      <pre>python -c <span class="tok-str">"import torch; print(torch.__version__, torch.version.cuda)"</span>
+<span class="tok-cmt"># 2.13.0+cpu  None        &lt;- broken, and nothing told you</span>
+
+pip install --force-reinstall torch==2.13.0 torchaudio \
+    --index-url https://download.pytorch.org/whl/cu126</pre>
+    </div>
+
+    <div class="prose">
+      <p>Then confirm your card's architecture is actually compiled into the build. This is the check specific to old hardware, and it takes two seconds:</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">is your card in there</div>
+      <pre>python -c <span class="tok-str">"import torch; print(torch.cuda.get_arch_list())"</span>
+<span class="tok-cmt"># ['sm_50','sm_60','sm_61','sm_70','sm_75','sm_80','sm_86','sm_90']</span>
+<span class="tok-cmt">#                                    ^^^^^^ Turing</span></pre>
+    </div>
+
+    <div class="prose">
+      <p>Turing is <code>sm_75</code>. CUDA 13 dropped several older architectures, so on a pre-Ampere card I pin the cu126 index rather than taking whatever is newest. Newer is not better when the newer thing has removed support for your hardware.</p>
+    </div>
+  </div>
+
+  <div class="section" id="path">
+    <div class="section-label"><a href="#path">04 &mdash; Trap two</a></div>
+    <h2><a class="anchor" href="#path">Why CUDA looks broken on Windows</a></h2>
+    <div class="prose">
+      <p>I spent longer on this than on everything else combined, and the fix is two lines.</p>
+      <p>The pip <code>nvidia-*</code> wheels put their DLLs in <code>site-packages/nvidia/*/bin</code>. The documented way to make those visible on Windows is <code>os.add_dll_directory()</code>. That is not sufficient. onnxruntime loads its provider DLL through a route that searches the real <code>PATH</code>, so the provider fails to load and falls back to CPU. No exception. No warning at the default log level.</p>
+      <p>Your job just runs four times slower than it should, and you conclude that this is what the hardware does. I concluded exactly that, and I was wrong for about a day.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">register the CUDA libraries before importing onnxruntime</div>
+      <pre>root = Path(importlib.util.find_spec(<span class="tok-str">"nvidia"</span>).origin).parent
+<span class="tok-key">for</span> sub <span class="tok-key">in</span> sorted(root.rglob(<span class="tok-str">"bin"</span>)):
+    <span class="tok-key">if</span> sub.is_dir():
+        os.environ[<span class="tok-str">"PATH"</span>] = str(sub) + os.pathsep + os.environ[<span class="tok-str">"PATH"</span>]
+        os.add_dll_directory(str(sub))   <span class="tok-cmt"># helps, insufficient alone</span></pre>
+    </div>
+
+    <div class="prose">
+      <p>Match the CUDA major version to your onnxruntime release while you are here. Version 1.29 wants CUDA 13 and looks for <code>cublasLt64_13.dll</code>; 1.22 wants CUDA 12. Install the wrong <code>nvidia-*-cu1x</code> wheels and you get a missing-DLL error naming a file you have never heard of. On Windows the CUDA 13 wheels had no builds available when I tried, so I pinned <code>onnxruntime-gpu==1.22.0</code> and used the CUDA 12 set.</p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">Make an explicit device request an assertion</div>
+      <p>Let an <code>auto</code> setting degrade quietly. Make anything explicit fail loudly. If <code>--device cuda</code> silently falls back to CPU, you find out an hour into a long run, and you will blame the wrong thing.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">fail loudly</div>
+      <pre>active = session.get_providers()[<span class="tok-val">0</span>]
+<span class="tok-key">if</span> device == <span class="tok-str">"cuda"</span> <span class="tok-key">and</span> <span class="tok-str">"CUDA"</span> <span class="tok-key">not in</span> active:
+    sys.exit(<span class="tok-str">"Asked for CUDA but got %s"</span> % active)</pre>
+    </div>
+  </div>
+
+  <div class="section" id="directml">
+    <div class="section-label"><a href="#directml">05 &mdash; A dead end</a></div>
+    <h2><a class="anchor" href="#directml">DirectML is the tempting wrong turn</a></h2>
+    <div class="prose">
+      <p>Before CUDA worked I tried DirectML, because it needs no CUDA toolkit and runs on any DirectX 12 GPU. On a Windows laptop it is the obviously attractive option.</p>
+      <p><code>onnxruntime-directml</code> advertises the provider, claims the node, then dies inside the model's F0 encoder on <code>ConvTranspose</code> with error <code>80070057</code>. Because it has already claimed the node there is no CPU fallback. Nothing renders at all. It also installs over <code>onnxruntime</code>, since both provide the same module, so testing the alternative means uninstalling one first.</p>
+      <p>I wrote the whole thing off as "GPU acceleration does not work on this machine" and moved on. That conclusion was wrong and it cost me a day. DirectML does not work with this model. CUDA does. Those are different claims and I collapsed them into one.</p>
+    </div>
+  </div>
+
+  <div class="section" id="dtype">
+    <div class="section-label"><a href="#dtype">06 &mdash; Trap three</a></div>
+    <h2><a class="anchor" href="#dtype">Why fp16 crashes on Turing</a></h2>
+    <div class="prose">
+      <p>The model I was running ships in bfloat16. Turing has no native bf16, so PyTorch emulates it, and fp16 is the genuinely native path. Switching to fp16 for the speed is the obvious optimisation. It is also wrong, and the failure mode is nasty.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">what fp16 gets you</div>
+      <pre>File <span class="tok-str">"transformers/generation/utils.py"</span>, line 2787, <span class="tok-key">in</span> _sample
+torch.AcceleratorError: CUDA error: device-side assert triggered</pre>
+    </div>
+
+    <div class="prose">
+      <p>bf16 has a much wider exponent range than fp16. In fp16 the logits overflow inside the sampling loop, sampling returns an out-of-range index, the embedding lookup asserts on device, and the process dies. Device-side asserts report asynchronously, so the traceback location is not trustworthy either. You get a crash pointing at a line that is fine.</p>
+      <p>Emulated bf16 is slower and correct. Take correct. The related setting: <code>attn_implementation="sdpa"</code>, because FlashAttention-2 requires Ampere or newer and will not build against this card at all.</p>
+    </div>
+  </div>
+
+  <div class="section" id="batch">
+    <div class="section-label"><a href="#batch">07 &mdash; Tuning</a></div>
+    <h2><a class="anchor" href="#batch">Tune against memory, not the clock</a></h2>
+    <div class="prose">
+      <p>Autoregressive decode is memory-bandwidth bound, so batching normally pays for itself. On a small card it pays, then abruptly stops paying, and the clock alone will not tell you where.</p>
+    </div>
+
+    <div class="data-table">
+      <table class="fixed">
+        <colgroup>
+          <col style="width:18%">
+          <col style="width:22%">
+          <col style="width:24%">
+          <col style="width:36%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="center">Batch</th>
+            <th class="num">Speed</th>
+            <th class="num">Peak VRAM</th>
+            <th>Verdict</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="center">1</td>
+            <td class="num">4.4x real time</td>
+            <td class="num">3.38 GB</td>
+            <td>fits</td>
+          </tr>
+          <tr>
+            <td class="center">2</td>
+            <td class="num td-mono">2.7x real time</td>
+            <td class="num">3.77 GB</td>
+            <td class="td-yes">1.6x faster, still fits</td>
+          </tr>
+          <tr>
+            <td class="center">4</td>
+            <td class="num">2.8x real time</td>
+            <td class="num">5.07 GB</td>
+            <td class="td-no">over the card, spills to system RAM</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>Batch 4 exceeds 4 GB, spills over PCIe, and hands back everything it gained. The clock said batch 4 was fine. The memory counter said why it was not. On a card with headroom you would never notice; on this one it is the whole game.</p>
+      <p>The same principle explains a much larger result. I first tried a 0.5B model whose weights took 3.21 GB, leaving 0.79 GB of headroom. It peaked at 4.30 GB against a 4.00 GB card and paged constantly, and its cost grew with utterance length: 11.6x real time at four seconds, 24.2x at eighteen. The replacement occupies 2.2 GB and holds a flat 4.5x regardless of length, because it never leaves the card.</p>
+      <p>Half a gigabyte of weights was the difference between a twelve-hour job and a three-hour one. On this class of hardware, model size is not a quality dial. It is a cliff.</p>
+    </div>
+  </div>
+
+  <div class="section" id="watchdog">
+    <div class="section-label"><a href="#watchdog">08 &mdash; When it dies</a></div>
+    <h2><a class="anchor" href="#watchdog">The driver will reset your GPU</a></h2>
+    <div class="prose">
+      <p>My first long run died after 40 minutes with no Python traceback. The Windows event log had the answer:</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">Event Viewer, System log</div>
+      <pre>Id 153   nvlddmkm   Error</pre>
+    </div>
+
+    <div class="prose">
+      <p>That is a GPU engine reset. A CUDA kernel ran past the display driver's two-second watchdog, Windows reset the graphics engine, and the CUDA context died taking the process with it. The underlying cause was the same paging described above: when kernels wait on PCIe transfers they stretch past the timeout.</p>
+      <p>The usual advice is to raise the watchdog through <code>TdrDelay</code> in the registry. I would try the actual fix first. Reducing the work per kernel, by shortening chunks or lowering batch size, addresses the cause; raising the timeout hides it and costs you a sixty-second frozen screen whenever the GPU genuinely hangs. After cutting chunk length the reset never recurred.</p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-lbl">Check the event log before you theorise</div>
+      <p>Across five interruptions I had five different causes: a GPU reset, a charger that was not seated, sleep on battery, a background Windows update under memory pressure, and a task timeout. Only the first was mine to fix in code. Without the event log I would have kept tuning the model.</p>
+    </div>
+  </div>
+
+  <div class="section" id="unattended">
+    <div class="section-label"><a href="#unattended">09 &mdash; Long runs</a></div>
+    <h2><a class="anchor" href="#unattended">Assume you will be interrupted</a></h2>
+    <div class="prose">
+      <p>A three-hour unattended job on a laptop will be interrupted. Design for it rather than hoping.</p>
+      <p>The highest-value change is caching every unit of work to disk as it completes, keyed on its inputs. Write to a temporary name and rename into place, so a crash mid-write cannot leave a truncated file that poisons the next run.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">atomic, resumable</div>
+      <pre>tmp = path.with_suffix(<span class="tok-str">".part"</span>)
+<span class="tok-key">with</span> open(tmp, <span class="tok-str">"wb"</span>) <span class="tok-key">as</span> fh:   <span class="tok-cmt"># np.save appends ".npy" to a bare</span>
+    np.save(fh, samples)      <span class="tok-cmt"># name, so hand it a handle instead</span>
+tmp.replace(path)</pre>
+    </div>
+
+    <div class="prose">
+      <p>That comment is a bug I shipped and hit immediately. <code>np.save</code> appends <code>.npy</code> to any path lacking it, so writing to <code>chunk.part</code> produced <code>chunk.part.npy</code> and the rename looked for a file that did not exist. It died on the first unit of an eighteen-file run. Passing an open handle keeps the name you chose.</p>
+      <p>Across five interruptions, that cache cost me a few seconds of redone work in total.</p>
+      <p>Then check the machine will not put itself to sleep. The idle timer counts user input, not GPU load, so a long render does not keep it awake. My hibernate default was three hours, which is exactly long enough to kill a three-hour job at the worst possible moment.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">before any long unattended run</div>
+      <pre>powercfg /change standby-timeout-ac <span class="tok-val">0</span>
+powercfg /change hibernate-timeout-ac <span class="tok-val">0</span></pre>
+    </div>
+
+    <div class="prose">
+      <p>And watch system RAM, not just VRAM. On a machine with 8.5 GB total, one render stalled for 53 minutes on work its neighbours did in two and a half, purely because memory ran short. If a unit of work takes disproportionately long, it is paging, not thinking.</p>
+    </div>
+  </div>
+
+  <div class="section" id="payoff">
+    <div class="section-label"><a href="#payoff">10 &mdash; The payoff</a></div>
+    <h2><a class="anchor" href="#payoff">What the old card actually does</a></h2>
+    <div class="prose">
+      <p>After all of that, the same speech model on the same machine:</p>
+    </div>
+
+    <div class="data-table">
+      <table class="fixed">
+        <colgroup>
+          <col style="width:34%">
+          <col style="width:22%">
+          <col style="width:22%">
+          <col style="width:22%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Execution provider</th>
+            <th class="num">Audio</th>
+            <th class="num">Compute</th>
+            <th class="num">Speed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>CPU</td>
+            <td class="num">118.5 s</td>
+            <td class="num">63.4 s</td>
+            <td class="num">0.53x</td>
+          </tr>
+          <tr>
+            <td>CUDA</td>
+            <td class="num">118.5 s</td>
+            <td class="num">14.7 s</td>
+            <td class="num td-mono">0.12x</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>A 4.3x speedup on a card that was mid-range in 2019 and is not sold any more. Forty-five minutes of narration in six minutes rather than twenty-four.</p>
+      <p>The card was never the problem. A stale driver, a CPU-only wheel, a missing PATH entry and a dtype mismatch were the problem, and every one of them failed quietly rather than loudly. That is the pattern worth taking away: on old hardware the errors you get are rarely about the hardware, and the hardware gets blamed anyway.</p>
+    </div>
+  </div>
+
+  <div class="section" id="short-version">
+    <div class="section-label"><a href="#short-version">11 &mdash; Closing</a></div>
+    <h2><a class="anchor" href="#short-version">The short version</a></h2>
+    <div class="prose">
+      <p>A 4 GB card from 2019 runs a 0.6B model at four times CPU speed. Getting there was almost entirely plumbing, and almost every failure was silent.</p>
+      <p>If you have an old GPU sitting in a laptop, it is probably more capable than the last time you checked, because the models came down to meet it.</p>
+    </div>
+
+    <ul class="dl">
+      <li>Update the driver before you debug anything else.</li>
+      <li>Check <code>torch.version.cuda</code> after every install that touches torch.</li>
+      <li>Confirm your architecture is in <code>get_arch_list()</code>. Newer CUDA drops old cards.</li>
+      <li>On Windows, put the CUDA DLL directories on PATH, not just <code>add_dll_directory</code>.</li>
+      <li>Use bf16 on pre-Ampere hardware even though fp16 is native. Correctness first.</li>
+      <li>Tune batch size against peak VRAM. The clock will mislead you.</li>
+      <li>Read the Windows event log before theorising about a crash.</li>
+      <li>Cache work to disk. Long local jobs get interrupted for reasons you cannot control.</li>
+    </ul>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <span>asadani.tech / September 2026</span>
+  <div class="footer-refs">
+    <a href="/narrate-writing-kokoro/">Part one: the synthetic voice</a>
+    <a href="/clone-your-voice-qwen3-tts/">Part two: your own voice</a>
+    <a href="/">&larr; back to index</a>
+  </div>
+</footer>
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
+</body>
+</html>

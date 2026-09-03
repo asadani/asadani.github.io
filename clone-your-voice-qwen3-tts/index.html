@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cloning your own voice with Qwen3-TTS on a 4 GB GPU</title>
-<meta name="description" content="Narrating 50 minutes of writing in my own voice on a GTX 1650. A 4.5 second reference beats an 85 second one, bf16 beats fp16, and the hardest part is your microphone.">
+<title>Cloning your own voice with Qwen3-TTS</title>
+<meta name="description" content="Narrating fifty minutes of writing in my own voice, offline. Three recording sessions, the microphone that lies about its own sample rate, and why four seconds of reference beat ninety.">
 <meta name="author" content="Anuj Sadani">
 <link rel="canonical" href="https://tech.anujsadani.in/clone-your-voice-qwen3-tts/">
 
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://tech.anujsadani.in/clone-your-voice-qwen3-tts/">
 <meta property="og:site_name" content="Anuj Sadani | Tech">
-<meta property="og:title" content="Cloning your own voice with Qwen3-TTS on a 4 GB GPU">
-<meta property="og:description" content="Narrating 50 minutes of writing in my own voice on a GTX 1650. A 4.5 second reference beats an 85 second one, bf16 beats fp16, and the hardest part is your microphone.">
+<meta property="og:title" content="Cloning your own voice with Qwen3-TTS">
+<meta property="og:description" content="Narrating fifty minutes of writing in my own voice, offline. Three recording sessions, the microphone that lies about its own sample rate, and why four seconds of reference beat ninety.">
 <meta property="og:image" content="https://tech.anujsadani.in/assets/profile-pic.png">
 <meta property="article:published_time" content="2026-09-03">
 <meta property="article:author" content="Anuj Sadani">
@@ -22,8 +22,8 @@
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "Cloning your own voice with Qwen3-TTS on a 4 GB GPU",
-  "description": "Narrating 50 minutes of writing in my own voice on a GTX 1650. A 4.5 second reference beats an 85 second one, bf16 beats fp16, and the hardest part is your microphone.",
+  "headline": "Cloning your own voice with Qwen3-TTS",
+  "description": "Narrating fifty minutes of writing in my own voice, offline. Three recording sessions, the microphone that lies about its own sample rate, and why four seconds of reference beat ninety.",
   "datePublished": "2026-09-03",
   "url": "https://tech.anujsadani.in/clone-your-voice-qwen3-tts/",
   "mainEntityOfPage": "https://tech.anujsadani.in/clone-your-voice-qwen3-tts/",
@@ -71,19 +71,19 @@
 
   <!-- HERO -->
   <header class="hero">
-    <div class="hero-eyebrow">Voice Cloning, Measured</div>
-    <h1>Cloning your own voice with Qwen3-TTS on a 4 GB GPU</h1>
-    <p class="hero-deck">Fifty minutes of narration in my own voice, on a GTX 1650, entirely offline. The model was the straightforward part. My microphone was not, and the reference recording needed to be twenty times shorter than I assumed.</p>
+    <div class="hero-eyebrow">Giving Writing A Voice</div>
+    <h1>Cloning your own voice with Qwen3-TTS</h1>
+    <p class="hero-deck">Fifty minutes of narration in my own voice, running entirely offline. The model behaved. My microphone did not, and the reference recording needed to be twenty times shorter than I assumed.</p>
     <div class="hero-meta">
       <span>September 2026</span>
       <span class="hero-meta-sep">/</span>
-      <span>Qwen3-TTS 0.6B / Turing sm_75 / 4 GB</span>
+      <span>Part two of three</span>
     </div>
   </header>
 
   <div class="banner">
-    <span class="banner-badge">PART 2 OF 2</span>
-    <p>Part one covers narrating with a synthetic voice: no recording, no GPU, 24 minutes of CPU for 45 minutes of audio. Start there unless you specifically need the voice to be yours.</p>
+    <span class="banner-badge">SERIES</span>
+    <p>Part one covers narrating with a synthetic voice, which needs no recording and no GPU. Start there unless the voice being yours is the actual point. Part three is the hardware write-up.</p>
   </div>
 
   <div class="plain-english">
@@ -91,51 +91,60 @@
     <ul class="pe-list">
       <li>
         <span class="pe-num">1</span>
-        <div><strong>Six seconds of you is enough.</strong> And better than ninety. A long reference sits in the KV cache for the whole generation and starves a small card.</div>
+        <div><strong>Six seconds of you is enough.</strong> And better than ninety. A long reference makes the model slower without making the voice better.</div>
       </li>
       <li>
         <span class="pe-num">2</span>
-        <div><strong>Your microphone is the bottleneck.</strong> Bluetooth headsets and laptop array mics cap you at 8 kHz while the file still claims 48. The clone inherits the dullness.</div>
+        <div><strong>Your microphone is the bottleneck.</strong> Bluetooth headsets and laptop mics both cap you at 8 kHz while the file still claims 48. The clone inherits the dullness.</div>
       </li>
       <li>
         <span class="pe-num">3</span>
-        <div><strong>Budget about three hours.</strong> 2.7x real time on a 4 GB card. Roughly twenty times what the synthetic voice costs.</div>
+        <div><strong>It needs the words, not just the audio.</strong> The model aligns a transcript against your recording, and refuses to run without one.</div>
       </li>
     </ul>
   </div>
 
-  <nav class="toc" aria-label="Jump to section">
-    <div class="toc-label">Jump to</div>
-    <ol class="toc-list">
-      <li><span class="toc-num">01</span><a href="#the-rig">The hardware, deliberately modest</a></li>
-      <li><span class="toc-num">02</span><a href="#microphone">Your microphone is lying to you</a></li>
-      <li><span class="toc-num">03</span><a href="#measure">Measure the take before you trust it</a></li>
-      <li><span class="toc-num">04</span><a href="#shorter">Then throw most of it away</a></li>
-      <li><span class="toc-num">05</span><a href="#install">The CPU wheel that pip hands you</a></li>
-      <li><span class="toc-num">06</span><a href="#dtype">Why fp16 crashes on old cards</a></li>
-      <li><span class="toc-num">07</span><a href="#batch">Batch two, and no more</a></li>
-      <li><span class="toc-num">08</span><a href="#interruptions">Designing for interruption</a></li>
-      <li><span class="toc-num">09</span><a href="#numbers">What it cost</a></li>
-      <li><span class="toc-num">10</span><a href="#worth-it">Is it worth it</a></li>
-    </ol>
-  </nav>
-
-  <div class="section" id="the-rig">
-    <div class="section-label">Constraints</div>
-    <h2><a class="anchor" href="#the-rig">The hardware, deliberately modest</a></h2>
+  <div class="section" id="why-yours">
+    <div class="section-label"><a href="#why-yours">01 &mdash; The premise</a></div>
+    <h2><a class="anchor" href="#why-yours">Why bother with your own voice</a></h2>
     <div class="prose">
-      <p>A GTX 1650 with 4 GB of VRAM, Turing generation, compute capability 7.5, no tensor cores. 8.5 GB of system RAM, of which two or three are usually free. This is a five-year-old gaming laptop, not a workstation.</p>
-      <p>Almost every decision below exists because of that 4 GB ceiling. The model weights take 2.2 GB, which leaves under 1.8 for everything else. The short reference, the batch size, the dtype: all of it is downstream of that number. On a 24 GB card most of this stops mattering and you can ignore me.</p>
-      <p>I mention it because "run it locally" advice usually assumes hardware that makes the advice trivial. The interesting question is what happens when you do not have that.</p>
+      <p>A synthetic narration is fine. I shipped one, and most listeners would not object to it. So the honest question is what you get for the extra work.</p>
+      <p>You get a narrator who is a person. For a course or a personal essay, where part of what you are shipping is that a particular human thought this through, that is not a cosmetic difference. A synthetic voice quietly reframes the piece as content. Your own voice keeps it as something you said.</p>
+      <p>Whether that is worth an afternoon and three recording takes depends entirely on the piece. For documentation, no. For anything with your name on it as the reason to listen, probably.</p>
+    </div>
+  </div>
+
+  <div class="section" id="passage">
+    <div class="section-label"><a href="#passage">02 &mdash; The recording</a></div>
+    <h2><a class="anchor" href="#passage">What you read matters</a></h2>
+    <div class="prose">
+      <p>Do not read random text. The clone learns the prosody you give it, so the passage should cover the shapes it will have to reproduce.</p>
+      <p>Mine covers long subordinate clauses, a semicolon's mid-sentence lift, a colon setting up a list, two very short declaratives for the falling cadence, digits spoken in sequence, and one real question. That last one is not decoration. Miss the question mark and every question you ever narrate comes out flat.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-label">from the passage I read</div>
+      <pre>A protocol is just an agreement about how two programs talk.
+
+The model does not run the tool. It cannot.
+
+Zero, one, two, three, four, five, six, seven, eight, nine.
+
+Is it going to rain tomorrow?</pre>
+    </div>
+
+    <div class="prose">
+      <p>About 160 words, or ninety seconds at teaching pace. Two rules for the reading itself, both of which I got wrong before I got them right.</p>
+      <p>Read at your normal speed. The clone copies your rhythm, so a carefully-slow take gives you a carefully-slow narrator for every article you ever render. And do not restart on a stumble. A fluffed word costs nothing. Three increasingly stiff takes cost you the voice, because what you end up cloning is the sound of someone concentrating on not making mistakes.</p>
     </div>
   </div>
 
   <div class="section" id="microphone">
-    <div class="section-label">The Real Difficulty</div>
+    <div class="section-label"><a href="#microphone">03 &mdash; The real difficulty</a></div>
     <h2><a class="anchor" href="#microphone">Your microphone is lying to you</a></h2>
     <div class="prose">
-      <p>I needed three recording sessions to get ninety usable seconds, and none of the failures were about machine learning.</p>
-      <p>Take one was on Bluetooth earbuds. When a Bluetooth device is used as a microphone the link drops from A2DP to the hands-free profile, which caps the mic at 16 kHz sampling. That is an 8 kHz audio ceiling. Windows then upsamples to 48 kHz to fill the WAV header, so the file metadata looks perfect.</p>
+      <p>I needed three sessions to get ninety usable seconds, and none of the failures were about machine learning.</p>
+      <p>Take one was on Bluetooth earbuds. When a Bluetooth device is used as a microphone the link drops to the hands-free profile, which caps the mic at 16 kHz sampling. That is an 8 kHz audio ceiling. Windows then upsamples to 48 kHz to fill the file header, so everything about the recording looks correct.</p>
     </div>
 
     <div class="code-block">
@@ -150,326 +159,111 @@ samplerate: <span class="tok-val">48000</span> Hz   channels: <span class="tok-v
     </div>
 
     <div class="prose">
-      <p>Above 8 kHz is where sibilance and consonant air live. The s, the t, the sh. A clone conditioned on band-limited audio reproduces that limitation, and you get 50 minutes of narration that sounds like a phone call.</p>
-      <p>So I switched to the laptop's built-in array microphone. Take two was worse. Same 8 kHz ceiling, because the Realtek voice DSP runs a 16 kHz capture pipeline you cannot switch off from the recorder app, and now I had also given up 23 dB of signal-to-noise and four fifths of the presence band by sitting 30 cm away.</p>
+      <p>Above 8 kHz is where sibilance and consonant air live. The s, the t, the sh. A clone conditioned on band-limited audio reproduces that limitation, and you get fifty minutes of narration that sounds like a phone call.</p>
+      <p>So I switched to the laptop's built-in array microphone. Take two was worse. Same 8 kHz ceiling, because the voice DSP runs a 16 kHz capture pipeline you cannot switch off from the recorder app, and now I had also given up 23 dB of signal-to-noise and four fifths of the presence band by sitting thirty centimetres away.</p>
     </div>
 
     <div class="callout">
       <div class="callout-lbl">Record on your phone</div>
-      <p>Any modern phone voice-memo app captures genuinely full-band 44.1 or 48 kHz and bypasses your laptop's audio stack entirely. Hold it a hand's width from your mouth, slightly off-axis so plosives do not hit the capsule head on. It will beat both your headset and your built-in mic, and it costs nothing.</p>
+      <p>Any modern phone voice-memo app captures genuinely full-band audio and bypasses your laptop's audio stack entirely. Hold it a hand's width from your mouth, slightly off-axis so plosives do not hit the capsule head on. It beats both your headset and your built-in mic, and it costs nothing.</p>
     </div>
   </div>
 
   <div class="section" id="measure">
-    <div class="section-label">Verification</div>
+    <div class="section-label"><a href="#measure">04 &mdash; Verification</a></div>
     <h2><a class="anchor" href="#measure">Measure the take before you trust it</a></h2>
     <div class="prose">
-      <p>Twenty lines that would have saved me two recording sessions. Run this on every take before you spend any GPU time.</p>
+      <p>Twenty lines that would have saved me two recording sessions. The last check is the one that matters, and it is the one nobody tells you to run.</p>
     </div>
 
     <div class="code-block">
-      <div class="cb-label">the checks that matter</div>
-      <pre>d, sr = sf.read(<span class="tok-str">"reference.wav"</span>)
-<span class="tok-key">if</span> d.ndim &gt; <span class="tok-val">1</span>: d = d.mean(<span class="tok-val">1</span>)
-
-peak  = float(np.max(np.abs(d)))
-rms   = float(np.sqrt(np.mean(d**<span class="tok-val">2</span>)))
-win   = int(sr * <span class="tok-val">0.05</span>)
-frames = [d[i:i+win] <span class="tok-key">for</span> i <span class="tok-key">in</span> range(<span class="tok-val">0</span>, len(d)-win, win)]
-floor = float(np.percentile([np.sqrt(np.mean(f**<span class="tok-val">2</span>)) <span class="tok-key">for</span> f <span class="tok-key">in</span> frames], <span class="tok-val">5</span>))
-
-print(f<span class="tok-str">"SNR approx {20*np.log10(rms/max(floor,1e-9)):.1f} dB"</span>)
-print(f<span class="tok-str">"clipped {int(np.sum(np.abs(d) &gt; 0.999))}"</span>)
-
-<span class="tok-cmt"># and the one that catches the Bluetooth trap:</span>
-S = np.abs(np.fft.rfft(d * np.hanning(len(d))))
+      <div class="cb-label">where does the audio actually stop</div>
+      <pre>S = np.abs(np.fft.rfft(d * np.hanning(len(d))))
 f = np.fft.rfftfreq(len(d), <span class="tok-val">1</span>/sr)
 c = np.cumsum(S) / S.sum()
 print(f<span class="tok-str">"99.9% of energy below {f[np.searchsorted(c, 0.999)]:.0f} Hz"</span>)</pre>
     </div>
 
     <div class="prose">
-      <p>Peak below 0.99 with zero clipped samples. SNR above roughly 25 dB, which is about the room rather than the microphone. And that last line: you want it reading 15,000 or higher. Mine read 7,943, twice, from two different microphones, before I understood what I was looking at.</p>
-      <p>One thing on the reading itself. Read at your normal pace, not slower. The clone copies your rhythm, so a carefully-slow take gives you a carefully-slow narrator for every article you ever render. And do not restart on a stumble. A fluffed word costs nothing. Three increasingly stiff takes cost you the voice.</p>
+      <p>You want that reading 15,000 or higher. Mine read 7,943, twice, from two different microphones, before I understood what I was looking at.</p>
+      <p>Alongside it: peak below 0.99 with zero clipped samples, and a signal-to-noise ratio above roughly 25 dB. That last one is about your room rather than your microphone. A quiet room with a phone beats a treated room with a Bluetooth headset, because one of those problems is fixable in software and the other is not.</p>
     </div>
   </div>
 
   <div class="section" id="shorter">
-    <div class="section-label">The Counterintuitive Part</div>
+    <div class="section-label"><a href="#shorter">05 &mdash; The surprise</a></div>
     <h2><a class="anchor" href="#shorter">Then throw most of it away</a></h2>
     <div class="prose">
-      <p>I recorded 85 seconds with a matching transcript, which felt like a rich conditioning signal. Qwen3-TTS advertises cloning from three seconds, so I assumed more would be better.</p>
-      <p>It was not. It was catastrophically worse.</p>
+      <p>I recorded 85 seconds with a matching transcript, which felt like a generous conditioning signal. The model advertises cloning from three seconds, so more seemed obviously better.</p>
+      <p>It was not. It was substantially worse.</p>
     </div>
 
     <div class="data-table">
       <table class="fixed">
         <colgroup>
-          <col style="width:28%">
-          <col style="width:16%">
-          <col style="width:20%">
-          <col style="width:36%">
+          <col style="width:30%">
+          <col style="width:22%">
+          <col style="width:48%">
         </colgroup>
         <thead>
           <tr>
             <th>Reference length</th>
-            <th class="num">RTF</th>
-            <th class="num">Peak VRAM</th>
+            <th class="num">Speed</th>
             <th>Outcome</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>85.1 s</td>
-            <td class="num">9.7x</td>
-            <td class="num">3.90 GB</td>
-            <td class="td-no">thrashed, then stalled</td>
+            <td>85.1 seconds</td>
+            <td class="num">9.7x real time</td>
+            <td class="td-no">stalled partway through a four-second line</td>
           </tr>
           <tr>
-            <td>4.52 s</td>
-            <td class="num td-mono">4.6x</td>
-            <td class="num">2.68 GB</td>
-            <td class="td-yes">stable, no paging</td>
+            <td>4.52 seconds</td>
+            <td class="num td-mono">4.6x real time</td>
+            <td class="td-yes">stable, and no worse to my ear</td>
           </tr>
         </tbody>
       </table>
     </div>
 
     <div class="prose">
-      <p>The model runs at a 12 Hz acoustic token rate. So 85 seconds of reference is roughly a thousand tokens sitting in the KV cache for the entire generation, before a single word of output exists. On a card with 1.8 GB of headroom that is the difference between computing and paging over PCIe.</p>
-      <p>The long-reference run peaked at 3.90 GB against a 4.00 GB card and spent twenty minutes on a four-second line. The short one held 2.68 GB and finished in 23 seconds. Quality was indistinguishable to me on an A/B.</p>
-      <p>Pick one clean complete sentence, cut on silence at both ends, save the exact transcript beside it. Four to ten seconds. That is the whole reference.</p>
+      <p>The reason is that the reference does not get consumed once and discarded. It stays in the model's working context for the whole generation. Eighty-five seconds of audio becomes roughly a thousand tokens that every subsequent word has to be computed against, before a single word of output exists.</p>
+      <p>So pick one clean, complete sentence. Cut it on silence at both ends. Save the exact transcript beside it. Four to ten seconds is the whole reference, and the quality difference against ninety seconds was not something I could hear on an A/B.</p>
     </div>
 
     <div class="callout">
       <div class="callout-lbl">It needs the words, not just the audio</div>
-      <p>Qwen3-TTS clones in-context, so it refuses to run without a transcript of the reference. There is an <code>x_vector_only_mode</code> that skips it, documented as lower quality. I take the refusal as a good sign: it is genuinely aligning text to audio rather than pulling a speaker embedding and hoping.</p>
+      <p>Qwen3-TTS clones in-context, so it refuses to run without a transcript of the reference. There is a mode that skips it, documented as lower quality. I take the refusal as a good sign. It is genuinely aligning text against audio rather than pulling a speaker embedding and hoping.</p>
     </div>
   </div>
 
-  <div class="section" id="install">
-    <div class="section-label">Setup</div>
-    <h2><a class="anchor" href="#install">The CPU wheel that pip hands you</a></h2>
+  <div class="section" id="pace">
+    <div class="section-label"><a href="#pace">06 &mdash; What comes out</a></div>
+    <h2><a class="anchor" href="#pace">It speaks at a human pace</a></h2>
     <div class="prose">
-      <p>Installing the package resolves a CPU-only torch. Silently. This is the second time this pattern has cost me an afternoon, so it is now the first thing I check after any install that touches torch.</p>
-    </div>
-
-    <div class="code-block">
-      <div class="cb-label">check, then repair</div>
-      <pre>pip install -U qwen-tts
-
-python -c <span class="tok-str">"import torch; print(torch.__version__, torch.version.cuda)"</span>
-<span class="tok-cmt"># 2.13.0+cpu  None        &lt;- the trap</span>
-
-pip install --force-reinstall torch==2.13.0 torchaudio \
-    --index-url https://download.pytorch.org/whl/cu126
-
-python -c <span class="tok-str">"import torch; print(torch.cuda.get_arch_list())"</span>
-<span class="tok-cmt"># ['sm_50','sm_60','sm_61','sm_70','sm_75','sm_80','sm_86','sm_90']</span></pre>
-    </div>
-
-    <div class="prose">
-      <p>That second check matters on older hardware. Turing is <code>sm_75</code>. CUDA 13 dropped several older architectures, so on a pre-Ampere card I use the cu126 index rather than the newest available. Two seconds of verification against an hour of confusing failures.</p>
-    </div>
-  </div>
-
-  <div class="section" id="dtype">
-    <div class="section-label">Precision</div>
-    <h2><a class="anchor" href="#dtype">Why fp16 crashes on old cards</a></h2>
-    <div class="prose">
-      <p>The official example uses <code>torch.bfloat16</code>. Turing has no native bf16, so PyTorch emulates it, and fp16 is the genuinely native path. I switched to fp16 for the speed. It was the wrong call and the failure mode is unpleasant.</p>
-    </div>
-
-    <div class="code-block">
-      <div class="cb-label">what fp16 gets you</div>
-      <pre>File <span class="tok-str">"transformers/generation/utils.py"</span>, line 2787, <span class="tok-key">in</span> _sample
-torch.AcceleratorError: CUDA error: device-side assert triggered</pre>
-    </div>
-
-    <div class="prose">
-      <p>The model was trained in bf16, whose exponent range is far wider than fp16's. In fp16 the logits overflow inside the sampling loop, sampling returns an out-of-range index, the embedding lookup asserts on device, and the whole process dies. The traceback points at the sampling loop but device-side asserts report asynchronously, so the location is not trustworthy either.</p>
-      <p>Emulated bf16 is slower and correct. Take correct.</p>
-    </div>
-
-    <div class="code-block">
-      <div class="cb-label">the two settings that matter on pre-Ampere hardware</div>
-      <pre>model = Qwen3TTSModel.from_pretrained(
-    <span class="tok-str">"Qwen/Qwen3-TTS-12Hz-0.6B-Base"</span>,
-    device_map=<span class="tok-str">"cuda:0"</span>,
-    dtype=torch.bfloat16,          <span class="tok-cmt"># NOT float16</span>
-    attn_implementation=<span class="tok-str">"sdpa"</span>,    <span class="tok-cmt"># flash_attention_2 needs Ampere+</span>
-)</pre>
-    </div>
-  </div>
-
-  <div class="section" id="batch">
-    <div class="section-label">Throughput</div>
-    <h2><a class="anchor" href="#batch">Batch two, and no more</a></h2>
-    <div class="prose">
-      <p>Autoregressive decode is memory-bandwidth bound, so batching normally pays for itself: you read the weights once and amortise across the batch. On a small card it pays, then abruptly stops.</p>
-    </div>
-
-    <div class="data-table">
-      <table class="fixed">
-        <colgroup>
-          <col style="width:20%">
-          <col style="width:20%">
-          <col style="width:24%">
-          <col style="width:36%">
-        </colgroup>
-        <thead>
-          <tr>
-            <th class="center">Batch</th>
-            <th class="num">RTF</th>
-            <th class="num">Peak VRAM</th>
-            <th>Verdict</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="center">1</td>
-            <td class="num">4.4x</td>
-            <td class="num">3.38 GB</td>
-            <td>fits</td>
-          </tr>
-          <tr>
-            <td class="center">2</td>
-            <td class="num td-mono">2.7x</td>
-            <td class="num">3.77 GB</td>
-            <td class="td-yes">1.6x faster, still fits</td>
-          </tr>
-          <tr>
-            <td class="center">4</td>
-            <td class="num">2.8x</td>
-            <td class="num">5.07 GB</td>
-            <td class="td-no">over the card, pages</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="prose">
-      <p>Batch 4 exceeds 4 GB, spills to system memory over PCIe, and hands back everything it gained. That table is the argument for tuning against peak VRAM rather than against the clock. The clock told me batch 4 was fine. The memory counter told me why it was not.</p>
-      <p>One structural note: batch across a whole document, not within a paragraph. Most paragraphs are a single chunk, so per-paragraph batching almost never fills a pair and you get batch-1 performance while believing otherwise.</p>
-    </div>
-  </div>
-
-  <div class="section" id="interruptions">
-    <div class="section-label">Reliability</div>
-    <h2><a class="anchor" href="#interruptions">Designing for interruption</a></h2>
-    <div class="prose">
-      <p>My first full render was interrupted five times. A GPU driver reset, a charger that was not seated, sleep-on-battery, a background Windows update, and a task timeout. Five different causes, and only one of them was something I could fix in code.</p>
-      <p>A three-hour unattended job on a laptop will be interrupted. Plan for it instead of hoping.</p>
-    </div>
-
-    <div class="code-block">
-      <div class="cb-label">cache every chunk as it is made</div>
-      <pre><span class="tok-key">for</span> start <span class="tok-key">in</span> range(<span class="tok-val">0</span>, len(todo), self.batch):
-    idxs = todo[start:start + self.batch]
-    <span class="tok-key">for</span> i, samples <span class="tok-key">in</span> zip(idxs, self._generate([texts[i] <span class="tok-key">for</span> i <span class="tok-key">in</span> idxs])):
-        out[i] = samples
-        path = self._path(texts[i])
-        <span class="tok-key">if</span> path <span class="tok-key">is</span> <span class="tok-key">not</span> <span class="tok-val">None</span>:
-            <span class="tok-cmt"># np.save appends ".npy" to a bare name, so hand it</span>
-            <span class="tok-cmt"># an open handle and the temp file keeps our name</span>
-            tmp = path.with_suffix(<span class="tok-str">".part"</span>)
-            <span class="tok-key">with</span> open(tmp, <span class="tok-str">"wb"</span>) <span class="tok-key">as</span> fh:
-                np.save(fh, samples)
-            tmp.replace(path)</pre>
-    </div>
-
-    <div class="prose">
-      <p>Key on the chunk text plus the reference, write to a temporary name, rename into place. The rename is what stops a crash mid-write leaving a truncated file that poisons the next run. Across five interruptions this cost me a few seconds of redone work in total.</p>
-      <p>The comment in that snippet is a bug I shipped and then hit immediately: <code>np.save</code> appends <code>.npy</code> to any path that lacks it, so writing to <code>chunk.part</code> produced <code>chunk.part.npy</code> and the rename looked for a file that did not exist. It died on the very first chunk of an eighteen-file run.</p>
-      <p>Two smaller things in the same category. Fall back to batch-of-one when a batch hits OOM, because chunk lengths vary and an occasional pair will not fit even though the average does. And check your machine will not sleep: the idle timer counts user input, not GPU load, and my hibernate default was three hours, which is exactly long enough to kill a three-hour job at the worst moment.</p>
-    </div>
-
-    <div class="code-block">
-      <div class="cb-label">before any long unattended run</div>
-      <pre>powercfg /change standby-timeout-ac <span class="tok-val">0</span>
-powercfg /change hibernate-timeout-ac <span class="tok-val">0</span></pre>
-    </div>
-  </div>
-
-  <div class="section" id="numbers">
-    <div class="section-label">Results</div>
-    <h2><a class="anchor" href="#numbers">What it cost</a></h2>
-    <div class="prose">
-      <p>Same machine, same eighteen files, same source text. I tried a second cloning model first and kept the numbers.</p>
-    </div>
-
-    <div class="data-table">
-      <table class="fixed">
-        <colgroup>
-          <col style="width:26%">
-          <col style="width:14%">
-          <col style="width:14%">
-          <col style="width:14%">
-          <col style="width:16%">
-          <col style="width:16%">
-        </colgroup>
-        <thead>
-          <tr>
-            <th>Engine</th>
-            <th class="num">Params</th>
-            <th class="num">Load</th>
-            <th class="num">RTF</th>
-            <th class="num">Peak VRAM</th>
-            <th class="num">Full run</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Kokoro (CPU)</td>
-            <td class="num">82M</td>
-            <td class="num">1 s</td>
-            <td class="num">0.53x</td>
-            <td class="num">n/a</td>
-            <td class="num">24 min</td>
-          </tr>
-          <tr>
-            <td>Chatterbox</td>
-            <td class="num">0.5B</td>
-            <td class="num">274 s</td>
-            <td class="num">16.8x</td>
-            <td class="num td-no">4.30 GB</td>
-            <td class="num">12.7 h</td>
-          </tr>
-          <tr>
-            <td>Qwen3-TTS</td>
-            <td class="num">0.6B</td>
-            <td class="num">13 s</td>
-            <td class="num td-mono">2.7x</td>
-            <td class="num">3.77 GB</td>
-            <td class="num td-yes">~3 h</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="prose">
-      <p>Chatterbox peaked at 4.30 GB against a 4.00 GB card, and that one row explains its whole column. It paged constantly. Its cost grew with utterance length, 11.6x at four seconds and 24.2x at eighteen, which meant chopping text into 140-character fragments to keep it under the driver watchdog. It eventually triggered a GPU reset anyway.</p>
-      <p>Qwen holds 4.4x at five seconds and 4.5x at eighteen. Flat. It never leaves the card, so length stops mattering and chunks can follow paragraph boundaries instead of fighting the hardware. The 20x difference in load time is a workflow change on its own: 13 seconds means you can render one file, listen, adjust, and render again.</p>
-      <p>One expectation to set. My 45.5-minute synthetic track came out at 50.3 minutes cloned, file by file between 6% and 20% longer. Nothing was truncated. It simply speaks at a human pace, because it learned one from a human.</p>
+      <p>My 45.5-minute synthetic track came out at 50.3 minutes cloned. File by file, between 6% and 20% longer. Nothing was truncated. It simply speaks the way a person does, because it learned that from a person.</p>
+      <p>That is worth knowing in advance for two reasons. If your player uses a duration manifest, it needs regenerating. And if you have been tuning paragraph gaps against the synthetic version, they will feel slightly different here, because the speech around them changed length while the silence did not.</p>
+      <p>I also checked the other direction. On a single sentence the clone ran 3.84 seconds against my own 4.52, so it is not uniformly slower. It redistributes time the way I do, which is the thing you actually wanted.</p>
     </div>
   </div>
 
   <div class="section" id="worth-it">
-    <div class="section-label">Closing</div>
+    <div class="section-label"><a href="#worth-it">07 &mdash; Closing</a></div>
     <h2><a class="anchor" href="#worth-it">Is it worth it</a></h2>
     <div class="prose">
-      <p>Honestly, only if the voice being yours is the actual point.</p>
-      <p>The synthetic path costs 24 minutes of CPU, no recording, and no traps worth writing a post about. This path cost me an afternoon of debugging, three hours of GPU time per full render, three recording sessions, and a working knowledge of Bluetooth audio profiles I did not want.</p>
-      <p>What you get back is that it is your voice, it runs on hardware you already own, nothing is uploaded anywhere, and the weights are Apache 2.0. For a course or a personal blog, where the narrator being a real person is part of what you are shipping, that is a different product rather than a cheaper version of the same one.</p>
-      <p>I kept both tracks. The synthetic one still ships. I have not decided yet, and having both sitting in separate directories is the reason I get to not decide.</p>
+      <p>Honestly, only if the voice being yours is the point.</p>
+      <p>The synthetic path costs no recording and no traps worth writing about. This one cost me three recording sessions, an afternoon of debugging, and roughly twenty times the compute per render. On a modest GPU that is about three hours for a fifty-minute track.</p>
+      <p>What you get back is that it is your voice, it runs on hardware you already own, nothing is uploaded anywhere, and the weights are Apache 2.0. For a course or a personal blog, that is a different product rather than a cheaper version of the same one.</p>
+      <p>I kept both tracks in separate directories. The synthetic one still ships. Having both is the reason I get to not decide yet.</p>
     </div>
 
     <ul class="dl">
-      <li>Record on your phone, then verify the spectrum before anything else.</li>
+      <li>Record on your phone, then check where the spectrum ends before anything else.</li>
+      <li>Read at your normal pace, and keep the take with the stumble in it.</li>
       <li>Cut the reference to one clean sentence. Longer is slower and no better.</li>
-      <li>On pre-Ampere cards, bf16 and sdpa. fp16 will assert on device.</li>
-      <li>Tune batch size against peak VRAM, not against the clock.</li>
-      <li>Cache every chunk to disk. Long local jobs get interrupted.</li>
+      <li>Keep the exact transcript beside the audio. The model needs it.</li>
+      <li>Expect the finished track to run about 10% longer than a synthetic one.</li>
       <li>Never let a clone run write into the directory holding your finished audio.</li>
     </ul>
   </div>
@@ -480,7 +274,8 @@ powercfg /change hibernate-timeout-ac <span class="tok-val">0</span></pre>
 <footer>
   <span>asadani.tech / September 2026</span>
   <div class="footer-refs">
-    <a href="https://github.com/asadani/narrate-your-writing">narrate-your-writing</a>
+    <a href="/narrate-writing-kokoro/">Part one: the synthetic voice</a>
+    <a href="https://github.com/asadani/narrate-your-writing">Code</a>
     <a href="/">&larr; back to index</a>
   </div>
 </footer>

@@ -1,5 +1,23 @@
 [
   {
+    "slug": "revive-old-gpu-small-models",
+    "title": "Reviving A Six-Year-Old GPU For Small Models",
+    "tags": [
+      "infrastructure"
+    ],
+    "flavors": [
+      "cost-latency",
+      "craft",
+      "models"
+    ],
+    "quote": "\"The card was never the problem.\"",
+    "desc": "A GTX 1650 with 4 GB of VRAM and a five-year-old driver now runs a 0.6B speech model four times faster than the CPU. Almost nothing standing in the way was about the hardware: a CPU-only torch wheel, a missing PATH entry, a dtype that crashes on Turing, and a batch size that looked fast while spilling into system RAM.",
+    "date": "2026-09-03",
+    "dateDisplay": "September 3, 2026",
+    "cta": "Read",
+    "shareUrl": "https://tech.anujsadani.in/revive-old-gpu-small-models/"
+  },
+  {
     "slug": "narrate-writing-kokoro",
     "title": "Narrating Your Writing With Kokoro",
     "tags": [
@@ -11,7 +29,7 @@
       "craft"
     ],
     "quote": "\"At 0.53x real time a re-render is a coffee break.\"",
-    "desc": "Forty-five minutes of narration costs 24 minutes of laptop CPU, or 6 minutes on a four-gigabyte GPU. Measured numbers for Kokoro 82M on both, plus the parts that actually decide whether a track is listenable: blending voices as style vectors, the espeak acronym tables, two silence constants, and the PATH bug that makes onnxruntime fall back to CPU without telling you.",
+    "desc": "An 82M model on a laptop gives written articles a listenable narration. The model is the easy part: what decides whether it works is blending voices as style vectors, an acronym table the espeak frontend needs, and two silence constants that matter more than any model parameter.",
     "date": "2026-09-03",
     "dateDisplay": "September 3, 2026",
     "cta": "Read",
@@ -29,7 +47,7 @@
       "craft"
     ],
     "quote": "\"A 4.5 second reference beat an 85 second one, and it was not close.\"",
-    "desc": "Fifty minutes of narration in my own voice on a GTX 1650, entirely offline. The model was the straightforward part. Three recording sessions went to discovering that Bluetooth headsets and laptop array mics both cap you at 8 kHz while the file still claims 48, and the reference recording needed to be twenty times shorter than I assumed.",
+    "desc": "Fifty minutes of narration in my own voice, offline. Three recording sessions went to discovering that Bluetooth headsets and laptop mics both cap you at 8 kHz while the file still claims 48, and that four seconds of reference audio beat ninety.",
     "date": "2026-09-03",
     "dateDisplay": "September 3, 2026",
     "cta": "Read",
