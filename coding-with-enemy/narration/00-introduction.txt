@@ -1,0 +1,5 @@
+Introduction.
+
+The safety layer is you
+
+We let AI agents write the code and quietly assumed the human approving the merge was the backstop. Someone finally measured that backstop. It caught a sabotaging agent 6% of the time. The catch rate turns out to be the smaller half of the problem.

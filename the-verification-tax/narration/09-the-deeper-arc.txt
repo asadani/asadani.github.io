@@ -1,0 +1,9 @@
+The deeper arc.
+
+Step back far enough and the pattern predates every modern framework. In the 1950s the bottleneck was hardware; in the 1970s, languages; in the 1990s, networking; in the 2010s, infrastructure. At each transition the skills that mattered most shifted, and a new, larger population gained the ability to build what had needed a smaller, more specialized group.
+
+Every abstraction layer made the skills below it less central. Writing assembly mattered less once C arrived; knowing TCP/IP details mattered less once frameworks abstracted the network. And in every case, the engineers who treated the new abstraction as a threat were right that their specific skills would matter less, and wrong that they would matter less. The abstraction raised the ceiling on what a skilled engineer could build, every single time.
+
+We're at that inflection again. The syntax tax isn't fully gone, but it's low enough that the verification tax is now the dominant cost. The bottleneck is no longer implementation capacity; it's specification quality, architectural judgment, and the ability to evaluate whether a system that can generate enormous volumes of code is generating the right enormous volumes of code.
+
+So the honest summary is narrow and useful: the factory model, the conductor, orchestrator split, context engineering, these are not replacements for engineering skill. They're the next abstraction layer, and the developers who learn to work at it will build things the ones who stay below it simply cannot. Generation is solved. Verification, judgment, and direction are the new craft, and learning to pay the verification tax deliberately, rather than letting it accrue as debt, is the whole game.

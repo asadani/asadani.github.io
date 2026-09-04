@@ -1,0 +1,9 @@
+The model stopped being the deliverable.
+
+For most of the last decade, the answer to "what is the AI product?" was a checkpoint. You train a model, you ship it, you monitor it, you retrain on some cadence. The model was the thing.
+
+That mental model is fraying. The thing producing useful work is no longer just the model. It is the agent that wraps the model, the harness that runs the agent, the verifier that scores its output, and the feedback signal that updates either the harness, the weights, or both.
+
+Self-improvement is the load-bearing concept under any honest argument for where this field is going. If the system can improve itself, the trajectory bends sharply. If it cannot, scaling laws and human researchers stay on the critical path.
+
+The question worth asking is not "is self-improvement working?" The answer is yes, in narrow places. The question is: how close to the kind of self-improvement the AGI framing implies?

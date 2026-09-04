@@ -1,0 +1,9 @@
+Voices are vectors, so blend them.
+
+This is the part I nearly missed, and it mattered more than any other choice I made.
+
+Kokoro's voices are not separate models. They are style vectors, which means they average. A blend of two presets is a real voice that neither gives you on its own.
+
+Spend ten minutes here. Single presets tend to carry one distracting quality, some vowel or landing that you stop being able to unhear around minute twenty of a long track. Averaging two voices sands that off. I tried maybe six combinations and shipped on bm_george+bm_fable, which was better than either component alone.
+
+Audition candidates on your own text, not on a demo sentence. A voice that sounds warm reading one line can sound smug reading four paragraphs of explanation.

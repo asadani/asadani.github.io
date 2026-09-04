@@ -1,0 +1,11 @@
+How to choose, by scenario.
+
+Start with classical engineering. Add APE / APO / OPRO style search via prompt-ops or Evidently against an LLM-judge or labeled eval. Run regression tests on every change through Langfuse / Humanloop / Maxim.
+
+Model the pipeline in DSPy. Bootstrap individual modules with Promptomatix or Promptim. Use TextGrad for the modules where you need fine-grained attribution of which sub-prompt is failing. Feed logs into your eval layer for continuous regression.
+
+Agents that should learn
+
+Use ACE (Generator / Reflector / Curator) to grow a structured playbook. Layer MAPS-style reflection for hard reasoning steps. Wrap the runtime in VIGIL-style self-healing patterns with explicit human-in-the-loop gates for high-risk actions.
+
+Adopt Humanloop, Maxim, Langfuse, or LangSmith as your prompt source-of-truth. Use Bedrock or SAP Joule for in-cloud rewrite. Run automated optimization (Evidently, prompt-ops, DSPy) behind a CI pipeline, never as direct production auto-rewrite.

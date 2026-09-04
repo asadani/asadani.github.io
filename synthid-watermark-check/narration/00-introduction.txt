@@ -1,0 +1,5 @@
+Introduction.
+
+SynthID can't tell you who made it.
+
+You can now drop an image into Gemini and ask &ldquo;is this made with AI?&rdquo; in about five seconds. The check is real, and it is the best one we have. It also answers a narrower question than most people think, and a screenshot still walks right past it.

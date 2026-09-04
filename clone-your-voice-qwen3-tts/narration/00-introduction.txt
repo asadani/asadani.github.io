@@ -1,0 +1,5 @@
+Introduction.
+
+Cloning your own voice with Qwen3-TTS
+
+Fifty minutes of narration in my own voice, running entirely offline. The model behaved. My microphone did not, and the reference recording needed to be twenty times shorter than I assumed.

@@ -1,0 +1,17 @@
+Who Benefits Most.
+
+ML / AI Training
+
+PyTorch and TensorFlow data loaders work unmodified. GPUs stay saturated without pre-hydration waits. Throughput scales to multiple TB/s in aggregate.
+
+AI agents using file-based Python tooling can share state and persist memory across distributed pipelines without custom S3 API wrappers.
+
+Apps that assume a POSIX file system, CMS platforms, ERP systems, monolithic backends, can move to S3 without code changes.
+
+Eliminate separate EFS volumes for configs and S3 buckets for assets. One bucket serves NFS-mounting services and REST clients simultaneously.
+
+HPC workloads can use S3 as shared scratch space with NFS semantics, without a dedicated parallel file system like FSx for Lustre.
+
+ETL pipelines writing intermediate results use standard file operations against S3, no choosing between object semantics and temporary EFS volumes.
+
+From "Copy-to-Compute" to "Compute-on-Data." The GPU cluster comes to the data, not the other way around. For large-scale ML where dataset sizes dwarf GPU memory by orders of magnitude, this is a fundamental change in training economics.

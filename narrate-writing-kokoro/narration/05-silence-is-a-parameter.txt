@@ -1,0 +1,9 @@
+Silence is a parameter.
+
+Feed the model one paragraph at a time and insert the gaps yourself. Synthesised pauses vary in length. Concatenated silence is exact, and you can tune it.
+
+I moved those two numbers more than anything else in the pipeline. A slightly long pause reads as thinking. A slightly short one reads as rushing. No model parameter gives you that control, and no amount of voice selection compensates for getting it wrong.
+
+Pace is the other half. Kokoro's default speed of 1.0 lands near 195 words per minute, brisk for anything explanatory. I ship at 0.9, around 170. Listeners who want it faster have a control in their player. Listeners who want it slower usually do not.
+
+Splitting on blank lines means your paragraph breaks become audible pauses. That makes paragraph length a narration decision, not just a typographic one. Long paragraphs that read fine on a page arrive as an unbroken wall of speech. I broke several in half after hearing them.

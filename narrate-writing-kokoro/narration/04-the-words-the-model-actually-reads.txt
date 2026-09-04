@@ -1,0 +1,7 @@
+The words the model actually reads.
+
+Kokoro's frontend is espeak-based. It will spell technical acronyms letter by letter, and it will get them wrong. You cannot prompt your way out of this. You fix it with a substitution table applied before the model sees the text.
+
+Keep that table separate from your punctuation rules. I found out why when I added a second engine with a neural frontend: it says "MCP" correctly on its own, and feeding it "em see pee" actively made things worse. The phonetic table belongs to the engine. The punctuation table belongs to the text.
+
+"Version two point zero", not "version 2.0". Do it in the script itself rather than in a substitution rule. You will read the script aloud to check it, and you want to be reading exactly what the model reads. Every transformation between your eyes and the model's input is somewhere for a surprise to hide.

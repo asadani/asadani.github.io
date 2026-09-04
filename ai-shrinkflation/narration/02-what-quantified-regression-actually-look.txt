@@ -1,0 +1,9 @@
+What Quantified Regression Actually Looks Like.
+
+AMD's Stella Laurenzo didn't file a complaint based on vibes. She used Claude Opus 4.6 itself to mine 6,852 JSONL session logs, 234,760 tool calls across four systems-programming projects (C, MLIR, GPU drivers), computing metrics that shifted sharply around February, March 2026, while the codebase and prompts stayed essentially constant.
+
+The 122× cost multiplier is the number that should alarm engineering leaders. The agent wasn't failing loudly, it was spinning. Incomplete reads, premature stops, corrective cycles, and supervisor interrupts all burn tokens with nothing to show. The team eventually concluded Claude Code "cannot be trusted for complex engineering" and migrated to a competing tool.
+
+Anthropic's explanation, that thinking was "redacted" for UI purposes and adaptive thinking was introduced, is plausible and not deliberately deceptive. But from an engineering standpoint, it changes nothing: the effective behavior delivered to this workload regressed sharply, without notice, and wasn't recoverable through prompting.
+
+Time-of-day analysis shows thinking depth became load-sensitive after the change: worst at 5pm and 7pm PST, recovering overnight. The same model, at the same effort setting, can behave materially differently based on backend GPU load. Stateless request assumptions don't hold.

@@ -1,0 +1,7 @@
+What the old card actually does.
+
+After all of that, the same speech model on the same machine:
+
+A 4.3x speedup on a card that was mid-range in 2019 and is not sold any more. Forty-five minutes of narration in six minutes rather than twenty-four.
+
+The card was never the problem. A stale driver, a CPU-only wheel, a missing PATH entry and a dtype mismatch were the problem, and every one of them failed quietly rather than loudly. That is the pattern worth taking away: on old hardware the errors you get are rarely about the hardware, and the hardware gets blamed anyway.

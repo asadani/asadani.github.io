@@ -1,0 +1,7 @@
+Borrowed confidence is the load-bearing finding.
+
+Across three experiments and 1,372 participants, Shaw and Nave found that simply having an AI available was enough for people to surrender. The numbers are unambiguous, and they're worse for the AI-assisted group than for the unassisted one in exactly the wrong way.
+
+The mechanism is what matters. Participants weren't randomly wrong; they were borrowing the model's confidence and treating it as their own. Models speak in declaratives. Declaratives read as authority. The participants inherited certainty without inheriting any reasoning underneath it. That borrowed-confidence effect is where this stops being a general cognition story and starts being a software engineering one.
+
+MIT's Your Brain on ChatGPT paper showed the same pattern at the neural level: writers leaning on AI exhibited measurably reduced neural connectivity, weaker memory of what they'd just produced, and difficulty reconstructing their own reasoning. The authors called it cognitive debt, borrowed from technical debt, short-term gain, compounding long-term cost.

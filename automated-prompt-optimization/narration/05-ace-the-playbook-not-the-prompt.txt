@@ -1,0 +1,17 @@
+ACE: the playbook, not the prompt.
+
+The other frameworks all optimize a static artifact: an instruction, a few-shot bundle, a compiled pipeline. ACE, Agentic Context Engineering, from SambaNova with Stanford and Berkeley contributors, argues that for long-running agents, that whole framing is wrong.
+
+Agents accumulate operational knowledge as they run: which tools to call when, which retrieval queries actually surface useful context, which user phrasings predict which intent. Compress that into a single prompt and you trigger two failure modes the literature now names explicitly: context collapse (the rewrite drops nuance) and brevity bias (optimizers prefer shorter prompts even when length carries signal).
+
+ACE's solution is to stop treating context as a string and start treating it as a structured, append-mostly database, a "playbook" with stable identifiers, itemized bullets, and metadata for every piece of operational knowledge. Three components maintain it:
+
+Executes the user task. Reads the current playbook to ground its actions in accumulated strategies, like consulting a runbook.
+
+Runs asynchronously over execution traces. Distills both successes and failures into discrete insights and proposes new behavioral rules.
+
+Integrates Reflector insights into the playbook via delta updates, small, deterministic edits to specific entries, never a full rewrite.
+
+The delta-update mechanism is the load-bearing idea. Because the Curator only appends or edits identified entries, earlier rules stay stable indefinitely. There's no point at which optimization "forgets" something it learned six iterations ago. Empirically that translated to a +10.6% performance gain on autonomous agent benchmarks, +8.6% on finance tasks, and an 86.9% reduction in adaptation latency versus monolithic context rewrites, because the Curator never has to re-emit the whole context.
+
+ACE is not a complete observability or governance stack. Combine it with a tracing tool and explicit safety policies, or its evolving playbook will quietly absorb whatever quirks dominated its first hundred runs.

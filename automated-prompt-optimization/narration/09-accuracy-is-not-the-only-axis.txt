@@ -1,0 +1,9 @@
+Accuracy is not the only axis.
+
+Single-metric optimization makes for clean papers and bad products. A prompt that lifts reasoning accuracy 1.5% but expands input tokens 60% violates UX thresholds in real-time chat and burns a serving budget that is no longer cheap.
+
+The principled response is pure-exploration multi-armed bandits over prompt configurations. Each prompt variant is an "arm." The bandit recovers the Pareto frontier, the set of prompts where no axis (accuracy, cost, latency) can be improved without degrading another, with a provable efficiency guarantee on identifying the best feasible configuration.
+
+This framing scales beyond text. The CAPS system (Carbon-Aware Prompt Scheduling) uses a lightweight prompt-complexity predictor to estimate token cost and latency per request, then routes requests across three execution pools, low-latency, low-carbon, and delay-tolerant batch, based on real-time grid carbon intensity, GPU energy profiles, and per-tenant SLOs. Trace-driven simulations cut average carbon emissions 26.8% per 1,000 generated tokens while still meeting strict SLO attainment.
+
+Read CAPS as the sign of where prompt optimization is heading: not better wording, but a control loop that ties prompts to physical infrastructure efficiency.

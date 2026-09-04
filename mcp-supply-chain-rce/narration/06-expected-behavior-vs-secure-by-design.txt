@@ -1,0 +1,7 @@
+"Expected Behavior" vs. Secure by Design.
+
+Anthropic's position is defensible on narrow technical grounds: STDIO MCP is a local transport, and a local transport that runs a binary you passed it is, in one sense, doing what it says on the tin. The problem is what happens when that transport's configuration format becomes reachable by untrusted inputs, model outputs, web UIs, marketplace payloads, repo files an IDE agent reads.
+
+Every one of the four attack families above is a variation on the same theme: something upstream of StdioServerParameters got closer to untrusted than the protocol assumed. Shifting that boundary is exactly what a "secure by default" transport would do, command as an opaque executable reference, args as an allowlisted whitelist, a capability manifest shipped with each server. None of that exists.
+
+The disclosure landed days after Anthropic unveiled Claude Mythos, pitched as a tool to help secure the world's software. OX's framing is hard to miss: apply that same commitment to the protocol you own.

@@ -1,0 +1,21 @@
+"Buyer beware" — four trade-offs that matter.
+
+Cost: Flash in name, not in price
+
+The Flash brand used to mean "cheap and fast." Half of that is still true. Artificial Analysis reports list pricing around 1.50 USD / 9.00 USD per million input/output tokens, versus 0.50 / 3.00 for Gemini 3 Flash, about a 3× jump on the rate card. On their Intelligence Index workloads, where output tokens dominate, real runs come in over 5× more expensive than 3 Flash and roughly 75% more expensive than Gemini 3.1 Pro.
+
+The honest read is that the agentic tier has its own price band now, and Google is calling it "Flash" because it inherits the latency profile, not the cost profile. If your workload is verbose or tool-heavy, i.e. the workload the model is optimized for, you should re-cost it before flipping the model name in your config.
+
+It is opinionated, built for agents, not single-pass chat
+
+3.5 Flash is explicitly tuned for long-horizon, multi-step, tool-using sessions, with sub-agents and pauses for human confirmation at decision points. That is fantastic if you are building Antigravity-style systems. It is largely irrelevant if you are building a documentation Q&A bot, a customer support assistant, or a small refactor helper that calls the model once and returns a string.
+
+For those single-pass workloads, you are paying a premium for headroom you do not use. The right move there is often "stay on 3.1 Pro or 3 Flash, wait for 3.5 Lite or 3.5 Pro, then re-evaluate", not "ship the newest model because it is the newest."
+
+Long-context regressions vs Pro
+
+The model card itself acknowledges that 3.5 Flash does not meaningfully surpass Gemini 3.1 Pro on frontier-safety capability evals and trails Pro on some hard reasoning and long-context benchmarks. Independent write-ups specifically call out 128k MRCR v2 as a place to stay on 3.1 Pro. For deep legal, scientific, or multi-book single-pass workloads, "newer" is not the same as "better" here.
+
+Safety and operational blast radius
+
+3.5 was developed under Google's Frontier Safety Framework, and the published claim is strengthened cyber and CBRN safeguards, plus better calibration on sensitive questions (less over-refusal). Independent of how good the model itself is, broad agent availability, including personal agents like Gemini Spark that run continuously, increases the blast radius for misaligned behavior. Google is already in litigation tied to prior Gemini conduct. Enterprises shipping this need their own guardrails, audit layers, and incident playbooks; the model card does not absorb that risk for you.

@@ -1,0 +1,7 @@
+Two kinds of spec, both lossy.
+
+A template tells you what exists. It is the grammar. Here are the components, here is the markup, here are the class names. A skill tells you how to proceed. It is the procedure. Start with the hero, write eight sections, hold the voice steady, run these checks before you ship.
+
+Between them they cover the what and the how. That feels like the entire job. It is not.
+
+Both are generalizations, and generalizations are lossy on purpose. A template is the distilled shape of every post that could exist, which makes it the shape of no post that does. The skill is the distilled method, lifted away from any particular topic. Neither one has ever met a real sentence. That gap stays invisible right up until it doesn't.

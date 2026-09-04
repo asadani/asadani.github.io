@@ -1,0 +1,30 @@
+{
+ "00-introduction": {
+  "k": "81101f205290d4b6",
+  "d": 17.2
+ },
+ "01-three-tiers-one-api": {
+  "k": "3da644f69d23a717",
+  "d": 60.1
+ },
+ "02-interactive-benchmark-5-runs-per-tier": {
+  "k": "8759969fc25c40d9",
+  "d": 35.7
+ },
+ "03-the-script": {
+  "k": "f206123427bea950",
+  "d": 30.3
+ },
+ "04-production-guidance": {
+  "k": "8b68cd0fc5513b74",
+  "d": 80.5
+ },
+ "05-the-real-cost-of-simplicity": {
+  "k": "2d58036051ea8d8c",
+  "d": 124.3
+ },
+ "06-bottom-line": {
+  "k": "1a83e4ba904a57bc",
+  "d": 82.5
+ }
+}

@@ -1,0 +1,7 @@
+The two-layer system I'd actually trust..
+
+If the goal is "tell me whether to trust what I'm looking at," no single watermark gets there. What I'd want is the two layers paired and verified together at the point of viewing.
+
+Layer one is the statistical watermark, SynthID and its industry siblings, answering "did a machine make this" with a confidence. It's the robust, dumb layer that survives ordinary handling. Layer two is signed provenance, C2PA bound to a real issuer identity, answering "who captured or published this" with a verifiable signature. It's the rich, fragile layer that carries the meaning.
+
+The viewer's job then becomes a single readout. Watermark present, so a model was involved. Signature present and valid, so a known publisher stands behind it. Both absent, so treat it as unverified and don't let it move you. That last state, unverified, is the one we're all sitting in for most of what we scroll past, and it's the honest default until provenance is the boring norm rather than the exception.

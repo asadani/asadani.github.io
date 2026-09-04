@@ -1,0 +1,7 @@
+The debt is already in the diffs.
+
+You do not have to take the perception argument on faith, because the debt is starting to surface in the code itself. GitClear analyzed 211 million lines of code changed between 2020 and 2024 across repositories at Google, Microsoft and other large companies. Two trends move in step with AI adoption.
+
+This is what comprehension debt looks like from orbit. Refactoring requires understanding the thing you are reshaping. Pasting does not. When the share of refactoring collapses while duplication climbs past it for the first time on record, that is a workforce assembling more and understanding less.
+
+I will be honest about the limits. This is correlation, the timing simply lines up with the spread of AI assistants, and GitClear sells tools in this market, so weigh it with that in mind. But the direction is hard to wave away, and duplicated code is independently associated with 15 to 50% more defects in prior research.

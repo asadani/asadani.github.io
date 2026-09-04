@@ -1,0 +1,46 @@
+{
+ "00-introduction": {
+  "k": "24dcfe6e10be09e3",
+  "d": 23.2
+ },
+ "01-the-check-that-actually-fits-in-your-poc": {
+  "k": "90c96eeb81937fa9",
+  "d": 70.4
+ },
+ "02-a-signal-not-a-label": {
+  "k": "d84e269234522005",
+  "d": 68.2
+ },
+ "03-can-you-just-strip-it-with-exiftool": {
+  "k": "5cdda6a53b90491e",
+  "d": 53.0
+ },
+ "04-the-screenshot-loophole": {
+  "k": "6d4d26bebb0ebe68",
+  "d": 71.9
+ },
+ "05-machine-made-is-not-the-same-as-authenti": {
+  "k": "d616668d68b7c0aa",
+  "d": 127.2
+ },
+ "06-why-adoption-matters-more-than-the-algor": {
+  "k": "d967376b89862d25",
+  "d": 79.3
+ },
+ "07-video-and-audio-are-the-real-win": {
+  "k": "a7ff51b6c643c80f",
+  "d": 69.4
+ },
+ "08-the-honest-list-of-what-defeats-it-today": {
+  "k": "e22d3c822ff4a36d",
+  "d": 63.8
+ },
+ "09-the-two-layer-system-i-d-actually-trust": {
+  "k": "48c106d1004dd0e2",
+  "d": 65.7
+ },
+ "10-the-short-version": {
+  "k": "ab04b8d75febb5a2",
+  "d": 45.1
+ }
+}

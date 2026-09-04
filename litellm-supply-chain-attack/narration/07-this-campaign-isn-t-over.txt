@@ -1,0 +1,13 @@
+This campaign isn't over.
+
+TeamPCP has now crossed five supply-chain ecosystems in under a month: GitHub Actions, Docker Hub, npm, OpenVSX and PyPI. Each compromised environment yields credentials that unlock the next target. The 13-minute gap between litellm 1.82.7 and 1.82.8 shows an attacker actively iterating during the attack window, escalating the trigger mechanism in real time.
+
+The AI developer tooling ecosystem is a particularly attractive target. High-privilege machines, dense credential environments, and a young plugin ecosystem with minimal security review combine with the implicit trust developers place in the tools they use every day. That combination will keep getting exploited.
+
+The best defense is to treat every layer of your tooling stack, not just your own code, as part of your attack surface.
+
+GitHub issue #24512 · BerriAI/litellm
+
+Endor Labs · teampcp-isnt-done
+
+Check Point Research · critical Claude Code flaws

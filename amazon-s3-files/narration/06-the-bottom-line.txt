@@ -1,0 +1,11 @@
+The Bottom Line.
+
+Amazon S3 Files is the most significant change to AWS storage architecture in years. It doesn't just add a feature to S3, it eliminates an entire category of infrastructure complexity that teams have been building workarounds for since 2006.
+
+For AI and ML teams, the value is immediate: no pre-hydration steps, no managing separate EFS volumes per training cluster, no data duplication costs. The GPU cluster talks directly to S3 via NFS, and the free large-file read path makes it the obvious default for any read-heavy training workload.
+
+For platform engineers, the convergence of object and file APIs on a single data layer enables architectures that weren't practical before, truly unified data planes where the same dataset is queryable by S3 Select, accessible via NFS by legacy apps, and consumed by REST APIs, all without a line of synchronization code.
+
+The open question is whether this makes FSx for Lustre obsolete for extreme-scale HPC. For most teams, even large GPU clusters, S3 Files will be sufficient. The edge cases that need striped, sub-millisecond access to petabytes of scratch space still have a home with Lustre. But that edge just got much smaller.
+
+Official announcement: aws.amazon.com/about-aws/whats-new/2026/04/amazon-s3-files/ · Pricing: aws.amazon.com/s3/pricing/

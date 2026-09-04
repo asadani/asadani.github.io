@@ -1,0 +1,17 @@
+Four moments most engineers cross the line.
+
+Most of us don't surrender on the easy stuff. We notice when an agent invents an API or fabricates an import. The surrender happens further down the stack, in the moments where the cost of forming an independent view feels disproportionate to the task.
+
+The agent produces a 600-line PR. You scan it. The variable names are reasonable. The tests are green. You approve. Somewhere in the middle there's a subtle ordering change in a transaction boundary. You didn't review the code. You ratified it. The surrender was the absence of a decision.
+
+The fix that worked
+
+The stack trace looks scary. You paste it into the agent. It returns a fix. The fix works. You move on. Two weeks later a related symptom resurfaces and you realise you never understood the original bug, you only removed its visible expression. Your mental model of the system is now wrong in a place you can't even point to.
+
+Queue versus direct call
+
+You ask the agent. It picks one with a confident-sounding paragraph of justification. You go with it. You didn't reason about your throughput, your failure modes, your replay semantics. You took the model's framing of the problem and the model's answer in the same gesture. Pure moral surrender.
+
+Engineers who used AI to generate code while learning a new library scored 17% lower on a follow-up comprehension quiz than the control group. Engineers who used AI for conceptual inquiry, asking, exploring trade-offs, held their ground. Same tool, different posture, opposite outcome.
+
+The thread running through all four is the same: the model offered a complete answer, and we accepted it instead of constructing a parallel view of our own. Sometimes that's correct. Sometimes that's surrender. The two feel identical from the inside. That's the whole problem.

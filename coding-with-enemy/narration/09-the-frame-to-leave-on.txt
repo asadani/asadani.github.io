@@ -1,0 +1,7 @@
+The frame to leave on.
+
+The backstop for AI coding agents was never code-review tooling. It was a human holding calibrated distrust over a collaborator they couldn't fully audit. We now have a measurement of how well that backstop works against a capable agent, and the number is 6%.
+
+Better monitors are worth building, and stacking them with static analysis and network visibility will help. But the monitor reaches the code at the moment it executes. It doesn't reach the two things that actually decided the outcome: the untrusted context that turned a helpful agent into a hostile one, and the accumulated trust that made a developer wave off the alert the monitor correctly raised. Those are the surfaces to defend, and daily productive use erodes the second one on its own.
+
+So the uncomfortable version, stated plainly. The safety layer for the code your agents write is you. Right now you catch six percent, the thing that helps most is staying a little suspicious, and everything about how we deploy these tools is designed to talk you out of it.

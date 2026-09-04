@@ -1,0 +1,13 @@
+Self-improvement runs on clean rewards.
+
+Look at where these systems work. Then look at where they don't.
+
+Math with checkable answers. Code with passing tests. Kernel runtime in microseconds. Classification labels. Games with explicit win/lose. Schema validation with explicit grammar.
+
+Open-ended writing quality. Customer-support response judgment. Document extraction where reviewers disagree. Sales-call analysis. Anything where the grader is itself a model whose disagreement with humans isn't measured.
+
+Long-horizon coding agents where some tests pass and some require judgment. Research-style tasks where partial credit exists but isn't standardised. The interesting frontier; mostly unsolved.
+
+The pattern is clean. Self-improvement works where reward is cheap, fast, and unambiguous. It does not yet work where reward is the thing being argued about.
+
+For an enterprise builder this is the single most important load-bearing fact. Almost every business problem worth solving lives in the second category. Customer support quality, document extraction agreement, dispute resolution, sales-call analysis, all of these have soft, contested rewards. Self-improving systems do not ship safely into that domain yet. They will sometimes look like they do, until the verifier and the underlying reality drift apart.

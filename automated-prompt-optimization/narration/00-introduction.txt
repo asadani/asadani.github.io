@@ -1,0 +1,5 @@
+Introduction.
+
+Automated prompt optimization, in 2026
+
+Prompts have stopped being static text. They are now optimizable parameters in compound AI systems, searched, gradient-updated, evolved, and curated by frameworks like DSPy, TextGrad, ACE, and GEPA. Here is what each one solves, where they break, and how to choose between them.

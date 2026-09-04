@@ -1,0 +1,7 @@
+The check that actually fits in your pocket..
+
+The workflow is genuinely four steps. Open Gemini, drop the image in, ask "is this made with AI?", read the answer. There is no portal to log into, no file to upload to a forensics service, no waiting. For the first time the detection is sitting in the same place people already do their asking.
+
+That placement matters more than the model behind it. I have watched plenty of good detection tools die because they lived one tab away from where the doubt actually happened. A check that fires inside the chat you already have open is a check people will use, and they are: Google says the Gemini verification flow has already been run around 50 million times. The friction was always the product, not the math.
+
+Google is extending the same lookup beyond Gemini. At I/O 2026, Sundar Pichai said Google is expanding both Content Credentials and SynthID verification to Search and Chrome. The check is moving to where people already look at images, instead of asking them to carry a file off to a separate service to verify it.

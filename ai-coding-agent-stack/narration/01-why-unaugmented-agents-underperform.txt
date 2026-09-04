@@ -1,0 +1,11 @@
+Why Unaugmented Agents Underperform.
+
+The failure modes of a stock Claude Code or Copilot session are well-documented by now. Give an agent access to a large repository and it will either stream every file into its context window, burning tokens and introducing noise, or hallucinate structure it hasn't seen. Give it a complex multi-step task and it will start writing code before it fully understands the requirements, then discover halfway through that it has painted itself into an architectural corner.
+
+These aren't model limitations. They're tooling gaps. The open-source community has spent the last year building targeted solutions to each failure mode, and the results are measurable: 10, 70× token reductions, 94% reduction in low-quality code that makes it to review, and agent sessions that compound knowledge across sessions instead of starting cold every time.
+
+Agents re-read entire repos for every task. A Next.js monorepo with 27k files costs millions of tokens daily.
+
+Agents skip planning, hallucinate specs, and generate functionally correct code that violates architectural conventions.
+
+Every session starts cold. Agents repeat the same mistakes, re-discover the same APIs, and lose prior debugging context.

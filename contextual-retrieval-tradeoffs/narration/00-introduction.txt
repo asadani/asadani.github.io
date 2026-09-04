@@ -1,0 +1,5 @@
+Introduction.
+
+Contextual retrieval, honestly
+
+Anthropic&rsquo;s contextual retrieval is a solid, well-packaged evolution of techniques the RAG community already had: contextualized embeddings, hybrid search, and reranking. Real gains. Real preprocessing costs. Real blind spots around long-horizon reasoning and governance.

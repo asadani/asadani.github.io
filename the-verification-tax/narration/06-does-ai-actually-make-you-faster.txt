@@ -1,0 +1,9 @@
+Does AI actually make you faster?.
+
+The fair criticism of AI tools was never that they produce bad code. It's that experienced developers using early tools were, under controlled conditions, measurably slower on complex tasks. In July 2025, METR found that sixteen seasoned open-source contributors, working on repos averaging 22,000 stars, took 19% longer with AI tools, while estimating they'd been 20% faster. The gap between perception and reality wasn't a rounding error. It was a full reversal of sign.
+
+Resist the urge to over-read it in either direction. METR's February 2026 follow-up complicated its own finding: heavy AI adopters had systematically refused to participate in the no-AI control condition, even at $50/hour, biasing the sample. Their revised, refreshingly honest conclusion: "We do not know if AI makes developers more productive."
+
+Developers who use AI on well-specified, implementation-heavy tasks and maintain strong review practices report gains of 25, 39% (JetBrains, Index.dev). Developers who accept output without review see bugs rise, by up to 41% in some studies, through increased churn and duplication. The productivity gain is real but conditional, and the condition is structure.
+
+This is the verification tax made measurable. Unstructured AI assistance was slower because it added verification overhead without removing specification overhead. Agentic engineering earns its keep only when the upfront investment in spec, scaffold, and tests means the AI's implementation replaces genuinely slower human implementation rather than piling on top of it. The payoff arrives in the second sprint, not the first, which is precisely why teams under deadline pressure find it counterintuitive and skip it.

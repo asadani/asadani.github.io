@@ -1,0 +1,7 @@
+The CPU wheel pip hands you.
+
+Install almost any library that depends on torch and pip will resolve a CPU-only build. Silently. It has now cost me an afternoon twice, so it is the first thing I check after any install that touches torch.
+
+Then confirm your card's architecture is actually compiled into the build. This is the check specific to old hardware, and it takes two seconds:
+
+Turing is sm_75. CUDA 13 dropped several older architectures, so on a pre-Ampere card I pin the cu126 index rather than taking whatever is newest. Newer is not better when the newer thing has removed support for your hardware.

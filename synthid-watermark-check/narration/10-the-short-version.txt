@@ -1,0 +1,7 @@
+The short version..
+
+SynthID is the best AI-media check we have, and the five-second Gemini workflow is real. It lives in the signal, so exiftool can't strip it, but a screenshot or an unmarked model walks right past it.
+
+It answers "did a machine make this," not "who made this" or "is this authentic." That second question needs signed provenance, and the two layers only get you to trust when they work together.
+
+For images, treat a hit as strong and a miss as nearly meaningless. For video and voice, take it more seriously, because the mark rides the whole stream and you can't screenshot your way out. Check before you share. Just know exactly what the check did and didn't tell you.

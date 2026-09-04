@@ -1,0 +1,7 @@
+A signal, not a label..
+
+SynthID embeds a statistical pattern into the content itself at generation time. For images and video, it nudges pixels in a way that survives common edits: cropping, filters, frame-rate changes, and lossy compression. For audio, it shifts the waveform in a band you can't hear, and Google says it holds up through MP3 compression, added noise, and speed changes. For text, it biases the token probabilities the model samples from, so the choice of words carries a faint signature.
+
+The key word is signal. The mark is not a field you can read with a hex editor. It is spread across the content the way a watermark is spread across a banknote, which is why ordinary edits don't remove it and why the detector reports a confidence rather than a clean yes or no.
+
+Detection is probabilistic. The honest output is "likely AI-generated" with a confidence, not a verdict. Treat a positive as strong evidence and a negative as weak evidence, because plenty of AI content was never marked in the first place.

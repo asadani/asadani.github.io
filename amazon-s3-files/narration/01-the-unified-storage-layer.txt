@@ -1,0 +1,5 @@
+The Unified Storage Layer.
+
+S3 buckets can now be mounted as POSIX file systems using standard NFS v4.1 clients, no gateway appliance, no data duplication, no synchronization delay. The S3 bucket is the file system.
+
+The EFS cache layer is the key technical detail. AWS maintains an active working set of metadata and small files (<128 KB) in a high-performance cache, delivering sub-millisecond latency for hot data. Large files stream directly from S3, bypassing the cache, which is why large-file NFS reads are essentially free.

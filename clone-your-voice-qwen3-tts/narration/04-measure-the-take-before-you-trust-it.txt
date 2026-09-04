@@ -1,0 +1,7 @@
+Measure the take before you trust it.
+
+Twenty lines that would have saved me two recording sessions. The last check is the one that matters, and it is the one nobody tells you to run.
+
+You want that reading 15,000 or higher. Mine read 7,943, twice, from two different microphones, before I understood what I was looking at.
+
+Alongside it: peak below 0.99 with zero clipped samples, and a signal-to-noise ratio above roughly 25 dB. That last one is about your room rather than your microphone. A quiet room with a phone beats a treated room with a Bluetooth headset, because one of those problems is fixable in software and the other is not.

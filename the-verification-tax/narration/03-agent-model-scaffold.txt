@@ -1,0 +1,13 @@
+Agent = Model + Scaffold.
+
+There is a strong temptation, when adopting AI tooling, to treat the model as the system. A newer model arrives and the agent gets smarter; an older one and it gets worse. The model becomes the explanation for everything. That intuition leads to the wrong investments.
+
+The whitepaper's framing is cleaner: the model is one input into a running agent. Everything else, the prompts, the tools, the rule files, the test runners, the observability layer, is the scaffold (the paper also calls it the harness): the machinery that gives the model state, feedback, and constraints.
+
+Agent = Model + Scaffold. A model arrives at your repository with the same blank-slate uncertainty as a new engineer on day one, except it cannot ask questions. It will infer. Without a rule file, those inferences will be wrong in predictable ways: wrong state pattern, wrong folder structure, wrong testing convention. The scaffold is the onboarding document the new hire never gets to ask you to write.
+
+How much does the scaffold actually move the needle? Public benchmarks make it concrete. On Terminal Bench 2.0, one team moved a coding agent from outside the top 30 into the top 5 by changing only the scaffold, no model change. A LangChain study lifted an agent's benchmark score by 13.7 points by tweaking only the system prompt and middleware around a fixed model. Examined honestly, most agent failures are scaffold-configuration failures wearing a model's clothes.
+
+A practical scaffold starts as a single rule file at the project root. It is not prompting, it's operating instructions, written once, paid forward into every future session:
+
+The developer who writes this spends about an hour. Every subsequent agent interaction in that project inherits the hour. It compounds, which is exactly the property the model alone does not give you.

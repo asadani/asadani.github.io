@@ -1,0 +1,17 @@
+The Real Cost of Simplicity.
+
+There's a meaningful caveat worth understanding: Flex inference traffic counts towards your general rate limits. It doesn't offer the extended rate limits that the Batch API provides. On its face, that sounds like a downgrade. It isn't.
+
+Flex shares your standard per-minute and per-day quotas. During sustained high volume, you'll hit the same ceiling you would with standard inference. The Batch API has separate, higher quotas specifically to handle large offline workloads.
+
+But this is a deliberate architectural trade-off, not an oversight. By keeping Flex within the standard request path, Google avoids introducing a second quota system, a separate endpoint, or any new client-side complexity. The whole point is that you don't change anything except one config key.
+
+Flex is the Spot Instance of LLM inference, you accept sheddability during peak surges in exchange for a 50% cost reduction, with none of the operational overhead of managing batch files or TTL logic for context caching.
+
+Flex vs Batch API, The Real Difference
+
+The 50% cost saving is the headline, but the actual win is engineering hours. Compare what it takes to run the same workload through each approach:
+
+The rate limit cost is essentially the price of not rewriting your entire data pipeline to support asynchronous batch processing. For most teams running enrichment pipelines or background classification jobs, that trade-off is obvious, you get the same 50% savings without touching your architecture.
+
+Where the Batch API wins is sustained, high-volume offline workloads that genuinely need extended quotas, millions of documents, overnight runs. Flex is for everything in between: workloads that don't need real-time latency but also don't justify a full async pipeline rebuild.

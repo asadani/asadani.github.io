@@ -1,0 +1,27 @@
+Engram: The Research That Didn't Make It In.
+
+In January 2026, three months before V4's release, DeepSeek and Peking University published Conditional Memory via Scalable Lookup: A New Axis of Sparsity for Large Language Models, introducing a module called Engram. The community immediately read it as V4's secret sauce. The V4 technical report makes no mention of Engram whatsoever.
+
+That absence is worth unpacking.
+
+What Engram Actually Proposed
+
+Standard Transformers, including MoE variants, have no native primitive for knowledge lookup. Every "memory" is simulated through computation: attention attends over all positions, experts activate dynamically, but there's no deterministic retrieval path. Engram proposed a third axis of sparsity alongside MoE: a conditional memory bank that routes known n-gram patterns directly to their embeddings, bypassing attention entirely.
+
+The implementation stores n-gram sequences (up to order 4) as compressed suffix representations hashed into a vocabulary of 2.26 billion slots. When a known sequence appears in context, Engram retrieves its embedding in O(1) time and modulates it through a lightweight context-aware gate against the current hidden state, a scalar operation, not multi-head attention. The memory bank is too large for GPU VRAM, but the paper showed that offloading to host DRAM costs only a 2.8% throughput penalty, because n-gram access follows Zipfian distribution and can be prefetched during the preceding layer's compute.
+
+The paper also discovered a Sparsity Allocation Law: dedicate ~20, 25% of your sparse parameter budget to the Engram memory module and keep the rest for computation, and you outperform pure MoE at the same total parameter count. The optimum was stable across both compute regimes tested.
+
+These are not free gains from extra parameters or compute. Engram replaces wasted attention on static patterns with direct lookup, same budget, better output. The long-context NIAH jump from 84.2% to 97.0% at 1M tokens is especially striking given that V4's own reported MRCR-1M score is 83.5%. Engram, at the 27B scale, already outperforms V4-Pro on this dimension.
+
+Why It Didn't Ship, Two Theories
+
+DeepSeek offered no public explanation. The paper itself provides a signal: the tiered cache hierarchy, hot n-grams in DRAM, rare patterns on NVMe SSD, is described as a promising direction rather than a demonstrated result. At 1.6T parameter scale, the Engram bank would be substantially larger than the 27B prototype. A 2.8% throughput hit at 27B may not hold at 10× the scale while serving tens of thousands of concurrent requests.
+
+The DRAM-offload and prefetch pipeline wasn't production-hardened at 1.6T scale in time for this release. DeepSeek chose to ship the attention architecture without it rather than delay further.
+
+It's in there, unnamed
+
+V4's CSA + HCA hybrid attention achieves some of Engram's long-context gains through a different mechanism. Engram-style lookup may be incorporated but not disclosed, DeepSeek's technical reports routinely under-document architectural choices.
+
+Engram's MMLU gains (+3.0) point directly at V4's current weakness against Gemini. If the module ships in V4.5 or V5 at production scale, the knowledge and factual-recall gap closes without any new training data, just better parameter allocation. The paper is an explicit roadmap, and it's already published.

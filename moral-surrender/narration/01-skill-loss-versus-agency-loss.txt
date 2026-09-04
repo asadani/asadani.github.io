@@ -1,0 +1,11 @@
+Skill loss versus agency loss.
+
+"Cognitive surrender" is a phrase from a recent paper out of the Wharton School at UPenn, Steven Shaw and Gideon Nave's "Thinking, Fast, Slow, and Artificial: How AI is Reshaping Human Reasoning and the Rise of Cognitive Surrender." The phrase has older theological roots, but the AI framing is new and it lands hard for anyone shipping code with an agent at their elbow.
+
+The distinction in the paper is the part worth memorising: offloading keeps you in the loop, surrender doesn't. But once you start watching for it in real engineering work, a second failure mode shows up next to the first, adjacent, harder to spot, and arguably more expensive when it does happen.
+
+You ask an agent for a regex or a sorting routine. It returns code that compiles and passes tests. You paste it in. You didn't trace the logic. If it breaks in production you have no idea how to fix it without going back to the model. What you give up: the how and the what.
+
+You ask, "Should we use a monolith or microservices?" The agent produces a confident, well-structured paragraph favoring microservices. You go with it, even though your team is small and a monolith is more pragmatic. You didn't just offload the typing; you offloaded the architectural philosophy. What you give up: the why and the should we.
+
+You can survive an engineer who needs an LLM to write Python boilerplate or interpret a stack trace. You cannot survive a project whose core strategic trade-offs are dictated by the average weights of a model's training data rather than the specific reality of your environment. Cognitive surrender introduces bugs. Moral surrender builds the wrong system.

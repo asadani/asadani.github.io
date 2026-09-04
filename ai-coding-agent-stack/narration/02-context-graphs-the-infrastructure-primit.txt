@@ -1,0 +1,13 @@
+Context Graphs: The Infrastructure Primitive.
+
+The core insight driving this category: a repository is a knowledge graph, not a directory of text files. Functions call other functions. Classes inherit from each other. Tests cover specific methods. When an agent needs to review a change to auth.ts, it doesn't need 27,000 files, it needs the 12 files that directly depend on or are depended on by auth.ts. A structural graph delivers exactly that.
+
+Two implementation approaches have emerged. AST-based tools (code-review-graph, Graphify, Codebase-Memory MCP) parse source files into syntax trees using Tree-sitter, extract entities and relationships, and store them in queryable databases. LSP-based tools (Serena) wrap Language Server Protocol backends to give agents the same symbol-level navigation a developer gets in an IDE, more precise, but requires a running LSP server per language.
+
+Token reduction data: code-review-graph benchmarks
+
+The tradeoff in the AST approach is conservative over-prediction. To guarantee 100% recall (never missing a dependency), the blast-radius algorithm over-estimates impact radius slightly. This is the correct engineering tradeoff: a missed dependency that causes a production failure is far more costly than feeding the agent a few extra files.
+
+Codebase-Memory MCP is written as a single C binary with 66 vendored Tree-sitter grammars. It indexes the Linux kernel (28M lines, 75k files) in 3 minutes and achieves 83% answer quality at 10× fewer tokens versus file-by-file approaches. For teams at scale, this is the high-watermark of what graph-based context can deliver.
+
+Choosing a context graph tool

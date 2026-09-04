@@ -1,0 +1,7 @@
+A spectrum, not a binary.
+
+Andrej Karpathy coined "vibe coding" in February 2025 and by early 2026 was already calling it passé, proposing "agentic engineering" at Sequoia's AI Ascent. The rename wasn't marketing. "Vibe" had become a suitcase word stuffed with everything from a weekend hack to a disciplined, agent-driven production workflow, and, as Osmani notes, telling a CTO you're "vibe engineering" their payment system tends to produce a visible flinch.
+
+The useful way to read the landscape is as a spectrum of how much structure surrounds the model's output. Vibe coding is an attitude toward verification: optional. Agentic engineering puts the model inside a scaffold of specs, tests, and feedback loops. Crucially, you can do either with the exact same agent and model, the difference is the discipline around it, not the tool.
+
+The trap is treating speed as a free upgrade. Vibe coding is the right gear for exploration and the wrong gear for production, and teams that keep the boundary blurry end up shipping prototypes by accident.

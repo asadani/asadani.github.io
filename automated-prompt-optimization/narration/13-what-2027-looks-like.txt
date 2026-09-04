@@ -1,0 +1,11 @@
+What 2027 looks like.
+
+Three trends are durable enough to plan around:
+
+Interface-first software. Analyst forecasts put roughly 60% of enterprise workflows behind conversational, natural-language interfaces by 2027. That mandates highly tuned optimization underneath, translating messy human language into precise API calls, invisibly.
+
+No-code optimization. Drag-and-drop workflow builders will embed automated parameter tuning transparently. The optimization mathematics will move out of the developer's view, the way the JIT compiler did. Business analysts will architect multi-agent systems without touching MIPROv2 directly.
+
+Engineering as orchestration. Gartner's projection that ~80% of the engineering workforce needs upskilling for AI-native work points the same direction: writing raw code matters less; defining system constraints, steering autonomous agents, designing eval harnesses, and managing optimization loops matter more.
+
+The further-out version is what the literature is starting to call Enterprise General Intelligence: interconnected workflows that proactively identify systemic inefficiencies, self-diagnose pipeline degradation, and deploy optimized configurations without human intervention, anchored to mathematically rigorous Pareto frontiers via tools like GEPA. Whether that horizon arrives in 2027 or 2030, the trajectory is set: prompts have stopped being something you write. They are something the system compiles.

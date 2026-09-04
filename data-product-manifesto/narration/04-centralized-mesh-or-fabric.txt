@@ -1,0 +1,5 @@
+Centralized, mesh, or fabric?.
+
+The seven pillars are pattern-agnostic, you can build a data product inside a monolithic warehouse or across a federated mesh. What changes is where ownership lives and who carries the operational load. These three patterns cover most real-world deployments and none of them is universally correct.
+
+Most large organizations end up with a hybrid: mesh-style domain ownership for new products, a central warehouse for cross-domain reporting, and fabric-style integration for the legacy systems nobody is going to rewrite. That's fine. The manifesto holds regardless, every data product, wherever it lives, commits to the seven pillars.

@@ -1,0 +1,5 @@
+The 10 CVEs That Came From One Protocol.
+
+Filter by status to see which projects moved and which are still sitting on a reported advisory. Every row traces back to the same STDIO pattern.
+
+The same root cause has been filed independently many times: CVE-2025-49596 (MCP Inspector), CVE-2026-22252 (LibreChat), CVE-2026-22688 (WeKnora), CVE-2025-54994 (@akoskm/create-mcp-server-stdio), CVE-2025-54136 (Cursor). Each landed on a different vendor's queue, because at the protocol level, nobody owns it.

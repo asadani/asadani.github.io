@@ -1,0 +1,7 @@
+The card nobody recommends.
+
+A GTX 1650: 4 GB of VRAM, Turing generation, compute capability 7.5, and no tensor cores at all. It is the cut-down Turing part, without the hardware that makes newer cards fast at low precision. Every "run models locally" guide assumes something better.
+
+I kept using it anyway, because the interesting shift of the last two years is not that models got bigger. It is that the useful small ones got small enough to matter. A 0.6-billion-parameter speech model occupies 2.2 GB and does real work. That is a size this card can hold.
+
+Everything below is what stood between the card and that work. Almost none of it was performance. It was plumbing.

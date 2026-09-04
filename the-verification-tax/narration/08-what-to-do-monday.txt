@@ -1,0 +1,23 @@
+What to do Monday.
+
+None of this requires a platform purchase. It requires a change in where you spend attention.
+
+If you write code
+
+Write a rule file for each active project. Start with ten lines, stack, architecture constraints, hard rules, testing conventions. Add a line every time an agent does something it shouldn't have. In a few weeks you'll have a project-specific config that improves output with no model change.
+
+Write tests and evals before generating code. A good test communicates intent more precisely than any natural-language prompt, and gives the agent something concrete to run, fail against, and correct toward. A test is a specification a machine can verify.
+
+Review every line that ships. Be skeptical of anything clever. Check that imported packages actually exist. Verify error handling covers realistic failure modes, not just the happy path. Code your team doesn't understand becomes debugging cost it can't afford, doubly so in regulated domains where the edge case matters because of a constraint the agent never had context for.
+
+Keep your core skills sharp. The arrangement only works if debugging, system design, and intuition for correctness stay strong. AI is a way to apply expertise at greater scale, not a substitute for having it.
+
+If you lead engineers
+
+Treat rule files, prompts, evals, and skill libraries as code. Versioned, reviewed in pull requests, owned by named engineers. Without that discipline, agent behaviour becomes irreproducible across the team.
+
+Set the bar at the eval, not the demo. A demo proves an agent can succeed once, a sample size of one. A passing eval suite proves it succeeds reliably.
+
+Make the prototype/production boundary explicit. Which projects, branches, and environments warrant vibe coding versus agentic engineering? Teams that keep this blurry ship prototypes by accident.
+
+Budget the CapEx. The upfront cost of specs, scaffolds, and test suites is real and lands in sprint one; the savings land in sprint two and compound. Plan for the curve, don't get ambushed by it.

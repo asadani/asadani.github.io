@@ -1,0 +1,21 @@
+Is it worth it.
+
+Honestly, only if the voice being yours is the point.
+
+The synthetic path costs no recording and no traps worth writing about. This one cost me three recording sessions, an afternoon of debugging, and roughly twenty times the compute per render. On a modest GPU that is about three hours for a fifty-minute track.
+
+What you get back is that it is your voice, it runs on hardware you already own, nothing is uploaded anywhere, and the weights are Apache 2.0. For a course or a personal blog, that is a different product rather than a cheaper version of the same one.
+
+I kept both tracks in separate directories. The synthetic one still ships. Having both is the reason I get to not decide yet.
+
+Record on your phone, then check where the spectrum ends before anything else.
+
+Read at your normal pace, and keep the take with the stumble in it.
+
+Cut the reference to one clean sentence. Longer is slower and no better.
+
+Keep the exact transcript beside the audio. The model needs it.
+
+Expect the finished track to run about 10% longer than a synthetic one.
+
+Never let a clone run write into the directory holding your finished audio.

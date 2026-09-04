@@ -1,0 +1,30 @@
+{
+ "00-introduction": {
+  "k": "fa283a3dcea55bee",
+  "d": 23.0
+ },
+ "01-the-unified-storage-layer": {
+  "k": "b7167ce69922cda6",
+  "d": 41.6
+ },
+ "02-who-benefits-most": {
+  "k": "11fd24e2e3195c0e",
+  "d": 92.0
+ },
+ "03-how-it-works-under-the-hood": {
+  "k": "9b6afb7444103131",
+  "d": 105.8
+ },
+ "04-understanding-the-cost-model": {
+  "k": "0c97e767721dc719",
+  "d": 63.0
+ },
+ "05-honest-pros-cons": {
+  "k": "008436f997cbc5aa",
+  "d": 69.1
+ },
+ "06-the-bottom-line": {
+  "k": "8aaa0dff17c6d695",
+  "d": 101.8
+ }
+}

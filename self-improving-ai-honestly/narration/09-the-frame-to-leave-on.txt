@@ -1,0 +1,9 @@
+The frame to leave on.
+
+Self-improvement is real. Across math, code, kernels, classification, and games, the loops measurably work, sometimes spectacularly. 14× kernel speedups. Tens of percentage points on hard benchmarks. Whole categories of human iteration replaced by an outer-loop agent.
+
+The "step toward AGI" framing is the part to push back on. The systems improving themselves today do so in narrow, well-instrumented domains, against fixed human-defined objectives, with a frozen improvement mechanism, and the resulting equilibria are fragile out of distribution.
+
+That is engineering progress at the frontier. It is not the recursive, open-ended, self-directed improvement the AGI label calls to mind. Treat the gap between those two as load-bearing. The label travels fast. The result moves at the speed of clean verifiers and bounded outer loops.
+
+Self-improving AI is here. Self-improving AI in the sense the phrase culturally implies is not. Both can be true at once. Pretending the gap is closing faster than it is, is the failure mode I'd watch this year.

@@ -1,0 +1,5 @@
+Introduction.
+
+The Five Layers of the Modern AI Coding Agent Stack
+
+The AI coding agent ecosystem has matured past prompt engineering. This is the architectural map, five layers that determine whether your agent is a productivity multiplier or an expensive autocomplete.

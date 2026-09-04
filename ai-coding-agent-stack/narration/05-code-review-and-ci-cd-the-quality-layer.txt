@@ -1,0 +1,13 @@
+Code Review and CI/CD: The Quality Layer.
+
+Automated code review has split into two distinct tiers in 2026. The first tier, mature PR-level tools, handles the bulk of review work at the syntax and logic level. The second tier, agentic security pipelines, goes deeper, using structured task decomposition to find vulnerabilities that pattern matching misses.
+
+PR-Agent (qodo-ai) remains the ecosystem's workhorse at 10.7k stars and ~200 contributors. Its proprietary PR Compression strategy handles arbitrarily large diffs in a single LLM call, about 30 seconds per review. The /review, /improve, /describe, and /ask command set covers 90% of what most teams need. It integrates with GitHub, GitLab, Bitbucket, and Azure DevOps. Known caveat: self-hosted Ollama integration has configuration bugs.
+
+LLM Code Reviewer runs as a standard GitHub Action triggered on PR open/update. Multi-model support (Claude, Gemini, OpenAI), file exclusion patterns, and language selection. For teams that want review in the pipeline without deploying a separate service, this is the lower-friction option.
+
+GitHub SecLab Taskflow Agent represents a qualitatively different paradigm. Structured YAML "taskflows" decompose security auditing into checkpointed steps with intermediate verification. It has found 80+ real vulnerabilities in open-source projects, auth bypasses, IDOR issues, token leaks. This is the strongest production evidence that agentic review delivers value on security that pattern-matching cannot.
+
+Semgrep bridges traditional SAST and the agent world. Its 2,000+ community rules provide deterministic pattern matching across 30+ languages. Its new Claude Code plugin and MCP prompts, including write_custom_semgrep_rule, let agents compose and apply security rules dynamically. Used in production at GitLab, Dropbox, Shopify, and HashiCorp. The safest upgrade path: add Semgrep to CI before adding any agentic review tools.
+
+Semgrep in CI catches deterministic security patterns. PR-Agent adds LLM-powered logic review to every PR. SecLab Taskflow is for periodic deep security audits or pre-release reviews. These serve different time horizons, use all three, not just one.

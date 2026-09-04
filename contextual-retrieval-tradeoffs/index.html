@@ -678,7 +678,40 @@
   </div>
 
   <!-- ─── SECTION 1: WHAT IT IS ─── -->
-  <div class="section" id="what-it-is">
+  <!-- ARTICLE-AUDIO:BEGIN -->
+<link rel="stylesheet" href="/assets/player.css">
+<div class="ap" id="articleaudio">
+  <div class="ap-hd">
+    <span class="ap-ico" aria-hidden="true">&#9654;</span>
+    <div><span class="ap-kick">Audio edition</span><b>Listen to this article</b><span class="ap-sub">8 parts &middot; 12 min</span></div>
+    <button class="ap-rate" type="button" aria-label="Playback speed">1&#215;</button>
+    <button class="ap-more" type="button" aria-expanded="false">Parts</button>
+  </div>
+  <p class="ap-now"></p>
+  <audio controls preload="none"></audio>
+  <ol class="ap-list" hidden>
+      <li><button type="button" data-src="audio/00-introduction.mp3"><span class="ap-n">1</span><span class="ap-nm">Introduction</span><span class="ap-d">0:25</span></button></li>
+      <li><button type="button" data-src="audio/01-what-contextual-retrieval-actually-is.mp3"><span class="ap-n">2</span><span class="ap-nm">What contextual retrieval actually is</span><span class="ap-d">1:40</span></button></li>
+      <li><button type="button" data-src="audio/02-none-of-the-parts-are-new.mp3"><span class="ap-n">3</span><span class="ap-nm">None of the parts are new</span><span class="ap-d">1:35</span></button></li>
+      <li><button type="button" data-src="audio/03-what-the-numbers-actually-say.mp3"><span class="ap-n">4</span><span class="ap-nm">What the numbers actually say</span><span class="ap-d">1:34</span></button></li>
+      <li><button type="button" data-src="audio/04-what-it-doesn-t-fix.mp3"><span class="ap-n">5</span><span class="ap-nm">What it doesn’t fix</span><span class="ap-d">2:14</span></button></li>
+      <li><button type="button" data-src="audio/05-what-you-sign-up-for-if-you-adopt-it.mp3"><span class="ap-n">6</span><span class="ap-nm">What you sign up for if you adopt it</span><span class="ap-d">1:58</span></button></li>
+      <li><button type="button" data-src="audio/06-where-it-ranks-against-the-alternatives.mp3"><span class="ap-n">7</span><span class="ap-nm">Where it ranks against the alternatives</span><span class="ap-d">2:06</span></button></li>
+      <li><button type="button" data-src="audio/07-if-you-only-remember-three-things.mp3"><span class="ap-n">8</span><span class="ap-nm">If you only remember three things</span><span class="ap-d">0:48</span></button></li>
+  </ol>
+</div>
+<div class="ap-mini" id="ap-mini" hidden>
+  <button class="ap-mb" data-act="play" aria-label="Play or pause">&#9654;</button>
+  <button class="ap-mt" data-act="goto" title="Back to the player"></button>
+  <div class="ap-mp" data-act="seek"><div class="ap-mpf"></div></div>
+  <em class="ap-mtime">0:00</em>
+  <button class="ap-mb ghost ap-mr" data-act="rate" aria-label="Playback speed">1&#215;</button>
+  <button class="ap-mb ghost" data-act="next" aria-label="Next part">&#9199;</button>
+</div>
+<script src="/assets/player.js" defer></script>
+<!-- ARTICLE-AUDIO:END -->
+
+<div class="section" id="what-it-is">
     <div class="section-label">01 / The Method</div>
     <h2><a class="anchor" href="#what-it-is">What contextual retrieval actually is</a></h2>
     <div class="prose">

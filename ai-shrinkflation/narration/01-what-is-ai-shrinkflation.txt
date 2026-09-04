@@ -1,0 +1,15 @@
+What Is AI Shrinkflation?.
+
+Shrinkflation is a term borrowed from consumer goods: the practice of reducing product quantity or quality while holding the price constant. The cereal box looks the same; there are fewer flakes inside. Applied to AI, it describes the pattern where a model subscription or API stays the same price, but the effective capability delivered to demanding workloads decreases over time.
+
+The causes are not always malicious. Providers continuously update models, adjust safety layers, tune reasoning budgets, and route requests across pools of stronger and cheaper variants to manage GPU cost and latency. Each change may look like an improvement on average benchmarks while degrading specific professional workflows. The result from the user's perspective is the same: less value, same invoice.
+
+Adaptive thinking and effort controls let providers dial down how deeply a model thinks per request, saving compute without changing the model's name or version.
+
+"GPT-4" and "Claude Opus" are labels over dynamic pools. Routers shift traffic toward cheaper variants under load. You may never know which model actually served your request.
+
+Safety & RLHF Drift
+
+Successive fine-tuning rounds optimize for safety and likeability. Over time, models become more cautious, more evasive, and less willing to do difficult, precise work.
+
+Unlike a database or an API that throws a 500 when it degrades, an LLM that regresses keeps returning 200 OK. The outputs are still coherent. The failure is in quality, depth, and reliability, dimensions that require systematic measurement to detect.

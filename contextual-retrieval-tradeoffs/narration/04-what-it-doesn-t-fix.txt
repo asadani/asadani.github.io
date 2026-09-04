@@ -1,0 +1,27 @@
+What it doesn’t fix.
+
+The marketing framing flattens trade-offs that are still very much present. Five worth naming explicitly.
+
+The 49, 67% lift is on Anthropic's internal evals with their failure definition. Your corpus, query distribution, and judge model can easily produce half that, or none.
+
+Retrieval is still driven by a short query vector, not the full conversation history, intermediate reasoning, or plan state. Better chunk semantics doesn't close that gap.
+
+Platform lock-in on cost
+
+Cheap ingestion depends on Claude prompt caching. Port the pattern to a provider without similar caching and the numbers stop looking friendly.
+
+LLM-generated chunk descriptions are frozen at ingestion. When source docs evolve, the situating text drifts subtly out of alignment. Re-ingest policies are rarely discussed.
+
+In legal, financial, or spec-heavy domains, LLM-generated context can smooth over critical numerical thresholds or scope conditions, producing convincing but off-target retrievals.
+
+It's a chunk-level fix
+
+Contextual retrieval improves local chunk semantics. It is not a substitute for query reformulation, agentic planning, structured grounding, or evals.
+
+Context blindness, in one sentence
+
+However well you describe a chunk, the system still asks "which chunks look like this query string?" not "what does this user actually need given the conversation, the half-formed plan, and what we've already retrieved?" That is a system-level limitation, and contextual retrieval doesn't address it.
+
+Governance is the unspoken cost
+
+Every chunk now has an LLM-generated derivative attached to it. That derivative needs the same lifecycle treatment as the source: re-ingest on change, audit on disagreement, version on drift. The marketing materials are notably quiet on this. In regulated environments it is not optional.

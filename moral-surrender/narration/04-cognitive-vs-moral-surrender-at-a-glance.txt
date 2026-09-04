@@ -1,0 +1,5 @@
+Cognitive vs moral surrender at a glance.
+
+If you're going to keep one frame from this essay, keep this one. The two modes are not the same problem dressed differently, they fail in different layers of the work and require different mitigations.
+
+Moral surrender is the more dangerous mode. The first failure breaks a function. The second one shapes the whole system. A model trained on the average of the public internet does not know your team size, your runway, your latency budget, your regulatory posture, and yet it will happily render a confident architectural recommendation that ignores all of them.

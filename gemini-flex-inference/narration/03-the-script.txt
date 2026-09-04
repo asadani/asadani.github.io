@@ -1,0 +1,5 @@
+The Script.
+
+All benchmarks were run with flex-genai.py (full source on GitHub Gist), a self-contained script that cycles through all three tiers, captures per-run latency and token usage, and reads the confirmed tier from response headers.
+
+Priority inference automatically falls back to Standard when capacity is constrained. The x-gemini-service-tier header tells you which tier actually served your request, not which one you asked for.

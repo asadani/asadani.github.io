@@ -1,0 +1,9 @@
+The Model Is a Dependency. Treat It Like One..
+
+"AI shrinkflation" is not a meme or a conspiracy theory. It is a structural consequence of how LLMs are deployed commercially: mutable, opaque, cost-optimized over time, and not subject to the deprecation discipline we expect from other software dependencies. The AMD case is the clearest public evidence yet, quantified, rigorous, hard to dismiss.
+
+The engineering response is not to distrust AI or to avoid using LLMs in production. It is to build the same discipline around LLM dependencies that you would build around any external service: observability, regression testing, failover, and abstraction layers that localize the blast radius when behavior changes.
+
+Your moat is not access to the current best model. Every team has that. Your moat is the evaluation harness, the orchestration layer, the behavioral telemetry, and the engineering discipline to catch regressions before users do, and to swap providers before the situation becomes a postmortem.
+
+Teams that invest in this infrastructure now will be comparatively better positioned as the model market matures. When you can A/B a new model against your own golden evals and cut over gradually, you benefit from every improvement, without being held hostage by any single regression.

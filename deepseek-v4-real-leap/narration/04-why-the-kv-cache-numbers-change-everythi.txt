@@ -1,0 +1,17 @@
+Why the KV Cache Numbers Change Everything.
+
+V4's genuine breakthrough isn't in a benchmark cell. It's in how the model computes attention at long contexts, and what that does to the cost of serving it.
+
+Traditional transformer attention scales quadratically with context length. At 1M tokens, the KV cache becomes the bottleneck: it grows so large that you either run one user at a time or you can't serve the context at all. This is why "1M context" in most models is a theoretical claim, not a practical one.
+
+V4 ships a hybrid attention architecture that combines two mechanisms: Compressed Sparse Attention (CSA) for routine positions, and Heavily Compressed Attention (HCA) for cross-window aggregation. Together they reduce KV cache to 10% of V3.2's footprint at 1M tokens, while retaining 27% of the single-token inference FLOPs.
+
+This matters enormously for deployment economics. If you're serving a coding agent that uses 200K tokens of context per session, V3.2 lets you handle maybe four simultaneous users before GPU memory is exhausted. V4, with the same budget, handles roughly forty. That's not a 10% improvement, it's a different product category.
+
+Pair this with FP4 quantization for MoE expert weights (a first for a model this size) and you compound the memory savings further. The 49B active-parameter profile means a 1.6T-parameter model runs inference at the cost of a ~50B dense model, which is already well within reach of a single 8×H100 node.
+
+The Other Architectural Pieces
+
+Manifold-Constrained Hyper-Connections (mHC) replace standard residual connections. This sounds esoteric but has a practical effect: it improves gradient flow through the very deep MoE stack, which directly enables the 32T+ token pre-training run without instability. You don't get to train on 32 trillion tokens without solving the propagation problem first.
+
+The Muon optimizer, a second-order momentum method that approximates gradient whitening, is the other training-side novelty. It converges faster and more stably than AdamW at large batch sizes, which is what you need when training a 1.6T model across thousands of GPUs. These are infrastructure choices, not headline features, but they're what makes the training compute efficiency claims credible.

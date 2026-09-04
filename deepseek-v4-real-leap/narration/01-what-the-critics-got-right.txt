@@ -1,0 +1,11 @@
+What the Critics Got Right.
+
+The criticism isn't just deflated hype. Several gaps are specific and well-founded, the kind that don't get better with more benchmark slides.
+
+Every Chinese flagship released in 2025, 2026 has native vision. Qwen has it. Kimi has it. Not having it in a "V4" release in 2026 is a genuine regression in the roadmap narrative.
+
+The promised Engram architecture, designed to stream MoE experts from SSD, never shipped. Flash (284B / 13B active) is still far out of reach for most local setups. Google's 26B A4B and Qwen 3 35B A3B run on laptops. V4 doesn't.
+
+MMLU-Pro: 87.5 vs Gemini's 91.0. SimpleQA: 57.9 vs Gemini's 75.6. V4 trails meaningfully on factual recall and broad knowledge benchmarks, the marketing slides don't feature these numbers.
+
+One community member's framing: "In my opinion, this is DeepSeek V3.4, not V4. You still lack native multimodality every other Chinese flagship model has now." That's sharp, but it reflects a real gap between versioning expectations and feature delivery. DeepSeek should have either waited or shipped with a vision tower.

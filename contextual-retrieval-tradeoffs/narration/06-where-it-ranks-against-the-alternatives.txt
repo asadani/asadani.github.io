@@ -1,0 +1,17 @@
+Where it ranks against the alternatives.
+
+If you're refactoring a RAG stack today, the honest order of priority looks like this. Contextual retrieval is in there, but it is not first.
+
+1. A real evaluation harness. Without it you can't tell whether contextual retrieval helped, hurt, or did nothing on your data. Ground-truth Q&A pairs, recall@k, MRR, answer correctness, and a regression suite tied to deploys. This is the highest-leverage investment by a wide margin.
+
+2. Query reformulation and intent handling. Most production RAG failures are query-side, not chunk-side. Multi-query expansion, decomposition, and clarification turn ambiguous user input into something a retriever can actually serve.
+
+3. Hybrid retrieval + rerank. Even without LLM-generated context, vector + BM25 + cross-encoder is a large step up from vector-only. Land this first; it's most of the gain at most of the simplicity.
+
+4. Contextual embeddings. Once 1, 3 are in place, layer LLM-generated chunk situating on top. This is where you get the marginal lift Anthropic advertises, and now you have evals to confirm it.
+
+5. Agentic loops over retrieval. For multi-step workflows, retrieve-reason-retrieve patterns, tool-augmented search, and plan-aware retrieval move the ceiling further than any chunk-level technique can.
+
+6. Structured grounding for the parts that need it. Tables, schemas, joins, and constraint-aware retrieval for finance/legal/specs. Don't expect contextual chunks to substitute.
+
+Contextual retrieval is a strong default chunk-level upgrade. It is not a strategy, it is not a moat, and it is not first on the priority list. Ship evals and query understanding before you ship contextual chunks. Then layer it in, and measure.

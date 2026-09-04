@@ -1,0 +1,13 @@
+What Actually Merged Into the Kernel.
+
+coding-assistants.rst is the kernel's first explicit policy document on AI tooling. It went through the normal RFC and review process, proposals by Dave Hansen and Sasha Levin preceded the final merge, and is now part of torvalds/linux main. It governs every AI-assisted patch submitted to the Linux kernel going forward.
+
+AI Cannot Sign Off
+
+"AI agents MUST NOT add Signed-off-by tags. Only humans can legally certify the Developer Certificate of Origin."
+
+Human Takes Full Ownership
+
+The human submitter reviews all AI-generated code, ensures license compliance, and adds their own Signed-off-by to certify the DCO.
+
+Contributions should include an Assisted-by tag listing the agent name, model version, and specialized tools used.

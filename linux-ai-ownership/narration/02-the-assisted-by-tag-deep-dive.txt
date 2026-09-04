@@ -1,0 +1,7 @@
+The Assisted-by Tag — Deep Dive.
+
+The kernel doc defines a new commit trailer tag. Its format is precise and follows the same Key: Value convention as other kernel commit trailers like Reviewed-by and Tested-by.
+
+What Gets Listed vs. What Doesn't
+
+The document draws a clear line between specialized analysis tools that meaningfully contribute to code correctness, and the normal development environment every developer uses anyway.

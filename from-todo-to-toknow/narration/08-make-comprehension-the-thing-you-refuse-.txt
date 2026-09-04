@@ -1,0 +1,19 @@
+Make comprehension the thing you refuse to defer.
+
+None of this argues for slowing down or hand-writing code out of nostalgia. I want the velocity. The fix is to stop letting the agent be the only thing that holds the understanding. Four habits I keep, each pointed at one of the failure modes above:
+
+Cap the diff you'll accept
+
+DORA's risk lever is changeset size, and the model will happily hand you a thousand lines. If you cannot reason about the whole change in one sitting, it is too big to merge, however green the tests look.
+
+Watch your refactor rate
+
+GitClear's warning light is refactoring collapsing while duplication climbs. If your team only ever adds and pastes and never reshapes, comprehension is already leaking out of the codebase.
+
+The explain test, no model
+
+Before merge, someone explains the change without the assistant. Not the prompt that produced it, the behavior: what it does on malformed input, where it breaks first. If only the AI can explain it, it is not done.
+
+Agent as harness, not brain
+
+Use the agent as an execution harness for your intent, not a substitute for it. You still decide what to build and why. The model types. The architecture stays yours, or it stays nobody's.

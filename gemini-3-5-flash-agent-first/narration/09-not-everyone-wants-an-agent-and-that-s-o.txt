@@ -1,0 +1,19 @@
+Not everyone wants an agent — and that's okay.
+
+The honest version of this story is that "agent > chat" is not obviously true for everyone. A large share of real workloads are still fundamentally single-pass: RAG-style Q&A over docs, customer support, simple summarization, unit tests, small refactors, lightweight code suggestions. For those, the model gets called once, returns a string or JSON, and the workflow moves on.
+
+Agentic stacks add failure modes that simply do not exist in a single-pass call: tool misconfiguration, environment drift, brittle DOMs or terminals, race conditions between sub-agents, and a much larger surface for prompt-injection. Buying a model that is optimized for those workflows when you do not run them means paying for headroom you cannot use, and inheriting risks you do not have to take.
+
+The right framing is not "should I move to 3.5 Flash?" It is "is my workload shaped like an agent?" If yes, 3.5 Flash is probably the strongest Google option in front of you right now. If no, 3.1 Pro / 3 Flash / future 3.5 Lite are all defensible choices, and "default in the Gemini app" is not a reason to migrate.
+
+If you are building agents
+
+Coding agents, browser/UI control, MCP tool chains, multi-hour autonomous runs, sub-agent topologies. This is the workload the model was built for.
+
+If you live in long-context reasoning
+
+Heavy single-pass retrieval at 128k+, deep legal or scientific reading, plan-and-orchestrate workloads. 3.1 Pro still leads here; 3.5 Pro is the upgrade to wait for.
+
+If you are doing single-pass chat or RAG
+
+Documentation Q&A, support bots, classification, small refactors. Stay on 3 Flash or wait for 3.5 Lite, do not pay agent prices for a one-shot call.

@@ -1,0 +1,7 @@
+Re-renders should cost nothing.
+
+Hash everything that affects the output, and skip any file whose hash has not moved.
+
+Fix a typo in chapter twelve and only chapter twelve re-renders. Change the voice and everything does, correctly, because the voice is part of the key.
+
+One detail I got wrong first time: write the stamp file after each chapter, not at the end of the run. I wrote it once at the end, an interrupted run lost every marker it had earned, and the next run redid finished work.

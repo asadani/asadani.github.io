@@ -1,0 +1,5 @@
+Introduction.
+
+The Complaints Are Valid. The Leap Is Real.
+
+In April 2026, DeepSeek released V4, over fifteen months after R1 shocked global markets and reset what anyone thought an open-source lab could pull off. Anticipation had been building the whole time. At launch, benchmarks looked solid. Then practitioners ran their own evaluations, held the numbers against what fifteen months of waiting had implied, and disappointment arrived quickly. But dig past the surface-level letdown and there are a few genuine wins buried in this release, architectural shifts and a cost story that most of the discourse missed entirely.

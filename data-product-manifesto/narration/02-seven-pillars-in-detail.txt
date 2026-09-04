@@ -1,0 +1,79 @@
+Seven pillars, in detail.
+
+The Core Asset, Data is Sovereign
+
+Data is a first-class citizen, not residue. Every dataset is deliberately curated for a consumer, not harvested and hoped over.
+
+Curation over collection. Raw, processed, and curated layers are distinct and intentional.
+
+Traceability. Every dataset has a unique identifier and strict version control.
+
+Accountability. Data is tagged with explicit, high-ownership domain routing, no orphan tables.
+
+The Gates, Input & Ingestion
+
+Ingestion is not a dump; it is a strictly controlled port of entry. The wrong pattern here, nightly batch when the consumer needs sub-minute, or a stream when a file would do, poisons every downstream decision.
+
+Versatile connectivity. APIs, streams, files, databases, whatever the upstream speaks.
+
+Adaptive mechanisms. Batch, streaming, or CDC, chosen by latency and volume, not habit.
+
+Gatekeeping. Schema validation at entry prevents downstream contamination.
+
+The Engine, Storage & Processing
+
+Storage is tiered and purpose-built. Each layer answers a different question: what actually happened, what does it mean, and how do we serve it fast?
+
+Landing zone (Raw). Immutable object storage, S3, GCS, ADLS, capturing ground truth.
+
+Engine room (Processed). Open table formats, Delta Lake, Iceberg, BigQuery, for reliable, ACID processing.
+
+The edge (Serving). Materialized views, feature stores, caching layers for low-latency retrieval.
+
+The Value Multiplier, Business Logic
+
+Transformations are not dark magic maintained by one senior engineer's memory. They are transparent, version-controlled code, reviewed like any other.
+
+Deterministic rules. Repeatable pipelines in dbt, Spark, or Flink.
+
+Contextual enrichment. Joins, lookups, and reference data integration that elevate raw events into business facts.
+
+Actionable metrics. Clear aggregations and derived metrics, the output is decisions, not rows.
+
+The Ironclad Contract, Quality Assurance
+
+Trust is earned through automated, relentless verification. We do not hope for data quality; we enforce it, and we fail loudly when it breaks.
+
+Strict contracts. Expected fields, types, nullability, declared and monitored.
+
+Automated enforcement. Continuous checks via Great Expectations, Soda, or dbt tests.
+
+Operational readiness. Freshness SLOs and volume-pattern monitoring.
+
+Proactive defense. Anomaly and drift detection catch silent failures before consumers do.
+
+The Interface, Output & Delivery
+
+A product is only as good as its usability. Different consumers want different surfaces, serve them where they are, not where the platform team finds it convenient.
+
+Analytical access. SQL endpoints and tables optimized for BI.
+
+Application access. REST and GraphQL APIs for software integration.
+
+Real-time access. Kafka, Pub/Sub, or equivalent for event-driven consumers.
+
+Bulk access. Parquet, CSV, or file exports for batch workloads.
+
+The Trust Layer, Governance
+
+Governance is not bureaucracy. Done right, it is the framework that lets a domain team ship a new data product next Thursday without a cross-org security review each time.
+
+Explicit terms. Consumption governed by Data Sharing Agreements (DSAs).
+
+Guaranteed performance. SLAs for uptime, latency, and freshness, published and measured.
+
+Secure by design. Granular access control and automatic PII tagging.
+
+Total transparency. End-to-end lineage and comprehensive audit logs.
+
+Discoverability. Every product registered in a central catalog, findable via the enterprise marketplace.

@@ -1,0 +1,11 @@
+Who pays the tax, and when.
+
+Velocity, how fast can we write code?, is the wrong metric for a leader. The right one is total cost of ownership, and in the AI era a large share of that cost is dictated by the token economy. Reframed as capital versus operating expenditure, the two ends of the spectrum invert each other.
+
+Vibe coding is low CapEx, high OpEx. The barrier to entry is essentially zero, a subscription and a few prompts. But the operating cost compounds: a token burn rate from dumping unstructured files into context and repeatedly asking the model to fix its own unverified mistakes (an expensive prompting loop with low first-pass success); a maintenance tax when a bug surfaces six months later in code nobody structured; and security remediation, where rapid generation without an evaluation harness means rapid generation of vulnerabilities.
+
+Agentic engineering is high CapEx, low OpEx. You pay upfront, designing API schemas, building deterministic test suites, structuring the agent's context, before a line of production code is generated. In return, the marginal cost of shipping and maintaining each feature drops, because the agent operates inside a governed factory and its output is structurally sound, pre-tested, and aligned with your standards.
+
+This reframes context engineering as a financial lever, not just a craft skill. LLMs charge for every token you send; passing an entire 100,000-token repository into every prompt is financially unviable at scale. A dense, high-signal payload, a precise rule file plus architectural guardrails, raises first-pass success and kills the trial-and-error loops that quietly drain the budget.
+
+The same logic powers intelligent model routing. Vibe coding leans on a single frontier model for everything, paying premium token prices to fix a typo or generate a basic unit test. A well-designed factory routes complex work (requirements, architecture, initial implementation) to large models, and deterministic, low-complexity work (test generation, code review, CI monitoring) to smaller, cheaper, faster ones. Orchestrating a multi-model ecosystem holds output quality while systematically driving operating cost down.

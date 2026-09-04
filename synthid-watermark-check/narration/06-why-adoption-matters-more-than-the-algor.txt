@@ -1,0 +1,11 @@
+Why adoption matters more than the algorithm..
+
+A watermark scheme is only as useful as the share of content that carries it. On that front the figures are the real headline. In his I/O 2026 keynote, Sundar Pichai said SynthID has now watermarked over 100 billion images and videos, plus 60,000 years' worth of audio. That is the kind of volume that makes a positive result mean something.
+
+The adoption list is the part I'd watch. At I/O 2026, Google named OpenAI, Kakao, and ElevenLabs as adopting SynthID too. If the model that generated an image wrote a SynthID mark regardless of vendor, the check stops being a Google-only feature and starts being closer to an industry baseline. A watermark that only one lab honors is a marketing line. A watermark that several major labs write is infrastructure.
+
+100B+ images and videos watermarked, plus 60,000 years of audio, per Google.
+
+At I/O 2026: Content Credentials and SynthID verification expanding to Search and Chrome.
+
+Adopters named at I/O: OpenAI, Kakao, ElevenLabs.

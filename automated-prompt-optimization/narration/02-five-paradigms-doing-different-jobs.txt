@@ -1,0 +1,5 @@
+Five paradigms, doing different jobs.
+
+The literature blurs together because everyone calls everything "automatic prompt optimization." It helps to separate by what is actually being optimized and where the loop runs:
+
+These are stacked, not substitutable. A mature setup ends up using a declarative compiler for the pipeline, an evolutionary or gradient method for hard sub-prompts, an ACE-style playbook for long-running agents, and a platform for governance and lifecycle. Every framework below picks a different layer of that stack.

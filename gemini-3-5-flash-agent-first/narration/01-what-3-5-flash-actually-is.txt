@@ -1,0 +1,7 @@
+What 3.5 Flash actually is.
+
+Gemini 3.5 Flash is the first model in the 3.5 family, and Google has not been subtle about the framing. It is positioned as "frontier intelligence with action", in practice, the strongest agentic and coding model Google has shipped, at output speeds around 4× other frontier-class models. It is already the default in the Gemini app and in AI Mode in Search, and it is the engine behind Antigravity, the Gemini Enterprise Agent Platform, and the upcoming personal agent ("Gemini Spark").
+
+Two things make this release a real reset rather than a routine point update. First, the model card and independent measurements both show Flash beating the previous-generation Pro on the benchmarks that map to real builder workflows, Terminal-Bench 2.1, MCP Atlas, OSWorld-Verified, GDPval-AA, SWE-Bench Pro. Second, every product announcement around it talks about agents and long-horizon workflows, not chatbots. Google's own demos pitch 3.5 Flash as something that can refactor an entire legacy codebase to Next.js or stand up an OS inside Antigravity, with sub-agents fanning out underneath it.
+
+If you were used to thinking of Flash as the cheap, fast option you reach for when you do not need Pro, the rest of this post is mostly about how aggressively that mental model is now wrong.

@@ -1,0 +1,19 @@
+The Responsibility Chain.
+
+The kernel doc establishes a clear sequence that must occur before any AI-assisted contribution can be submitted. The AI is a tool, the human is the author, reviewer, certifier, and owner.
+
+The AI tool generates, suggests, or significantly modifies code. At this point, the work has no legal status, it is raw output from a tool, not a certifiable contribution.
+
+The human developer reviews all AI-generated code. Not a spot-check, a thorough review. Correctness, style, security, kernel-subsystem conventions. The reviewer is now accountable for what they read and accepted.
+
+Ensure the AI-generated code is GPL-2.0-only compatible (for the kernel). No permissive-license fragments, no copyleft traps, correct SPDX identifiers. AI tools are trained on vast corpora, provenance is not guaranteed.
+
+Add the Assisted-by Tag
+
+Document which AI agent and model version were used, and which specialized analysis tools were involved. This creates a transparent audit trail of AI involvement without obscuring human authorship.
+
+Only after review and verification does the human add their Signed-off-by. This is the legal certification, your name, your responsibility, your email address on the record forever.
+
+Submit, and Own All Consequences
+
+The contribution is submitted. From this point forward, the human is the legally responsible author. Bugs, regressions, security issues, license violations, they are yours. AI is not a defense.

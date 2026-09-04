@@ -1,0 +1,7 @@
+If you only remember three things.
+
+Contextual retrieval is good packaging of known parts: contextualized embeddings + hybrid search + rerank, made cheap by prompt caching. The packaging is real value; it is not a research breakthrough.
+
+The reported gains are real but bounded. Up to ~67% fewer failed retrievals on Anthropic's evals. Your corpus, query distribution, and evaluation method decide whether you see anywhere near that.
+
+It does not fix the systemic problems, context blindness, agentic reasoning, structured grounding, and content drift. Build evals and query reformulation first; layer contextual retrieval on top, not in place.

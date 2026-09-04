@@ -1,0 +1,17 @@
+What to Actually Install.
+
+The ecosystem has 25+ high-traction tools. This is the prioritized installation sequence for a professional team, ordered by impact-per-effort, not by category.
+
+Week 1, code-review-graph (L1). Install the MCP server, point it at your repo, and watch token costs on code reviews drop immediately. Sub-2 second incremental reindexing means it stays current without manual effort. This is the highest-ROI first install.
+
+Week 1, Semgrep (L4). Add to CI before you trust agents to write security-relevant code. Static analysis catches a class of issues LLM review misses, they're complementary, not competitive.
+
+Week 2, Anthropic official skills + Superpowers (L2). Install the official skills standard first. Add Superpowers for any feature work involving more than two files. Skip the full pipeline for bug fixes and one-liners, the overhead isn't worth it at that scale.
+
+Week 2, Caveman (L2). Install alongside Superpowers. Use in review and commit modes by default. The 75% token reduction on output means faster responses, lower cost, and, counterintuitively, often better answers due to forced concision.
+
+Week 3, Engram or agentmemory (L3). Start with Engram for zero-friction persistent memory (single binary). Migrate to Mem0 once your team has more than two agents and needs scoped retrieval. Don't skip this layer, session amnesia is a silent productivity drain that compounds over time.
+
+Month 2, PR-Agent (L4). Add automated PR review once your context graph and skills are stable. Review quality correlates strongly with context quality, get L1 and L2 right first, then automate the review layer.
+
+Later, OpenHands or LangGraph (L5). Orchestration is the multiplier, but it only multiplies what you've built on the layers below it. Teams that skip to orchestration without solid context, skills, and memory usually end up spending more time debugging agent coordination than they save in parallelism.

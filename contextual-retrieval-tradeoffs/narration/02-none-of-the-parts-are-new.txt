@@ -1,0 +1,13 @@
+None of the parts are new.
+
+If you already run hybrid retrieval with LLM-augmented chunks, you have most of this. Anthropic's contribution is taking three known ideas, prescribing a specific composition, and pricing it down. That is genuinely useful, but it is packaging, not invention.
+
+Generate a hypothetical answer with an LLM, embed that, retrieve against it. Anthropic explicitly compares against HyDE and reports it helped less than contextual chunking on their evals.
+
+Generate a title, summary, or tags per chunk and index alongside the raw text. Pluralsight, Datacamp, and others have walkthroughs going back years on the noise-vs-precision balance.
+
+Vector DB + BM25 + cross-encoder reranker is the default stack in Elastic, OpenSearch, Pinecone, and Bedrock Knowledge Bases. AWS now ships a contextual-retrieval variant on Bedrock with the same telemetry.
+
+Open-source templates implementing Anthropic-style chunk situating already exist. Zep, Pinecone, and others publish similar pipelines in their cookbooks.
+
+Prompt caching applied to per-chunk LLM augmentation. Without it, "contextualize every chunk against the full document" would be cost-prohibitive on most enterprise corpora. With it, ingestion lands at roughly $1, 3 per million tokens. That is the load-bearing innovation, and it is platform-specific.

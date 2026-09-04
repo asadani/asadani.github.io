@@ -1,0 +1,21 @@
+Engineering scaffolding that resists surrender.
+
+Personal heuristics matter. They also fail at scale. The harder version of this problem is structural, building workflows, harnesses, and team norms that make surrender harder to fall into without thinking. A short list of moves that hold up:
+
+Every agent-completed task should terminate in concrete evidence: a test that runs, a screenshot, a log, a runtime trace, a reviewer signoff. "It looks done" is the surrender-friendly exit. "Here is the evidence it works" is the surrender-resistant one.
+
+Agent Skills pair common excuses for skipping a workflow step with a written rebuttal. "Too simple to need a spec" → "Acceptance criteria still apply." You're pre-writing the rebuttal to the rationalization the model, or your tired Friday-afternoon self, hasn't yet produced.
+
+Unit of review = unit of comprehension
+
+Surrender scales with size. A 50-line change you can actually read; a 600-line change you cannot. Google's ~100-line PR norm exists for human reasons but it works against AI surrender for the same reasons. Make the unit small enough to actually comprehend.
+
+When you're new to a library or a system, ask the agent to explain before you ask it to generate. The same tool, used to interrogate rather than to produce, builds rather than erodes your mental model. The data on this is unambiguous and the cost of switching modes is trivial.
+
+The arXiv "Cognitive Agency Surrender" paper proposes deliberately introducing moments of resistance to interrupt heuristic acceptance. In engineering terms: a required design doc before generation, a confirmation step before merge, a checklist before deploy. Friction has a bad reputation in productivity discourse, it's also exactly what stands between offloading and surrender.
+
+Solo time at the keyboard
+
+Write some code without the agent every week. Not as a moral exercise; as a calibration exercise. The day you can't comfortably build something simple without AI assistance is the day the offloading became surrender and you didn't notice.
+
+The moral-surrender-resistant analogue of these structural moves is a written, dated decision record that contains the trade-offs you actually evaluated, the constraints specific to your environment, and the option you rejected. If you can't write the rejected option's case in your own words, you didn't make the decision, you ratified the model's.

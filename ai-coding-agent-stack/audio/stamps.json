@@ -1,0 +1,38 @@
+{
+ "00-introduction": {
+  "k": "23e77c3178d00767",
+  "d": 21.5
+ },
+ "01-why-unaugmented-agents-underperform": {
+  "k": "498ef51e1fa6e53e",
+  "d": 87.8
+ },
+ "02-context-graphs-the-infrastructure-primit": {
+  "k": "731e6d20a6cecc9f",
+  "d": 118.1
+ },
+ "03-skills-and-methodology-the-process-layer": {
+  "k": "aec8102ef556f243",
+  "d": 71.0
+ },
+ "04-memory-layers-solving-session-amnesia": {
+  "k": "60ed9f1833605f21",
+  "d": 170.3
+ },
+ "05-code-review-and-ci-cd-the-quality-layer": {
+  "k": "7cba28b5317b6bc5",
+  "d": 159.6
+ },
+ "06-orchestration-multi-agent-coordination-a": {
+  "k": "1d9e1f73889603cd",
+  "d": 155.6
+ },
+ "07-what-to-actually-install": {
+  "k": "d5383e779a280e52",
+  "d": 139.5
+ },
+ "08-what-the-ecosystem-tells-us-about-where-": {
+  "k": "d41634c16c46ece6",
+  "d": 86.3
+ }
+}

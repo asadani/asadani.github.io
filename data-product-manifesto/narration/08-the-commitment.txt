@@ -1,0 +1,5 @@
+The commitment.
+
+Treating data as a product is not an architectural style choice. It is an operational commitment: to owners, to contracts, to SLAs, and to the consumers who depend on the output. The seven pillars are what that commitment looks like in concrete terms.
+
+Pick a single high-value dataset in your organization. Give it an owner. Give it a contract file. Give it a published SLA. Wire up automated quality. Register it in the catalog. That one product, done rigorously, will do more for your data culture than a three-year platform strategy deck. Start there.

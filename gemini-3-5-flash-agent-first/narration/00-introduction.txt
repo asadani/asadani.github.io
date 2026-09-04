@@ -1,0 +1,5 @@
+Introduction.
+
+Google is quietly changing what "Flash" means.
+
+Gemini 3.5 Flash beats Gemini 3.1 Pro on the benchmarks builders actually care about, ships straight to GA across Google's whole surface area, and quietly triples its own per-token cost. This is what Google's first agent-first frontier model actually means for the people building on it.

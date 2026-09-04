@@ -1,0 +1,5 @@
+How an Error Return Is Actually a Shell Execution.
+
+The failure mode is counterintuitive: the error path is the attack path. Walk the flow node by node, each click reveals what happens at that step and why error-handling doesn't save you.
+
+The shape is identical in every SDK. TypeScript's StdioClientTransport, Java's StdioServerTransport, Rust's TokioChildProcess, all wrap an OS-level spawn of a caller-supplied command. Any component upstream that lets a model, a UI form, or a config file populate that string is an RCE primitive.

@@ -1,0 +1,5 @@
+What a data product contract looks like.
+
+The abstractions get real when you write them down. Below is a minimal but complete product descriptor, the kind of file that lives next to the dbt models, gets reviewed in PRs, and is consumed by the catalog, the quality runner, and the access layer alike. Everything a consumer needs to decide whether to depend on this product is in this one file.
+
+If a new consumer can read this one file and decide, without asking anyone, whether the product meets their needs, you have a data product. If they have to ping the owning team on Slack to find out the freshness, you have a pipeline.

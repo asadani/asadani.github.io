@@ -1,0 +1,9 @@
+Tune against memory, not the clock.
+
+Autoregressive decode is memory-bandwidth bound, so batching normally pays for itself. On a small card it pays, then abruptly stops paying, and the clock alone will not tell you where.
+
+Batch 4 exceeds 4 GB, spills over PCIe, and hands back everything it gained. The clock said batch 4 was fine. The memory counter said why it was not. On a card with headroom you would never notice; on this one it is the whole game.
+
+The same principle explains a much larger result. I first tried a 0.5B model whose weights took 3.21 GB, leaving 0.79 GB of headroom. It peaked at 4.30 GB against a 4.00 GB card and paged constantly, and its cost grew with utterance length: 11.6x real time at four seconds, 24.2x at eighteen. The replacement occupies 2.2 GB and holds a flat 4.5x regardless of length, because it never leaves the card.
+
+Half a gigabyte of weights was the difference between a twelve-hour job and a three-hour one. On this class of hardware, model size is not a quality dial. It is a cliff.

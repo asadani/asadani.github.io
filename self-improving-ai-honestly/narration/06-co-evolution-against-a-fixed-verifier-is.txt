@@ -1,0 +1,11 @@
+Co-evolution against a fixed verifier is fragile.
+
+When two optimizers chase the same fixed reward, they don't optimize toward truth. They optimize toward whatever joint configuration maximizes the reward on the seen distribution. The SIA paper formalises this in its limitations section, and the framing applies to the whole co-evolution class.
+
+"The harness finds scaffolds that are easy for the current policy to exploit; the weights train on data collected through a scaffold that will subsequently change. The joint fixed point is a Nash equilibrium between two optimisers blind to each other's update history, not a point that maximises V on out-of-distribution scaffolds or novel policies."
+
+Paraphrased: the equilibrium can look strong on the training verifier and collapse under any meaningful perturbation.
+
+This is not abstract. It is why a 14× speedup on a specific kernel shape can produce a 2× speedup or a regression on a slightly different shape. The system found a fixed point of a particular game. Change the game and the fixed point isn't there.
+
+Every "self-improving" demo should be read against the question: how well does this hold up out of distribution? Most papers do not answer that question. The ones that do answer it find the fall-off is steep.

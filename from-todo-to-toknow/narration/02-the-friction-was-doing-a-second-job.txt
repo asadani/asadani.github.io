@@ -1,0 +1,5 @@
+The friction was doing a second job.
+
+Understanding never used to be a task of its own. It was a side effect, forced on you at four points in the work whether you wanted it or not. You understood the problem because you had to decide what to build. You understood the design because you defended it at a whiteboard against someone who disagreed. You understood the implementation because you wrote it and hit every wall in person. Then you understood it once more when a reviewer made you justify it.
+
+The code was the residue of all that comprehension. AI removed the friction at each of those points, and that is the part people rightly celebrate. But the friction was quietly doing a second job nobody put on the invoice. It was forcing the thinking. Take away the struggle of producing the code and you also remove the thing that used to guarantee you understood it. Comprehension does not arrive for free just because the code compiled.

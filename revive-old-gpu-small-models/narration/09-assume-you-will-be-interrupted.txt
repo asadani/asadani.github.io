@@ -1,0 +1,13 @@
+Assume you will be interrupted.
+
+A three-hour unattended job on a laptop will be interrupted. Design for it rather than hoping.
+
+The highest-value change is caching every unit of work to disk as it completes, keyed on its inputs. Write to a temporary name and rename into place, so a crash mid-write cannot leave a truncated file that poisons the next run.
+
+That comment is a bug I shipped and hit immediately. np.save appends.npy to any path lacking it, so writing to chunk.part produced chunk.part.npy and the rename looked for a file that did not exist. It died on the first unit of an eighteen-file run. Passing an open handle keeps the name you chose.
+
+Across five interruptions, that cache cost me a few seconds of redone work in total.
+
+Then check the machine will not put itself to sleep. The idle timer counts user input, not GPU load, so a long render does not keep it awake. My hibernate default was three hours, which is exactly long enough to kill a three-hour job at the worst possible moment.
+
+And watch system RAM, not just VRAM. On a machine with 8.5 GB total, one render stalled for 53 minutes on work its neighbours did in two and a half, purely because memory ran short. If a unit of work takes disproportionately long, it is paging, not thinking.

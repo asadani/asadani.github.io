@@ -1,0 +1,5 @@
+Introduction.
+
+The Data Product Manifesto
+
+Data is no longer a byproduct of our systems &mdash; it is the product itself. Seven pillars for building sovereign, governed, and trustworthy data products that scale beyond the era of fragile pipelines and disconnected silos.

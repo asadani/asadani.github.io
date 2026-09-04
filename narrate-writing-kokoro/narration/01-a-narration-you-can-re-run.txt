@@ -1,0 +1,7 @@
+A narration you can re-run.
+
+I had eighteen chapters of written course material and wanted audio for it. The obvious route was a hosted TTS API. I tried the local option first because I wanted to know what I would be giving up.
+
+What I got back was not better audio. It was a different relationship with the audio. Kokoro renders 45 minutes of narration in about 24 minutes of laptop CPU, which makes a re-render a coffee break rather than a decision. I stopped treating the track as something generated once and started treating it as a build artifact. Fix a sentence, run it again, forget about it.
+
+That changes what you are willing to fix. When a render costs money and an hour of waiting, you live with the sentence that reads badly aloud. When it costs a coffee, you fix it.

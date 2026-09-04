@@ -1,0 +1,7 @@
+The screenshot loophole..
+
+If exiftool can't touch it, why does a screenshot defeat it? Because a screenshot is not an edit. It is a re-capture. The original signal gets rendered to a screen, recomposited by the operating system, and re-rasterized into a brand new file at a new resolution. Each of those steps adds noise, and the watermark is a faint signal trying to stay above a confidence threshold. Push it down far enough and the detector stops trusting it.
+
+The second gap is simpler. The mark is only there if a participating model put it there. An image painted by a model that never adopted SynthID has nothing to detect, and the check comes back clean. So a negative result means "no mark found," which is not the same as "a human made this." The cleanest way to evade the check is not to attack the watermark at all. It is to generate with a tool that never wrote one.
+
+A positive is strong. The signature is hard to forge, so a confident hit means a participating model almost certainly made it. A negative is weak. It only rules out the marked tools, and the marked tools are a shrinking slice of everything out there.

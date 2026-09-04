@@ -1,0 +1,11 @@
+The factory and its two modes.
+
+The mental model that ties this together is the factory. A factory manager doesn't assemble each widget by hand; they design the assembly line and own quality control. In the new SDLC the developer's primary output is not code, it's the system that produces code: the specs, the agent configurations, the test suites, the feedback loops, the guardrails. Within that frame, the work splits into two modes most developers move between in a single day.
+
+Real-time direction in the IDE, watching code appear, guiding with prompts and corrections. Natural for traditional engineers; preserves understanding at each step. Risk: if you personally direct every interaction, the throughput gain stays small.
+
+Higher abstraction: define goals, assign them to agents, review results without watching every line. Best for well-defined work, bug fixes, features against established patterns, migrations. Requires writing precise specs first, so it demands more upfront discipline, not less.
+
+Agents generate ~80% of a feature fast. The remaining 20%, edge cases, error handling, integration, the constraint you only understand because you know why it exists, is where production failures originate and where human judgment is non-negotiable.
+
+The orchestrator mode is where the leverage is, but it's also where the trap is. You cannot delegate an implementation you haven't specified. Treat AI tooling as a shortcut to avoid specification work and you produce, once again, prototypes that ship by accident.

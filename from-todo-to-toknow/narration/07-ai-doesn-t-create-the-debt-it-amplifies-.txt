@@ -1,0 +1,7 @@
+AI doesn't create the debt. It amplifies you..
+
+It would be easy to land this as an anti-AI piece, and it would be wrong. The best evidence we have says the tool is not the villain. It is a multiplier.
+
+Google's DORA program has the longest-running data on this. In 2024 it found that a 25% increase in AI adoption came with an estimated 7.2% drop in delivery stability and a smaller dip in throughput. The mechanism was not "AI writes garbage." It was batch size. AI makes it trivial to produce more change at once, and bigger changesets have always carried more risk.
+
+By 2025, with AI adoption near 90%, the picture matured. Throughput actually turned positive, so teams really do ship more now. But the negative relationship with stability held. DORA's reading is that AI amplifies whatever your organization already is. Teams with strong testing and fast feedback turn it into real gains. Teams with fragmented process and shallow understanding get their weaknesses magnified. The comprehension gap is the pre-existing condition. AI just turns up the volume on it.

@@ -1,0 +1,9 @@
+One Design Decision, Every Language, Every Downstream Library.
+
+On April 15, 2026, OX Security Research published what they called "the mother of all AI supply chains", a class of vulnerability baked into the reference implementation of the Model Context Protocol across every supported language. It is not a coding bug. It is the STDIO transport working exactly as specified.
+
+The mechanics are brutally simple. When an MCP client spins up a local STDIO server, it accepts a command string and hands it straight to the operating system. If the command successfully spins up an STDIO server, you get a protocol handle. If it fails, you get an error, and the command still runs. Sanitization, allowlisting, warning signals: none of it is part of the protocol. The vulnerability is that the configuration format is the execution format.
+
+OX confirmed live command execution on six production platforms, including LiteLLM, LangChain, and IBM's LangFlow. They also seeded a benign payload into 9 of 11 MCP marketplaces to prove malicious distribution trivially works. 150M+ SDK downloads; 7,000+ publicly exposed servers; up to 200K total vulnerable instances.
+
+Anthropic was contacted on January 7, 2026. Their response, repeated across multiple rounds: the behavior is "expected," their execution model is a "secure standard," and hardening is the implementer's job. No protocol-level patch. No deprecation path. They did not object to public disclosure.

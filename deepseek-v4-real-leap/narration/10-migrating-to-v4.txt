@@ -1,0 +1,5 @@
+Migrating to V4.
+
+The API is a model-name swap with one new parameter for thinking mode control. If you're using the OpenAI-compatible endpoint, the change is minimal.
+
+If you use think_max, ensure your context window is at least 384K tokens, the extended chain-of-thought can consume tens of thousands of tokens before reaching the final answer. Budget accordingly, or the reasoning will be truncated mid-chain.

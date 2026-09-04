@@ -1,0 +1,23 @@
+Five habits that hold the line.
+
+Calibration is a practice, not an attitude. The question to keep asking yourself is: am I forming an independent view of this answer, or just adopting the agent's view wholesale? Those are different psychological acts that look identical from the outside. The heuristics below force the difference back into view.
+
+1 · Construct an expectation before reading the output
+
+Before you run the agent on a non-trivial task, write down, even just in your head, what you think the answer should look like. Three lines or fifty. A queue or a direct call. Bug in this module or that one. When the agent's answer matches your expectation, you're calibrated. When it doesn't, you have a real choice to make: am I wrong, or is it? That choice is the thing surrender skips.
+
+2 · Read the diff like the AI didn't write it
+
+Pretend a junior engineer on your team submitted the PR. Would you merge it on the strength of "the tests pass"? You wouldn't. The same standard should apply when the author is a model. The job hasn't changed; the author has. "Seems right" is still not a review.
+
+3 · Ask the model to argue against itself
+
+Most models will produce a confident answer and then, when prompted, an equally confident counter-argument. That second pass is cheap and it breaks the borrowed-confidence effect. If you can't reason about which of the two answers is right, you've just located a place where you were about to surrender. This is the single highest-leverage anti-moral-surrender move.
+
+4 · Notice when you're tired
+
+Surrender is a fatigue phenomenon. The first PR of the day gets a real review; the fifth one gets a glance. Senior engineers who've thought about this all converge on some version of: stop letting the agent generate when you're too tired to evaluate. That self-knowledge is part of the job now.
+
+5 · Watch where the confidence is coming from
+
+If you find yourself defending a design choice in a meeting and you can't reconstruct why it was made, only that the agent suggested it and it seemed reasonable, you've inherited the model's confidence without any of the reasoning underneath it. That's a surrender artifact. Go back to the code and rebuild the why before the conversation continues.

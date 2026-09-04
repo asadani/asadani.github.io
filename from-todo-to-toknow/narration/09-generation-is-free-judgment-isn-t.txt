@@ -1,0 +1,5 @@
+Generation is free. Judgment isn't..
+
+There is a career implication buried in all of this. For twenty years the prized engineer was the one who could produce. Type faster, know more libraries, ship more volume. Generation was the bottleneck, so generation was the prize.
+
+Generation is no longer the bottleneck. It is close to free and close to infinite. When supply runs to infinity, value moves to whatever is now scarce, and what is scarce is the judgment to decide whether a given thousand lines should exist at all. The valuable engineer now is not the fastest typist. It is the person who can read what the model produced and tell you which fifty lines are load-bearing and which are confidently wrong.

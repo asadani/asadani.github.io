@@ -1,0 +1,51 @@
+How to Architect for Model Drift.
+
+The goal is not to eliminate LLM dependency, it is to make it a swappable dependency. Your competitive moat should be your data, your workflows, your evaluations, and your orchestration layer. Not your current best model. The following patterns make that concrete.
+
+1. Hard separation: business logic vs. LLM calls
+
+Keep all domain logic, state management, and workflow control in your own code. Talk to models through a thin, typed interface, LLMClient.generate(task, effort), not scattered direct SDK calls throughout the codebase. When a provider changes defaults or you need to swap vendors, the blast radius is one adapter, not every file that has an anthropic.messages.create() call.
+
+2. Own your routing, the WRP pattern
+
+Vendors already use Workload, Router, Pool architectures internally. Build the same thing on your side. Define a task taxonomy (reasoning-heavy, draft-fast, retrieval, etc.), implement a router with your own policies, and plug in a pool of providers. Your orchestrator decides routing based on your own eval data, not vendor marketing.
+
+Workload, Your task taxonomy
+
+Classify each task: complex reasoning, fast draft, retrieval synthesis, code generation. Keep this in config, not hardcoded. Your app asks for a capability, not a specific model.
+
+Router, Your policy, your eval data
+
+Route based on your own continuous evaluation scores, not vendor defaults. When provider A regresses on your golden evals, the router shifts traffic to provider B. Humans review the dashboard; the switch is automatic.
+
+Pool, Pluggable, diverse providers
+
+Maintain live connections to at least two strong providers (Anthropic, OpenAI, Google, or strong open-source on your own infra). Switching vendors is config + mapping work, not a refactor.
+
+3. Build agent harnesses that detect silent failures
+
+The AMD stop-phrase hook, a bash guard that fires when the agent says "I'll stop here" or "should I continue?", caught 173 violations in 17 days that would otherwise have silently produced incomplete work. Build equivalents into your harnesses:
+
+Stop-phrase detection: catch premature stopping and responsibility-dodging language, then force continuation or escalate.
+
+Read-before-edit enforcement: verify that the model has read a file before it is allowed to modify it.
+
+Action verification: cross-check claimed actions (test runs, builds, API calls) against actual tool logs.
+
+Loop detection: detect repeated edits to the same file without measurable progress.
+
+Cost-per-task alerts: flag sessions where token cost exceeds 3× the rolling average for that task type.
+
+4. Maintain golden evaluation suites, run them continuously
+
+For each critical workflow, maintain a set of representative prompts with expected behavior profiles. Track task success rate, tool-call counts, error types, and behavioral flags over time. Run on a schedule, daily at minimum, and publish trend dashboards your team can watch. Regressions show up in the trend before users file complaints.
+
+Unit tests verify code correctness. Golden evals verify model behavior on your workloads. They are not interchangeable. Passing CI says nothing about whether the model reasoning depth changed overnight.
+
+5. Control effort and reasoning configuration explicitly
+
+Never rely on provider defaults for critical workflows. Adaptive thinking and effort controls exist to let providers reduce compute cost on average workloads. For long-running engineering sessions, explicitly set effort to high or max, and consider disabling adaptive thinking to enforce a fixed reasoning budget per turn. Treat these as part of your deployment configuration, reviewed and versioned like any other service config.
+
+6. Data and vectors: own your layer
+
+Don't couple your entire RAG stack to a proprietary embedding format. Store raw text and metadata in your own systems. Use open embedding models or provider-agnostic formats where possible. Your retrieval corpus is a long-lived asset; the embedding model serving it should be swappable independently of your generation model.

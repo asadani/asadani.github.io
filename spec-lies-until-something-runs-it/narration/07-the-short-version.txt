@@ -1,0 +1,5 @@
+The short version.
+
+The sequence is the whole lesson. Template and skill were not enough. Template and skill and a real example worked, and cost more to run. Then I spent that cost back down by folding what the example exposed into the template and the skill, until the lean version was finally the honest one.
+
+So I no longer treat a worked example as a teaching aid or a crutch. It is the diff between what I wrote down and what reality does with it. Run it once, read the diff, and promote the difference into the spec. The spec you can finally trust is the one that has already eaten its examples.

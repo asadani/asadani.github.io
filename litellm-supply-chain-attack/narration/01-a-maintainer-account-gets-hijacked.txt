@@ -1,0 +1,7 @@
+A maintainer account gets hijacked.
+
+On March 24, 2026 at 10:39 UTC, litellm==1.82.7 was uploaded to PyPI. Thirteen minutes later, 1.82.8 followed. Neither version had a corresponding Git tag or GitHub release. Both were uploaded directly by the threat actor after compromising the PyPI account of krrishdholakia, the litellm maintainer, bypassing the project's entire CI/CD pipeline.
+
+The attack was only discovered by accident. A developer at FutureSearch installed an MCP plugin in Cursor IDE, and that plugin pulled in litellm as a transitive dependency. Within seconds the machine ran out of RAM and crashed, caused by an exponential fork bomb that was a bug in the malware itself. Without that bug, the attack would have been completely silent.
+
+A commit pushed to a forked repository by the attacker reads "teampcp owns BerriAI". The same group was behind the Trivy scanner attack on March 19 and the KICS compromise, and the exfiltrated archive filename, tpcp.tar.gz, is a direct reference to the group's name.

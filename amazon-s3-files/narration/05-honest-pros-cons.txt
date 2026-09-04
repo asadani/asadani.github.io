@@ -1,0 +1,27 @@
+Honest Pros & Cons.
+
+Eliminates data duplication between EFS and S3
+
+No DataSync or File Gateway to manage or pay for
+
+Large-file reads are free, massive win for ML workloads
+
+Single IAM policy governs both NFS and REST access
+
+Inherits S3's 11-nines durability automatically
+
+Compatible with S3 Intelligent-Tiering
+
+Architecture diagrams get dramatically simpler
+
+$0.06/GB write fee, expensive for heavy-write workloads
+
+Small-file read fees accumulate at scale
+
+Close-to-open consistency: last-writer-wins under concurrent writes
+
+Cold cache causes latency spike on first file access
+
+Deep recursive directory scans still slower than local NVMe
+
+May not fully replace FSx for Lustre at extreme HPC scale

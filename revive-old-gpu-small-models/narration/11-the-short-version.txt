@@ -1,0 +1,21 @@
+The short version.
+
+A 4 GB card from 2019 runs a 0.6B model at four times CPU speed. Getting there was almost entirely plumbing, and almost every failure was silent.
+
+If you have an old GPU sitting in a laptop, it is probably more capable than the last time you checked, because the models came down to meet it.
+
+Update the driver before you debug anything else.
+
+Check torch.version.cuda after every install that touches torch.
+
+Confirm your architecture is in get_arch_list(). Newer CUDA drops old cards.
+
+On Windows, put the CUDA DLL directories on PATH, not just add_dll_directory.
+
+Use bf16 on pre-Ampere hardware even though fp16 is native. Correctness first.
+
+Tune batch size against peak VRAM. The clock will mislead you.
+
+Read the Windows event log before theorising about a crash.
+
+Cache work to disk. Long local jobs get interrupted for reasons you cannot control.

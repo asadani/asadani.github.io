@@ -1,0 +1,7 @@
+What it will not do.
+
+Kokoro reads evenly and well. It does not act. There is no emotional range to direct, no way to say that this sentence is the punchline and that one is an aside. For explanatory writing that is fine, and arguably better than a narrator with opinions about your emphasis.
+
+It also will not sound like you. No setting gets you there. That needs a cloning model, a careful recording, and roughly twenty times the compute, which is part two.
+
+And it is a synthetic voice, which some readers clock immediately. I decided a listenable synthetic narration beats no narration, but that is a judgment about your audience rather than a technical fact.

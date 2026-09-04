@@ -1,0 +1,5 @@
+Introduction.
+
+The Mother of All AI Supply Chains: MCP's By-Design RCE
+
+OX Security disclosed a systemic, by-design flaw in Anthropic's Model Context Protocol: passing a configuration string to the STDIO transport is passing a shell command. Anthropic's response was one word, expected.

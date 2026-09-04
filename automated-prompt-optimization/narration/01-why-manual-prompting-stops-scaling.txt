@@ -1,0 +1,19 @@
+Why manual prompting stops scaling.
+
+For single-turn classification or one-shot generation, manual prompt engineering still works. Frameworks like CO-STAR, RISEN, and KERNEL give you a clean structure for instructions, and zero-shot, few-shot, chain-of-thought, and self-consistency prompting cover most of the obvious tricks.
+
+But the moment a prompt sits inside a compound system, retrieval, tool use, multi-step reasoning, or an agent loop, it stops behaving like a parameter you can tune by reading the output. Practitioners now classify pipeline failures into more than a dozen distinct, recurring modes. Five matter most:
+
+The retriever returns the right document, but the model stitches its answer from an irrelevant sentence inside it, or from a neighbor chunk with merely-similar wording.
+
+The model commits to an early premise and rides it past contradicting evidence to preserve internal consistency. Confidence rises while accuracy drops.
+
+Constraints buried in the middle of long prompts get under-weighted. Format and safety rules get violated erratically, not because the model "forgot" them but because attention never landed on them.
+
+A term defined precisely in step one quietly broadens by step four. Final outputs are internally consistent but no longer anchored to the original definitions.
+
+Long-running agents quietly clobber their own scratchpad, losing track of completed sub-goals or already-verified facts, then re-doing or contradicting them.
+
+Long prompts trigger attention collapse. Short prompts drop the constraints you actually need. There is no universal sweet spot, only one calibrated to your data.
+
+None of these are fixed by better wording. They are properties of how transformers process long, structured contexts under uncertainty, and they show up the moment you compose more than one LLM call. That is the real reason the field has shifted from prompt engineering to prompt optimization: the search problem is too high-dimensional and too non-stationary for human intuition to win.

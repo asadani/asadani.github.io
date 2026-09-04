@@ -1,0 +1,7 @@
+Then I fed the lessons back.
+
+Paying that tax on every future post is not a strategy. It works, but it is rent, and you keep paying it. The better move arrived once I stopped treating the example as a permanent crutch and started reading it as a report on what the spec had been missing all along.
+
+So I went back and changed the spec itself. The list rule that broke under a bold lead-in lost its flexbox and got a plain gutter, so the next post inherits the fix instead of rediscovering the bug. I added a note to the table component spelling out that explicit column widths need fixed layout or the browser throws them away. The assembly rules that had been living only in my head, and in the sample, went into the design doc in writing. And the procedure stopped asking me questions that a real example had already answered.
+
+Each of those moved a piece of knowledge out of the example and into the template and the skill. The spec got heavier, in the right way. The example got less necessary, not because I stopped trusting it, but because it had already done its work and I had finally written down what it taught me. The cheap path got cheaper precisely because the expensive path had run first.

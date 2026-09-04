@@ -1,0 +1,21 @@
+Context engineering is not prompt engineering.
+
+Prompt engineering asks: how do I phrase this question to get a smarter answer from the model? It optimizes a single turn. Context engineering asks a different question: what would a new team member need to know to contribute correctly to this project, and how do I encode that in a form the AI can use? It optimizes the whole session, and when context persists across sessions, every future session too.
+
+Six kinds of context matter in any agentic workflow:
+
+Instructions, the agent's role, constraints, and operating bounds.
+
+Knowledge, retrieved docs, architecture diagrams, domain-specific data.
+
+Memory, short-term session state (what just happened) and long-term project state (what the project is).
+
+Examples, few-shot patterns from your own codebase, not generic snippets from the internet.
+
+Tools, precise definitions of the APIs, scripts, and services the agent may call.
+
+Guardrails, the hard constraints it cannot cross.
+
+The practical heuristic, hard-won: a rule should be short, specific, and paired with a concrete example of the behaviour you want. Rule files that are too broad don't help; rule files too verbose don't fit efficiently. And there's a cost dimension most people miss, the distinction between static and dynamic context is an architectural decision, not a detail.
+
+Static context (rule files, system instructions) is always loaded: every token is paid on every model call, relevant or not. Dynamic context (tool results, retrieved docs, windowed history) loads on demand and costs only when the information is actually needed. The most effective pattern for managing the dynamic side is portable, structured packages of procedural knowledge, "skills", that the agent loads only when a task matches: lightweight metadata at startup, full instructions on match, deep reference material only when explicitly needed.

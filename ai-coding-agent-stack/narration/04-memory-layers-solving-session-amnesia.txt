@@ -1,0 +1,13 @@
+Memory Layers: Solving Session Amnesia.
+
+Context loss across sessions is the most under-discussed pain point in agent workflows. The first session you debug a tricky async race condition, discover the right Stripe webhook signature validation pattern, or figure out that your team's monorepo requires a specific import path convention, all of that evaporates when the session ends. The next session starts cold and re-discovers everything from scratch.
+
+Memory layers solve this at different levels of sophistication, from simple key-value stores to full temporal knowledge graphs with bi-temporal invalidation.
+
+Mem0 is the category benchmark. Its "AUDN" cycle, Add/Update/Delete/No-op, uses an LLM to automatically extract, deduplicate, and consolidate memories from conversations. It scored +26% on the LOCOMO benchmark versus OpenAI's memory implementation. For a senior engineer, Mem0's hybrid architecture (Pinecone/Qdrant for vectors, Neo4j for relationships, scoped retrieval by user/session/agent) is the reference design for how memory systems should work.
+
+agentmemory is the sleeper pick for Claude Code specifically. It hooks into the PostToolUse lifecycle to silently capture every action the agent takes, compresses observations into structured facts with quality scoring, and injects relevant context at the start of each session. The hybrid BM25 + vector search with session-diversified Reciprocal Rank Fusion is architecturally elegant for a ~290-star project.
+
+MemPalace applies the classical method of loci to agent memory, knowledge is stored in spatially-organized "rooms" rather than a flat vector index. This means retrieval is context-anchored: the agent recalls facts in relation to where and when they were stored, not just semantic similarity. Newer project, but the conceptual model is well-suited to agents that traverse the same codebase regions repeatedly. See official getting-started guide and GitHub repo.
+
+Start with Engram for immediate zero-friction persistent memory (single binary, no Docker). Upgrade to Mem0 once your team is doing serious production agent work and needs scoped retrieval across agents and sessions. Add MemPalace if your agents repeatedly navigate the same code paths and would benefit from spatial, context-anchored recall. Only add Graphiti if you have changing facts or need audit trails of what the agent believed at specific points in time.

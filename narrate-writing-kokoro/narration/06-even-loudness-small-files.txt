@@ -1,0 +1,5 @@
+Even loudness, small files.
+
+Chapters rendered separately drift in loudness. Normalise each to the same peak. A listener reaching for the volume between chapters notices. A listener who never has to notices nothing, which is the goal.
+
+That lands around 1 MB per two and a half minutes of speech. Small enough to serve from a static site without thinking about it.

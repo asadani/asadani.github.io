@@ -1,0 +1,7 @@
+Coding was never the bottleneck.
+
+For decades the industry quietly believed that writing code was the slow part of building software. It wasn't. Give an experienced engineer a clear specification and the implementation was usually the straightforward part, testing and deployment had working automation years ago. The drag lived upstream: deciding what to build, agreeing on requirements, and surviving the design rituals where weeks vanished into workshops and "back to the drawing board." Mohamed Hassan puts it bluntly: the hardest part of building software was never the coding, it was deciding what to build in the first place.
+
+This matters because it tells you exactly which constraint generative AI relaxed. AI didn't just make implementation faster, it hit the front of the lifecycle, the part that was always slowest, by turning rough goals into draft requirements, user flows, and a testable prototype in an afternoon. The output stops being another document nobody reads and becomes something users can touch. The feedback loop tightens. You learn faster.
+
+But relaxing the upstream constraint exposes a new one. Once an agent can produce roughly 80% of a feature in minutes, the scarce resource is no longer typing speed or algorithmic recall. It is judgment: knowing what to ask for, and knowing whether what came back is actually right. The syntax tax, the price you paid to compress human intent into something a parser would accept, is collapsing. A verification tax took its place, and the rest of this piece is about how to pay it without going broke.

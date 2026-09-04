@@ -1,0 +1,5 @@
+Introduction.
+
+Breaking the Object&#8209;File Barrier
+
+Native NFS&nbsp;v4.1 access directly on S3 buckets, backed by EFS-powered caching, erases the decade-long divide between object storage and high-performance file systems.

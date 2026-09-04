@@ -1,0 +1,9 @@
+What "self-improving" actually means today.
+
+Read across all five categories and one thing is constant. The system improves itself with respect to a target someone else defined.
+
+That someone is almost always a paper author. The verifier (the function that tells the system what's good) is hand-written. The dataset is hand-picked. The success metric is hand-chosen. The reward signal is engineered by a human.
+
+The system is not figuring out what to improve. It is figuring out how to improve a thing humans pointed it at.
+
+That distinction is the whole gap between "self-improving in a technical sense" and "self-improving in the AGI sense." The phrase is doing very different work in each. Engineers reading the research and executives reading the press release are usually working with the second interpretation while the paper is delivering the first.

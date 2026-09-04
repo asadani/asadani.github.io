@@ -1,0 +1,7 @@
+If you only remember three things.
+
+Flash is the new product floor, not the cheap tier. Google reshuffled which tier does what. 3.5 Flash beats 3.1 Pro on agentic and coding work, and the next surprise will be 3.5 Pro reclaiming the top of the reasoning ladder.
+
+The roadmap is agents, and the price reflects it. 3× input and 3× output cost vs 3 Flash, multi-hour sessions as a first-class mode, an explicit Pro-orchestrates / Flash-executes / Lite-fans-out topology. If you are not running agents, you are subsidizing the people who are.
+
+Migrations are now an eval problem, not a config change. 2.5 is on a clock through October 2026, and the recommended replacement for 2.5 Flash is a more expensive, more verbose model. Shadow-replay, re-cost, and re-baseline before you flip the switch.

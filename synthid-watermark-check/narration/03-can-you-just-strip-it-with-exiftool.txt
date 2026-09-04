@@ -1,0 +1,7 @@
+Can you just strip it with exiftool?.
+
+This is the first thing an engineer reaches for, and the answer reveals the whole design. exiftool edits metadata. SynthID does not live in metadata. So the obvious attack misses the target.
+
+That is the cleaner way to see the landscape. There are three separate layers, and they fail to different attacks.
+
+Notice the trade. SynthID is hard to strip because it is baked into the signal, but for the same reason it carries almost no information. It cannot tell you who, when, or on which model. C2PA can carry all of that, because it is a signed manifest, but a signed manifest is easy to drop. You strip C2PA by deleting it and the file is silently unsigned. The robust layer is dumb, and the rich layer is fragile. That tension is the real story.

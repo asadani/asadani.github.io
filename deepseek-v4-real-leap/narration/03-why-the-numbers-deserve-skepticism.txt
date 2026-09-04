@@ -1,0 +1,9 @@
+Why the Numbers Deserve Skepticism.
+
+The AI benchmark ecosystem has a saturation problem. HumanEval, the de facto coding eval for years, now clusters every frontier model between 88, 92%. At that level, the differences are within noise, and the comparisons become marketing rather than measurement.
+
+DeepSeek's benchmark comparisons are curated. They foreground wins (coding, agentic, long context) and omit losses (SimpleQA, MMLU-Pro, factual recall). That's not deception, every lab does this, but reading the headline numbers without the full table gives you a distorted picture.
+
+The more reliable signal comes from task-grounded evals: SWE-bench Verified tests real GitHub issues, not synthetic problems. LiveCodeBench uses competitive programming with time-controlled data cutoffs. Codeforces Rating is a live arena that's extremely hard to overfit. On all three, V4 performs. The skepticism should be applied to the cherry-picked leaderboard presentation, not the underlying results on harder evals.
+
+Multiple frontier models now score 90%+ on HumanEval, a benchmark of synthetic, single-function Python problems. This tells you nothing about which model will succeed on a 200-file TypeScript refactor. The field needs SWE-bench primacy, not HumanEval dominance.

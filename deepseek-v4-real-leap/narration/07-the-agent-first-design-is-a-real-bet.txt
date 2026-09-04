@@ -1,0 +1,21 @@
+The Agent-First Design Is a Real Bet.
+
+V4 is the first open model that was explicitly designed for agentic workflows from the architecture level up, not retrofitted with an agent wrapper afterward. The 1M context default, the hybrid attention that makes that context cheap to serve, the native integration with Claude Code and OpenClaw, the built-in thinking modes: these are coherent choices, not a feature checklist.
+
+The Think / Think-High / Think-Max triad gives developers explicit control over reasoning depth at inference time. Non-Think mode returns fast results for routine tasks; Think-Max enables extended chain-of-thought for problems at the model's reasoning boundary (requiring at least a 384K token context window). That's a practical API design, not a marketing tier.
+
+1M Context by Default
+
+Not a premium add-on. Not a paid tier. The standard context length, at 10% of V3.2's KV cache cost. Entire codebases fit in a single prompt.
+
+Three depths: Non-Think for speed, Think-High for complex reasoning, Think-Max for boundary exploration. Callers control the compute budget explicitly.
+
+MIT License · FP4 Experts
+
+The most capable open-weight model ever released, with a permissive license and novel FP4 MoE quantization that makes self-hosting economically viable for teams with H100 access.
+
+The Flash Model Is Underrated
+
+DeepSeek-V4-Flash (284B total / 13B active) is the quiet story in the V4 release. At 13B active parameters, it's comparable in inference cost to a mid-sized dense model, but it nearly matches the Pro variant on simple agentic tasks. For pipelines that chain dozens of agent steps, the economics of Flash are compelling: you're paying for a 13B model and getting something that routes, plans, and executes at near-Pro quality on structured tasks.
+
+Yes, it's still too large for a consumer GPU. But for teams serving these models in the cloud, Flash closes the gap between "bleeding edge" and "affordable at scale."

@@ -1,0 +1,25 @@
+Why Quality Degrades Before Anyone Notices.
+
+AI shrinkflation is uniquely difficult to detect because the failure modes don't map to anything in your existing observability stack. HTTP status codes stay green. Latency may actually improve, less thinking means faster responses. Test suites pass because regressions are probabilistic and often task-specific.
+
+The signals are buried in behavior, not infrastructure
+
+The AMD report found the regression through behavioral instrumentation, read-to-edit ratios, stop-phrase hooks, user interrupt rates, word-frequency shifts across 500,000 words of prompts. None of those signals appear in a standard APM dashboard. You have to build them deliberately, and you have to know what "normal" looks like to recognize deviation.
+
+No exception is thrown when the model stops reasoning deeply. Outputs remain fluent and confident.
+
+Logging changes (like Anthropic's thinking redaction) can hide the signals you'd use to diagnose it.
+
+Benchmark scores may improve even as your specific workload gets worse, they measure different things.
+
+The regression may be load-sensitive or time-of-day-sensitive, making it hard to reproduce on demand.
+
+Model names and API versions stay the same. There is no artifact pinning analogous to a package lock file.
+
+The organizational compounding effect
+
+When an LLM used in a coding or analysis workflow degrades, the first response from engineers is to work around it: more prompting, more supervision, more manual correction. This increases cognitive load across the team gradually. No single moment triggers an incident review. By the time someone builds the case that the model is the problem, not the prompts, not the codebase, not the team, weeks of degraded productivity have already accumulated.
+
+This is the shrinkflation trap: the cost is real, diffuse, and nearly impossible to attribute without deliberate instrumentation built in advance.
+
+Regressions in long-running agentic workflows are the worst category. The agent runs for minutes or hours. Failure manifests as a bad output at the end, not a crash mid-run. Root-causing requires replaying the full session log, which most teams don't have, because they didn't know to capture it.

@@ -1,0 +1,7 @@
+Where 3.5 Flash actually wins.
+
+The headline numbers are clustered in agentic and tool-use evals. Pulling the four most-cited rows together makes the pattern obvious: 3.5 Flash beats 3 Flash by a large margin, and it beats 3.1 Pro by a smaller but consistent one on these axes.
+
+Three things to read out of that table. The agentic gap between Flash and Pro is large and consistent, these are not noisy wins. The multimodal numbers are strong but incremental rather than transformative. And on long-context retrieval at 128k, Flash still trails Pro, which is exactly the seam that a future 3.5 Pro is presumably being shipped to close.
+
+If your workload is "drive a terminal, click around a browser, call a chain of tools", pick 3.5 Flash. If your workload is "read a 300-page contract and answer questions across it", keep your 3.1 Pro deployment, and re-evaluate when 3.5 Pro lands.

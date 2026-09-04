@@ -1,0 +1,7 @@
+The Human Is Not Optional.
+
+The Linux kernel's AI policy is deceptively simple: use whatever tools help you write better code, but stand behind what you submit. The Signed-off-by is not a formality, it is the legal foundation of open-source contribution, and it requires a human being who can be held accountable.
+
+For the agent AI world, this is a clarifying constraint. The question was never whether AI could write good kernel code, clearly it can help. The question was always who owns the output. The kernel community has answered: you do. Every time. Fully. The AI is a power tool, not a coauthor.
+
+As AI agents become more autonomous and capable, this human-accountability requirement becomes more important, not less. The more an AI can do unsupervised, the more critical it is that a human with full understanding reviews and certifies the result. That is not a limitation of AI, it is the correct architecture for trusted, legally sound open-source development.

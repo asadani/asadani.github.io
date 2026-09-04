@@ -1,0 +1,5 @@
+Anatomy of a single data product.
+
+Viewed from the outside, a data product is a black box with declared input ports, output ports, and a published contract. Viewed from the inside, every pillar shows up as a concrete architectural layer. The boundary between inside and outside is the contract, and that contract is what consumers actually depend on.
+
+A pipeline ends at a table. A data product ends at a contract. The contract is the thing consumers depend on, schema, semantics, freshness, owner, SLA, and it is versioned independently of the pipeline implementation underneath.

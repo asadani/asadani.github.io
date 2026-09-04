@@ -462,7 +462,40 @@
   </header>
 
   <!-- SECTION 1 -->
-  <div class="section" id="the-setup">
+  <!-- ARTICLE-AUDIO:BEGIN -->
+<link rel="stylesheet" href="/assets/player.css">
+<div class="ap" id="articleaudio">
+  <div class="ap-hd">
+    <span class="ap-ico" aria-hidden="true">&#9654;</span>
+    <div><span class="ap-kick">Audio edition</span><b>Listen to this article</b><span class="ap-sub">8 parts &middot; 7 min</span></div>
+    <button class="ap-rate" type="button" aria-label="Playback speed">1&#215;</button>
+    <button class="ap-more" type="button" aria-expanded="false">Parts</button>
+  </div>
+  <p class="ap-now"></p>
+  <audio controls preload="none"></audio>
+  <ol class="ap-list" hidden>
+      <li><button type="button" data-src="audio/00-introduction.mp3"><span class="ap-n">1</span><span class="ap-nm">Introduction</span><span class="ap-d">0:17</span></button></li>
+      <li><button type="button" data-src="audio/01-i-had-the-spec-i-still-wanted-the-exampl.mp3"><span class="ap-n">2</span><span class="ap-nm">I had the spec. I still wanted the example</span><span class="ap-d">0:51</span></button></li>
+      <li><button type="button" data-src="audio/02-two-kinds-of-spec-both-lossy.mp3"><span class="ap-n">3</span><span class="ap-nm">Two kinds of spec, both lossy</span><span class="ap-d">0:48</span></button></li>
+      <li><button type="button" data-src="audio/03-two-bugs-the-clean-version-could-not-sho.mp3"><span class="ap-n">4</span><span class="ap-nm">Two bugs the clean version could not show</span><span class="ap-d">1:06</span></button></li>
+      <li><button type="button" data-src="audio/04-the-example-cost-more-and-it-worked.mp3"><span class="ap-n">5</span><span class="ap-nm">The example cost more, and it worked</span><span class="ap-d">1:06</span></button></li>
+      <li><button type="button" data-src="audio/05-a-spec-is-not-a-reference-implementation.mp3"><span class="ap-n">6</span><span class="ap-nm">A spec is not a reference implementation</span><span class="ap-d">1:00</span></button></li>
+      <li><button type="button" data-src="audio/06-then-i-fed-the-lessons-back.mp3"><span class="ap-n">7</span><span class="ap-nm">Then I fed the lessons back</span><span class="ap-d">1:14</span></button></li>
+      <li><button type="button" data-src="audio/07-the-short-version.mp3"><span class="ap-n">8</span><span class="ap-nm">The short version</span><span class="ap-d">0:38</span></button></li>
+  </ol>
+</div>
+<div class="ap-mini" id="ap-mini" hidden>
+  <button class="ap-mb" data-act="play" aria-label="Play or pause">&#9654;</button>
+  <button class="ap-mt" data-act="goto" title="Back to the player"></button>
+  <div class="ap-mp" data-act="seek"><div class="ap-mpf"></div></div>
+  <em class="ap-mtime">0:00</em>
+  <button class="ap-mb ghost ap-mr" data-act="rate" aria-label="Playback speed">1&#215;</button>
+  <button class="ap-mb ghost" data-act="next" aria-label="Next part">&#9199;</button>
+</div>
+<script src="/assets/player.js" defer></script>
+<!-- ARTICLE-AUDIO:END -->
+
+<div class="section" id="the-setup">
     <div class="section-label">The Setup</div>
     <h2><a class="anchor" href="#the-setup">I had the spec. I still wanted the example.</a></h2>
     <div class="prose">

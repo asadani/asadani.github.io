@@ -1,0 +1,9 @@
+A spec is not a reference implementation.
+
+This is not a CSS story. It is the oldest gap in engineering wearing new clothes.
+
+A statute is not case law. A recipe is not the plated dish. The rule reads clean and general, and the moment it touches a real case it sprouts exceptions nobody wrote down. Case law exists precisely because statutes are lossy. You only find out what the rule meant when a real dispute forces the question.
+
+Models behave the same way, which is why a few-shot example so often beats a paragraph of instructions. The instruction is the spec. The example is the spec after it has survived an actual input. One of them has been tested. The other only sounds like it has.
+
+A worked sample is not a teaching aid you reach for when the docs are thin. It is a test fixture. It is the one artifact in the room that has already met real content and lived to tell you where it bent.

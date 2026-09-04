@@ -1,0 +1,17 @@
+Your evaluator is your real product.
+
+None of the optimization frameworks above are useful without a metric. And as of 2026, the evaluation layer has matured into its own sub-field, because the easy benchmarks died first.
+
+MMLU is saturated. Frontier models routinely top 88%, and a 1.5-point improvement is statistical noise. The serious benchmarks for an optimizer to climb are different in kind:
+
+What ResearchRubrics actually surfaced is more interesting than the headline number. Failures cluster not in factual retrieval but in logical synthesis: missing implicit reasoning dependencies, sloppy citation rigor, weak integration of retrieved context. That is a direct indictment of optimizing prompts only for retrieval recall, the bottleneck is one layer up.
+
+For optimization loops at scale, no team can afford expert human judgment on every variation. The industry runs on LLM-as-judge protocols, which score outputs at roughly 80, 90% agreement with expert humans for 500, 5000× less cost. But naive use of LLM judges is dangerous:
+
+Position bias, judges favor whichever option appears first in pairwise comparisons.
+
+Verbosity bias, judges equate length with quality, so optimizers learn to write longer, not better.
+
+Modern evaluation protocols correct for these mechanically, not heuristically. Position bias gets neutralized by systematically rotating answer positions and cross-validating. Verbosity bias is mitigated through structured "form-filling" outputs: instead of returning a scalar, the judge emits a JSON object that articulates its sequential reasoning across explicit rubric dimensions (coherence, depth, factuality) before the score. Forcing that intermediate structure improves judge reliability by over 85% and lets cheaper models replicate frontier-judge analytical depth.
+
+On top of that, frameworks like FACTS use Cohen's Kappa, Pearson, and Spearman to certify pairwise judge agreement beyond random chance, separating real optimization wins from statistical noise.

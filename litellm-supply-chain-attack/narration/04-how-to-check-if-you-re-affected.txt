@@ -1,0 +1,7 @@
+How to check if you're affected.
+
+Run these on any machine where you use Python-based AI tooling, especially Cursor, Claude Code, or anything with MCP plugins installed.
+
+Treat the machine as fully compromised. The window between install and exfiltration is seconds, so assume everything reachable from that machine was stolen and rotate it immediately.
+
+SSH keys, AWS/GCP/Azure credentials, every.env API key, Kubernetes configs, GitHub tokens, database passwords, Docker credentials, and shell history (which often contains secrets passed as arguments).

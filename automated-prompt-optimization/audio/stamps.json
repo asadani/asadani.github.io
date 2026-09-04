@@ -1,0 +1,62 @@
+{
+ "00-introduction": {
+  "k": "892d64a69e7f36de",
+  "d": 26.0
+ },
+ "01-why-manual-prompting-stops-scaling": {
+  "k": "edec3bbe5964c005",
+  "d": 134.5
+ },
+ "02-five-paradigms-doing-different-jobs": {
+  "k": "4b0cd1b87a0684a8",
+  "d": 35.3
+ },
+ "03-dspy-prompts-as-compiled-code": {
+  "k": "d3a5dec8d0073a0c",
+  "d": 112.8
+ },
+ "04-textgrad-backpropagation-without-numbers": {
+  "k": "a30862d2fe33e535",
+  "d": 137.5
+ },
+ "05-ace-the-playbook-not-the-prompt": {
+  "k": "75331f175b70e79d",
+  "d": 148.7
+ },
+ "06-gepa-mohepo-when-evolution-beats-rl": {
+  "k": "62ee6d22279ab255",
+  "d": 135.8
+ },
+ "07-your-evaluator-is-your-real-product": {
+  "k": "bf9615ca71433b6b",
+  "d": 143.6
+ },
+ "08-the-metric-is-the-attack-surface": {
+  "k": "e6cf993e9ab3d286",
+  "d": 128.8
+ },
+ "09-accuracy-is-not-the-only-axis": {
+  "k": "f77ce24f53721a02",
+  "d": 89.1
+ },
+ "10-where-research-patterns-meet-governance": {
+  "k": "6791dc9fa9871f4b",
+  "d": 43.4
+ },
+ "11-what-s-oversold-in-plain-language": {
+  "k": "460afe3ddc7c7102",
+  "d": 142.3
+ },
+ "12-how-to-choose-by-scenario": {
+  "k": "9d54d4c0a804e610",
+  "d": 74.5
+ },
+ "13-what-2027-looks-like": {
+  "k": "a7b8bd29b434c42d",
+  "d": 106.2
+ },
+ "14-if-you-only-remember-three-things": {
+  "k": "08905ed14a0284e9",
+  "d": 50.2
+ }
+}

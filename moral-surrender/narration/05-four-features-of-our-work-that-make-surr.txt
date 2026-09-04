@@ -1,0 +1,11 @@
+Four features of our work that make surrender easier.
+
+Engineers are unusually vulnerable to both modes for reasons that don't apply as cleanly to other knowledge work. The structural shape of the job hides surrender behind signals that look like progress.
+
+Surface signals look correct by default. Generated code compiles, passes the linter, runs, and looks like the rest of the file. Most domains don't have such a strong "looks plausible" filter for AI output. Ours does, and it's the wrong filter. Surface correctness is not systemic correctness, and the gap between them is where surrender hides.
+
+Throughput is the visible metric. PRs merged, features shipped, tickets closed. None of these distinguish "I built this and understand it" from "the agent built this and I approved it." The org rewards both equivalently in the short run. Surrender is invisible to the dashboard.
+
+Confidence transfers cleanly. Models speak in declaratives. Code reviews tend to read declaratives as authority. When the agent writes "we use a debounce of 300ms here to avoid jank", it sounds like institutional knowledge, even if the model invented the number on the spot. You inherit certainty without inheriting reasoning.
+
+The work composes. Each surrender enables the next one. Once you've accepted a chunk you don't fully understand, the next change to that chunk almost has to be another act of surrender, because forming an independent view now requires reconstructing the part you skipped. Surrender is path-dependent.

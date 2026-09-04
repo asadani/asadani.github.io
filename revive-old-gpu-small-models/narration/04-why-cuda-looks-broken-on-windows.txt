@@ -1,0 +1,11 @@
+Why CUDA looks broken on Windows.
+
+I spent longer on this than on everything else combined, and the fix is two lines.
+
+The pip nvidia-* wheels put their DLLs in site-packages/nvidia/*/bin. The documented way to make those visible on Windows is os.add_dll_directory(). That is not sufficient. onnxruntime loads its provider DLL through a route that searches the real PATH, so the provider fails to load and falls back to CPU. No exception. No warning at the default log level.
+
+Your job just runs four times slower than it should, and you conclude that this is what the hardware does. I concluded exactly that, and I was wrong for about a day.
+
+Match the CUDA major version to your onnxruntime release while you are here. Version 1.29 wants CUDA 13 and looks for cublasLt64_13.dll; 1.22 wants CUDA 12. Install the wrong nvidia-*-cu1x wheels and you get a missing-DLL error naming a file you have never heard of. On Windows the CUDA 13 wheels had no builds available when I tried, so I pinned onnxruntime-gpu==1.22.0 and used the CUDA 12 set.
+
+Let an auto setting degrade quietly. Make anything explicit fail loudly. If --device cuda silently falls back to CPU, you find out an hour into a long run, and you will blame the wrong thing.

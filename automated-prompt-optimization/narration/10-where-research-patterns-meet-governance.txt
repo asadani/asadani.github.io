@@ -1,0 +1,5 @@
+Where research patterns meet governance.
+
+Research frameworks describe what to optimize. Enterprise platforms describe how to ship optimization safely. Both layers are necessary; conflating them is how teams end up with either ungoverned auto-rewrites or governance theater around prompts no one has actually evaluated.
+
+The architectural principle that matters across all of them: separate the control plane from the data plane. Prompts and optimization logic live in a versioned registry with CI-style rollout; production traffic reads pinned versions. Auto-rewrites land in the registry, get evaluated, and only then promote, never directly into live serving.

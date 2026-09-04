@@ -1,0 +1,5 @@
+Introduction.
+
+AI Shrinkflation: The Silent Regression Your Team Won't See Coming
+
+The model you deployed last quarter is not the model running today. Quality can degrade silently, no announcement, no version bump, no alert. Here is what every engineering team building on LLMs needs to know, and how to architect for it.

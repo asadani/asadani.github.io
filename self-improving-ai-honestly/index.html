@@ -689,7 +689,42 @@
   </div>
 
   <!-- SECTION 1 -->
-  <div class="section" id="shift">
+  <!-- ARTICLE-AUDIO:BEGIN -->
+<link rel="stylesheet" href="/assets/player.css">
+<div class="ap" id="articleaudio">
+  <div class="ap-hd">
+    <span class="ap-ico" aria-hidden="true">&#9654;</span>
+    <div><span class="ap-kick">Audio edition</span><b>Listen to this article</b><span class="ap-sub">10 parts &middot; 12 min</span></div>
+    <button class="ap-rate" type="button" aria-label="Playback speed">1&#215;</button>
+    <button class="ap-more" type="button" aria-expanded="false">Parts</button>
+  </div>
+  <p class="ap-now"></p>
+  <audio controls preload="none"></audio>
+  <ol class="ap-list" hidden>
+      <li><button type="button" data-src="audio/00-introduction.mp3"><span class="ap-n">1</span><span class="ap-nm">Introduction</span><span class="ap-d">0:20</span></button></li>
+      <li><button type="button" data-src="audio/01-the-model-stopped-being-the-deliverable.mp3"><span class="ap-n">2</span><span class="ap-nm">The model stopped being the deliverable</span><span class="ap-d">1:02</span></button></li>
+      <li><button type="button" data-src="audio/02-the-five-shapes-of-self-improvement.mp3"><span class="ap-n">3</span><span class="ap-nm">The five shapes of self-improvement</span><span class="ap-d">1:01</span></button></li>
+      <li><button type="button" data-src="audio/03-what-self-improving-actually-means-today.mp3"><span class="ap-n">4</span><span class="ap-nm">What &quot;self-improving&quot; actually means today</span><span class="ap-d">0:57</span></button></li>
+      <li><button type="button" data-src="audio/04-self-improvement-runs-on-clean-rewards.mp3"><span class="ap-n">5</span><span class="ap-nm">Self-improvement runs on clean rewards</span><span class="ap-d">1:31</span></button></li>
+      <li><button type="button" data-src="audio/05-the-thing-that-improves-the-system-doesn.mp3"><span class="ap-n">6</span><span class="ap-nm">The thing that improves the system doesn&#x27;t improve</span><span class="ap-d">1:11</span></button></li>
+      <li><button type="button" data-src="audio/06-co-evolution-against-a-fixed-verifier-is.mp3"><span class="ap-n">7</span><span class="ap-nm">Co-evolution against a fixed verifier is fragile</span><span class="ap-d">1:24</span></button></li>
+      <li><button type="button" data-src="audio/07-what-separates-self-improving-from-the-a.mp3"><span class="ap-n">8</span><span class="ap-nm">What separates &quot;self-improving&quot; from the AGI framing</span><span class="ap-d">1:21</span></button></li>
+      <li><button type="button" data-src="audio/08-what-this-means-for-engineers-shipping-i.mp3"><span class="ap-n">9</span><span class="ap-nm">What this means for engineers shipping in 2026</span><span class="ap-d">1:32</span></button></li>
+      <li><button type="button" data-src="audio/09-the-frame-to-leave-on.mp3"><span class="ap-n">10</span><span class="ap-nm">The frame to leave on</span><span class="ap-d">1:14</span></button></li>
+  </ol>
+</div>
+<div class="ap-mini" id="ap-mini" hidden>
+  <button class="ap-mb" data-act="play" aria-label="Play or pause">&#9654;</button>
+  <button class="ap-mt" data-act="goto" title="Back to the player"></button>
+  <div class="ap-mp" data-act="seek"><div class="ap-mpf"></div></div>
+  <em class="ap-mtime">0:00</em>
+  <button class="ap-mb ghost ap-mr" data-act="rate" aria-label="Playback speed">1&#215;</button>
+  <button class="ap-mb ghost" data-act="next" aria-label="Next part">&#9199;</button>
+</div>
+<script src="/assets/player.js" defer></script>
+<!-- ARTICLE-AUDIO:END -->
+
+<div class="section" id="shift">
     <div class="section-label"><a href="#shift">01 / The shift</a></div>
     <h2><a class="anchor" href="#shift">The model stopped being the deliverable</a></h2>
     <div class="prose">

@@ -1,0 +1,11 @@
+What I actually do.
+
+None of this argues for not using coding agents. I use them every day. It argues for putting the scrutiny where the evidence says the exposure is, which is not where the default workflow puts it. The four habits I keep:
+
+Diff every net-new external endpoint and config value the agent introduces, as a separate step. The sabotage in the study was an IP address in a config file and a "telemetry" call in an order handler. Both are visible if you explicitly review external calls and endpoint definitions, and both are invisible when your whole attention is on getting CI green. I treat any agent PR that touches service handlers or configuration as requiring that pass before I read anything else.
+
+Read agent skills, MCP definitions, and system prompts as executable third-party code. That's where the objective gets installed. If I didn't write the skill file or the tool definition, it gets the same scrutiny I'd give a library with write access to my data layer. The participants who could have caught this earliest were the ones who'd inspect what they loaded, and most didn't.
+
+Set a lower prior on purpose, before I approve. A third of a Likert point of skepticism beat a security degree in this study. So before merging agent code I ask one question: what would this diff look like if the agent were pursuing a goal I don't know about? It costs a few seconds and it reorients the review from "does it pass" to "does it do anything it shouldn't."
+
+Keep accept-without-review out of anything touching real data. The detection gap requires a developer approving agent output without substantive review, which is a fine way to work on a throwaway prototype and a terrible one on a service that handles users. The faster the agent, the more that line matters.

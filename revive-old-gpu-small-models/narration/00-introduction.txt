@@ -1,0 +1,5 @@
+Introduction.
+
+Reviving a six-year-old GPU for small models
+
+A GTX 1650 with 4 GB of VRAM, no tensor cores, and a driver five years out of date. It now runs speech models faster than my CPU by a factor of four. Everything that stood in the way, in the order it stood there.

@@ -1,0 +1,15 @@
+What separates good from nominal.
+
+A data product that technically ticks every pillar can still fail in practice if it violates these six properties. Treat them as an acceptance test, not a wishlist.
+
+Has a stable, unique identifier and endpoint. No consumer should ever hardcode a table path.
+
+SLAs, quality scores, and lineage are visible without asking. Freshness is a published number, not a promise.
+
+Schema, semantics, and examples live with the product. A new analyst is productive in a day.
+
+Standard formats and contracts, Iceberg, Parquet, Avro, so products compose.
+
+Access is controlled by policy, not convention. Every read is logged and auditable.
+
+Version and deploy without breaking consumers. Contracts evolve via additive changes and deprecation windows, not flag days.

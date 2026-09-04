@@ -1,0 +1,17 @@
+How It Works Under the Hood.
+
+Protocol: NFSv4.1, not v3 or v4.0. v4.1 provides compound operations, better caching semantics, and pNFS support for parallel file access across multiple servers.
+
+Consistency model: close-to-open. Changes written by one NFS client become visible to others after the writing client closes the file. Same model as Amazon EFS. Works well for shared read-heavy workloads.
+
+EFS cache layer. Active metadata and small files (<128 KB) are cached in a high-performance EFS layer. Managed automatically, no provisioning needed.
+
+Large-file bypass path. Files >128 KB stream directly from S3, bypassing the cache. Full S3 throughput for sequential reads, the dominant pattern for ML training.
+
+Throughput ceiling: multiple TB/s aggregate across concurrent clients, a function of S3's distributed architecture, not a single-node file system limit.
+
+Durability: 11-nines (S3-native). Data written via NFS is committed to S3 storage. The cache accelerates performance; it is not the durable store.
+
+S3 Metadata integration. Works with the new S3 Metadata feature for fast directory listings at millions-of-objects scale.
+
+IAM-based access control. Permissions governed by standard S3 bucket policies and IAM. POSIX UID/GID are handled via a mapping layer.

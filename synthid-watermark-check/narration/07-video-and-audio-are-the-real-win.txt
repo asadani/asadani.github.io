@@ -1,0 +1,7 @@
+Video and audio are the real win..
+
+The screenshot loophole is an image problem, and it mostly dissolves for video and audio. You can grab one frame of a clip, but you cannot screenshot motion or sound. The SynthID mark is carried across the temporal signal, re-stamped frame after frame and second after second, so capturing a usable copy means re-recording the stream, not snapping a still.
+
+Re-recording is a much taller fence than a screenshot. Run a watermarked clip through a screen-and-mic recapture and you keep the temporal structure the detector keys on, while picking up new noise rather than cleanly erasing the mark. For audio especially, the watermark living in an inaudible band and surviving MP3 compression means the obvious laundering paths leave it intact.
+
+This is the part of the original note I'd underline hardest. For static images, watermarking is a useful-but-leaky check. For synthetic video and voice, the very thing that makes deepfakes dangerous, the watermark has the most room to work, because the signal you'd have to destroy is spread across time and you can't grab it with a single frame.

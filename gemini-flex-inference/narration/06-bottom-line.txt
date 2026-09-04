@@ -1,0 +1,9 @@
+Bottom Line.
+
+Service tiers are a zero-architecture-change optimization. If you're already calling generate_content(), you're one config key away from cutting your inference costs in half or guaranteeing your users the fastest possible response.
+
+The benchmarks show priority is the fastest and most consistent tier (~2.2s avg, 0.4s spread), standard is the reliable default (~2.6s avg), and flex trades latency variance for cost (~3.2s avg, 50% cheaper). During high demand, flex may 503, design for retries.
+
+And on rate limits: yes, Flex shares your general quota. But the real value isn't just the 50% cost reduction, it's the engineering hours you don't spend building async batch pipelines, managing output files, and rewriting your request flow. Sometimes the best infrastructure decision is the one that lets your team ship something else instead.
+
+Both features are in preview. Flex inference is documented at ai.google.dev/gemini-api/docs/flex-inference and priority inference at ai.google.dev/gemini-api/docs/priority-inference. Full benchmark source: flex-genai.py on GitHub Gist.

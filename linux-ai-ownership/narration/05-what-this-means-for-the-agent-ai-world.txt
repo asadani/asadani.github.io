@@ -1,0 +1,25 @@
+What This Means for the Agent AI World.
+
+The Linux kernel's policy is not just a rule for kernel contributors. It is the world's most important open-source project formally codifying a position on AI agency, and it draws a sharp, non-negotiable line: autonomous agents cannot certify contributions to projects that use DCO.
+
+This matters because the current trajectory of AI tooling is toward greater autonomy, agents that open pull requests, submit patches, create commits, and iterate without human intervention per-step. The kernel policy says: that autonomy stops at the DCO boundary. A human must be in the loop before any legally binding act of contribution.
+
+Fully autonomous patch agents cannot submit to the kernel without human certification
+
+Every AI-assisted commit requires a human review pass, not just a merge approval
+
+AI coding tools need an explicit Assisted-by disclosure workflow
+
+Existing AI-generated commits without disclosure are technically non-compliant
+
+Will npm, PyPI, and crates.io adopt analogous AI disclosure policies?
+
+Can SBOM (Software Bill of Materials) standards evolve to track AI involvement?
+
+How do MCP-based autonomous agents fit when they open PRs on behalf of humans?
+
+Will DCO itself evolve to accommodate verified human-in-the-loop AI workflows?
+
+There is a fundamental mismatch between what AI agents can do (generate correct, compilable, well-structured code) and what they cannot be (a legally responsible author). The kernel policy formalizes this gap. As agents become more capable, the gap does not close, it widens, because the stakes of autonomous contribution rise. This is the new architectural constraint for agent AI systems operating in open-source ecosystems.
+
+This also sets a precedent for how open-source governance bodies will respond to AI contributions. Rather than banning AI tooling, which would be unenforceable, the kernel community has chosen disclosure and human accountability as its governing framework. That is almost certainly the model other major projects will follow. Expect similar language in CNCF projects, Apache Foundation guidelines, and major package registry policies within the next 12, 18 months.

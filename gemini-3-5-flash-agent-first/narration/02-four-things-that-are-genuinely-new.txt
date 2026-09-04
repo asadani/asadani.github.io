@@ -1,0 +1,17 @@
+Four things that are genuinely new.
+
+Strip out the marketing and there are four substantive shifts in this release.
+
+The tier ladder broke
+
+Flash is no longer "smaller than Pro." On Terminal-Bench, MCP Atlas, OSWorld and GDPval-AA it scores ahead of Gemini 3.1 Pro. The fast tier passed the reasoning tier on the metrics builders read first.
+
+Independent measurements put 3.5 Flash above 280 tokens/s and at the top of the intelligence-vs-speed Pareto frontier. The design point is clearly "many agents in parallel," not "snappier chat."
+
+GA across the whole surface
+
+Gemini App, Search AI Mode, AI Studio, the Gemini API, Android Studio, Gemini Enterprise, Antigravity, all on day one. No staged Labs rollout, no narrow preview SKUs.
+
+The launch barely mentions chat. Demos showcase multi-hour autonomous runs, sub-agent orchestration, and long-horizon enterprise workflows. Google is publicly betting against single-pass UX as the next product.
+
+If you have been tracking the Gemini line, the surprise is less "is this model better" and more "Google reshuffled which tier does what." A Flash that wins on agentic benchmarks and ships as the consumer default is a signal about Google's roadmap, not just a model card.

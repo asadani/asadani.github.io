@@ -1,0 +1,9 @@
+The driver will reset your GPU.
+
+My first long run died after 40 minutes with no Python traceback. The Windows event log had the answer:
+
+That is a GPU engine reset. A CUDA kernel ran past the display driver's two-second watchdog, Windows reset the graphics engine, and the CUDA context died taking the process with it. The underlying cause was the same paging described above: when kernels wait on PCIe transfers they stretch past the timeout.
+
+The usual advice is to raise the watchdog through TdrDelay in the registry. I would try the actual fix first. Reducing the work per kernel, by shortening chunks or lowering batch size, addresses the cause; raising the timeout hides it and costs you a sixty-second frozen screen whenever the GPU genuinely hangs. After cutting chunk length the reset never recurred.
+
+Across five interruptions I had five different causes: a GPU reset, a charger that was not seated, sleep on battery, a background Windows update under memory pressure, and a task timeout. Only the first was mine to fix in code. Without the event log I would have kept tuning the model.

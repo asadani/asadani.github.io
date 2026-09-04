@@ -1,0 +1,15 @@
+Machine-made is not the same as authentic..
+
+Here is where the original framing needs a correction. The dream people describe is a single check that confirms an image is "true work by a real author" versus AI. SynthID does not do that, and by design it never will. It only sees its own ink. It is blind to a photo a human actually took, because there is no mark to find, and a clean result there proves nothing about authenticity.
+
+The question of who made this and can I trust them is provenance, and provenance needs identity, not a watermark. That is the job C2PA Content Credentials are built for: a manifest signed by the camera, the editor, or the publisher, binding the file to an issuer you can verify. The asset says "Reuters captured me, then Photoshop edited me," and a chain of signatures backs the claim. Content Credentials can also assert the opposite of synthetic, marking a frame as an unaltered original straight off a sensor.
+
+Google is already shipping this side, not just the watermark. The Pixel 10 camera writes Content Credentials at capture, so a photo can carry a signed claim that it came off a real lens and was never edited. That signed-at-capture identity is the "authentic human work" signal SynthID structurally cannot give you, because a watermark only knows about its own ink and a real camera leaves none.
+
+So the "central management with a user ID" instinct in the original note is the right instinct. It just isn't SynthID's job. You want two layers working together. A watermark to answer was a machine involved, and a signed provenance chain to answer who stands behind this. Neither one alone gets you to "authentic."
+
+In the signal. Survives edits, carries no identity. Answers "did a participating model make this."
+
+Signed manifest bound to a creator or publisher. Answers "who made or edited this," but easy to strip.
+
+A bare image with no mark and no signature. Most of the internet. The check returns nothing useful.

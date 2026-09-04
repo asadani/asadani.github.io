@@ -1,0 +1,19 @@
+We're shipping code we admit we don't trust.
+
+Developers told Stack Overflow two things this year that do not fit together. 84% of us use or plan to use AI to write code. Only 3% say we highly trust what those tools produce, and among the most experienced developers that number falls to 2.6%. Active distrust of AI output climbed to 46%, up from 31% a year earlier.
+
+Sit with that. We have adopted, at industry scale, a way of producing software that most of us openly say we do not believe. This is not recklessness. We ship anyway because it is fast, and we file the disbelief under "deal with it later."
+
+That gap between using and trusting is the real story, and it has a cost nobody has named yet. For most of my career, technical debt had a shape I could see. It looked like a comment. // TODO: handle the null case. The work was deferred on purpose, and the understanding stayed intact.
+
+AI changed which half you defer. It writes the code in minutes and generates the tests and the docs alongside it, so the things we used to postpone now come for free. What gets postponed instead is comprehension. The defining comment of this era is not the TODO. It is the TOKNOW.
+
+A TODO is an honest promise. It says I know exactly what is missing, and I am choosing to handle it later.
+
+A TOKNOW is a promise nobody made. It says I don't know what I just shipped, and I am trusting that later will come to explain it. It rarely does.
+
+Old debt was unfinished work. A skipped test, a TODO you could grep for. The uncertainty was bounded, because you knew what was missing.
+
+New debt is unfinished understanding. The code looks complete and passes its tests. The uncertainty sits in what is present and unexamined, and you cannot grep for "nobody here can reason about this."
+
+They bill to different accounts. The first is paid in rewrites. The second is paid on the day the system does something surprising and the only thing that understood it was the model that wrote it.

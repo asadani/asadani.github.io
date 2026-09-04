@@ -1,0 +1,38 @@
+{
+ "00-introduction": {
+  "k": "7e0273045ad1a1b4",
+  "d": 21.0
+ },
+ "01-the-pipeline-era-is-over": {
+  "k": "3ee6bd17133db228",
+  "d": 72.8
+ },
+ "02-seven-pillars-in-detail": {
+  "k": "7ce5c31137ce833a",
+  "d": 278.7
+ },
+ "03-anatomy-of-a-single-data-product": {
+  "k": "2c97fcc3c7d7433b",
+  "d": 39.8
+ },
+ "04-centralized-mesh-or-fabric": {
+  "k": "4205adafb215c561",
+  "d": 43.9
+ },
+ "05-what-a-data-product-contract-looks-like": {
+  "k": "5764f9ed4ec90bc7",
+  "d": 39.5
+ },
+ "06-what-separates-good-from-nominal": {
+  "k": "f20febdb8be07c8c",
+  "d": 59.2
+ },
+ "07-ways-this-goes-wrong": {
+  "k": "5fb5b00c1e10f974",
+  "d": 74.1
+ },
+ "08-the-commitment": {
+  "k": "67888f308bf7619d",
+  "d": 38.1
+ }
+}

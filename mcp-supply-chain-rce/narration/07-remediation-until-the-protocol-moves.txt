@@ -1,0 +1,39 @@
+Remediation — Until the Protocol Moves.
+
+Because the vulnerability is architectural, there is no patch you can pull. Defense is about shrinking the distance between untrusted input and StdioServerParameters, and limiting blast radius when that boundary fails.
+
+Treat MCP Config as Code
+
+Never let user input, including model output, flow into command or args. Use a fixed, pre-configured set of allowed MCP servers, stored outside any directory the agent can write.
+
+Sandbox Every MCP Server
+
+Run each MCP process in a container with its own filesystem, no host keys, no cloud creds, no shell access. Docker MCP Toolkit and user-namespace isolation are both viable baselines.
+
+LLM gateways and research tools with API keys and DB credentials should never have a public IP. The 7K publicly accessible MCP servers OX found are the low-hanging targets.
+
+Pin to the official GitHub MCP Registry or a curated internal mirror. 9 of 11 public registries accepted a malicious payload, the long tail is untrusted by default.
+
+Log Every Tool Invocation
+
+Treat MCP tool calls the way you'd treat exec(). Log command, args, env snapshot, and destination IPs. Alert on unexpected outbound traffic, exfiltration shows up there first.
+
+Upgrade the Patched Stack
+
+LiteLLM, Bisheng, DocsGPT, Flowise, Upsonic have fixes. Upgrade everywhere (including CI runners and images). For unpatched vendors, disable the MCP integration or firewall the input path.
+
+Audit for direct use of StdioServerParameters, StdioClientTransport, or equivalents, flag any path where external input reaches command.
+
+Lock down mcp.json permissions so the agent can't write its own MCP config (mitigates zero-click prompt injection in IDEs).
+
+Upgrade LiteLLM, Bisheng, Flowise, Upsonic, and DocsGPT to their patched versions and pin the upgrade in lockfiles.
+
+Disable or firewall any MCP-enabled service with a public-facing UI and an unauthenticated form field.
+
+Move MCP processes into containers with least-privilege credentials; never pass host API keys into the process environment.
+
+Add a SAST / pre-commit rule that flags any code path letting model output populate STDIO command/args.
+
+If you're a vendor: implement argv allowlisting, reject commands with embedded shell metacharacters, ship a signed capability manifest with each MCP server.
+
+You cannot wait for the protocol to change. Assume every STDIO MCP entry on a machine is a potential exec surface, isolate those machines accordingly, and treat any UI or agent that can write MCP configuration as a privileged tool. The goal is containment, not prevention, with an architectural vulnerability, prevention is out of your hands.

@@ -1,0 +1,23 @@
+Production Guidance.
+
+Cut costs with Flex
+
+Use service_tier="flex" for background pipelines, batch enrichment, or any job that can tolerate variable latency and occasional retries.
+
+Guarantee UX with Priority
+
+Use service_tier="priority" for real-time user interactions. Automatic failover to Standard means no hard failures.
+
+Handle Flex 503s gracefully
+
+Flex may return 503 UNAVAILABLE during peak demand (preview behavior). Implement exponential backoff or queue retries.
+
+Verify the served tier
+
+Always check x-gemini-service-tier in the response headers to confirm which tier actually handled your request.
+
+Priority delivered a 0.42s spread across 5 runs. Standard spread was 1.5s. Flex spread was 2.67s. Use Priority when p99 latency matters.
+
+No batch file overhead
+
+Unlike the Batch API, Flex uses the same generate_content() call. No file upload, no polling, no async job management.

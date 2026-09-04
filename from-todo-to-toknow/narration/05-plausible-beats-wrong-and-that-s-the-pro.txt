@@ -1,0 +1,7 @@
+Plausible beats wrong, and that's the problem.
+
+Bad code is not the real threat. Bad code tends to announce itself. It throws an error, fails a test, or falls over in the demo. The threat is plausible code, the kind that compiles and passes its tests and reads cleanly, then turns out to be quietly wrong in a way nobody thought to question.
+
+A Stanford team led by Dan Boneh put numbers on this in 2023. Across 47 participants writing security-sensitive code, the group with an AI assistant wrote measurably less secure code than the group without one. The part that should worry you is the second half: the people using the assistant were also more confident their code was secure. Less safe, and more sure.
+
+That inversion is the engine of the whole problem. The tool raises your confidence faster than it raises your correctness. The danger was never that AI writes bad code. It is that AI writes convincing code, and convincing code does not get the second look that ugly code earns for free.

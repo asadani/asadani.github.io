@@ -1,0 +1,17 @@
+How to Stay Compliant.
+
+The mechanics are simple. The discipline is not. Here is what a fully compliant AI-assisted kernel commit looks like:
+
+Common Mistakes to Avoid
+
+Skipping the review, approving AI output without reading it line by line. You signed it; you're responsible for it.
+
+Wrong tag order, Assisted-by comes before your Signed-off-by in the trailer block.
+
+Listing basic tools, do not list git, gcc, or your editor. Only specialized analysis tools belong in Assisted-by.
+
+Wrong model version, use the specific model identifier, not a marketing name. claude-sonnet-4-6, not "Claude Sonnet".
+
+Assuming AI output is license-clean, AI models are trained on vast corpora. Always verify that the generated code doesn't inadvertently reproduce incompatibly-licensed snippets.
+
+Omitting Assisted-by entirely, the doc says "should include" (not "must"), but disclosure is the intent. Omitting it is technically allowed for now, but signals poor practice.

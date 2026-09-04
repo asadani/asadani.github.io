@@ -1,0 +1,5 @@
+Introduction.
+
+Flex &amp; Priority: One Line of Code
+
+Optimize cost, reliability, and latency for production workloads by simply choosing a service_tier. No batch file management, no architectural changes.

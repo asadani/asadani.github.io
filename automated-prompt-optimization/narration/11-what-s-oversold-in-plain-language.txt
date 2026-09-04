@@ -1,0 +1,17 @@
+What's oversold, in plain language.
+
+"Just add auto-prompting and it will learn"
+
+Wrapping a prompt in an APO loop and walking away usually overfits to your eval set, then regresses on real traffic. The signal you optimize against has to track what users actually want, not what your judge happens to score highly. In practice this means combining LLM-judge scores with programmatic checks and a sample of human-reviewed traces, and accepting that the optimization is only as honest as that triangulation.
+
+"Self-healing means it never fails"
+
+Self-healing runtimes (VIGIL, Union, Latitude patterns) reduce mean time to resolution. They do not guarantee correctness. They detect, diagnose, and propose repairs, but the repairs only run inside the policies and guardrails you defined. For high-risk actions, runtime repair has to coexist with human-in-the-loop gates. For everything else, periodic offline re-optimization is still cheaper and safer than relying purely on online adaptation.
+
+"Prompt optimization replaces RAG and fine-tuning"
+
+It does not. Empirical results from Databricks and SAP show automated prompt optimization can match or beat supervised fine-tuning for some tasks while reducing serving cost, but the strongest production stacks combine prompt optimization, RAG, and targeted fine-tuning. Prompt optimization is the cheapest layer to iterate on; fine-tuning is the layer that absorbs domain knowledge that doesn't fit in context; RAG is the layer that handles freshness. Picking one and dropping the others is a reliable way to get a benchmark win and a production loss.
+
+"One framework will rule them all"
+
+DSPy compiles pipelines. ACE curates agent context. TextGrad attributes failure to specific text variables. GEPA mutates under multi-objective constraints. Bedrock manages the lifecycle. Trying to push any one of them into all five jobs is the most common architectural mistake in this space, and the fastest path to a brittle, opinionated stack that resists every change you'll need to make in 2027.

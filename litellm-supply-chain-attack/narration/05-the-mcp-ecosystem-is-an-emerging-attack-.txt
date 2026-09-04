@@ -1,0 +1,11 @@
+The MCP ecosystem is an emerging attack surface.
+
+This attack did not just exploit a Python package. It exploited a structural property of how modern AI tooling gets assembled, and it landed on machines running Cursor and Claude Code because of it.
+
+"The person who discovered this only found it because their machine crashed. Without that bug, it would still be running silently on thousands of developer machines right now."
+
+MCP plugins are a young, largely unvetted ecosystem. There is no curated review process, plugins can pull in arbitrary Python packages, and the machines running these tools (developer workstations and CI runners) are loaded with the exact credentials attackers want.
+
+Claude Code users face compounded risk. It is an agentic tool with broad filesystem access and code execution by design, and it has documented support for the LiteLLM proxy as an MCP integration. Beyond the litellm vector, Check Point Research separately disclosed vulnerabilities in Claude Code where a malicious repository configuration file could trigger arbitrary shell commands and API-key exfiltration simply by opening a project. Those issues are now patched by Anthropic.
+
+The pattern is the same across all of these attacks: the configuration and tooling layers have become part of the execution surface. A.pth file is not code you wrote. An MCP plugin dependency is not a package you explicitly chose. Both run with full privileges on your machine.

@@ -1,0 +1,11 @@
+The 2.5 line is on a clock.
+
+The 3.5 Flash launch is paired with explicit deprecation timelines in the Gemini API docs and a parallel notice for Vertex AI. The earliest shutdown date for the 2.5 family is October 16, 2026, with at least six months of notice once the Gemini 3 migration path is fully GA.
+
+The direction of travel is unambiguous: you have runway, but you are expected to be on 3.x or 3.5 in production within the next year. Two specific traps to plan around:
+
+The 2.5 Flash → 3.5 Flash hop is not free. The recommended replacement is a more expensive model with a different output distribution. Treat the migration as a re-eval, not a string-replace on the model name. Re-cost it on real traffic before you cut over.
+
+2.5 Flash-Lite hands off to 3.1 Flash-Lite, not 3.5. There is no 3.5 Lite yet. If your stack relies on a true low-cost-per-token tier, the migration target today is 3.1 Flash-Lite, and you will likely re-migrate again when 3.5 Lite ships.
+
+Live / streaming endpoints are migrating too. Old flash-live endpoints under 2.0/2.5 are being pointed at gemini-3.1-flash-live-preview as their successor. If you have anything in real-time voice or video, that is a separate migration thread to track.

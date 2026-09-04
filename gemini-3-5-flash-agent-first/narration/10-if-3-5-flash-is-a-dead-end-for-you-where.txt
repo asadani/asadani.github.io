@@ -1,0 +1,19 @@
+If 3.5 Flash is a dead end for you, where do 2.5 Flash teams actually go?.
+
+One question I keep getting from people on Gemini 2.5 Flash: the recommended migration target is 3.5 Flash, but the new model is 3× the per-token cost, optimized for agents you do not run, and verbose in ways that inflate real bills further. What does the cross-vendor landscape look like if you treat the 2.5 Flash price/feature profile as the actual constraint, not "stay on Google"?
+
+The anchor: 2.5 Flash sits at $0.30 in / $2.50 out per million tokens, 1M context, 65K output, multimodal (text + image in → text out), prompt caching, GA on Vertex AI. Below is the full landscape, every serious cross-vendor option in the same price-and-capability neighborhood, with 2.5 Flash at the top and 3.5 Flash at the bottom as bookends. Each row is tagged with the single biggest reason it fits or does not.
+
+Reading note: every row below supports text + image input and prompt caching, those columns are dropped to keep the table readable. The PDF column captures the one modality that actually varies (native, via Converse API, or partial). All rows output text.
+
+The strict fits are the four pills marked good near the top, Nova 2 Lite, GPT-5 mini, GPT-4.1 mini, and Claude Haiku 4.5. These meet the full 2.5 Flash profile: price within roughly 1× of baseline, context ≥ 200K, output ≥ 20K, full multimodal input, prompt caching, and GA today. Flash-Lite would belong in this band on price alone, but it shares the October 2026 shutdown clock with 2.5 Flash, which makes it a worse migration target than the model it would replace.
+
+The yellow band is where output length stops mattering, eight cheaper alternatives sit at 5, 8K max output. If your real workloads emit short answers (chat, RAG, extraction, classification, structured output), every row in this band is genuinely usable and often dramatically cheaper than the baseline. If you regularly emit > 20K, only the four strict-fit rows and 3.5 Flash itself remain viable.
+
+The bottom of the table sorts itself into two failure modes, preview-but-otherwise-fits (Gemini 3 Flash, perfectly usable specs but not yet GA on Vertex) and cost-too-high (Pixtral Large, GPT-4.1, and Google's own 3.5 Flash, all sit well above the output budget). I dropped the former-flagship tier (Gemini 2.5 Pro, GPT-5), at ≥ $10/M output, those are not in the same conversation as 2.5 Flash and never were.
+
+The single closest 1:1 swap on cost is Amazon Nova 2 Lite. Exact match on $0.30 / $2.50 and on the 1M / 64K context window, GA on Bedrock with the Converse API for PDF input, prompt caching, code interpreter and web grounding built in. If you are already on AWS, this is the lowest-risk lateral move.
+
+Cross-vendor deprecation timelines are not published in one place. Each of these is "GA today," but the same clock risk you are migrating away from in 2.5 applies in different shapes to every other vendor, Nova will get a Nova 3, Llama 4 will get a Llama 5, Haiku will get a Haiku 5. Before you commit to a multi-year build on any of these, pull the vendor's own deprecation policy and the model card's listed retirement date, and assume an 18-month effective lifetime unless the vendor commits otherwise.
+
+The honest framing: "stay on Google" is one valid migration, but it is not the only one, and given how aggressively Google has repriced Flash, it is worth at least putting two or three of these on a real eval bench. The 2.5 → 3.5 hop is not free, and the cross-vendor hop, evaluated this quarter, may be the cheaper version of the same work.

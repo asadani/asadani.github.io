@@ -1,0 +1,34 @@
+{
+ "00-introduction": {
+  "k": "b18ac76ee8383a46",
+  "d": 23.4
+ },
+ "01-what-is-ai-shrinkflation": {
+  "k": "6f7d895ebbdecbc1",
+  "d": 112.2
+ },
+ "02-what-quantified-regression-actually-look": {
+  "k": "33058dd14b1a7895",
+  "d": 98.1
+ },
+ "03-why-quality-degrades-before-anyone-notic": {
+  "k": "31890c522f0aba57",
+  "d": 152.3
+ },
+ "04-what-this-changes-about-your-job": {
+  "k": "9862a200ce48e085",
+  "d": 144.8
+ },
+ "05-how-to-architect-for-model-drift": {
+  "k": "502d9f2b1e84d5e9",
+  "d": 289.4
+ },
+ "06-the-production-llm-engineering-checklist": {
+  "k": "d8e03ca779678701",
+  "d": 150.4
+ },
+ "07-the-model-is-a-dependency-treat-it-like-": {
+  "k": "e90337fe779985bd",
+  "d": 86.9
+ }
+}

@@ -1,0 +1,7 @@
+Small enough to be boring.
+
+Kokoro is 82 million parameters, shipped as ONNX, with Apache 2.0 weights. Two files totalling 354 MB that sit next to your project.
+
+For scale, the voice-cloning model in part two is 0.6 billion parameters and needs a GPU to be usable at all. Kokoro is roughly a seventh the size and runs a single forward pass instead of sampling token by token. That is the whole reason it feels different to work with.
+
+Being unremarkable is the point. No warm-up, no batching strategy, no memory ceiling to design around. You call it and it returns audio.

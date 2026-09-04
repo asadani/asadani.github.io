@@ -1,0 +1,7 @@
+Interactive Benchmark — 5 Runs per Tier.
+
+All 15 runs using gemini-2.5-flash-preview, same prompt, sequential execution. The Served tier is confirmed from the x-gemini-service-tier response header.
+
+Latency per Run (seconds)
+
+In a separate test run, flex returned a 503 UNAVAILABLE error due to high demand on the preview endpoint. Standard and priority completed successfully. Design flex workloads to handle retries or graceful degradation.

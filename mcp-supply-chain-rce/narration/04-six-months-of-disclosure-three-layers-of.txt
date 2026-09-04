@@ -1,0 +1,5 @@
+Six Months of Disclosure, Three Layers of Silence.
+
+Below is an interactive version of the disclosure timeline. Three horizontal swim lanes: the Root Layer (Anthropic itself), the Transport Layer (frameworks like LangChain, LiteLLM, FastMCP), and the Application Layer (end tools like Cursor, Windsurf, DocsGPT). Filter a layer to isolate it, the pattern across the stack is the whole story.
+
+Several weeks of individual "by design" responses at the root and transport layers, then a coordinated March 17 CVE burst at the application layer. The protocol owner did not move. The downstream projects, each absorbing the risk individually, had to.

@@ -1,0 +1,17 @@
+GEPA & MOHEPO: when evolution beats RL.
+
+Reinforcement learning approaches like GRPO have been the default for adapting models and prompts to downstream tasks. They work, but they need thousands of rollouts because they learn from sparse scalar rewards (+1 / -1). For prompt optimization, that is wasteful, the medium of variation is natural language, which is much richer than a scalar.
+
+GEPA, Genetic-Pareto, exploits exactly that. It samples trajectories (reasoning chains, tool calls, outputs), reflects on them in natural language to diagnose systemic failures, and proposes prompt mutations that combine complementary lessons from its own history along a Pareto frontier.
+
+Across six diverse tasks, GEPA outperformed GRPO by an average of 6 percentage points (up to 19) using up to 35× fewer rollouts. On AIME-2025 it beat MIPROv2 by more than 10 points, making "natural-language reflection" the dominant strategy over policy gradients for task-specific prompt adaptation.
+
+MOHEPO (Multi-Objective Hybrid Evolutionary Prompt Optimizer) is the broader genetic-algorithm flavor. It maintains a population of candidate prompts and applies three operators:
+
+Debate-guided selection, evaluates fitness via LLM-assisted debate across multiple criteria simultaneously (accuracy, token efficiency, bias).
+
+Semantic crossover, splices effective clauses from two parent prompts into a hybrid child.
+
+Reflective mutation, deliberately perturbs semantics to escape local optima, instead of relying on random edits.
+
+On SST-2, GSM8K, and SAMSum, MOHEPO posted 8, 22% accuracy gains over baseline evolutionary optimizers while reducing token usage 25, 35%. The headline is the multi-objective framing: real systems care about cost and latency as much as accuracy, and treating prompts as a single-objective problem is what got the field stuck in the first place.

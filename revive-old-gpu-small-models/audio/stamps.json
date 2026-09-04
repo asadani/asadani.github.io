@@ -1,0 +1,50 @@
+{
+ "00-introduction": {
+  "k": "b1a61798ffcfa9bf",
+  "d": 23.3
+ },
+ "01-the-card-nobody-recommends": {
+  "k": "58523ce2f9153153",
+  "d": 50.0
+ },
+ "02-the-driver-is-probably-ancient": {
+  "k": "bc4467779c3d18e4",
+  "d": 65.3
+ },
+ "03-the-cpu-wheel-pip-hands-you": {
+  "k": "291c3a3ab76eac7b",
+  "d": 45.1
+ },
+ "04-why-cuda-looks-broken-on-windows": {
+  "k": "e468b63ce86c5fa1",
+  "d": 92.3
+ },
+ "05-directml-is-the-tempting-wrong-turn": {
+  "k": "9d56230d9d73b7fd",
+  "d": 57.1
+ },
+ "06-why-fp16-crashes-on-turing": {
+  "k": "723415a11ca2b915",
+  "d": 62.9
+ },
+ "07-tune-against-memory-not-the-clock": {
+  "k": "7a9e1cb28a7a42ff",
+  "d": 76.7
+ },
+ "08-the-driver-will-reset-your-gpu": {
+  "k": "4b524a61722d41f4",
+  "d": 74.2
+ },
+ "09-assume-you-will-be-interrupted": {
+  "k": "47b68112be00b566",
+  "d": 86.5
+ },
+ "10-what-the-old-card-actually-does": {
+  "k": "a04137c600f5e24a",
+  "d": 39.9
+ },
+ "11-the-short-version": {
+  "k": "06244eabd5d3c248",
+  "d": 71.5
+ }
+}

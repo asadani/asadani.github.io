@@ -1,0 +1,7 @@
+The five shapes of self-improvement.
+
+Self-improvement in current research has five distinct shapes. They differ in what changes and on what timescale.
+
+Each shape answers a different question. Verbal: can the model fix its own output without changing itself? Bootstrap: can the model train on its own better outputs? Scaffold: can an outer agent rewrite the inner agent's code? Weight: can the model train at test time on feedback? Co-evolution: can both happen at once?
+
+The 2026 SIA paper is the strongest evidence to date that co-evolution actually beats either lever alone. It posts a 36.5 percentage-point gain from harness-only to harness-plus-weights on Chinese legal classification, and a 14× CUDA-kernel speedup the harness search never reached. That is real engineering progress. It is also the moment to ask what "self-improving" actually means once the dust settles.

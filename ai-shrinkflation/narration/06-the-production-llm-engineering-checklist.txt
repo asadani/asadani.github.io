@@ -1,0 +1,31 @@
+The Production LLM Engineering Checklist.
+
+This is the minimum bar for any team running LLMs in a production system where quality matters. It should be part of your AI service design review, not retrofitted after the first regression incident.
+
+Log tool call sequences, reasoning block presence, task completion rates, user interrupt rates, and cost per task. Not just latency and HTTP status.
+
+A scheduled eval suite running against production models. Trend dashboards with alerts on deviation. Reviewed in weekly engineering sync.
+
+Single LLM gateway layer. No direct SDK calls in business logic. Switching providers is config + mapping, not a migration project.
+
+Live connections to at least two providers. Automated failover when eval scores degrade. Never single-vendor-dependent on the critical path.
+
+Stop-phrase detection, action verification, loop detection, and cost guards built into the agent harness. Not optional add-ons.
+
+Reasoning budget, effort level, and sampling parameters specified explicitly for each workflow tier. No reliance on provider defaults.
+
+What to ask of your vendors
+
+Enterprise contracts should include more than an SLA on uptime. Push for:
+
+Per-request reasoning token counts exposed in response metadata, not hidden by redaction.
+
+Explicit model version identifiers on every response, including which pool variant served the request.
+
+Change notifications when safety layers, routing policies, or effort defaults are adjusted.
+
+Pinned model versions with contractual migration windows, analogous to API deprecation schedules.
+
+Access to internal effort and configuration settings available to the vendor's own engineers.
+
+Analysis of the March 2026 Claude Code source leak found that Anthropic's own engineers run with an instruction set that includes "verify work actually works before claiming done", a check not present in the default configuration for paying customers. If your vendor's engineers get a higher-quality harness than you do, that is a quality tier gap worth negotiating into your contract.

@@ -1,0 +1,11 @@
+TextGrad: backpropagation without numbers.
+
+Standard backprop assumes differentiable nodes, neurons, kernels, attention weights. Compound AI systems contain non-differentiable nodes: API calls, search engines, deterministic simulators, tool invocations. TextGrad's claim is that you can still propagate gradients through such graphs, as long as the gradients are written in natural language.
+
+The architecture mirrors PyTorch syntax deliberately. The graph is a DAG. Forward pass produces an output. A loss function, implemented as an LLM critique, generates a textual error description. That critique is the "gradient." It propagates backward, suggesting concrete, actionable edits to every text variable in the graph: prompts, intermediate reasoning, even tool descriptions.
+
++20% relative improvement on LeetCode-Hard solutions over GPT-4o; zero-shot GPQA accuracy from 51% to 55% via test-time refinement; gains on novel small-molecule design and radiation-oncology plan refinement. The pattern: TextGrad is strongest where a quick critique is cheaper than a full retry.
+
+The catch is that the gradient is itself an LLM output, and LLM outputs hallucinate. If the critique is wrong, the optimization step is wrong, and the system can drift confidently into worse prompts. TextualVerifier patches this: instead of trusting a single critique, it decomposes reasoning chains into atomic claims, generates multiple variant evaluations, takes a majority vote, then aggregates the consensus. Plugged into TextGrad's loss function, it lifted MMLU Machine Learning from 76.79% to 87.50% and MMLU College Physics from 91.18% to 95.10%, with p < 0.001 statistical significance.
+
+Read TextGrad as a primitive, not a product: the right tool when you have a fragile compound system and want a principled way to attribute its failures to specific text variables.

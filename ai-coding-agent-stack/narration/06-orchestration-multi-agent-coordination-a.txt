@@ -1,0 +1,11 @@
+Orchestration: Multi-Agent Coordination at Scale.
+
+Multi-agent orchestration is the most architecturally interesting layer and the one most teams should adopt last. The promise, parallel subagents executing independent tasks simultaneously, is real, but the prerequisites are demanding. Teams that move to orchestration before nailing context management, skills, and memory typically experience context pollution, subagent hallucination, and coordination overhead that offsets the parallelism gains.
+
+OpenHands (formerly OpenDevin) is the category leader at ~70k stars and $18.8M raised. It autonomously plans, codes, debugs, runs tests, and can deploy applications, given a high-level task, it orchestrates multi-step workflows with real tool execution in a sandboxed environment. It integrates with GitHub, GitLab, Slack, and Jira, and supports any LLM backend. The practical tradeoff: full autonomy means full responsibility for sandboxing. Running OpenHands without container isolation is a significant security risk.
+
+SWE-agent / mini-swe-agent is the benchmark standard. The minimal agent variant is ~100 lines of code but achieves 65, 74% on SWE-bench Verified, making it the reference for evaluating whether your own orchestration approach is actually improving agent output. Widely adopted by Meta, NVIDIA, IBM, and academic labs for exactly this reason.
+
+ByteDance's deer-flow handles long-horizon tasks (minutes to hours) via a 12-stage middleware chain: summarization layers reduce context as token limits approach, and a virtual path system isolates agent operations from host directories. The tradeoff: dangerously high privileges without strict Docker sandboxing, and aggressive context compression strips intermediate reasoning that subagents need for deep coordination.
+
+Multi-agent orchestration pays off when tasks genuinely decompose into independent parallel work streams, typically features spanning multiple services or large refactors. For single-service feature work, a well-configured single agent with a strong skill methodology (Superpowers-style) outperforms orchestration due to lower coordination overhead. Run the comparison on your own workload before committing to the infrastructure.

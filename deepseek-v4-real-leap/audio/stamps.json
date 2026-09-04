@@ -1,0 +1,46 @@
+{
+ "00-introduction": {
+  "k": "a81c77ed893fde2d",
+  "d": 42.0
+ },
+ "01-what-the-critics-got-right": {
+  "k": "339e297ee95ffaa7",
+  "d": 90.3
+ },
+ "02-engram-the-research-that-didn-t-make-it-": {
+  "k": "1c80aeafaf849e11",
+  "d": 251.2
+ },
+ "03-why-the-numbers-deserve-skepticism": {
+  "k": "cc8ff306fd0d1c2a",
+  "d": 91.1
+ },
+ "04-why-the-kv-cache-numbers-change-everythi": {
+  "k": "4e84ad6dcf535df0",
+  "d": 158.0
+ },
+ "05-where-v4-leads-where-it-doesn-t": {
+  "k": "23ffd9052db19eee",
+  "d": 38.2
+ },
+ "06-how-the-economics-stack-up": {
+  "k": "92c761462515423d",
+  "d": 137.9
+ },
+ "07-the-agent-first-design-is-a-real-bet": {
+  "k": "d6fc881aed18c2b9",
+  "d": 144.2
+ },
+ "08-open-weight-hardware-sovereignty": {
+  "k": "f786d787d5876d00",
+  "d": 113.5
+ },
+ "09-who-should-care-and-why": {
+  "k": "f11bfe3e13e70c9a",
+  "d": 54.7
+ },
+ "10-migrating-to-v4": {
+  "k": "ef88b7b064f8829e",
+  "d": 31.4
+ }
+}

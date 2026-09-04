@@ -1,0 +1,5 @@
+Introduction.
+
+Verification-maxxing
+
+For seventy years the cost of software lived in syntax: translating intent into something a parser would accept. That tax is collapsing. What replaced it is the verification tax, the cost of checking what the machine hands back, and the move from "vibe coding" to "agentic engineering" is really a fight over who pays it, and when. Generation is solved. Judgment is the moat.

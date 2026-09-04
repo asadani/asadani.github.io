@@ -1,0 +1,7 @@
+The pipeline era is over.
+
+For two decades, data teams optimized for one thing: moving bytes from A to B. The resulting systems are familiar, centralized warehouses fed by hundreds of brittle pipelines, owned by a lone platform team, consumed by analysts who file tickets and wait. It worked, until it didn't. The failure mode is always the same: nobody knows where a number came from, nobody will commit to its freshness, and nobody is accountable when it's wrong.
+
+Product thinking flips the model. A data product is built like a service: it has an owner, an SLA, a version, a contract, and a consumer experience. The team that understands the data best, the domain team, owns it end-to-end. The platform team builds the substrate (storage, compute, governance) that makes this feasible without every domain reinventing the wheel. This is the core bet of the Data Mesh paradigm, and it's the architectural frame this manifesto operationalizes.
+
+What follows is a concrete commitment to seven pillars. None of them are optional. A data "product" that skips governance is just a pipeline with a better name.

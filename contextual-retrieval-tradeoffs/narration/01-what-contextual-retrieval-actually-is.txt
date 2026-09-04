@@ -1,0 +1,13 @@
+What contextual retrieval actually is.
+
+Stripped of marketing, the recipe has four moving parts. Three are common knowledge in the RAG community. The fourth is where Anthropic adds something distinctive.
+
+Contextual embeddings. For each chunk, prompt the model with the whole document plus the chunk and ask it to produce a short situating description. Prepend that description to the chunk before embedding. The vector now carries global document context, not just local text.
+
+Contextual BM25. Index the same context-prefixed text in a BM25 / keyword index alongside the vector store. Query both. This is a standard hybrid stack; the trick is that BM25 now matches against LLM-augmented text.
+
+Reranking. Pull a wide top-N (e.g. 150) from hybrid retrieval, then run an LLM or smaller cross-encoder reranker to pick the final 20. ~100, 200 ms latency overhead per query in the cookbook's numbers, plus per-query API cost.
+
+Prompt caching to make ingestion affordable. Load the document into the cache once, then apply a cheap per-chunk prompt against the cached doc. Anthropic estimates roughly $1, 3 per million document tokens, one-time. This is the platform unlock.
+
+Algorithmically: LLM-generated metadata + hybrid retrieval + rerank. Operationally: a prescriptive recipe with a cost story that depends on Claude's caching primitive.

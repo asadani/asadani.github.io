@@ -1,0 +1,7 @@
+If you only remember three things.
+
+There are two failure modes, not one. Cognitive surrender hollows out your skill. Moral surrender hollows out your judgment. They look the same from the outside; they require different mitigations.
+
+Borrowed confidence is the load-bearing mechanism. 73% wrong-answer acceptance, with confidence going up, is not a knowledge problem, it's a posture problem. The fix is to construct an independent view before reading the agent's answer, and to make the model argue against itself when you can't.
+
+The tool is the same in both postures; the posture is what differs. If your code is shipping and your understanding of the system is shrinking, you're paying with cognitive debt. If your code is shipping and your understanding is growing, you're doing the actual job, just faster than before. That part is still entirely yours.

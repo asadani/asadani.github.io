@@ -1,0 +1,11 @@
+Your microphone is lying to you.
+
+I needed three sessions to get ninety usable seconds, and none of the failures were about machine learning.
+
+Take one was on Bluetooth earbuds. When a Bluetooth device is used as a microphone the link drops to the hands-free profile, which caps the mic at 16 kHz sampling. That is an 8 kHz audio ceiling. Windows then upsamples to 48 kHz to fill the file header, so everything about the recording looks correct.
+
+Above 8 kHz is where sibilance and consonant air live. The s, the t, the sh. A clone conditioned on band-limited audio reproduces that limitation, and you get fifty minutes of narration that sounds like a phone call.
+
+So I switched to the laptop's built-in array microphone. Take two was worse. Same 8 kHz ceiling, because the voice DSP runs a 16 kHz capture pipeline you cannot switch off from the recorder app, and now I had also given up 23 dB of signal-to-noise and four fifths of the presence band by sitting thirty centimetres away.
+
+Any modern phone voice-memo app captures genuinely full-band audio and bypasses your laptop's audio stack entirely. Hold it a hand's width from your mouth, slightly off-axis so plosives do not hit the capsule head on. It beats both your headset and your built-in mic, and it costs nothing.

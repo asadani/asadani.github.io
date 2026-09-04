@@ -1,0 +1,7 @@
+The example cost more, and it worked.
+
+Here is the part I resisted at first. Reading a real article into the context before writing is not free. A finished post runs about two and a half times the size of the skeleton, so handing the model a full sample is the expensive path: more tokens to read, more to hold in working memory than a clean template and a short list of steps.
+
+I kept choosing it anyway, because the cheap path kept producing posts that were quietly wrong and the expensive path did not. Template plus skill gave me the grammar and the procedure. Template plus skill plus a real example gave me output that actually held together, because the example carried the one thing the other two could not: what the components look like once they meet real content, including the exact places they fall apart.
+
+So for a while the scoreboard was blunt. The lean version was elegant and incomplete. The heavy version cost more and shipped. I paid the tokens and stopped pretending the clean inputs were enough.

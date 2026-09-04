@@ -1,0 +1,7 @@
+The short version.
+
+AI did not abolish technical debt. It changed its denomination. The old debt was unfinished implementation and you could see it. The new debt is unfinished understanding, and it hides behind a green test suite and a confident tone.
+
+I wrote once about moral surrender, losing the why and not just the how. TOKNOW is what that surrender looks like inside a codebase. Every generated function nobody has reasoned about is a quiet bet that later will come, and that someone will understand it before it matters. The data says later does not arrive on its own.
+
+So I have started asking one question before anything ships. If this breaks, and the only thing that ever understood it is the model that wrote it, who fixes it? If the answer is nobody, you did not ship a feature. You filed a TOKNOW and called it done. The TODO was a promise to do the work. Make the TOKNOW the one promise you refuse to write.

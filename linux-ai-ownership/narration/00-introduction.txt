@@ -1,0 +1,5 @@
+Introduction.
+
+AI Writes the Code. You Own Everything.
+
+The Linux kernel has merged its first official rules for AI-assisted code contributions, redefining the line between tool and author in ways every developer using AI agents needs to understand.

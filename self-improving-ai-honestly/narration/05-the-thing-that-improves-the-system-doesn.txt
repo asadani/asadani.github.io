@@ -1,0 +1,9 @@
+The thing that improves the system doesn't improve.
+
+Across SIA, the Darwin Gödel Machine, AI Scientist, Meta-Harness, Hyperagents, the improvement mechanism itself is a frozen large language model. An LLM is choosing what to change next.
+
+That LLM does not get better at choosing. It is the same Claude or GPT call, run again with new context. Its prior over "what to try" is whatever the foundation lab last shipped.
+
+For genuine recursive self-improvement, the thing that decides "what to improve" has to itself be on a learning curve. None of the public systems do that. The SIA authors say so directly in their future-work section: the selection policy itself should be the object of training, not a frozen prior.
+
+Until that exists, every "self-improving AI" system in the literature is two-level. A learnable inner loop. A frozen outer loop. The recursive open-ended improvement that the phrase culturally implies, the version that suggests an exponential trajectory, needs at least three levels with the outer one moving. Possibly more.

@@ -1,0 +1,13 @@
+What separates "self-improving" from the AGI framing.
+
+Four pieces stand between today's research and the version of self-improvement that justifies the "step toward AGI" language. None are solved.
+
+The system has to decide what is worth improving, not just how. No current system chooses its own problem; humans pick the dataset, the verifier, the success metric.
+
+The meta-agent driving the loop has to itself sit on a learning curve. Today it is a frozen LLM prior. The thing that selects "what to try next" doesn't get better at selecting.
+
+Improvements have to generalise. Today's systems specialise: a LoRA adapter per task, a scaffold per benchmark. Wins on TriMul don't help LawBench. The compounding flywheel is absent.
+
+The system has to improve in domains where reward isn't pre-specified. Every working result lives in domains where some authority can score the output cheaply. Most of real life does not work that way.
+
+Each of these is an active research direction. None are within striking distance of being closed. Pretending otherwise sells expectations the field cannot deliver this year, probably not next year either.

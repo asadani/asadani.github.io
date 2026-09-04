@@ -1,0 +1,7 @@
+Understanding the Cost Model.
+
+You pay standard S3 storage rates for all data at rest, plus data-access surcharges for the caching and movement overhead introduced by NFS operations. The large-file free-read rule is the detail that makes the economics work for ML workloads.
+
+ML datasets are almost entirely large files, multi-GB Parquet shards, TFRecords, checkpoints. Under S3 Files pricing, large-file reads are essentially free, making it dramatically cheaper than EFS ($0.30/GB-mo) for the massive, read-heavy access patterns that define model training at scale.
+
+The $0.06/GB NFS write fee adds up fast for write-heavy workloads, log rotation, frequent checkpointing, code compilation scratch space. For those patterns, pure EFS or local NVMe is likely cheaper. Use the estimator above to check your specific numbers.

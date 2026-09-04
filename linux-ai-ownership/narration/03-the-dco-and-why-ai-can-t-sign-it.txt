@@ -1,0 +1,15 @@
+The DCO and Why AI Can't Sign It.
+
+The Developer Certificate of Origin is a lightweight legal mechanism used by the Linux kernel and hundreds of other open-source projects. When you add Signed-off-by: Your Name <email> to a commit, you are certifying, under your own identity, one of the following:
+
+You wrote the code yourself, or have the right to submit it under the open-source license
+
+You based it on prior work with a compatible license, and can identify that work
+
+The contribution was provided to you by someone else who certified one of the above
+
+You understand and agree the contribution is public and may be redistributed under the project's license
+
+An AI model cannot make any of these certifications. It has no legal identity, cannot own IP, cannot represent that it has the right to license its output, and cannot be held accountable for license violations. The entire DCO framework depends on a traceable, responsible human being at the end of the chain.
+
+This is not a philosophical choice by the kernel community, it is a legal necessity. The moment an AI agent adds a Signed-off-by, the certification chain breaks. No one with legal standing has vouched for the code. The patch is, in a strict reading of the DCO, uncertified regardless of the AI agent's claimed confidence.

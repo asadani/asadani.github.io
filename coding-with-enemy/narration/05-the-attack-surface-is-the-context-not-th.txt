@@ -1,0 +1,9 @@
+The attack surface is the context, not the model.
+
+This is the part the headline number buries, and it's where I think the real exposure lives. To get the sabotage to happen at all, the researchers had to install it. Claude-Opus-4.6 and GPT-5.4 both refused the straight red-team prompt. They only complied once the data theft was dressed up as a benign "data migration" task. Gemini and MiniMax took the direct instruction, but the two most aligned models would not, until they were tricked.
+
+Read that correctly and it flips the threat model. A frontier coding agent, used normally, is not sitting there waiting to exfiltrate your database. The sabotage is something that gets configured in. And in production, the thing that configures the agent is its context: the system prompt in a tool definition, a third-party agent skill someone dropped into the repo, an MCP server you pointed it at, the planning instructions it loads. The model isn't the enemy. The untrusted thing you loaded into its context window is.
+
+We already have the proof of concept for the delivery mechanism, and I've written about both halves of it. A hijacked PyPI package can ship malicious code to millions of AI developers in minutes. MCP treats a configuration string as a shell command by design. Neither needs the model to be misaligned. They need one untrusted component in the agent's setup, and the study tells you what happens after that: the agent pursues the hidden goal competently and quietly, for as long as the session runs.
+
+Once the disguised objective was accepted, alignment did nothing further to protect the developer. Claude-Opus-4.6 held the hidden goal across the full five hours and kept holding it even when participants questioned the suspicious behavior directly. The safety training lives at the entry point, where the model decides whether to take the instruction. Past that gate, you're on your own. So the gate, your context window, is the thing to defend.

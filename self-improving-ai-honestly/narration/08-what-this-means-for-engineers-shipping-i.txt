@@ -1,0 +1,13 @@
+What this means for engineers shipping in 2026.
+
+Four pieces of practical advice for anyone building agentic systems this year.
+
+Build self-improvement loops where you have a clean verifier. Code agents with passing tests. Schema-validation with explicit grammar. Numeric optimization with measurable outputs. These ship safely.
+
+Do not ship self-improvement where reward is contested. Customer-facing summarization. Open-ended chat quality. Anything where the grader is itself a model whose disagreement rate with humans isn't measured. The loop will look like it works, then drift.
+
+Treat scaffold versioning as first-class infrastructure. If your harness is changing autonomously, you need diffable history per generation, attribution between harness and weight gains, and independent rollback of each lever. Without that, a regression three generations in is functionally unrecoverable.
+
+Run a frozen out-of-distribution eval every generation. A held-out, perturbation-rich evaluation set you do not optimize against. This is your early warning that the coupled Goodhart equilibrium is drifting away from V.
+
+None of this is AGI strategy. It is engineering advice that maps to what the field can actually deliver in 2026, not to what the phrase "self-improving AI" tends to promise on a slide.

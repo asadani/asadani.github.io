@@ -1,0 +1,42 @@
+{
+ "00-introduction": {
+  "k": "fd42b67311c9349b",
+  "d": 22.0
+ },
+ "01-a-narration-you-can-re-run": {
+  "k": "458e2ae8587ba42c",
+  "d": 51.0
+ },
+ "02-small-enough-to-be-boring": {
+  "k": "eaceae055cd9e7b7",
+  "d": 44.4
+ },
+ "03-voices-are-vectors-so-blend-them": {
+  "k": "fb87089564e5e0ba",
+  "d": 52.5
+ },
+ "04-the-words-the-model-actually-reads": {
+  "k": "83c62ad79976d8b0",
+  "d": 56.6
+ },
+ "05-silence-is-a-parameter": {
+  "k": "411f0b9e0f0b8004",
+  "d": 68.1
+ },
+ "06-even-loudness-small-files": {
+  "k": "952a420730a9f068",
+  "d": 25.4
+ },
+ "07-re-renders-should-cost-nothing": {
+  "k": "8d0ce9c67470f678",
+  "d": 33.7
+ },
+ "08-what-it-will-not-do": {
+  "k": "210f70d1d1eeabe9",
+  "d": 44.7
+ },
+ "09-the-short-version": {
+  "k": "1490dfdcf9be7306",
+  "d": 51.4
+ }
+}

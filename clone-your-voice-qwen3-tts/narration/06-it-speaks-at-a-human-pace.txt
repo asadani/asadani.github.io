@@ -1,0 +1,7 @@
+It speaks at a human pace.
+
+My 45.5-minute synthetic track came out at 50.3 minutes cloned. File by file, between 6% and 20% longer. Nothing was truncated. It simply speaks the way a person does, because it learned that from a person.
+
+That is worth knowing in advance for two reasons. If your player uses a duration manifest, it needs regenerating. And if you have been tuning paragraph gaps against the synthetic version, they will feel slightly different here, because the speech around them changed length while the silence did not.
+
+I also checked the other direction. On a single sentence the clone ran 3.84 seconds against my own 4.52, so it is not uniformly slower. It redistributes time the way I do, which is the thing you actually wanted.

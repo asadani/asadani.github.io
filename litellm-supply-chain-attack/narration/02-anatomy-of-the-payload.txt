@@ -1,0 +1,19 @@
+Anatomy of the payload.
+
+The attack behaves differently across the two versions, with 1.82.8 being the escalated, more aggressive iteration. Here is what 1.82.8 does from the moment litellm is installed.
+
+The.pth trick: why no import is needed
+
+Python's site module processes every.pth file in site-packages/ at interpreter startup. The malicious file litellm_init.pth (34,628 bytes, listed in the package's own RECORD) contains a one-line trigger.
+
+This spawns a child Python process carrying the full payload. Because.pth files trigger on every interpreter startup, the child re-triggers the same file, creating an exponential fork bomb. That fork bomb was not intentional. It is a bug, and without it this attack would still be undetected in countless environments.
+
+Version 1.82.7 was slightly less aggressive. Its payload was embedded directly in proxy/proxy_server.py and needed an explicit import litellm to fire. Version 1.82.8 removed that requirement entirely.
+
+Credential harvesting. Sweeps the filesystem for SSH private keys,.env files, cloud credentials across AWS, GCP and Azure, Kubernetes configs, database passwords, shell history, Docker configs, npm tokens and crypto wallet files. It then runs printenv to capture every live environment variable, so any API key or secret in the process environment goes too. SSH keysCloud credsAPI keysK8s secretsCrypto wallets
+
+Encrypted exfiltration. Collected data is encrypted with AES-256-CBC using a random 32-byte session key, which is itself encrypted with a hardcoded 4096-bit RSA public key. Both are bundled into tpcp.tar.gz and POSTed to https://models.litellm.cloud/, a lookalike domain registered specifically for this attack. The legitimate domain is litellm.ai. AES-256-CBCRSA-4096models.litellm.cloud
+
+Lateral movement and persistence. If a Kubernetes service account token is present, the payload reads all secrets across all namespaces and tries to create a privileged alpine:latest pod on every node in kube-system. Each pod mounts the host filesystem and drops a backdoor at ~/.config/sysmon/sysmon.py with a systemd service that polls a C2 server for updated binaries. K8s priv-escsystemd persistenceC2 polling
+
+LiteLLM is an LLM API gateway. Its entire job is to manage API keys for OpenAI, Anthropic, Google and 100-plus other providers, so any machine running it is by definition a treasure chest of high-value credentials. The attacker knew exactly what they would find.

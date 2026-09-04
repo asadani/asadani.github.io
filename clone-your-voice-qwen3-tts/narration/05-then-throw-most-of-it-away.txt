@@ -1,0 +1,11 @@
+Then throw most of it away.
+
+I recorded 85 seconds with a matching transcript, which felt like a generous conditioning signal. The model advertises cloning from three seconds, so more seemed obviously better.
+
+It was not. It was substantially worse.
+
+The reason is that the reference does not get consumed once and discarded. It stays in the model's working context for the whole generation. Eighty-five seconds of audio becomes roughly a thousand tokens that every subsequent word has to be computed against, before a single word of output exists.
+
+So pick one clean, complete sentence. Cut it on silence at both ends. Save the exact transcript beside it. Four to ten seconds is the whole reference, and the quality difference against ninety seconds was not something I could hear on an A/B.
+
+Qwen3-TTS clones in-context, so it refuses to run without a transcript of the reference. There is a mode that skips it, documented as lower quality. I take the refusal as a good sign. It is genuinely aligning text against audio rather than pulling a speaker embedding and hoping.

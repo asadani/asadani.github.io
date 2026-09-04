@@ -1,0 +1,13 @@
+The honest list of what defeats it today..
+
+I'd rather state the limits plainly than oversell the check. Here is what gets past SynthID right now.
+
+Generate with a non-participating model. No mark written, nothing to detect. The simplest evasion, and it needs zero skill.
+
+Screenshot or re-capture a still image. Re-rasterizing pushes the signal below the detector's confidence on a single frame.
+
+Heavy generative editing. Run the image through a second, unmarked model that repaints it, and you can dilute the original mark.
+
+The analog hole. Print it and photograph it, or aggressively crop and rescale, and a faint image watermark can drop out.
+
+None of this makes the check worthless. It makes it a filter, not a verdict. A filter that catches the lazy 90% of synthetic media is still enormously valuable, as long as nobody mistakes a clean result for proof of a human hand.

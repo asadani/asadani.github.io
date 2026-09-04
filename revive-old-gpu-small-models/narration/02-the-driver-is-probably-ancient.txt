@@ -1,0 +1,9 @@
+The driver is probably ancient.
+
+Mine was version 462.30, shipped February 2021. Five years stale, and it caps you at the CUDA 11.2 runtime, which no current PyTorch wheel targets. Every downstream thing I tried would have failed against it for reasons that had nothing to do with the real problem.
+
+Check this before anything else:
+
+One practical note if your machine still has GeForce Experience on it: that client was retired, and its driver-download backend no longer serves the old builds. Express Install will sit there doing nothing forever and tell you nothing. Download the driver directly instead, take the Studio branch, and choose the custom install so you can decline the extra background services on a memory-constrained machine.
+
+You do not need the CUDA Toolkit. Modern PyTorch wheels bundle their own runtime, and on a machine with 8.5 GB of RAM the toolkit is three gigabytes you will never use.

@@ -1,0 +1,7 @@
+Why fp16 crashes on Turing.
+
+The model I was running ships in bfloat16. Turing has no native bf16, so PyTorch emulates it, and fp16 is the genuinely native path. Switching to fp16 for the speed is the obvious optimisation. It is also wrong, and the failure mode is nasty.
+
+bf16 has a much wider exponent range than fp16. In fp16 the logits overflow inside the sampling loop, sampling returns an out-of-range index, the embedding lookup asserts on device, and the process dies. Device-side asserts report asynchronously, so the traceback location is not trustworthy either. You get a crash pointing at a line that is fine.
+
+Emulated bf16 is slower and correct. Take correct. The related setting: attn_implementation="sdpa", because FlashAttention-2 requires Ampere or newer and will not build against this card at all.

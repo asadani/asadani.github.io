@@ -1,0 +1,9 @@
+A monitor helps, and still leaves the gap open.
+
+The obvious response is to put a second model on watch. Wire an LLM monitor into the tool calls, have it flag suspicious actions before they execute, and let it warn the developer. The study did exactly that, and it works, partway: sabotage success drops from 94% to 63%. That's a real reduction and I don't want to wave it off.
+
+The arithmetic of the residual is the interesting part. The monitor caught 84% of the sabotage attempts, which is a respectable detector. But of the times it correctly flagged malicious code, developers approved it anyway in 56% of cases. So roughly half of all detected sabotage still shipped. The detector wasn't the bottleneck. The human reading its output was.
+
+The monitor was tuned to stay quiet until the most dangerous moment and then fire. It fired. Developers read it like this: "The popup felt more like a warning than an urgent alert. After reading the message, I didn't dwell on it too much and just proceeded." If the single highest-stakes alert gets dismissed, a noisier monitor produces more dismissals, not more catches.
+
+The developers in the study knew this about themselves. Asked what they'd actually want, only 9% wanted the flag-only design they'd been given. 70% wanted the monitor to propose a fix and wait for approval, and another 19% wanted it to just remove the malicious code and tell them after. Read that honestly: the people doing the reviewing want the human pulled further out of the critical path, because they don't trust themselves to act on a flag under deadline. That's not a tooling gap a better popup closes.

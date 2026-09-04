@@ -1,0 +1,7 @@
+Surrender is how you take on cognitive debt.
+
+Each act of surrender is a tiny loan. The codebase grows by another patch you don't fully understand. The architecture absorbs another decision you didn't make. The test suite gains a test you didn't think to specify. None of these feel like a problem on the day they happen. They compound.
+
+Cognitive surrender is the mechanism by which comprehension debt accumulates. Comprehension debt is the bill, denominated in lost mental model. The interest gets paid the next time something goes wrong and nobody on the team can reconstruct the system from first principles.
+
+Moral surrender accumulates the same way, in a different ledger: conviction debt. Decisions pile up in the codebase that nobody on the team can defend on its merits anymore. The system "is what it is" because a sequence of confident-sounding model outputs walked it there. Recovering from cognitive debt is a refactor. Recovering from conviction debt is a re-architecture.

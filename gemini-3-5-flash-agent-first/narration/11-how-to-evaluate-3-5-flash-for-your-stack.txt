@@ -1,0 +1,15 @@
+How to evaluate 3.5 Flash for your stack this week.
+
+If you are on 2.5 Flash today and the migration target is 3.5 Flash, do not change the model string in your config and call it done. The deprecation is real, but the new model has a different cost profile, different output verbosity, and a different design target. Treat the cutover as a real re-eval.
+
+Replay your top 100 prompts in shadow mode. Diff outputs, token counts, latency, and tool-call patterns against your current 2.5 Flash baseline. The risk is not quality; it is verbosity blowing up cost.
+
+Re-cost on real traffic, not list price. Output dominates total cost for tool-using workloads. Track effective $/successful-run, not $/M tokens.
+
+Probe long-context behavior explicitly. If you push past 64k, run a small MRCR-style eval inside your domain. If accuracy drops, hold on 3.1 Pro until 3.5 Pro lands.
+
+Stress the agentic path. Run your tool-using chains end-to-end with sub-agents enabled. The headline benchmark wins are agentic, if you do not exercise that path, you will not see them.
+
+Add a kill-switch on autonomous runs. Multi-hour sessions only make sense with hard timeouts, budget caps, and human confirmation gates. Build those before you ship, not after the first incident.
+
+Re-read the safety surface for your domain. Better calibration on sensitive prompts changes refusal patterns. Regression-test your safety filters and audit your refusal logs after cutover.

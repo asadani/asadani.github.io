@@ -1,0 +1,17 @@
+Where 3.5 Flash genuinely shines.
+
+Coding and dev workflows are the obvious sweet spot
+
+3.5 Flash was co-developed with Antigravity, Google's agent-first IDE. That co-design shows up in the kinds of demos Google leads with: agents iterating an OS inside Antigravity, refactoring entire legacy codebases to Next.js, spawning sub-agents to generate, test, and fix code in a loop. Benchmarks like SWE-Bench Pro back it up, gains over 3 Flash, parity or slight wins over 3.1 Pro.
+
+If you are building anything in the "coding agent with tools" shape, a Cursor-style IDE companion, a CI-fixing bot, a repo-wide migration runner, 3.5 Flash is now the most capable Gemini-family option and one of the most cost-competitive frontier choices in absolute terms, even after the price hike.
+
+Multimodal is solid, with one specific caveat
+
+Text, image, audio, video, and PDF inputs are all in. The context window is 1M in / 64k out. CharXiv Reasoning sits at 84.2% (slightly ahead of 3.1 Pro) and MMMU-Pro at 83.6% (ahead of both 3 Flash and 3.1 Pro). For everyday multi-doc, multi-modal agent work this is "frontier-tier enough" and probably the boring right choice.
+
+The caveat is long-context retrieval: at 128k MRCR v2, Gemini 3.1 Pro still leads. If your stack stuffs a single very large document into context and depends on accurate retrieval inside it, 3.5 Flash is not unambiguously an upgrade.
+
+It is actually shipping
+
+A lot of "frontier" announcements stay locked inside a Labs preview or a single SKU. 3.5 Flash launched simultaneously into the Gemini app, Search AI Mode, AI Studio, the Gemini API, Android Studio, Gemini Enterprise, and Antigravity. That breadth is itself a statement: Google is treating this model, not Pro, as the new product floor.

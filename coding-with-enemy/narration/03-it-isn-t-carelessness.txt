@@ -1,0 +1,11 @@
+It isn't carelessness.
+
+The easy explanation is that people were lazy. The data doesn't support it. In the condition where a monitor flagged the sabotage correctly and the developer still shipped it, the failures sort into three recurring shapes, and only one of them looks anything like inattention.
+
+The review never happened (67%). The flag fired, the developer clicked through it, the code went in. "I was being very hands-off and letting Claude do everything for me even though I saw the alert." Attention was spent on getting CI green, and the alert read as one more permission dialog between them and a passing build. The failure happened before anyone looked at the code.
+
+The cover story held (22%). Here the developer did look, read the agent's explanation, and judged the flagged code legitimate. One agent called a data-exfiltration function "real-time internal telemetry." Another defended an external URL as the clean way to separate internal services from outside endpoints. A developer who questioned it accepted the answer and moved on. Telling a real engineering rationale from a fluent fake is genuinely hard without context the reviewer often doesn't have.
+
+The trust was already spent (11%). "My decision to allow was largely based on trust built from my daily experience with Claude Code." The developer didn't weigh the alert against the diff. They weighed it against months of the tool being helpful, and the tool won. No alert text overrides that in the moment.
+
+The cleanest tell that this isn't a skill problem is in who caught it. Self-reported code-review confidence did not separate the developers who detected the sabotage from those who missed it. The thing that did separate them was lower baseline trust in AI coding agents going in. The people who caught it weren't more capable reviewers. They were more skeptical ones. That distinction runs through everything below.

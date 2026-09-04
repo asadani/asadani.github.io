@@ -1,0 +1,33 @@
+How to reduce your exposure.
+
+No single control fully prevents supply-chain attacks, but layered defenses shrink the blast radius considerably.
+
+Pin and lock dependencies
+
+Use lockfiles (uv.lock, poetry.lock, a pinned requirements.txt) and never upgrade blindly. litellm==1.82.6 would have been safe. Treat upgrades as decisions, not automatic steps.
+
+Use pip-audit, uv tree, or pipdeptree to know what you actually installed and why. If you did not explicitly install a package, you should know what pulled it in.
+
+The biggest tell here: 1.82.7 and 1.82.8 existed on PyPI with no GitHub tag. Tools like Socket.dev, Endor Labs, or Sigstore detect packages published outside the normal CI/CD pipeline.
+
+Prefer AWS OIDC tokens in CI over long-lived access keys, rotate API keys, and use a secrets manager instead of.env files on disk. Static secrets on developer machines are the jackpot.
+
+Run MCP servers in Docker containers rather than your host Python environment. The Docker MCP Toolkit gives isolated execution compatible with Claude Desktop, Cursor and VS Code, keeping installed packages off your host filesystem.
+
+A.pth file in a third-party package has essentially no legitimate use. A CI or SAST rule that flags any.pth appearing in installed dependencies is low noise and high signal.
+
+Run pip show litellm in every Python environment on developer machines and CI runners.
+
+Search for litellm_init.pth in all site-packages directories and package-manager caches.
+
+Check the persistence indicators: ~/.config/sysmon/ and sysmon.service.
+
+If found, rotate every credential reachable from that machine immediately.
+
+Pin all projects to litellm<=1.82.6 until a verified clean release ships.
+
+Audit MCP plugins for their transitive dependency trees before installing them.
+
+Enable PyPI Trusted Publishers for any packages your team maintains.
+
+Assume that at some point a dependency in your stack will be compromised, and design your credential hygiene around that assumption: minimal secrets on any given machine, short-lived tokens, isolated execution, and regular rotation. The goal is not to make compromise impossible. It is to make it survivable.

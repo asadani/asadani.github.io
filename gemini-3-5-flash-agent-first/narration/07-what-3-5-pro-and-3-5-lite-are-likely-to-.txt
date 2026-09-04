@@ -1,0 +1,17 @@
+What 3.5 Pro and 3.5 Lite are likely to be.
+
+Google has said the 3.5 family will fill out, Pro is being used internally and is the next public drop, and there is no 3.5 Lite model card yet. We can say plausible things about each without inventing numbers.
+
+3.5 Pro, the planner and reasoning brain
+
+The framing Google has used publicly is that Pro orchestrates and Flash executes: Pro holds the long-horizon plan, Flash carries out brute-force tool calls and parallel work as sub-agents underneath it. Combine that with the fact that 3.5 Flash slightly regresses against 3.1 Pro on long-context and hard reasoning, and the implication is clear: 3.5 Pro is being built to restore that lead and to act as the top of an explicitly hierarchical agent stack.
+
+Expect: highest-reasoning, deepest long-context, more expensive, and pitched as the orchestrator in multi-agent topologies, not as a chat default.
+
+3.5 Lite, the high-volume worker
+
+3.5 Lite (or 3.5 Flash-Lite, the naming is not pinned yet) has not shipped, but the prior at 3.1 Flash-Lite is "scalable thinking model for high-volume tasks at low cost and latency." Read forward: a tier optimized for tagging, summarization, classification, and the kinds of simple agents where you fire millions of small calls and care about per-token cost above all else.
+
+It will almost certainly absorb the migration target currently pointed at 3.1 Flash-Lite, finishing the deprecation table.
+
+Pro orchestrates. Flash executes heavy agentic work. Lite handles massive, cheap workloads. That is a coherent three-tier story for multi-agent systems, Pro at the top of the planning graph, Flash as the worker pool, Lite as the long tail. It is also the first time a major lab has shipped its tiering with this much built-in agent topology in mind.

@@ -1,0 +1,7 @@
+You're a poor judge of your own speed.
+
+Here is what makes this debt so easy to take on: you cannot feel yourself accruing it. In 2025, METR ran a careful randomized study of experienced open-source developers working on their own repositories. With AI tools allowed, they took about 19% longer to finish their tasks. They had expected AI to speed them up by 24%, and even after living through the slowdown they still believed it had sped them up by around 20%.
+
+I want to be fair to that study, because it has a sequel. METR later cautioned that its follow-up data was distorted by selection effects, that the developers who gain most from AI kept opting out of the no-AI condition, and that it had probably underestimated how much current tools help. Fair enough. I would not bet a roadmap on the slowdown number.
+
+The finding that survives all of that is the one I care about. These developers were wrong about their own productivity, in the optimistic direction, by roughly forty points. If we cannot feel a swing that large in our own speed, we certainly cannot feel the comprehension we skipped along the way. The velocity is loud and immediate. The debt is silent and deferred. We calibrate on the loud signal and miss the quiet one.

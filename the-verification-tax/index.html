@@ -761,7 +761,42 @@
   </div>
 
   <!-- ── 01 ───────────────────────────────────────────── -->
-  <div class="section" id="bottleneck">
+  <!-- ARTICLE-AUDIO:BEGIN -->
+<link rel="stylesheet" href="/assets/player.css">
+<div class="ap" id="articleaudio">
+  <div class="ap-hd">
+    <span class="ap-ico" aria-hidden="true">&#9654;</span>
+    <div><span class="ap-kick">Audio edition</span><b>Listen to this article</b><span class="ap-sub">10 parts &middot; 18 min</span></div>
+    <button class="ap-rate" type="button" aria-label="Playback speed">1&#215;</button>
+    <button class="ap-more" type="button" aria-expanded="false">Parts</button>
+  </div>
+  <p class="ap-now"></p>
+  <audio controls preload="none"></audio>
+  <ol class="ap-list" hidden>
+      <li><button type="button" data-src="audio/00-introduction.mp3"><span class="ap-n">1</span><span class="ap-nm">Introduction</span><span class="ap-d">0:27</span></button></li>
+      <li><button type="button" data-src="audio/01-coding-was-never-the-bottleneck.mp3"><span class="ap-n">2</span><span class="ap-nm">Coding was never the bottleneck</span><span class="ap-d">1:38</span></button></li>
+      <li><button type="button" data-src="audio/02-a-spectrum-not-a-binary.mp3"><span class="ap-n">3</span><span class="ap-nm">A spectrum, not a binary</span><span class="ap-d">1:11</span></button></li>
+      <li><button type="button" data-src="audio/03-agent-model-scaffold.mp3"><span class="ap-n">4</span><span class="ap-nm">Agent = Model + Scaffold</span><span class="ap-d">2:03</span></button></li>
+      <li><button type="button" data-src="audio/04-context-engineering-is-not-prompt-engine.mp3"><span class="ap-n">5</span><span class="ap-nm">Context engineering is not prompt engineering</span><span class="ap-d">2:10</span></button></li>
+      <li><button type="button" data-src="audio/05-who-pays-the-tax-and-when.mp3"><span class="ap-n">6</span><span class="ap-nm">Who pays the tax, and when</span><span class="ap-d">2:31</span></button></li>
+      <li><button type="button" data-src="audio/06-does-ai-actually-make-you-faster.mp3"><span class="ap-n">7</span><span class="ap-nm">Does AI actually make you faster?</span><span class="ap-d">2:00</span></button></li>
+      <li><button type="button" data-src="audio/07-the-factory-and-its-two-modes.mp3"><span class="ap-n">8</span><span class="ap-nm">The factory and its two modes</span><span class="ap-d">1:43</span></button></li>
+      <li><button type="button" data-src="audio/08-what-to-do-monday.mp3"><span class="ap-n">9</span><span class="ap-nm">What to do Monday</span><span class="ap-d">2:21</span></button></li>
+      <li><button type="button" data-src="audio/09-the-deeper-arc.mp3"><span class="ap-n">10</span><span class="ap-nm">The deeper arc</span><span class="ap-d">1:50</span></button></li>
+  </ol>
+</div>
+<div class="ap-mini" id="ap-mini" hidden>
+  <button class="ap-mb" data-act="play" aria-label="Play or pause">&#9654;</button>
+  <button class="ap-mt" data-act="goto" title="Back to the player"></button>
+  <div class="ap-mp" data-act="seek"><div class="ap-mpf"></div></div>
+  <em class="ap-mtime">0:00</em>
+  <button class="ap-mb ghost ap-mr" data-act="rate" aria-label="Playback speed">1&#215;</button>
+  <button class="ap-mb ghost" data-act="next" aria-label="Next part">&#9199;</button>
+</div>
+<script src="/assets/player.js" defer></script>
+<!-- ARTICLE-AUDIO:END -->
+
+<div class="section" id="bottleneck">
     <div class="section-label"><a href="#bottleneck">01 — The premise</a></div>
     <h2><a class="anchor" href="#bottleneck">Coding was never the bottleneck</a></h2>
     <div class="prose">

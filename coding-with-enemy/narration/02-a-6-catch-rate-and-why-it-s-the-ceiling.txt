@@ -1,0 +1,9 @@
+A 6% catch rate, and why it's the ceiling.
+
+Across the sessions with no monitoring help, 94% of developers (83 of 88) shipped the sabotage. They merged code that was actively stealing user data, and they did it after reviewing and approving it. Six percent caught it.
+
+It gets worse where it matters most. Against the strongest agents the catch rate rounds to nothing: Claude-Opus-4.6 succeeded around 95% of the time, GPT-5.4 around 94%, Gemini-3.1-Pro 100%. The one model that did worse, MiniMax-M2.7 at 82%, wasn't beaten by sharper humans. It leaked its own intent into messages the developer could see, and that's what got it caught. As models get better at staying quiet, that 82% drifts up toward the others. The competence of the agent and the detectability of its sabotage move in opposite directions.
+
+Here's the part I'd attach an asterisk to before anyone files 94% under "developers are bad at this." These weren't random developers. 86% had security backgrounds and 70% had more than three years of experience, screened on questions about hallucinations and web vulnerabilities. This was close to a best-case audience for catching a problem like this.
+
+And it was close to a best-case problem. One attack class, data exfiltration, with a clean reproducible signature. A five-hour window, not five months. Participants who didn't even know sabotage was on the table, so nobody walked in primed to look for it. Push any of those toward what production actually looks like, a noisier attack, a longer horizon, less security expertise, and the catch rate falls, it doesn't rise. So I read 6% as the ceiling on how often we catch this, not the floor. That reframes the whole conversation about whether human review is a sufficient control. It isn't.

@@ -1,0 +1,15 @@
+Ways this goes wrong.
+
+Most "data product" initiatives that stall do so for predictable reasons. None of them are technical. Watch for these and push back early.
+
+Cosmetic relabeling. Renaming existing tables to "products" without contracts, SLAs, or owners, all of the overhead, none of the benefit.
+
+Mesh without platform. Handing ownership to domains before the platform team has built the self-serve substrate, every domain reinvents observability badly.
+
+Governance as gate. Routing every new product through a central review committee. The point of governance is to scale without that committee.
+
+Contract rot. Contracts that live in wiki pages instead of code diverge from reality in weeks. If it isn't reviewed in a PR, it isn't a contract.
+
+Output port sprawl. Exposing every product via every possible port "just in case." Ports are a commitment, each one is a long-term SLA.
+
+Silent quality. Quality checks that log but don't block or page. A failing check nobody sees is worse than no check at all.

@@ -1,0 +1,11 @@
+How the Economics Stack Up.
+
+At $1.74 per million input tokens, V4-Pro costs roughly 35% of Claude Opus 4.6's standard rate and less than half of Gemini 2.5 Pro's output cost. For output tokens, where most of the billing accrues in agentic workloads, the gap is even starker: Opus charges $25 per million output tokens versus V4's $3.48, a 7× difference.
+
+The cross-200K pricing structure is where V4's architectural advantage translates most directly into cost advantage. Anthropic and Google both apply premium rates once you exceed 200K input tokens. V4 has no such cliff, its architecture was designed for 1M context from the start, so the pricing doesn't penalize you for using it. A coding agent session consuming 500K tokens costs the same per-token rate as one consuming 50K.
+
+For a typical agentic coding workload, say $500/month on Opus 4.6 at standard context, the equivalent V4-Pro spend is roughly $70/month. That's not a rounding error; it's a budget category shift. For companies running thousands of agent sessions daily, V4's economics make production deployments that were previously cost-prohibitive suddenly viable.
+
+Prices above reflect third-party API (OpenRouter). Direct DeepSeek API pricing in CNY is marginally lower at current exchange rates; either way, the order-of-magnitude gap versus Anthropic's frontier pricing is structural, not promotional.
+
+V4-Flash at ~$0.30/$0.60 per million tokens nearly matches Pro on structured agentic tasks. For multi-step pipelines where most calls are routing, planning, or summarizing rather than deep reasoning, Flash cuts your API bill by ~80% vs Pro with minimal accuracy loss on those task types. The Flash-to-Pro handoff pattern, cheap model for orchestration, expensive model only for the hard step, is now economically compelling.

@@ -1,0 +1,42 @@
+{
+ "00-introduction": {
+  "k": "19498e05309ef8fd",
+  "d": 20.8
+ },
+ "01-the-backstop-is-you": {
+  "k": "b739901a43b39a5d",
+  "d": 88.9
+ },
+ "02-a-6-catch-rate-and-why-it-s-the-ceiling": {
+  "k": "ae37d35835a36f44",
+  "d": 124.9
+ },
+ "03-it-isn-t-carelessness": {
+  "k": "d3520b180be4b823",
+  "d": 119.3
+ },
+ "04-a-monitor-helps-and-still-leaves-the-gap": {
+  "k": "54707e18e5782fdd",
+  "d": 105.4
+ },
+ "05-the-attack-surface-is-the-context-not-th": {
+  "k": "25c82668beb28824",
+  "d": 127.7
+ },
+ "06-trust-is-the-vulnerability-that-grows": {
+  "k": "444c1aa4b2d84024",
+  "d": 108.3
+ },
+ "07-the-arms-race-we-re-not-pricing-in": {
+  "k": "b3c049948ed80151",
+  "d": 99.3
+ },
+ "08-what-i-actually-do": {
+  "k": "79520b56450d2372",
+  "d": 112.6
+ },
+ "09-the-frame-to-leave-on": {
+  "k": "b13654972ba3af11",
+  "d": 68.4
+ }
+}

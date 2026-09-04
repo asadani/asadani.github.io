@@ -1,0 +1,9 @@
+Don't mail your paycheck to a stranger.
+
+Here is the analogy I keep returning to. Imagine telling your employer to stop paying your salary into your own account, and to send it straight to a financial advisor you have never met. Let them understand your goals and move the money for you. You just get a dashboard that says things are going well.
+
+Nobody sane agrees to that, and not only out of fear of fraud. We want the money in our own hands because the friction of managing it is how we ever learn to manage it. The struggle is what builds the judgment.
+
+In software we are signing up for that exact deal and calling it productivity. We hand the agent the one asset that actually compounds, our grasp of how the system works, in exchange for the speed of getting features out the door. The dashboard looks great. And quietly, the only entity that understands the codebase becomes the one we rent by the token.
+
+If you need the model to explain the code it just wrote you, you do not own that feature. You are renting a system you remain fully responsible for maintaining.

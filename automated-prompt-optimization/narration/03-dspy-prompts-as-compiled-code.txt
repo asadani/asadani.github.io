@@ -1,0 +1,15 @@
+DSPy: prompts as compiled code.
+
+The defining shift in DSPy is conceptual: you do not write prompts. You declare signatures, typed input/output specs like question -> answer or document, query -> summary, and you compose them with modules like dspy.ChainOfThought or dspy.ReAct. The natural-language phrasing is not yours to author. It is compiled.
+
+The compilation step is where the optimizers live. Each one solves a different version of "given this pipeline and this metric, what prompts and few-shot examples would maximize the metric on this data?":
+
+BootstrapFewShot, for low-data regimes (under ~50 examples). Runs the pipeline, filters successful trajectories, and synthesizes a few-shot training set out of its own outputs.
+
+COPRO (Coordinate Prompt Optimization), generates and refines novel instructions for each pipeline step using coordinate ascent, hill-climbing toward a metric.
+
+MIPROv2, the current state-of-the-art DSPy optimizer. Jointly optimizes natural-language instructions and few-shot demonstration selection using mini-batched search and reflector feedback after each failed attempt.
+
+Where DSPy shines is structured pipelines you can re-run end-to-end against an evaluation set: complex RAG, multi-hop QA, agent skeletons. Where it struggles is anything throwaway: the abstraction tax (signatures, modules, optimizers, dev sets) only pays off when you'll re-compile the same pipeline many times across data drift or model swaps.
+
+It is also offline-heavy. DSPy compiles a snapshot. To "self-improve" in production you re-run the compile on fresh logs, it does not patch a live runtime.

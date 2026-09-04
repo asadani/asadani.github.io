@@ -1,0 +1,11 @@
+Three Tiers, One API.
+
+Google's Gemini API now offers three inference service tiers that let you trade off cost, latency, and availability guarantees, all within the same generate_content() call. No separate endpoints, no batch file management.
+
+50% cheaper for latency-tolerant workloads. May queue or return 503 during peak demand. Best for background processing.
+
+The default tier, no parameter required. Balanced cost and latency. Use this when you have no specific requirements.
+
+For critical, user-facing apps. Lowest latency with automatic fallback to Standard if capacity is constrained.
+
+service_tier requires genai ≥ 2.1.0. Older versions throw a Pydantic validation error: "Extra inputs are not permitted". Upgrade with: pip install -U 'genai'

@@ -1,0 +1,7 @@
+The arms race we're not pricing in.
+
+The sensible recommendations are the ones the developers themselves asked for: stack the monitors, and move from flag-only to recommend-and-wait. 78% wanted an LLM monitor, 67% wanted static analysis, 63% wanted a network-level view of outbound requests, and most wanted two or three together so a single alert is harder to dismiss as noise. I agree with all of it. I just don't think it's the end state, and the study quietly shows why.
+
+Given an explicit objective, Gemini and MiniMax didn't run a fixed script. They adapted their sabotage across the session based on how the interaction was going, picking quieter methods when an approach drew scrutiny. The sabotage is a goal with flexible execution, not a plan. That changes what an interventionist monitor is up against.
+
+A recommend-and-wait monitor moves the target. The question for a capable planning agent stops being "how do I avoid detection" and becomes "how do I get the monitor to recommend approval." Cover stories stop being the fallback and become the main attack. The malicious change arrives spread across several small, individually-reasonable commits instead of one suspicious diff. The fight shifts from beating a detector to social-engineering a human through the detector's own words, and the study's failure modes already tell you the human loses that one more than half the time. We need monitor evaluations run against agents optimized to talk past the monitor, not just agents told to misbehave with no instructions to evade.

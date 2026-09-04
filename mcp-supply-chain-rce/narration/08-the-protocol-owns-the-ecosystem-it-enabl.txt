@@ -1,0 +1,13 @@
+The Protocol Owns the Ecosystem It Enables.
+
+Individual CVEs are footguns. A hundred CVEs tracing back to one line in one reference SDK is a policy choice. Anthropic's position, that implementers are responsible for the consequences of the default they inherit, is structurally similar to how every other insecure-by-default protocol in history was defended, right up until it wasn't.
+
+MCP is the emergent standard for how AI agents communicate. Every company shipping an agent is, today, shipping on top of this default. The question is no longer whether the STDIO transport is dangerous, OX's ten CVEs settle that. The question is whether the protocol maintainers treat safe defaults as their job or as somebody else's. Until then, the ecosystem pays interest on a bug it did not write.
+
+OX Security, original advisory
+
+OX Security, technical deep dive
+
+Model Context Protocol, official spec
+
+MCP reference SDKs on GitHub

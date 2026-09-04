@@ -1,0 +1,5 @@
+From streaming chat to multi-hour sessions.
+
+One underdiscussed shift between 2.5 and 3.5: Google has effectively split "live" into two product lines. The streaming, voice-and-video flash-live endpoints are being routed to gemini-3.1-flash-live-preview, that remains an explicitly low-latency, conversational mode. Separately, 3.5 Flash is designed for multi-hour autonomous sessions, with pauses for human confirmation at decision points, and is positioned as the core engine for Antigravity-style harnesses and the Gemini Enterprise Agent Platform.
+
+In 2.5, long-running and live felt like preview features grafted onto a chat model. In 3.5, the long-running case is a first-class product surface, that is the actual productization step here, not just "we added streaming."

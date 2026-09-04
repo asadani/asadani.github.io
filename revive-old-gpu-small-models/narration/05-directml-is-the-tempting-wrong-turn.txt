@@ -1,0 +1,7 @@
+DirectML is the tempting wrong turn.
+
+Before CUDA worked I tried DirectML, because it needs no CUDA toolkit and runs on any DirectX 12 GPU. On a Windows laptop it is the obviously attractive option.
+
+onnxruntime-directml advertises the provider, claims the node, then dies inside the model's F0 encoder on ConvTranspose with error 80070057. Because it has already claimed the node there is no CPU fallback. Nothing renders at all. It also installs over onnxruntime, since both provide the same module, so testing the alternative means uninstalling one first.
+
+I wrote the whole thing off as "GPU acceleration does not work on this machine" and moved on. That conclusion was wrong and it cost me a day. DirectML does not work with this model. CUDA does. Those are different claims and I collapsed them into one.

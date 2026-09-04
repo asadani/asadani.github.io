@@ -1,0 +1,7 @@
+Two bugs the clean version could not show.
+
+My template had a list component. In the skeleton, each item was a short, plain string, and it looked perfect. Then a real article used a list where every item opened with a bold lead-in and continued into a sentence. The list rule was built on flexbox. Flex took the arrow, the bold lead-in, and the body text, treated them as three children, and laid them out as three columns. The bold part wrapped in a cramped gutter on the left and the sentence floated off to the right. The whole thing read like a broken table.
+
+The skeleton never had a bold lead-in inside a list item, so the bug could not appear there. It was invisible by construction.
+
+The table had the same shape of problem. In the template it looked clean. A real post set explicit column widths through a colgroup, and the columns still came out uneven, because the layout mode quietly ignores those widths unless you ask for fixed layout. One line fixes it. The template was not wrong. It was untested, because nothing real had ever run through it.

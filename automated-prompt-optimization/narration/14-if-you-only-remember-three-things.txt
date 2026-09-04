@@ -1,0 +1,7 @@
+If you only remember three things.
+
+Prompt optimization is a stack, not a tool. Search + evals + observability + governance, layered. Picking one product and calling it done is the most common failure.
+
+Your evaluator is your real product. Goodhart's Law makes the metric the attack surface, defend it with structured rubrics, position-rotated LLM judges, and dynamic eval scenarios, not a single scalar score.
+
+The frameworks that win are the ones that take a specific layer seriously: DSPy compiles pipelines, TextGrad attributes failures, ACE curates context, GEPA evolves under multi-objective constraints, Bedrock and Humanloop govern lifecycle. Use them for what they are. Don't ask any of them to be the whole stack.

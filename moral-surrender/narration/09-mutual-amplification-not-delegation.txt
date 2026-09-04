@@ -1,0 +1,9 @@
+Mutual amplification, not delegation.
+
+The frame I want to leave on isn't the bleak one. Andy Clark, quoted in Time on this research, draws the right distinction: there's a difference between delegating to an AI system and cooperating with it. Delegation produces surrender. Cooperation produces what he calls mutual amplification, a loop where your prompts sharpen the model's output, which sharpens your next prompts, which sharpens your model of the problem.
+
+You can feel the difference. With mutual amplification, you catch yourself learning the domain through the conversation, not in spite of it. You end the session with a sharper mental model than you started with, not a fuzzier one. You can still build the thing yourself; you've just chosen a faster path. The agent is the second engineer in the room, not the only one.
+
+The surrender posture is the inverse. The agent ends with a sharper model of the problem than you do. You can't reconstruct the design. You can't debug the code without the agent's help. You've outsourced the part of the work that was supposed to be making you better.
+
+Both postures use the same tools. Both produce code that ships. From the outside, on a single sprint, they look identical. The difference shows up six months in, when something breaks and one of the two engineers can fix it from first principles and the other can't.

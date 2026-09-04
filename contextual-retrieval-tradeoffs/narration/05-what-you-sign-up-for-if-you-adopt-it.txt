@@ -1,0 +1,17 @@
+What you sign up for if you adopt it.
+
+Four trade-offs are load-bearing once you go beyond a demo. None are dealbreakers; all of them deserve explicit budget.
+
+Your pipeline now does: chunk → cache document → per-chunk LLM call for context → merge → embed → index to two stores. Every stage has a knob (chunk size, overlap, context length, prompt phrasing, summary verbosity) that interacts with retrieval quality non-trivially. Too much added context and embeddings get noisy and precision drops; too little and you've added cost for nothing.
+
+2. Query-path latency and cost
+
+Hybrid + rerank adds infra (BM25 index, often a separate reranker model) and roughly 100, 200 ms per query plus per-query API cost (cookbook examples land near $0.002 / query). For interactive chat this is fine. For high-QPS, low-latency workloads it eats your error budget, and reranker timeouts become an operational concern.
+
+3. Operational surface area
+
+You now run a vector index, a BM25 index, an ingestion job system, ideally an eval harness, and possibly a separate reranker service. Debugging a bad answer goes from "why did this chunk match?" to "was it the situating text, the original chunk, the hybrid score weighting, or the reranker that put this chunk in the prompt?" You need observability before this is comfortable in production.
+
+4. Recall vs. precision is still your call
+
+Contextual retrieval tends to improve recall. It does not remove the recall, precision trade-off, you still set the operating point. For agents, broader recall with rerank is usually right; for safety-critical or single-answer questions, you want tighter precision. The technique gives you better candidates; it does not pick your operating point.

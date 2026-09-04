@@ -1,0 +1,7 @@
+Skills and Methodology: The Process Layer.
+
+The shift from prompt engineering to agent skills represents the most significant change in how developers work with coding agents in 2026. Rather than writing elaborate system prompts that models probabilistically follow, skills encode process as portable markdown, structured instruction files that agents load dynamically, enforce consistently, and compose together.
+
+The distinction matters: a system prompt says "write tests." A skill enforces the full RED-GREEN-REFACTOR cycle, blocks commits that skip the red phase, and uses subagents for parallel test execution. Same underlying instruction; categorically different enforcement.
+
+Structured skills add upfront reasoning overhead. Superpowers enforces a 7-phase pipeline, meaningful for a feature build, wasteful for a one-liner fix. The practical pattern: apply full methodology to complex tasks (new features, refactors, architecture changes) and bypass for trivial edits. Both Superpowers and the Karpathy-inspired skill packs advise this explicitly.

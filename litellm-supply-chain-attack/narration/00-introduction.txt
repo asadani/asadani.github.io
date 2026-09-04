@@ -1,0 +1,5 @@
+Introduction.
+
+The LiteLLM PyPI attack: a supply-chain postmortem
+
+How a hijacked maintainer account and a malicious.pth file turned the booming MCP plugin ecosystem into one of the most targeted credential-theft operations against AI developers yet.

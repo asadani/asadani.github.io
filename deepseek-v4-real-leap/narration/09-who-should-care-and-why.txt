@@ -1,0 +1,7 @@
+Who Should Care and Why.
+
+If you were building a multimodal application or hoping to run a local LLM on a gaming rig, V4 is not your answer, and your disappointment is legitimate. DeepSeek made a choice to go deep on coding and agentic efficiency rather than broad on modalities and accessibility. That's a valid strategy, but they should have communicated it instead of letting expectations run ahead.
+
+If you're deploying coding agents or long-context document pipelines at scale, V4 is the most interesting infrastructure development in months. Not because of benchmark numbers, but because the KV cache math changes what's economically feasible. Going from 4 to 40 concurrent users on the same hardware isn't a talking point, it's the difference between a pilot and a production deployment.
+
+The leap is real. It's just not the leap people expected.

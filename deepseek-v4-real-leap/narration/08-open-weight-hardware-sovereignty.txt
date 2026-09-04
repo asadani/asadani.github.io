@@ -1,0 +1,13 @@
+Open Weight + Hardware Sovereignty.
+
+The geopolitical subtext of V4 is impossible to ignore. Huawei confirmed its Ascend AI processors can run V4 natively, and Beijing has been actively pushing Chinese companies toward domestic chips to reduce Nvidia dependence. A model this capable, running on domestically-produced hardware, changes the calculus around AI sovereignty.
+
+For the global open-source ecosystem, the implications are different but also significant. V4 with an MIT license means it can be fine-tuned, distilled, and deployed without restriction. The gap between "open" and "closed" keeps narrowing: V4 beats Opus on LiveCodeBench, matches it on SWE-Verified, and does so with a weight file anyone can download.
+
+Chip diversity: Native Huawei Ascend support isn't a footnote, it validates China's domestic AI stack and reduces the single-vendor dependency on Nvidia for frontier inference.
+
+Distillation surface: A 1.6T / 49B active MoE with MIT license is the most powerful distillation teacher ever released openly. Expect a wave of smaller, specialized models trained against V4 over the next six months.
+
+API migration deadline: deepseek-chat and deepseek-reasoner retire July 24, 2026. If you're running integrations against those endpoints, update now, the new model IDs are already live.
+
+Cost pressure on closed models: V4's inference cost is substantially below GPT-5.4 and Gemini at equivalent context lengths. For teams that price-optimize their model routing, V4 reshapes the frontier tier economics.

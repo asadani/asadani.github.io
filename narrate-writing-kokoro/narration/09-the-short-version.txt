@@ -1,0 +1,15 @@
+The short version.
+
+An 82M model on a laptop gives you a good narration in about half the wall-clock time of listening to it, with Apache 2.0 weights and nothing leaving your machine.
+
+The model is the easy part. Your attention belongs on the blend, the acronym table, and the two gap constants. That is where a track stops sounding like a robot reading a document and starts sounding like a narration.
+
+Blend two voices. Single presets wear thin over a long track.
+
+Write numbers as words in the source, not in a substitution rule.
+
+Tune the paragraph gaps before you touch anything on the model.
+
+Hash your inputs so a re-render only costs what changed.
+
+Audition on a full chapter. Demo lines lie.

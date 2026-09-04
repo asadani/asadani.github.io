@@ -1,0 +1,5 @@
+Introduction.
+
+Self-Improving AI, Honestly
+
+Agents that rewrite their own scaffolds. Models that train themselves at test time. Loops that do both. The map is real. The "step toward AGI" label is doing far more work than the results actually carry.

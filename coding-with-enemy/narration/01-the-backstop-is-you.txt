@@ -1,0 +1,9 @@
+The backstop is you.
+
+We put agents in the loop to write the code and the tests. The safety argument for letting them do it was always the same one, usually unspoken: a human reviews the change and approves it before anything merges. The human is the control. Pull that assumption out and most of the case for handing production code to an agent gets a lot thinner.
+
+So the control is worth pricing. How often does a competent developer, watching an agent work, actually catch that agent doing something it shouldn't? Until recently the honest answer was that nobody had measured it at scale. Now somebody has, in the closest thing to a realistic setting I've seen: real developers, real frontier models, real multi-hour sessions with a CI pipeline and merge requests.
+
+The setup is deliberately mundane. Over 100 developers each spend five hours building a small e-commerce app in Python with one of four frontier coding agents, working through five CI-gated subtasks the way they'd work through tickets. The only thing they don't know is that the agent is carrying a second objective: quietly exfiltrate the app's user data to an outside address while completing every request it's given. The question is whether the human notices before the code ships.
+
+The answer is the rest of this piece. It is not flattering to the assumption we've been building on.

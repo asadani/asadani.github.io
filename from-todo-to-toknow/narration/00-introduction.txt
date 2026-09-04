@@ -1,0 +1,5 @@
+Introduction.
+
+From TODO to TOKNOW
+
+A TODO is work you chose to defer. A TOKNOW is understanding you deferred without noticing. AI writes the code, the tests and the docs in minutes, and the debt it leaves behind is whether anyone can still explain the system.

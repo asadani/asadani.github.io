@@ -1,0 +1,3 @@
+What's safe, what's not.
+
+You may have never run pip install litellm yourself. LiteLLM is a dependency of many AI agent frameworks, MCP servers and orchestration tools, so check all your Python environments, not just the primary one. CI/CD containers, project-local virtual envs, and tool-managed environments like Cursor and Claude Code are all in scope.

@@ -1,0 +1,42 @@
+{
+ "00-introduction": {
+  "k": "609635ce59b2af46",
+  "d": 27.5
+ },
+ "01-coding-was-never-the-bottleneck": {
+  "k": "4f34b79d470571fe",
+  "d": 98.0
+ },
+ "02-a-spectrum-not-a-binary": {
+  "k": "edadd16b493b3c28",
+  "d": 71.0
+ },
+ "03-agent-model-scaffold": {
+  "k": "e4c8d3a0d55a59bb",
+  "d": 122.7
+ },
+ "04-context-engineering-is-not-prompt-engine": {
+  "k": "42404d8df91c15ab",
+  "d": 129.9
+ },
+ "05-who-pays-the-tax-and-when": {
+  "k": "1e7e786ab3317605",
+  "d": 150.8
+ },
+ "06-does-ai-actually-make-you-faster": {
+  "k": "803d8d51b4c6868b",
+  "d": 120.3
+ },
+ "07-the-factory-and-its-two-modes": {
+  "k": "894847ddc5bb4fc5",
+  "d": 102.5
+ },
+ "08-what-to-do-monday": {
+  "k": "40cc8a1a9b3b7874",
+  "d": 141.2
+ },
+ "09-the-deeper-arc": {
+  "k": "4e56f9ec462739c6",
+  "d": 110.3
+ }
+}

@@ -1,0 +1,5 @@
+Where V4 Leads, Where It Doesn't.
+
+With the benchmark hygiene caveat applied, here's the honest performance picture. V4 dominates on coding and agentic evals, the categories where the evals are hardest to game. It trails on general knowledge and factual recall, where Gemini is the clear leader.
+
+V4 wins where tasks are grounded, structured, and tool-use-adjacent. It loses where factual recall and broad world knowledge dominate. For coding agents and long-context document work, it's the best open model. For a general-purpose knowledge assistant, Gemini still leads.

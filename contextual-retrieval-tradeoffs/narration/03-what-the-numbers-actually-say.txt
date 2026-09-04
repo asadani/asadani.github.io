@@ -1,0 +1,13 @@
+What the numbers actually say.
+
+The benchmark numbers are real but narrow. They come from Anthropic's internal evals with Anthropic's definitions of "failure." Read them as evidence of strong relative lift on document-style corpora, not as a generic ranking improvement that ports to every workload.
+
+Where the lift is genuinely useful
+
+Cross-referenced clauses. Chunk A has the rule, chunk B has the exceptions. Naive chunking isolates them. Contextual situating helps both surface for the same query, concretely valuable for HR, policy, legal, and compliance docs.
+
+Hybrid term + concept queries. BM25 catches exact identifiers (error codes, SKUs, statute numbers). Contextual embeddings catch concept matches. Fusion + rerank gives you both without compromising either.
+
+One-time ingestion, repeated queries. If your corpus is high-value and reasonably stable (handbooks, manuals, support docs), the $1, 3 / M tokens one-time cost amortizes well across queries.
+
+"67% reduction in failed retrievals" is a relative number on a benchmark with a particular failure definition. If your baseline retrieval is already good, the absolute lift is smaller. If your real bottleneck is bad query phrasing, ambiguous user intent, or missing documents, contextual retrieval will not move your top-line metric much.

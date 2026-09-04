@@ -1,0 +1,23 @@
+What This Changes About Your Job.
+
+If you're building production systems on LLMs, AI shrinkflation reframes the problem. The model is not a static dependency you configure once. It is a mutable, externally-managed service with behavior that can change silently on a provider's timeline. That makes it more like a cloud database with unpublished schema migrations than like a library you pin in a lockfile.
+
+Behavioral Telemetry Is Now Your Job
+
+You need to instrument not just latency and errors, but task-level behavioral signals: did the agent read before editing? Did it stop early? Did it claim to run a test it didn't? These are your regression indicators.
+
+Golden Evals Are Non-Negotiable
+
+A suite of representative prompts with expected behavior profiles must run continuously against your production model. Not just at deploy time, daily. Drift shows up in the trend, not in a single run.
+
+Thrash Is a Regression Signal
+
+Unexplained cost increases, the same workload consuming 5× the tokens, are often the first measurable signal of a reasoning regression. Monitor cost-per-task alongside latency and error rate.
+
+Strong engineers are more important, not less
+
+The AMD case illustrates something counterintuitive: the engineer who caught and documented the regression didn't do it with a smarter prompt. She did it with forensics, log analysis, metric design, statistical correlation, and causation reasoning. Those are senior engineering skills that no amount of model improvement eliminates.
+
+As LLMs become more capable, the engineering skill required to deploy them safely increases. Drift detection, harness design, cost/quality routing, correctness invariants for high-stakes outputs, and change management when a vendor flips a default, these are systems engineering problems, not prompt engineering problems.
+
+Treat LLMs like running a trading system: real-time data feeds, latency-sensitive execution, and external dependencies that can change without notice. Your edge is in the harness, the monitoring, and the ability to adapt, not in trusting any single data feed.

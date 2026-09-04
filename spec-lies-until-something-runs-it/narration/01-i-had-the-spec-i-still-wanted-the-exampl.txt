@@ -1,0 +1,9 @@
+I had the spec. I still wanted the example..
+
+I built myself a shortcut this week. Then I refused to use it the way I had designed it.
+
+By the end of a rebuild I had two things that, on paper, were enough to write any future post without looking at anything else. A template: one HTML file with every component, every class name, all the CSS, the exact structure. And a skill: a written procedure for filling it. What to write, in what order, in what voice.
+
+That should be the whole job. The what and the how, both written down and sitting in front of me.
+
+And every time I went to actually produce a post, I did the same thing. I opened a real, published article and read it first. The shortcut was right there and I kept walking past it. That nagged at me enough to stop and ask why.

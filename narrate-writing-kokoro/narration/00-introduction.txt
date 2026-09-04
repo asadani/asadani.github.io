@@ -1,0 +1,5 @@
+Introduction.
+
+Narrating your writing with Kokoro
+
+I gave eighteen written chapters an audio track using an 82-million-parameter model on a laptop. The model turned out to be the easy part. What decides whether a narration is listenable is the text you feed it and the silence you put between the paragraphs.
