@@ -1,5 +1,23 @@
 [
   {
+    "slug": "mcp-101",
+    "title": "MCP 101",
+    "tags": [
+      "tutorial",
+      "ai-engineering"
+    ],
+    "flavors": [
+      "agents",
+      "craft"
+    ],
+    "quote": "\"The model never runs the tool. It cannot.\"",
+    "desc": "An interactive tutorial on the Model Context Protocol. Eighteen chapters on one page, with the protocol's moving parts as things you step through rather than diagrams you look at: a wire tap that shows the real JSON-RPC frames as you advance the lifecycle, three lanes making clear who is acting at each step, the M by N problem as a dial, and a self-check that tells you which chapter to revisit. Narrated in two voices.",
+    "date": "2026-09-04",
+    "dateDisplay": "September 4, 2026",
+    "cta": "Start",
+    "shareUrl": "https://tech.anujsadani.in/mcp-101/"
+  },
+  {
     "slug": "revive-old-gpu-small-models",
     "title": "Reviving A Six-Year-Old GPU For Small Models",
     "tags": [

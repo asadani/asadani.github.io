@@ -281,6 +281,7 @@
   .art-policy .art-strip { background: var(--accent); }
   .art-data  .art-strip { background: var(--blue); }
   .art-interactive .art-strip { background: var(--green); }
+.art-tutorial .art-strip { background: var(--accent); }
 
   /* Body */
   .art-body { flex: 1; padding: 14px 20px; min-width: 0; }
@@ -292,6 +293,7 @@
   .badge-infra       { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
   .badge-policy      { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border); }
   .badge-data        { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-border); }
+  .badge-tutorial    { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border); }
   .badge-interactive { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
 
   .art-title { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--text); line-height: 1.3; }
