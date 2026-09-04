@@ -1,0 +1,15 @@
+“Two prompts and a SOTA model are enough.”.
+
+Many practitioners ask the same question under these announcements, written twenty different ways:
+
+The skeptical case is worth taking seriously. It has four planks.
+
+Agent frameworks burn tokens. A loop that re-reads the page three to five times is several multiples of the cost of a single pass. On a million documents a day, that gap becomes real money.
+
+Degrees of freedom invite weirdness. Anything that decides for itself when to stop is something that sometimes decides wrong. A fixed pipeline fails predictably; an agent fails creatively.
+
+Pipelines are easier to debug. A four-stage pipeline gives you four breakpoints. An agent gives you a transcript. Root-causing a regression in a transcript takes a different kind of patience.
+
+The 80% case doesn't need it. If your input is a clean invoice with twelve fields and a fixed schema, two prompts and a Pydantic model is the better tool. The agent loop is overhead.
+
+The strongest version of the skeptical case is the regularization one: doing less actually improves performance, because we are still bad at managing the complexity of LLM outputs. It's not that agents don't work, it's that the simpler tool generalizes better at the scale most teams operate at.

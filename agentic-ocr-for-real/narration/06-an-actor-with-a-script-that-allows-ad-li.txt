@@ -1,0 +1,11 @@
+An actor with a script that allows ad-libs..
+
+The most common metaphor for agentic AI is theatrical: the language model is the actor, each agent is a character with its own script, and the multi-agent system is the play. It's a fine way to picture multi-agent collaboration in general. It is the wrong way to picture agentic OCR.
+
+For OCR there is no cast. There is one actor and one script, but the script ends with the line: "keep going until you understand what you are looking at." The novelty isn't the troupe, it is the actor being allowed to step off the page, ask for a closer angle, and verify the answer against the source before walking off stage.
+
+A better framing for OCR specifically:
+
+That is closer to the truth, because it preserves the thing that actually changed: not the number of operators, but the level of agency the single operator has over the process. The cinematographer can stop, re-light, and re-shoot. The camera cannot.
+
+If you must use the play metaphor, refine it this way: there is one actor, but the director hands them a script with stage directions like "if you can't read the prop from here, walk closer." That stage direction is the harness.

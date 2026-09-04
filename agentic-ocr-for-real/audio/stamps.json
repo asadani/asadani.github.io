@@ -1,0 +1,50 @@
+{
+ "00-introduction": {
+  "k": "f6c591a4d558d05d",
+  "d": 27.1
+ },
+ "01-what-vendors-are-actually-selling": {
+  "k": "59fc55081c0a7d3a",
+  "d": 76.4
+ },
+ "02-two-prompts-and-a-sota-model-are-enough": {
+  "k": "e6b0eecefeb98dd6",
+  "d": 87.0
+ },
+ "03-what-does-agentic-even-mean": {
+  "k": "cc6fcaa67ffa0488",
+  "d": 94.3
+ },
+ "04-orchestration-or-llm-with-harness": {
+  "k": "98acdb0b55086dd3",
+  "d": 76.2
+ },
+ "05-what-the-harness-actually-does-step-by-s": {
+  "k": "9766c5ae958aab2d",
+  "d": 103.4
+ },
+ "06-an-actor-with-a-script-that-allows-ad-li": {
+  "k": "5d0fe52c25a9b40d",
+  "d": 76.4
+ },
+ "07-the-cases-where-agentic-ocr-pays-for-its": {
+  "k": "24fe1116ce14b703",
+  "d": 79.1
+ },
+ "08-when-two-prompts-beat-the-loop": {
+  "k": "8c279a8e41e1fcd9",
+  "d": 77.9
+ },
+ "09-the-tax-you-pay-for-an-agent-loop": {
+  "k": "3fcffc1845e2dff2",
+  "d": 43.6
+ },
+ "10-five-things-to-watch-when-you-adopt-it": {
+  "k": "b54af623f34b15d7",
+  "d": 75.4
+ },
+ "11-so-is-it-just-llm-orchestration": {
+  "k": "f37b13332b0a0732",
+  "d": 114.8
+ }
+}

@@ -1,0 +1,15 @@
+The cases where agentic OCR pays for itself..
+
+There are document types where a fixed pipeline tops out around 80% and the next 15 points require looking again. These are the cases where the agentic harness earns its tokens.
+
+Insurance, medical intake, government. The answer is often the shape of a mark, not text. Vision-LM plus grounding wins here cleanly.
+
+Financial documents where "is this signed?" spans images, form fields, and annotation objects. Multiple looks, multiple modalities, pipelines miss this constantly.
+
+The arrows carry as much meaning as the boxes. Text-first OCR returns disconnected labels. An agent can reconstruct the graph.
+
+Annual reports where a number in a chart references a footnote on page 47. The loop "find the chart, find the footnote, reconcile" is exactly the agent shape.
+
+Anywhere a human needs to verify the answer came from a specific place. Visual grounding (bounding boxes per field) is the actual product here, not the OCR.
+
+When you don't know in advance what fields a document has, the agent can explore. A pipeline needs to be told.

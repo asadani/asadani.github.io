@@ -1,0 +1,11 @@
+Five things to watch when you adopt it..
+
+The token bill is not optional. Loops re-read pages. Budget for an order-of-magnitude jump over a single VLM call, or cap the loop count and accept early stops.
+
+Determinism drops. Two runs on the same document can pick different paths and reach slightly different intermediate states. For regulated outputs, pin the model version, fix the seed where possible, and bound max iterations. Log the trace.
+
+Visual grounding is the actual differentiator. If the API does not return bounding boxes per extracted field, you are paying agentic prices for non-agentic verifiability. Make grounding a buying criterion.
+
+Evaluation gets harder. Pipelines fail per stage; agents fail per trajectory. Build an eval harness that scores both the final extraction and whether the loop made reasonable intermediate decisions. Trajectory metrics are still an underdeveloped art.
+
+"Multi-agent" often means "multi-prompt". Ask the vendor a single question: can the model decide at run time to call a different tool? If no, it is a pipeline with branding.

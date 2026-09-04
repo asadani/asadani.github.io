@@ -1,0 +1,5 @@
+Introduction.
+
+What is &ldquo;agentic OCR,&rdquo; really?
+
+Vendors keep renaming document extraction agentic. Engineers keep asking if it&rsquo;s just LLM orchestration in a trench coat. Both camps are partly right. Here&rsquo;s the honest definition, three metaphors that actually fit, and a decision table for when the word earns its keep.

@@ -1,0 +1,19 @@
+What does “agentic” even mean?.
+
+Half the disagreement about agentic OCR is downstream of a deeper problem: the word agent means four different things to four different people. The replies under any "what is agentic" thread land in roughly these camps.
+
+Agent = role prompt
+
+Unless the base model is fine-tuned, "agent" just means a system prompt and some hyperparameters. Honest, but deflationary, it makes the word do almost no work.
+
+Agent = tool use + routing
+
+A model has agency when it can decide which tool or endpoint to call given the input. The dynamic-dispatch definition; closest to how Anthropic and OpenAI describe their own "agents."
+
+Agent = feedback loop
+
+An agent evaluates its own outputs, catches errors, and refines before responding. The self-critique definition; this is the one that requires something a fixed pipeline structurally cannot do.
+
+Each agent is an expert in its domain; the multi-agent setup is just clean architecture for LLM systems. Single-responsibility, but for prompts.
+
+All four are real definitions in active use. The interesting move is figuring out which one document extraction actually needs, because the answer is not all of them. Camp B and Camp C are doing the technical work. Camps A and D are mostly doing the marketing work.

@@ -1,0 +1,17 @@
+When two prompts beat the loop..
+
+The skeptics are right about a much bigger slice of the market than vendors admit. If your problem looks like any of these, the simpler tool wins on cost, latency, and predictability.
+
+Generated invoices, exported statements, anything where the text layer is already correct. OCR isn't even the bottleneck.
+
+Fixed schema, narrow domain
+
+"Extract these twelve fields from this template." A vision-LM call with structured output and a regex backup is faster, cheaper, and more debuggable.
+
+High volume, low ambiguity
+
+Receipts at scale. The marginal token cost of an agent loop becomes real money at a million documents a day.
+
+Anywhere a user is waiting. A 3-step loop is roughly 3× the time-to-first-answer of a single call.
+
+There is a third category worth naming: agentic theater. Pipelines that are three prompts in a fixed order, marketed as multi-agent. If the "agents" can't decide at run time to call a different tool, ask for a different region, or stop early, they are functions wearing a costume. The product can still be good. It is the noun that is wrong.

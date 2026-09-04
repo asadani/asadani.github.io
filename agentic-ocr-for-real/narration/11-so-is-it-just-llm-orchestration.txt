@@ -1,0 +1,21 @@
+So — is it just LLM orchestration?.
+
+Yes and no, and the "no" is the only part that matters.
+
+It is not orchestration in the "many agents passing notes" sense. The product is almost always one vision-language model. The role prompts and the "extractor agent / validator agent" framing is mostly marketing scaffolding around what is, in code, a single model call inside a loop.
+
+It is an LLM with a harness, where the harness can:
+
+read the page as a visual layout, not a text stream;
+
+decide at run time what to look at next;
+
+call tools (crop, table parser, signature detector, template index) selectively;
+
+and ground every answer to a coordinate on the source page.
+
+That harness is a real, useful thing. It earns the word agentic, if we adopt the feedback-loop definition from Camp C, which is the only one of the four definitions that requires the system to do something a fixed pipeline structurally cannot.
+
+The mistake the field keeps making is using agentic as a marketing label for any LLM workflow with more than one step. The right use of the word is narrower and harder to fake: a system that decides what to do next based on what it just observed. If your document extractor does that, and the documents you handle actually need it, you have an agentic system. If it doesn't, you have a pipeline, and that's fine, sometimes a pipeline is the better answer.
+
+Agentic OCR isn't a buzzword and it isn't a revolution. It's a vision-language model in a feedback loop with grounded outputs, sold as a category because "LLM with a harness" doesn't fit on a slide. Use it where documents are visual and answers need citing. Stick with the pipeline where they aren't.

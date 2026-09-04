@@ -1,0 +1,69 @@
+/* Listen-along player for articles. Written by article_player.py.
+   Edit this file to restyle every article at once. */
+.ap{--ap-warm:#FBF8F3;--ap-warm-2:#F4EFE7;--ap-line:#E4DCD0;--ap-dim:#8A8175;
+ margin:34px 0;border:1px solid var(--ap-line);border-radius:10px;overflow:hidden;
+ background:var(--ap-warm);color:var(--text,#1A1714);
+ box-shadow:0 1px 2px rgba(60,45,30,.04),0 12px 28px -20px rgba(60,45,30,.3)}
+[data-theme="dark"] .ap{--ap-warm:#1A1611;--ap-warm-2:#211C16;--ap-line:#332C24;
+ --ap-dim:#A39C90;color:var(--text,#F2EEE7)}
+.ap *{box-sizing:border-box}
+.ap-hd{display:flex;align-items:center;gap:13px;padding:15px 16px}
+.ap-ico{flex:none;width:34px;height:34px;border-radius:50%;background:var(--accent,#C85C2D);
+ color:#fff;display:grid;place-items:center;font-size:12px}
+.ap-hd>div{flex:1;min-width:0}
+.ap-kick{display:block;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+ color:var(--ap-dim)}
+.ap-hd b{display:block;font-size:15.5px;margin-top:2px}
+.ap-sub{display:block;font-size:12.5px;color:var(--ap-dim);margin-top:2px;
+ font-variant-numeric:tabular-nums}
+.ap-more,.ap-rate{flex:none;font:inherit;font-size:12px;padding:5px 12px;border-radius:999px;
+ cursor:pointer;background:transparent;color:var(--ap-dim);border:1px solid var(--ap-line)}
+.ap-more:hover,.ap-rate:hover{border-color:var(--text,#1A1714);color:var(--text,#1A1714)}
+.ap-rate{min-width:3.4em;text-align:center;font-variant-numeric:tabular-nums}
+.ap-now{margin:0;padding:0 16px 12px;font-size:12.5px;color:var(--ap-dim);
+ overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ap audio{width:100%;display:block;border-top:1px solid var(--ap-line);
+ background:var(--ap-warm-2)}
+.ap-list{list-style:none;margin:0;padding:6px;border-top:1px solid var(--ap-line);
+ max-height:17em;overflow:auto;scrollbar-width:thin;scrollbar-color:#B9AF9F transparent}
+.ap-list::-webkit-scrollbar{width:6px}
+.ap-list::-webkit-scrollbar-track{background:transparent}
+.ap-list::-webkit-scrollbar-thumb{background:#C6BCAC;border-radius:3px}
+.ap-list::-webkit-scrollbar-thumb:hover{background:#8A8175}
+.ap-list button{display:flex;gap:12px;align-items:baseline;width:100%;padding:8px 10px;
+ border-radius:6px;font:inherit;font-size:13.5px;text-align:left;background:none;
+ border:0;cursor:pointer;color:var(--text-body,#3D3A35)}
+.ap-list button:hover{background:var(--ap-warm-2);color:var(--text,#1A1714)}
+.ap-list button[aria-current="true"]{background:var(--ap-warm-2);
+ color:var(--accent,#C85C2D);font-weight:600}
+.ap-n{flex:none;width:1.7em;font-size:11.5px;color:var(--ap-dim);
+ font-variant-numeric:tabular-nums}
+.ap-nm{flex:1;min-width:0}
+.ap-d{flex:none;font-size:11.5px;color:var(--ap-dim);font-variant-numeric:tabular-nums}
+/* Docked, not floating. A pill hovering mid-page sits on top of the text it
+   is meant to accompany; a bar at the edge with matching body padding never
+   covers a word. */
+.ap-mini{position:fixed;left:0;right:0;bottom:0;z-index:9999;width:100%;
+ display:flex;align-items:center;gap:14px;padding:9px 20px;
+ border-top:1px solid var(--ap-line);background:var(--ap-warm);
+ color:var(--text,#1A1714);font:inherit;font-size:13px;
+ box-shadow:0 -8px 24px -16px rgba(60,45,30,.5)}
+.ap-mb{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
+ background:var(--accent,#C85C2D);color:#fff;border:0;cursor:pointer;font-size:10px;
+ font-family:inherit;line-height:1}
+.ap-mb.ghost{background:transparent;color:var(--ap-dim);border:1px solid var(--ap-line)}
+.ap-mb.ghost:hover{color:var(--text,#1A1714);border-color:var(--text,#1A1714)}
+.ap-mt{flex:none;max-width:22em;min-width:0;overflow:hidden;text-overflow:ellipsis;
+ white-space:nowrap;background:none;border:0;padding:0;font:inherit;cursor:pointer;
+ color:var(--text,#1A1714);text-align:left}
+.ap-mt:hover{color:var(--accent,#C85C2D)}
+.ap-mp{flex:1;min-width:4em;height:4px;border-radius:2px;background:var(--ap-line);
+ cursor:pointer;position:relative}
+.ap-mpf{position:absolute;inset:0 auto 0 0;width:0;border-radius:2px;
+ background:var(--accent,#C85C2D)}
+.ap-mtime{flex:none;font-style:normal;font-size:11.5px;color:var(--ap-dim);
+ font-variant-numeric:tabular-nums}
+.ap-mr{width:auto;padding:0 10px;border-radius:999px;min-width:3.2em}
+body.ap-bar-open{padding-bottom:56px}
+@media (max-width:640px){.ap-mini{gap:10px;padding:8px 12px}.ap-mt{display:none}}
+@media print{.ap,.ap-mini{display:none!important}}

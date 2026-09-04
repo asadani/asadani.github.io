@@ -1,0 +1,5 @@
+The tax you pay for an agent loop..
+
+The numbers below are illustrative public-API prices in mid-2026 for an A4-sized page of moderate complexity. Specific vendors will quote you differently, especially at volume. The point is the shape of the curve.
+
+Two things to read off the table. First, the agentic harness is roughly an order of magnitude more expensive than a single VLM call. Second, that gap is the price of verifiability, not of accuracy alone. If you do not need to defend each extracted value to an auditor or a regulator, a single frontier-tier VLM call gets you most of the way there at a fraction of the cost.

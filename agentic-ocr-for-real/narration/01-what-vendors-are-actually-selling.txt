@@ -1,0 +1,11 @@
+What vendors are actually selling..
+
+Landing AI, LlamaIndex, Extend, Reducto, Docugami, and a dozen others rolled out roughly the same product in the last twelve months and gave it roughly the same name: agentic document extraction. The pitch, once you strip the branding, is consistent across all of them.
+
+Traditional OCR was built on a premise that no longer holds: that a document is a string of text with formatting on top. Andrew Ng made the inverse point at the Landing AI launch:
+
+The argument is that text-first OCR plateaus around 70, 80% on real-world documents because the remaining 20% lives in things OCR was never designed to see: a checked box, an arrow connecting two flowchart nodes, a signature that's technically an image, a number that only makes sense because of where it sits in a table column.
+
+Strip the marketing and the pitch has three load-bearing pieces. The table below is how vendors actually justify the "agentic" word, with the part that is genuinely new called out.
+
+None of that is wrong. The interesting question is whether you needed to call the bundle agentic to ship it.

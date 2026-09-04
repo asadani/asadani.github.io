@@ -1,0 +1,13 @@
+What the harness actually does, step by step..
+
+The agentic OCR systems shipping in 2026 mostly share a four-stage internal pattern. The branding differs; the loop does not.
+
+1 · Look. The page is rendered to an image (usually 1024, 2048 px on the long side) and passed to a vision-language model along with a goal, either a free-text question or a target JSON schema.
+
+2 · Decide. The model emits a structured plan: which fields it is confident in, which regions are still ambiguous, and which tool it wants next. This is the step a fixed pipeline cannot do, because it requires the model to reason about its own output.
+
+3 · Act. The harness executes the requested tool, crop and re-look, run a dedicated table parser, run a signature detector, fetch a related page, query a known-templates index. These tools are the "harness" in LLM-with-harness.
+
+4 · Ground. When the model finalizes an answer, it returns bounding boxes (or polygon coordinates) for every extracted field. The system can show a reviewer exactly where each value came from on the page.
+
+If you have used a reasoning model like a thinking-mode Gemini or a Claude with extended thinking, you have seen a degenerate version of this loop. The model talks to itself, decides what to look at next, and answers. Agentic OCR makes that loop external and tool-augmented, the "thinking" can actually crop the image, call a table parser, or zoom into a stamp, instead of just rereading the same context.

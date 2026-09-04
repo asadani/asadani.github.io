@@ -1,0 +1,9 @@
+Orchestration, or LLM-with-harness?.
+
+Here is where I land after reading the vendor announcements and the practitioner threads back-to-back. Most things being sold as agentic OCR are not multi-LLM orchestration. They are one vision-language model, usually a Gemini, Claude, or GPT variant, running inside a harness. The harness is the part that earns the word:
+
+There is no team of agents in there. There is one model, a small set of tools, and a control loop that lets the model decide what to do next based on what it just saw. That is the agentic part, not the number of LLMs, not the role prompts, but the run-time decision about what to do next.
+
+By that definition, "LLM orchestration" and "LLM with a harness" are the two honest names. Orchestration implies multiple things being coordinated, which oversells it. Harness is what is actually new, and harnesses don't market as well as agents.
+
+A pipeline that is allowed to loop and call tools based on what it sees is agentic. A pipeline that runs three prompts in a fixed order is not, no matter how many of those prompts are labelled "extractor agent" or "validator agent."
