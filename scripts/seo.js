@@ -370,11 +370,13 @@ function applyHead(html, block, opts) {
    absent from the sitemap. `bf build` overwrites them, so this must be
    re-runnable -- hence the markers. */
 function patchBooks() {
-  const report = { patched: [], updated: [], skipped: [], missing: [] };
+  const report = { patched: [], updated: [], skipped: [], missing: [], external: [] };
 
   hostedBooks.forEach((b) => {
     const abs = path.join(ROOT, b.slug, 'index.html');
-    if (!fs.existsSync(abs)) { report.missing.push(b.slug); return; }
+    // Every hosted book is built in its own repo and only served from this
+    // domain. There is nothing here to patch, and that is not a fault.
+    if (!fs.existsSync(abs)) { report.external.push(b.slug); return; }
 
     let html = fs.readFileSync(abs, 'utf8');
     const block = bookHeadBlock(b, {
@@ -394,12 +396,17 @@ function patchBooks() {
 
 /* ── back-fill existing article pages ─────────────────────────────────── */
 function patchArticles() {
-  const report = { patched: [], updated: [], skipped: [], missing: [] };
+  const report = { patched: [], updated: [], skipped: [], missing: [], external: [] };
 
   articles.forEach((a) => {
     const rel = path.join(a.slug, 'index.html');
     const abs = path.join(ROOT, rel);
-    if (!fs.existsSync(abs)) { report.missing.push(a.slug); return; }
+    if (!fs.existsSync(abs)) {
+      // "external": true means the page is built in its own repo and served
+      // from this domain. Without that flag an absent page is a broken entry.
+      (a.external ? report.external : report.missing).push(a.slug);
+      return;
+    }
 
     let html = fs.readFileSync(abs, 'utf8');
     // Test for an existing description OUTSIDE the managed block. Testing the
@@ -431,11 +438,16 @@ write('robots.txt', robots());
 write('llms.txt', llms());
 
 function report(label, r) {
+  const ext = r.external || [];
   console.log(`\n${label}: ${r.patched.length} ${DRY ? 'to patch' : 'patched'}, ` +
               `${r.updated.length} updated, ${r.skipped.length} untouched, ` +
-              `${r.missing.length} missing`);
+              `${ext.length} external, ${r.missing.length} missing`);
   if (r.patched.length) console.log('  patched: ' + r.patched.join(', '));
   if (r.updated.length) console.log('  updated: ' + r.updated.join(', '));
+  if (ext.length) {
+    console.log('  external (own repo, served from ' + SITE + '/<slug>/):');
+    ext.forEach((slug) => console.log(`    ${SITE}/${slug}/`));
+  }
   if (r.missing.length) console.log('  MISSING: ' + r.missing.join(', '));
 }
 

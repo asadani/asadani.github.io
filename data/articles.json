@@ -15,7 +15,8 @@
     "date": "2026-09-04",
     "dateDisplay": "September 4, 2026",
     "cta": "Start",
-    "shareUrl": "https://tech.anujsadani.in/mcp-101/"
+    "shareUrl": "https://tech.anujsadani.in/mcp-101/",
+    "external": true
   },
   {
     "slug": "revive-old-gpu-small-models",
@@ -88,7 +89,8 @@
     "cta": "Read",
     "shareUrl": "https://tech.anujsadani.in/the-meter-is-not-the-money/",
     "summary": true,
-    "pages": 30
+    "pages": 30,
+    "external": true
   },
   {
     "slug": "monolith-wearing-a-transformer",
@@ -107,7 +109,8 @@
     "cta": "Read",
     "shareUrl": "https://tech.anujsadani.in/monolith-wearing-a-transformer/",
     "summary": true,
-    "pages": 29
+    "pages": 29,
+    "external": true
   },
   {
     "slug": "onboarding-slop",
@@ -126,7 +129,8 @@
     "cta": "Read",
     "shareUrl": "https://tech.anujsadani.in/onboarding-slop/",
     "summary": true,
-    "pages": 59
+    "pages": 59,
+    "external": true
   },
   {
     "slug": "speed-is-the-moat",
@@ -145,7 +149,8 @@
     "cta": "Read",
     "shareUrl": "https://tech.anujsadani.in/speed-is-the-moat/",
     "summary": true,
-    "pages": 26
+    "pages": 26,
+    "external": true
   },
   {
     "slug": "abundant-and-uncurated",
@@ -164,7 +169,8 @@
     "cta": "Read",
     "shareUrl": "https://tech.anujsadani.in/abundant-and-uncurated/",
     "summary": true,
-    "pages": 24
+    "pages": 24,
+    "external": true
   },
   {
     "slug": "the-human-leverage-map",
@@ -181,7 +187,8 @@
     "date": "2026-06-24",
     "dateDisplay": "June 24, 2026",
     "cta": "Read",
-    "shareUrl": "https://tech.anujsadani.in/the-human-leverage-map/"
+    "shareUrl": "https://tech.anujsadani.in/the-human-leverage-map/",
+    "external": true
   },
   {
     "slug": "the-failed-engineer",
@@ -198,7 +205,8 @@
     "date": "2026-06-23",
     "dateDisplay": "June 23, 2026",
     "cta": "Read",
-    "shareUrl": "https://tech.anujsadani.in/the-failed-engineer/"
+    "shareUrl": "https://tech.anujsadani.in/the-failed-engineer/",
+    "external": true
   },
   {
     "slug": "the-monk-who-oversold-the-ai",
@@ -215,7 +223,8 @@
     "date": "2026-06-18",
     "dateDisplay": "June 18, 2026",
     "cta": "Read",
-    "shareUrl": "https://tech.anujsadani.in/the-monk-who-oversold-the-ai/"
+    "shareUrl": "https://tech.anujsadani.in/the-monk-who-oversold-the-ai/",
+    "external": true
   },
   {
     "slug": "three-leaders-one-market",
@@ -232,7 +241,8 @@
     "date": "2026-06-18",
     "dateDisplay": "June 18, 2026",
     "cta": "Read",
-    "shareUrl": "https://tech.anujsadani.in/three-leaders-one-market/"
+    "shareUrl": "https://tech.anujsadani.in/three-leaders-one-market/",
+    "external": true
   },
   {
     "slug": "the-verification-tax",
@@ -266,7 +276,8 @@
     "date": "2026-06-09",
     "dateDisplay": "June 9, 2026",
     "cta": "Read",
-    "shareUrl": "https://tech.anujsadani.in/idp-barbell/"
+    "shareUrl": "https://tech.anujsadani.in/idp-barbell/",
+    "external": true
   },
   {
     "slug": "coding-with-enemy",
