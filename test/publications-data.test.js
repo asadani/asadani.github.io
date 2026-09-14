@@ -6,10 +6,10 @@ const b = require('../build.js');
 
 const pubs = JSON.parse(fs.readFileSync(path.join(__dirname,'../data/publications.json'),'utf8'));
 
-test('bucket counts: 1 book, 3 papers, 5 digital', () => {
+test('bucket counts: 1 book, 3 papers, 11 digital', () => {
   assert.strictEqual(pubs.books.length, 1);
   assert.strictEqual(pubs.papers.length, 3);
-  assert.strictEqual(pubs.digital.length, 5);
+  assert.strictEqual(pubs.digital.length, 11);
 });
 
 test('every paper has a dateDisplay string and the SSRN paper is present', () => {

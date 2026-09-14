@@ -1,5 +1,23 @@
 [
   {
+    "slug": "ai-slop",
+    "title": "The Attention Invoice",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "craft",
+      "provenance"
+    ],
+    "quote": "\"AI slop is a failure of judgment, not a method of generation.\"",
+    "desc": "How AI slop transfers its cost to everyone else. LinkedIn's own definition is the right one: not whether a machine helped, but whether anyone exercised enough judgment to make the result worth someone else's attention. Eight chapters on what changed when generation got cheap, why detection is the wrong question, and what to do about it on Monday. Includes a downloadable designed PDF.",
+    "date": "2026-09-14",
+    "dateDisplay": "September 14, 2026",
+    "cta": "Read",
+    "shareUrl": "https://tech.anujsadani.in/ai-slop/",
+    "external": true
+  },
+  {
     "slug": "mcp-101",
     "title": "MCP 101",
     "tags": [

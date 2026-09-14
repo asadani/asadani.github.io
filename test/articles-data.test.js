@@ -6,8 +6,8 @@ const b = require('../build.js');
 
 const arts = JSON.parse(fs.readFileSync(path.join(__dirname,'../data/articles.json'),'utf8'));
 
-test('all 24 existing articles are present', () => {
-  assert.strictEqual(arts.length, 24);
+test('all 36 existing articles are present', () => {
+  assert.strictEqual(arts.length, 36);
 });
 
 test('every article has required fields and a known primary topic', () => {

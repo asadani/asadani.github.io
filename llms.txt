@@ -8,6 +8,7 @@ Author profile: https://anujsadani.in
 
 ## Essays
 
+- [The Attention Invoice](https://tech.anujsadani.in/ai-slop/): How AI slop transfers its cost to everyone else. LinkedIn's own definition is the right one: not whether a machine helped, but whether anyone exercised enough judgment to make the result worth someone else's attention. Eight chapters on what changed when generation got cheap, why detection is the wrong question, and what to do about it on Monday. Includes a downloadable designed PDF.
 - [MCP 101](https://tech.anujsadani.in/mcp-101/): An interactive tutorial on the Model Context Protocol. Eighteen chapters on one page, with the protocol's moving parts as things you step through rather than diagrams you look at: a wire tap that shows the real JSON-RPC frames as you advance the lifecycle, three lanes making clear who is acting at each step, the M by N problem as a dial, and a self-check that tells you which chapter to revisit. Narrated in two voices.
 - [Reviving A Six-Year-Old GPU For Small Models](https://tech.anujsadani.in/revive-old-gpu-small-models/): A GTX 1650 with 4 GB of VRAM and a five-year-old driver now runs a 0.6B speech model four times faster than the CPU. Almost nothing standing in the way was about the hardware: a CPU-only torch wheel, a missing PATH entry, a dtype that crashes on Turing, and a batch size that looked fast while spilling into system RAM.
 - [Narrating Your Writing With Kokoro](https://tech.anujsadani.in/narrate-writing-kokoro/): An 82M model on a laptop gives written articles a listenable narration. The model is the easy part: what decides whether it works is blending voices as style vectors, an acronym table the espeak frontend needs, and two silence constants that matter more than any model parameter.
@@ -56,6 +57,7 @@ Author profile: https://anujsadani.in
 
 ## Digital releases
 
+- [The Attention Invoice](https://tech.anujsadani.in/ai-slop/): listed under Essays above. PDF at https://tech.anujsadani.in/ai-slop/.
 - [The Meter Is Not the Money](https://tech.anujsadani.in/the-meter-is-not-the-money/): listed under Essays above. PDF at https://ko-fi.com/s/0f1f4f72ad.
 - [A Monolith Wearing a Transformer](https://tech.anujsadani.in/monolith-wearing-a-transformer/): listed under Essays above. PDF at https://ko-fi.com/s/93e24c2638.
 - [Onboarding Slop](https://tech.anujsadani.in/onboarding-slop/): listed under Essays above. PDF at https://ko-fi.com/s/c0d90b0885.

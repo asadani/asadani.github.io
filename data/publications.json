@@ -65,6 +65,15 @@
   ],
   "digital": [
     {
+      "title": "The Attention Invoice",
+      "desc": "LinkedIn added a \"Seems like AI slop\" feedback option, and its own definition is better than the button's name: not whether a machine helped, but whether the result reflects a person's perspective, experience, or expertise. This book takes that distinction seriously and pushes past it. Generation got cheap; judgment did not, and the gap between the two is exactly where the cost of unreviewed output lands — on the reader who trusted the headline, the teammate who merged the pull request, the maintainer who inherits the debt. Eight chapters: what the word actually names, why detecting AI-written text is the wrong question, what changes when slop reaches a codebase instead of a feed, and a responsibility test sharper than \"did a model write this.\"",
+      "image": "/assets/covers/ai-slop.jpg",
+      "url": "https://tech.anujsadani.in/ai-slop/",
+      "hosted": "/ai-slop/",
+      "pages": 19,
+      "datePublished": "2026-09-14"
+    },
+    {
       "title": "The Meter Is Not the Money",
       "desc": "Everyone calls tokens the currency of AI, including the chief executive who justified buying a router with the line. Every credit balance in the market is denominated in dollars instead — because providers serving the identical open-weight model differ threefold in price, the router picks between them with a weighted draw so the cost of a request is a distribution rather than a number when you press send, and writing to a cache can cost more than an ordinary input token with the sign of the adjustment varying by vendor. A token is a meter reading, not a unit of account; every credit is a conversion layer over dollars; the position worth owning is the exchange desk rather than the mint. Includes the strongest case against that argument, presented without rebuttal.",
       "image": "/assets/covers/the-meter-is-not-the-money.jpg",
