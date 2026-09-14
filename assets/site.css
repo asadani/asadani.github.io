@@ -28,6 +28,7 @@
     --nvidia:  #76B900;
     --dh:      #E00024;
     --infrrd:  #00A651;
+    --newrole: #8A8175;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -486,6 +487,9 @@
     .tl-mobile-accent.nvidia { background: var(--nvidia); }
     .tl-mobile-accent.dh     { background: var(--dh); }
     .tl-mobile-accent.infrrd { background: var(--infrrd); }
+    .tl-mobile-accent.newrole { background: var(--newrole); }
+    .job-logo-ph { font-family: var(--mono); font-weight: 600; color: var(--text-muted); }
+    .tl-mobile-logo.job-logo-ph { display: flex; align-items: center; justify-content: center; }
     .tl-mobile-logo { width: 38px; height: 38px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); overflow: hidden; padding: 3px; flex-shrink: 0; }
     .tl-mobile-logo img { width: 100%; height: 100%; object-fit: contain; }
     .tl-mobile-info { flex: 1; min-width: 0; }
