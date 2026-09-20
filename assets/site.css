@@ -130,8 +130,8 @@
   .tl-col.nvidia .tl-bar  { background: var(--nvidia); }
   .tl-col.dh .tl-bar      { background: var(--dh); }
   .tl-col.infrrd .tl-bar  { background: var(--infrrd); }
-  /* 2026: Infrrd to Jun, a gap over Jul-Aug, Citi from Sep */
-  .tl-col.citi .tl-bar    { background: linear-gradient(90deg, var(--infrrd) 0 50%, transparent 50% 66%, var(--citi) 66% 100%); }
+  /* 2026: Infrrd to July, Citi from July, so the bar has no gap */
+  .tl-col.citi .tl-bar    { background: linear-gradient(90deg, var(--infrrd) 0 50%, var(--citi) 50% 100%); }
 
   /* tick mark on each bar */
   .tl-bar::after {
