@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Reviving a six-year-old GPU for small models</title>
-<meta name="description" content="A GTX 1650 with 4 GB of VRAM still runs useful models in 2026. The driver, the CPU wheel pip hands you, the PATH bug that makes CUDA look broken, bf16 over fp16 on Turing, and tuning batch size against memory instead of the clock.">
+<!-- SEO:HEAD -->
 <meta name="author" content="Anuj Sadani">
 <link rel="canonical" href="https://tech.anujsadani.in/revive-old-gpu-small-models/">
 
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://tech.anujsadani.in/revive-old-gpu-small-models/">
 <meta property="og:site_name" content="Anuj Sadani | Tech">
-<meta property="og:title" content="Reviving a six-year-old GPU for small models">
-<meta property="og:description" content="A GTX 1650 with 4 GB of VRAM still runs useful models in 2026. The driver, the CPU wheel pip hands you, the PATH bug that makes CUDA look broken, bf16 over fp16 on Turing, and tuning batch size against memory instead of the clock.">
+<meta property="og:title" content="Reviving A Six-Year-Old GPU For Small Models">
+<meta property="og:description" content="A GTX 1650 with 4 GB of VRAM and a five-year-old driver now runs a 0.6B speech model four times faster than the CPU. Almost nothing standing in the way was about the hardware: a CPU-only torch wheel, a missing PATH entry, a dtype that crashes on Turing, and a batch size that looked fast while spilling into system RAM.">
 <meta property="og:image" content="https://tech.anujsadani.in/assets/profile-pic.png">
 <meta property="article:published_time" content="2026-09-03">
 <meta property="article:author" content="Anuj Sadani">
@@ -21,22 +21,79 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Reviving a six-year-old GPU for small models",
-  "description": "A GTX 1650 with 4 GB of VRAM still runs useful models in 2026. The driver, the CPU wheel pip hands you, the PATH bug that makes CUDA look broken, bf16 over fp16 on Turing, and tuning batch size against memory instead of the clock.",
-  "datePublished": "2026-09-03",
-  "url": "https://tech.anujsadani.in/revive-old-gpu-small-models/",
-  "mainEntityOfPage": "https://tech.anujsadani.in/revive-old-gpu-small-models/",
-  "inLanguage": "en",
-  "isPartOf": { "@id": "https://tech.anujsadani.in/#blog" },
-  "author": {
-    "@type": "Person",
-    "@id": "https://anujsadani.in/#person",
-    "name": "Anuj Sadani",
-    "url": "https://anujsadani.in/"
-  }
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://anujsadani.in/#person",
+      "name": "Anuj Sadani",
+      "givenName": "Anuj",
+      "familyName": "Sadani",
+      "url": "https://anujsadani.in/",
+      "image": "https://tech.anujsadani.in/assets/profile-pic.png",
+      "jobTitle": "Senior Vice President, GenAI Platform",
+      "description": "Anuj Sadani is Senior Vice President, GenAI Platform at Citi in Pune, India. He builds enterprise generative-AI systems -- RAG platforms, agentic workflows, and evaluation pipelines -- and leads the engineers who build them. He writes about AI engineering, infrastructure, and security, and is the author of The Clean Vibe Coder.",
+      "sameAs": [
+        "https://anujsadani.in/",
+        "https://tech.anujsadani.in/",
+        "https://github.com/asadani",
+        "https://linkedin.com/in/anujsadani",
+        "https://medium.com/@anuj.sadani",
+        "https://devpandaandvibedragon.substack.com/",
+        "https://ko-fi.com/anujsadani",
+        "https://www.amazon.com/stores/Anuj-Sadani/author/B0H34JHLSB",
+        "https://orcid.org/0009-0001-0124-3181"
+      ],
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Citi",
+        "url": "https://www.citigroup.com/"
+      },
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "Government College of Engineering, Amravati"
+      },
+      "homeLocation": {
+        "@type": "Place",
+        "name": "Pune, India"
+      },
+      "knowsAbout": [
+        "AI engineering",
+        "Retrieval-augmented generation",
+        "Agentic workflows",
+        "LLM evaluation",
+        "Intelligent document processing",
+        "Machine learning infrastructure",
+        "Software engineering leadership"
+      ],
+      "identifier": {
+        "@type": "PropertyValue",
+        "propertyID": "ORCID",
+        "value": "0009-0001-0124-3181"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Reviving A Six-Year-Old GPU For Small Models",
+      "url": "https://tech.anujsadani.in/revive-old-gpu-small-models/",
+      "mainEntityOfPage": "https://tech.anujsadani.in/revive-old-gpu-small-models/",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://tech.anujsadani.in/#blog"
+      },
+      "author": {
+        "@id": "https://anujsadani.in/#person"
+      },
+      "publisher": {
+        "@id": "https://anujsadani.in/#person"
+      },
+      "description": "A GTX 1650 with 4 GB of VRAM and a five-year-old driver now runs a 0.6B speech model four times faster than the CPU. Almost nothing standing in the way was about the hardware: a CPU-only torch wheel, a missing PATH entry, a dtype that crashes on Turing, and a batch size that looked fast while spilling into system RAM.",
+      "datePublished": "2026-09-03",
+      "keywords": "infrastructure"
+    }
+  ]
 }
 </script>
+<!-- /SEO:HEAD -->
 <!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
 <script>
   (function () {
