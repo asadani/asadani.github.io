@@ -169,10 +169,6 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   }
   .tl-logo-btn img { width: 100%; height: 100%; object-fit: contain; }
-  /* text monogram for a company with no logo asset */
-  .tl-logo-btn .mono, .tl-detail-logo .mono, .tl-mobile-logo .mono {
-    font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--citi);
-  }
   .tl-logo-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 16px rgba(0,0,0,0.14); }
   .tl-logo-btn.active { border-color: var(--accent); box-shadow: 0 4px 18px rgba(200,92,45,0.22); transform: translateY(-2px); }
 
