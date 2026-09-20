@@ -1,7 +1,7 @@
 # Anuj Sadani — Tech
 
 > Essays on AI engineering, infrastructure, and security by Anuj Sadani,
-> Principal Software Development Engineer at Infrrd. Enterprise RAG, agentic
+> Senior Vice President, GenAI Platform at Citi (Pune). Enterprise RAG, agentic
 > workflows, evaluation pipelines, and the parts that break in production.
 
 Author profile: https://anujsadani.in
@@ -57,7 +57,7 @@ Author profile: https://anujsadani.in
 
 ## Digital releases
 
-- [The Attention Invoice](https://tech.anujsadani.in/ai-slop/): listed under Essays above. PDF at https://tech.anujsadani.in/ai-slop/.
+- [The Attention Invoice](https://tech.anujsadani.in/ai-slop/): listed under Essays above. PDF at https://ko-fi.com/s/b2d61a99ec.
 - [The Meter Is Not the Money](https://tech.anujsadani.in/the-meter-is-not-the-money/): listed under Essays above. PDF at https://ko-fi.com/s/0f1f4f72ad.
 - [A Monolith Wearing a Transformer](https://tech.anujsadani.in/monolith-wearing-a-transformer/): listed under Essays above. PDF at https://ko-fi.com/s/93e24c2638.
 - [Onboarding Slop](https://tech.anujsadani.in/onboarding-slop/): listed under Essays above. PDF at https://ko-fi.com/s/c0d90b0885.

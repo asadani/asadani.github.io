@@ -162,7 +162,7 @@ function llms() {
   lines.push('# Anuj Sadani — Tech');
   lines.push('');
   lines.push('> Essays on AI engineering, infrastructure, and security by Anuj Sadani,');
-  lines.push('> Principal Software Development Engineer at Infrrd. Enterprise RAG, agentic');
+  lines.push('> Senior Vice President, GenAI Platform at Citi (Pune). Enterprise RAG, agentic');
   lines.push('> workflows, evaluation pipelines, and the parts that break in production.');
   lines.push('');
   lines.push(`Author profile: ${HOME}`);
