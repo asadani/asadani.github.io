@@ -98,7 +98,7 @@
 <div class="pillars">
       <a class="pillar-card" href="#articles">
         <span class="pillar-label">Writing</span>
-        <span class="pillar-count">36</span>
+        <span class="pillar-count">39</span>
         <span class="pillar-meta">essays &amp; field notes</span>
         <span class="pillar-link">Browse &rarr;</span>
       </a>
@@ -130,12 +130,13 @@
       <span class="filter-lead">Filter</span>
       <div class="flavor-bar">
 <!-- BUILD:flavorbar -->
-        <button class="flavor-chip" data-flavor="craft" title="16 articles">craft</button>
+        <button class="flavor-chip" data-flavor="craft" title="19 articles">craft</button>
         <button class="flavor-chip" data-flavor="models" title="11 articles">models</button>
+        <button class="flavor-chip" data-flavor="agents" title="10 articles">agents</button>
         <button class="flavor-chip" data-flavor="evals" title="8 articles">evals</button>
-        <button class="flavor-chip" data-flavor="agents" title="7 articles">agents</button>
-        <button class="flavor-chip" data-flavor="cost-latency" title="6 articles">cost-latency</button>
+        <button class="flavor-chip" data-flavor="cost-latency" title="7 articles">cost-latency</button>
         <button class="flavor-chip" data-flavor="provenance" title="5 articles">provenance</button>
+        <button class="flavor-chip" data-flavor="tutorial" title="4 articles">tutorial</button>
         <button class="flavor-chip" data-flavor="agentic-coding" title="3 articles">agentic-coding</button>
         <button class="flavor-chip" data-flavor="research" title="3 articles">research</button>
         <button class="flavor-chip" data-flavor="supply-chain" title="3 articles">supply-chain</button>
@@ -159,6 +160,60 @@
     <div class="articles-list">
 
       <!-- BUILD:articles -->
+      <a class="art-row art-tutorial" href="/mcp-102/" data-tags="tutorial ai-engineering" data-flavors="tutorial agents craft">
+        <div class="art-strip"></div>
+        <div class="art-body">
+          <div class="art-top"><span class="art-badge badge-tutorial">Tutorial</span><span class="art-title">MCP 102</span><span class="card-flavors"><span class="card-flavor">tutorial</span><span class="card-flavor">agents</span><span class="card-flavor">craft</span></span></div>
+          <div class="art-quote">“If I deleted the MCP server tomorrow, would this rule still be enforced?”</div>
+          <div class="art-desc">Builds Teamspace, a task tracker and knowledge base behind one MCP server, and puts every layer under its own light: schemas, resources and prompts, per-request identity, stateless handlers, approvals bound to an exact operation, and a transactional idempotency guard you can break on purpose. Every frame and excerpt is captured from the running code. Narrated in two voices.</div>
+        </div>
+        <div class="art-meta">
+          <span class="art-date">September 21, 2026</span>
+          <div class="art-actions">
+            <button class="share-btn" aria-label="Share" data-url="https://tech.anujsadani.in/mcp-102/" data-title="MCP 102">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            </button>
+            <span class="art-link">Start →</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="art-row art-tutorial" href="/mcp-103/" data-tags="tutorial ai-engineering" data-flavors="tutorial agents craft">
+        <div class="art-strip"></div>
+        <div class="art-body">
+          <div class="art-top"><span class="art-badge badge-tutorial">Tutorial</span><span class="art-title">MCP 103</span><span class="card-flavors"><span class="card-flavor">tutorial</span><span class="card-flavor">agents</span><span class="card-flavor">craft</span></span></div>
+          <div class="art-quote">“A control that exists is not a control that applies.”</div>
+          <div class="art-desc">Puts the working integration from MCP 102 under production pressure: rate limits shared across replicas, a budget that reserves before it spends, retries and idempotency, a circuit breaker, a safe URL importer, durable jobs with leases, and a deployment sketch checked against an eight-point readiness list. Narrated in two voices.</div>
+        </div>
+        <div class="art-meta">
+          <span class="art-date">September 21, 2026</span>
+          <div class="art-actions">
+            <button class="share-btn" aria-label="Share" data-url="https://tech.anujsadani.in/mcp-103/" data-title="MCP 103">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            </button>
+            <span class="art-link">Start →</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="art-row art-tutorial" href="/mcp-104/" data-tags="tutorial ai-engineering" data-flavors="tutorial agents craft cost-latency">
+        <div class="art-strip"></div>
+        <div class="art-body">
+          <div class="art-top"><span class="art-badge badge-tutorial">Tutorial</span><span class="art-title">MCP 104</span><span class="card-flavors"><span class="card-flavor">tutorial</span><span class="card-flavor">agents</span><span class="card-flavor">craft</span><span class="card-flavor">cost-latency</span></span></div>
+          <div class="art-quote">“A router picks, and refuses to guess.”</div>
+          <div class="art-desc">Argues through the economics and shape of MCP at scale: two cost ledgers, tiering behind one server, when a slow lane pays for itself, semantic routing that refuses to guess, tool retrieval, gateways as a second lock rather than a replacement, and where a model belongs inside a tool. One mechanism is implemented and tested; the rest is argued, and every chapter says which. Narrated in two voices.</div>
+        </div>
+        <div class="art-meta">
+          <span class="art-date">September 21, 2026</span>
+          <div class="art-actions">
+            <button class="share-btn" aria-label="Share" data-url="https://tech.anujsadani.in/mcp-104/" data-title="MCP 104">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            </button>
+            <span class="art-link">Start →</span>
+          </div>
+        </div>
+      </a>
+
       <div class="art-row art-ai has-summary" data-tags="ai-engineering" data-flavors="craft provenance">
         <div class="art-strip"></div>
         <div class="art-body">
@@ -177,10 +232,10 @@
         </div>
       </div>
 
-      <a class="art-row art-tutorial" href="/mcp-101/" data-tags="tutorial ai-engineering" data-flavors="agents craft">
+      <a class="art-row art-tutorial" href="/mcp-101/" data-tags="tutorial ai-engineering" data-flavors="tutorial agents craft">
         <div class="art-strip"></div>
         <div class="art-body">
-          <div class="art-top"><span class="art-badge badge-tutorial">Tutorial</span><span class="art-title">MCP 101</span><span class="card-flavors"><span class="card-flavor">agents</span><span class="card-flavor">craft</span></span></div>
+          <div class="art-top"><span class="art-badge badge-tutorial">Tutorial</span><span class="art-title">MCP 101</span><span class="card-flavors"><span class="card-flavor">tutorial</span><span class="card-flavor">agents</span><span class="card-flavor">craft</span></span></div>
           <div class="art-quote">"The model never runs the tool. It cannot."</div>
           <div class="art-desc">An interactive tutorial on the Model Context Protocol. Eighteen chapters on one page, with the protocol's moving parts as things you step through rather than diagrams you look at: a wire tap that shows the real JSON-RPC frames as you advance the lifecycle, three lanes making clear who is acting at each step, the M by N problem as a dial, and a self-check that tells you which chapter to revisit. Narrated in two voices.</div>
         </div>

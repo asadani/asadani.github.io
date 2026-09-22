@@ -27,6 +27,7 @@
       "ai-engineering"
     ],
     "flavors": [
+      "tutorial",
       "agents",
       "craft"
     ],
@@ -630,5 +631,66 @@
     "dateDisplay": "Mar 24, 2026",
     "cta": "Read",
     "shareUrl": "https://tech.anujsadani.in/litellm-supply-chain-attack/"
+  },
+  {
+    "slug": "mcp-102",
+    "title": "MCP 102",
+    "tags": [
+      "tutorial",
+      "ai-engineering"
+    ],
+    "flavors": [
+      "tutorial",
+      "agents",
+      "craft"
+    ],
+    "quote": "“If I deleted the MCP server tomorrow, would this rule still be enforced?”",
+    "desc": "Builds Teamspace, a task tracker and knowledge base behind one MCP server, and puts every layer under its own light: schemas, resources and prompts, per-request identity, stateless handlers, approvals bound to an exact operation, and a transactional idempotency guard you can break on purpose. Every frame and excerpt is captured from the running code. Narrated in two voices.",
+    "date": "2026-09-21",
+    "dateDisplay": "September 21, 2026",
+    "cta": "Start",
+    "shareUrl": "https://tech.anujsadani.in/mcp-102/",
+    "external": true
+  },
+  {
+    "slug": "mcp-103",
+    "title": "MCP 103",
+    "tags": [
+      "tutorial",
+      "ai-engineering"
+    ],
+    "flavors": [
+      "tutorial",
+      "agents",
+      "craft"
+    ],
+    "quote": "“A control that exists is not a control that applies.”",
+    "desc": "Puts the working integration from MCP 102 under production pressure: rate limits shared across replicas, a budget that reserves before it spends, retries and idempotency, a circuit breaker, a safe URL importer, durable jobs with leases, and a deployment sketch checked against an eight-point readiness list. Narrated in two voices.",
+    "date": "2026-09-21",
+    "dateDisplay": "September 21, 2026",
+    "cta": "Start",
+    "shareUrl": "https://tech.anujsadani.in/mcp-103/",
+    "external": true
+  },
+  {
+    "slug": "mcp-104",
+    "title": "MCP 104",
+    "tags": [
+      "tutorial",
+      "ai-engineering"
+    ],
+    "flavors": [
+      "tutorial",
+      "agents",
+      "craft",
+      "cost-latency"
+    ],
+    "quote": "“A router picks, and refuses to guess.”",
+    "desc": "Argues through the economics and shape of MCP at scale: two cost ledgers, tiering behind one server, when a slow lane pays for itself, semantic routing that refuses to guess, tool retrieval, gateways as a second lock rather than a replacement, and where a model belongs inside a tool. One mechanism is implemented and tested; the rest is argued, and every chapter says which. Narrated in two voices.",
+    "date": "2026-09-21",
+    "dateDisplay": "September 21, 2026",
+    "cta": "Start",
+    "shareUrl": "https://tech.anujsadani.in/mcp-104/",
+    "external": true
   }
 ]
