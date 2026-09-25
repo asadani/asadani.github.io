@@ -692,5 +692,25 @@
     "cta": "Start",
     "shareUrl": "https://tech.anujsadani.in/mcp-104/",
     "external": true
+  },
+  {
+    "slug": "skills-101",
+    "title": "Skills 101",
+    "tags": [
+      "tutorial",
+      "ai-engineering"
+    ],
+    "flavors": [
+      "tutorial",
+      "agents",
+      "craft"
+    ],
+    "quote": "“The agent owns the objective. The skill contributes a method.”",
+    "desc": "An interactive field guide to agent skills, sixteen chapters on one page. A placement console asks whether a responsibility belongs in a prompt, a skill, code, a tool, MCP, retrieval or an agent; a package inspector shows what a skill file holds, down to the real frontmatter; and steppers walk the lifecycle, the four ways skills meet MCP, and the failure chain where a green tool response is still the wrong outcome. Ends with a level-one skill you can copy and use. Narrated in a synthetic voice.",
+    "date": "2026-09-25",
+    "dateDisplay": "September 25, 2026",
+    "cta": "Start",
+    "shareUrl": "https://tech.anujsadani.in/skills-101/",
+    "external": true
   }
 ]
