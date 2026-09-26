@@ -1,9 +1,27 @@
 Filter, then rank, and where I would change the score.
 
-Hard filters are deterministic policy, not LLM judgment: missing connection, missing scope, a write tool for a read-only request, a tool unavailable in this environment. They run before any model sees a candidate, and they are cheap to test.
+Hard filters are deterministic policy, not LLM judgment. They remove a missing connection or scope, incompatible data types, a write tool for a read-only request (and a read-only tool for a write request), an action that policy disallows or that is riskier than the request needs, and any tool unavailable in this environment. They run before any model sees a candidate, and they are cheap to test.
+
+Each stage optimizes something different, and it helps to say so out loud:
+
+Retrieval optimizes recall. Missing the right tool is the expensive error.
+
+Filters optimize correctness. They remove what cannot or should not run.
+
+The reranker optimizes precision and order. It puts the strongest candidates first.
+
+The LLM does a bounded comparison over a small menu.
+
+Validation checks that the choice is supported and safe to run.
 
 The reranker then cuts roughly 30 to 50 candidates to a menu of 5 to 8. I keep the cut generous. A reranker error deletes the right tool for good, so this is the stage where I trade a few extra tokens for recall. In my paper I recommended k of 8 to 12 with the threshold doing the precision work.
 
-A popular way to specify the reranker is a weighted sum: intent match, capability match, entity match, permission, history, minus risk, latency and cost. I like the inputs and would change how they combine.
+A common way to specify the reranker is a weighted sum over the candidate tool t, with a weight on each term:
+
+Here I is intent match, C is capability match, and E is entity or data-source match. P is permission and availability, and H is historical success on similar tasks. R is operational risk, L is expected latency, and K is execution cost.
+
+The weights should move with the task. For a sensitive action, permission and risk count for more. For an interactive request, relevance and latency count for more. I like the inputs and I like that instinct. I would change how the terms combine:
+
+The advice to weight permission and risk more heavily for sensitive actions points the same way. Past some weight they stop being weights and become gates.
 
 Anything that must never happen belongs in a filter or a policy. Anything that is a preference belongs in the ranker. A weighted sum blurs the two, and the blur is where incidents come from.

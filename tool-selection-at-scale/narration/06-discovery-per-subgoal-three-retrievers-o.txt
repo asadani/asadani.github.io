@@ -4,4 +4,6 @@ The baseline pipeline embeds the input once. A tool request is rarely one intent
 
 Retrieval then runs three ways and fuses the ranks. Vectors catch paraphrase. BM25 catches the exact tokens embeddings blur: tool ids, product names, error codes. Capability matching uses the structured operations field. Reciprocal rank fusion (Cormack et al., SIGIR 2009, constant 60) merges them without needing comparable scores.
 
+Two more signals feed the same stage: historical success on similar tasks, and whether the connector is available in this environment. I use history as a ranker feature and availability as a pre-filter. False positives are acceptable here and a miss is not. A missing tool costs the whole task, while an irrelevant one costs a few tokens that the reranker removes.
+
 The detail people miss is the pre-filter. If you filter for permissions after retrieval, the top 40 can be full of tools this user cannot call, and your recall of usable tools collapses while the recall you measure looks fine. Push the static predicates into the index query.

@@ -4,4 +4,6 @@ For classification, the rule is to stop asking the LLM to remember the taxonomy 
 
 Do not ask the LLM to be the only thing standing between a request and a side effect. Give it a small, filtered, well-described menu. Run the rules around it in code. Measure every stage, so that when the agent is wrong you know which part to fix.
 
+My design rule fits in one line. The LLM reasons over the actions that are viable right now and does not carry the platform's whole capability surface in every prompt. Retrieve broadly, filter deterministically, rerank intelligently, and reveal full tool details only when the model needs them.
+
 At 100 tools, the model does the work. At 1,000, the control plane does most of it, and the model makes the last call.

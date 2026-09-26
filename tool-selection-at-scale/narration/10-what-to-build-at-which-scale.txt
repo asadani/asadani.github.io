@@ -1,6 +1,6 @@
 What to build at which scale.
 
-Here is the whole flow in one place, in three stages. The tag on each step says whether it is rules, a learned model, or the LLM. Two of the eight steps are the LLM, and every loop is decided by code.
+Here is the whole flow in one place, in three stages. It starts where the user does, with the request. The tag on each step says whether it is rules, a learned model, or the LLM. Two of the eight steps are the LLM, and every loop is decided by code.
 
 You do not need all of it. The thresholds below are my judgment from building these systems, not measured boundaries. In my simulation the full-schema baseline crossed the 70% context-utilization line at about 50 tools, which is why the first row is short.
 

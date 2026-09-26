@@ -1,6 +1,6 @@
 Validate, iterate, recover.
 
-Validate before executing. Deterministic checks on required parameters, types, permissions, read versus write intent, confirmation requirements and target scope. For writes I add a dry-run where the tool supports one. Feed validator errors back to the model verbatim. They are the cheapest correction signal in the system.
+Validate before executing. The model may pick one tool or a short sequence from the menu, and each call gets deterministic checks on required parameters, types, permissions, read versus write intent, confirmation requirements and target scope. For writes I add a dry-run where the tool supports one. Feed validator errors back to the model verbatim. They are the cheapest correction signal in the system.
 
 Return observations, not payloads. The executor should cap and normalize the result, and keep a handle to the full output outside the context. A 200 KB response dumped into the prompt undoes everything the earlier stages saved.
 

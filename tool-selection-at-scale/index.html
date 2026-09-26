@@ -718,6 +718,7 @@
   .dg .lb-a { fill: var(--accent); }
   .dg .pl { font-family: var(--mono); font-size: 9px; letter-spacing: .06em; text-anchor: middle; }
   .dg .sl { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-anchor: end; fill: var(--accent); }
+  .dg .start { fill: var(--accent-bg); stroke: var(--accent-border); stroke-width: 1.5; }
   .dg .band { fill: none; stroke: var(--border); stroke-width: 1.5; stroke-dasharray: 4 4; }
   .dg .node { fill: var(--surface); stroke: var(--border); stroke-width: 1.5; }
   .dg .dec { fill: var(--surface-tint); stroke: var(--text-subtle); stroke-width: 1.5; }
@@ -767,7 +768,7 @@
     <div class="hero-meta">
       <span>September 2026</span>
       <span class="hero-meta-sep">/</span>
-      <span>14 min read</span>
+      <span>16 min read</span>
     </div>
   </header>
 
@@ -816,12 +817,13 @@
   </div>
 
   <!-- 01 -->
-  <!-- ARTICLE-AUDIO:BEGIN -->
+  
+<!-- ARTICLE-AUDIO:BEGIN -->
 <link rel="stylesheet" href="/assets/player.css">
 <div class="ap" id="articleaudio">
   <div class="ap-hd">
     <span class="ap-ico" aria-hidden="true">&#9654;</span>
-    <div><span class="ap-kick">Audio edition</span><b>Listen to this article</b><span class="ap-sub">12 parts &middot; 14 min</span></div>
+    <div><span class="ap-kick">Audio edition</span><b>Listen to this article</b><span class="ap-sub">12 parts &middot; 16 min</span></div>
     <button class="ap-rate" type="button" aria-label="Playback speed">1&#215;</button>
     <button class="ap-more" type="button" aria-expanded="false">Parts</button>
   </div>
@@ -834,12 +836,12 @@
       <li><button type="button" data-src="audio/03-it-is-a-context-quality-problem-not-only.mp3"><span class="ap-n">4</span><span class="ap-nm">It is a context-quality problem, not only a knowledge problem</span><span class="ap-d">1:48</span></button></li>
       <li><button type="button" data-src="audio/04-the-recall-chain.mp3"><span class="ap-n">5</span><span class="ap-nm">The recall chain</span><span class="ap-d">1:09</span></button></li>
       <li><button type="button" data-src="audio/05-the-catalog-is-a-product.mp3"><span class="ap-n">6</span><span class="ap-nm">The catalog is a product</span><span class="ap-d">1:44</span></button></li>
-      <li><button type="button" data-src="audio/06-discovery-per-subgoal-three-retrievers-o.mp3"><span class="ap-n">7</span><span class="ap-nm">Discovery per subgoal, three retrievers, one pre-filter</span><span class="ap-d">1:08</span></button></li>
-      <li><button type="button" data-src="audio/07-filter-then-rank-and-where-i-would-chang.mp3"><span class="ap-n">8</span><span class="ap-nm">Filter, then rank, and where I would change the score</span><span class="ap-d">1:08</span></button></li>
-      <li><button type="button" data-src="audio/08-progressive-disclosure.mp3"><span class="ap-n">9</span><span class="ap-nm">Progressive disclosure</span><span class="ap-d">1:29</span></button></li>
-      <li><button type="button" data-src="audio/09-validate-iterate-recover.mp3"><span class="ap-n">10</span><span class="ap-nm">Validate, iterate, recover</span><span class="ap-d">1:41</span></button></li>
-      <li><button type="button" data-src="audio/10-what-to-build-at-which-scale.mp3"><span class="ap-n">11</span><span class="ap-nm">What to build at which scale</span><span class="ap-d">1:04</span></button></li>
-      <li><button type="button" data-src="audio/11-the-short-version.mp3"><span class="ap-n">12</span><span class="ap-nm">The short version</span><span class="ap-d">0:41</span></button></li>
+      <li><button type="button" data-src="audio/06-discovery-per-subgoal-three-retrievers-o.mp3"><span class="ap-n">7</span><span class="ap-nm">Discovery per subgoal, three retrievers, one pre-filter</span><span class="ap-d">1:31</span></button></li>
+      <li><button type="button" data-src="audio/07-filter-then-rank-and-where-i-would-chang.mp3"><span class="ap-n">8</span><span class="ap-nm">Filter, then rank, and where I would change the score</span><span class="ap-d">2:28</span></button></li>
+      <li><button type="button" data-src="audio/08-progressive-disclosure.mp3"><span class="ap-n">9</span><span class="ap-nm">Progressive disclosure</span><span class="ap-d">1:36</span></button></li>
+      <li><button type="button" data-src="audio/09-validate-iterate-recover.mp3"><span class="ap-n">10</span><span class="ap-nm">Validate, iterate, recover</span><span class="ap-d">1:46</span></button></li>
+      <li><button type="button" data-src="audio/10-what-to-build-at-which-scale.mp3"><span class="ap-n">11</span><span class="ap-nm">What to build at which scale</span><span class="ap-d">1:06</span></button></li>
+      <li><button type="button" data-src="audio/11-the-short-version.mp3"><span class="ap-n">12</span><span class="ap-nm">The short version</span><span class="ap-d">1:00</span></button></li>
   </ol>
 </div>
 <div class="ap-mini" id="ap-mini" hidden>
@@ -1016,6 +1018,8 @@
   <span class="tok-key">"domain"</span>:       <span class="tok-str">"source_control"</span>,
   <span class="tok-key">"summary"</span>:      <span class="tok-str">"Find where something is implemented across connected repositories"</span>,
   <span class="tok-key">"capabilities"</span>: [<span class="tok-str">"code_search"</span>, <span class="tok-str">"repository_read"</span>],
+  <span class="tok-key">"entities"</span>:     [<span class="tok-str">"repository"</span>, <span class="tok-str">"file"</span>, <span class="tok-str">"commit"</span>],
+  <span class="tok-key">"input_concepts"</span>: [<span class="tok-str">"query"</span>, <span class="tok-str">"repository"</span>, <span class="tok-str">"organization"</span>],
   <span class="tok-key">"prefer_over"</span>:  [<span class="tok-str">"web.search"</span>],
   <span class="tok-key">"not_for"</span>:      <span class="tok-str">"Reading one known file. Use github.read_file."</span>,
   <span class="tok-key">"examples"</span>:     [<span class="tok-str">"Find authentication middleware in the Varta repository"</span>],
@@ -1047,15 +1051,18 @@
   <span class="tok-key">"subgoals"</span>: [
     { <span class="tok-key">"goal"</span>: <span class="tok-str">"locate authentication implementation"</span>,
       <span class="tok-key">"operations"</span>: [<span class="tok-str">"repository_search"</span>, <span class="tok-str">"code_read"</span>],
-      <span class="tok-key">"entities"</span>: [<span class="tok-str">"Varta repository"</span>], <span class="tok-key">"mutation"</span>: false },
+      <span class="tok-key">"entities"</span>: [<span class="tok-str">"Varta repository"</span>],
+      <span class="tok-key">"required_access"</span>: [<span class="tok-str">"GitHub"</span>], <span class="tok-key">"mutation"</span>: false },
     { <span class="tok-key">"goal"</span>: <span class="tok-str">"check deployment status"</span>,
       <span class="tok-key">"operations"</span>: [<span class="tok-str">"deployment_inspect"</span>],
-      <span class="tok-key">"entities"</span>: [<span class="tok-str">"Varta"</span>], <span class="tok-key">"mutation"</span>: false }
+      <span class="tok-key">"entities"</span>: [<span class="tok-str">"Varta"</span>],
+      <span class="tok-key">"required_access"</span>: [<span class="tok-str">"deployment platform"</span>], <span class="tok-key">"mutation"</span>: false }
   ]
 }</pre>
     </div>
     <div class="prose">
       <p>Retrieval then runs three ways and fuses the ranks. Vectors catch paraphrase. BM25 catches the exact tokens embeddings blur: tool ids, product names, error codes. Capability matching uses the structured <code>operations</code> field. Reciprocal rank fusion (Cormack et al., SIGIR 2009, constant 60) merges them without needing comparable scores.</p>
+      <p>Two more signals feed the same stage: historical success on similar tasks, and whether the connector is available in this environment. I use history as a ranker feature and availability as a pre-filter. False positives are acceptable here and a miss is not. A missing tool costs the whole task, while an irrelevant one costs a few tokens that the reranker removes.</p>
       <p>The detail people miss is the pre-filter. If you filter for permissions after retrieval, the top 40 can be full of tools this user cannot call, and your recall of <em>usable</em> tools collapses while the recall you measure looks fine. Push the static predicates into the index query.</p>
     </div>
     <div class="code-block">
@@ -1089,9 +1096,31 @@
     <div class="section-label">07 / Control part 3</div>
     <h2><a class="anchor" href="#filter-rank">Filter, then rank, and where I would change the score</a></h2>
     <div class="prose">
-      <p>Hard filters are deterministic policy, not LLM judgment: missing connection, missing scope, a write tool for a read-only request, a tool unavailable in this environment. They run before any model sees a candidate, and they are cheap to test.</p>
+      <p>Hard filters are deterministic policy, not LLM judgment. They remove a missing connection or scope, incompatible data types, a write tool for a read-only request (and a read-only tool for a write request), an action that policy disallows or that is riskier than the request needs, and any tool unavailable in this environment. They run before any model sees a candidate, and they are cheap to test.</p>
+      <p>Each stage optimizes something different, and it helps to say so out loud:</p>
+    </div>
+    <ul class="dl">
+      <li><strong>Retrieval</strong> optimizes recall. Missing the right tool is the expensive error.</li>
+      <li><strong>Filters</strong> optimize correctness. They remove what cannot or should not run.</li>
+      <li><strong>The reranker</strong> optimizes precision and order. It puts the strongest candidates first.</li>
+      <li><strong>The LLM</strong> does a bounded comparison over a small menu.</li>
+      <li><strong>Validation</strong> checks that the choice is supported and safe to run.</li>
+    </ul>
+    <div class="prose">
       <p>The reranker then cuts roughly 30 to 50 candidates to a menu of 5 to 8. I keep the cut generous. A reranker error deletes the right tool for good, so this is the stage where I trade a few extra tokens for recall. In my paper I recommended k of 8 to 12 with the threshold doing the precision work.</p>
-      <p>A popular way to specify the reranker is a weighted sum: intent match, capability match, entity match, permission, history, minus risk, latency and cost. I like the inputs and would change how they combine.</p>
+      <p>A common way to specify the reranker is a weighted sum over the candidate tool <code>t</code>:</p>
+    </div>
+    <div class="code-block">
+      <div class="cb-label">Reranking score</div>
+<pre>S(t) = w1*I + w2*C + w3*E + w4*P + w5*H - w6*R - w7*L - w8*K</pre>
+    </div>
+    <ul class="dl">
+      <li><code>I</code> intent match, <code>C</code> capability match, <code>E</code> entity or data-source match.</li>
+      <li><code>P</code> permission and availability, <code>H</code> historical success on similar tasks.</li>
+      <li><code>R</code> operational risk, <code>L</code> expected latency, <code>K</code> execution cost.</li>
+    </ul>
+    <div class="prose">
+      <p>The weights should move with the task. For a sensitive action, permission and risk count for more. For an interactive request, relevance and latency count for more. I like the inputs and I like that instinct. I would change how the terms combine:</p>
     </div>
     <div class="data-table">
       <table class="fixed">
@@ -1136,6 +1165,9 @@
         </tbody>
       </table>
     </div>
+    <div class="prose">
+      <p>The advice to weight permission and risk more heavily for sensitive actions points the same way. Past some weight they stop being weights and become gates.</p>
+    </div>
     <div class="callout">
       <div class="callout-lbl">The rule I use</div>
       <p>Anything that must never happen belongs in a filter or a policy. Anything that is a preference belongs in the ranker. A weighted sum blurs the two, and the blur is where incidents come from.</p>
@@ -1174,8 +1206,17 @@
       </table>
     </div>
     <div class="prose">
-      <p>A six-tool menu at discovery level is about 200 tokens. The same six with full schemas is about 2,400. The saving is real, and so is the risk: the model chooses from one-liners, so the one-liners must be good. That takes you straight back to the catalog.</p>
-      <p>Two operational details. First, keep the summary pool in the stable prefix of the prompt and put per-turn schemas right before the user message. In my simulation this gave an 84% prompt-cache hit rate over a 30-turn session against 22% for naive full-schema injection, because the tool list stopped invalidating the cache. Second, give the model an escape hatch: a <code>search_tools</code> meta-tool it can call when the menu is wrong. Anthropic's tool search is the same idea shipped as a platform feature.</p>
+      <p>A six-tool menu at discovery level is about 200 tokens. The same six with full schemas is about 2,400. The saving is real, and so is the risk: the model chooses from one-liners, so the one-liners must be good. That takes you straight back to the catalog. This is all the model sees at the discovery level:</p>
+    </div>
+    <div class="code-block">
+      <div class="cb-label">discovery-level menu</div>
+<pre>1. github.search_code   Search code inside connected repositories
+2. github.read_file     Read a specific repository file
+3. library.search       Search user-owned Library artifacts
+4. web.search           Search public internet sources</pre>
+    </div>
+    <div class="prose">
+      <p>Only after it picks <code>github.search_code</code> does the system reveal that tool's full input schema. Two operational details. First, keep the summary pool in the stable prefix of the prompt and put per-turn schemas right before the user message. In my simulation this gave an 84% prompt-cache hit rate over a 30-turn session against 22% for naive full-schema injection, because the tool list stopped invalidating the cache. Second, give the model an escape hatch: a <code>search_tools</code> meta-tool it can call when the menu is wrong. Anthropic's tool search is the same idea shipped as a platform feature.</p>
       <p>Pair that with a gate: if the model calls a tool that is not in the active set, reject it with a structured error listing what is available. In my simulation the gate fired on 2.3% of turns. The model recovered on the next turn 78% of the time and asked the user a clarifying question the other 22%.</p>
     </div>
   </div>
@@ -1185,9 +1226,19 @@
     <div class="section-label">09 / Control parts 5 and 6</div>
     <h2><a class="anchor" href="#validate-recover">Validate, iterate, recover</a></h2>
     <div class="prose">
-      <p><strong>Validate before executing.</strong> Deterministic checks on required parameters, types, permissions, read versus write intent, confirmation requirements and target scope. For writes I add a dry-run where the tool supports one. Feed validator errors back to the model verbatim. They are the cheapest correction signal in the system.</p>
+      <p><strong>Validate before executing.</strong> The model may pick one tool or a short sequence from the menu, and each call gets deterministic checks on required parameters, types, permissions, read versus write intent, confirmation requirements and target scope. For writes I add a dry-run where the tool supports one. Feed validator errors back to the model verbatim. They are the cheapest correction signal in the system.</p>
       <p><strong>Return observations, not payloads.</strong> The executor should cap and normalize the result, and keep a handle to the full output outside the context. A 200 KB response dumped into the prompt undoes everything the earlier stages saved.</p>
       <p><strong>Rediscover on every subgoal.</strong> A tool's output can reveal the next need: a config reference that points to a deployment system you had no tools for. In my simulation 5 of the 29 failures (17%) were multi-hop cases where the right tool only became relevant after an intermediate result. Re-embedding the query after each observation partly fixed them. The agent should not carry every plausibly useful tool for the whole session.</p>
+    </div>
+    <div class="code-block">
+      <div class="cb-label">one request, three rounds of discovery (illustrative)</div>
+<pre>search the repository            <span class="tok-cmt"># round 1: discover(sub 1)</span>
+  -&gt; found a config reference
+config says deployment is managed elsewhere   <span class="tok-cmt"># new subgoal</span>
+retrieve deployment tools        <span class="tok-cmt"># round 2: discover(sub 2)</span>
+inspect the deployment configuration          <span class="tok-cmt"># round 3: schema on demand, validate, run</span></pre>
+    </div>
+    <div class="prose">
       <p><strong>Name the failure class.</strong> "The agent used the wrong tool" is not a diagnosis. There are at least six distinct failures, each with a different detector and a different fix:</p>
     </div>
     <div class="data-table">
@@ -1248,13 +1299,13 @@
     <div class="section-label">10 / Judgment</div>
     <h2><a class="anchor" href="#what-to-build">What to build at which scale</a></h2>
     <div class="prose">
-      <p>Here is the whole flow in one place, in three stages. The tag on each step says whether it is rules, a learned model, or the LLM. Two of the eight steps are the LLM, and every loop is decided by code.</p>
+      <p>Here is the whole flow in one place, in three stages. It starts where the user does, with the request. The tag on each step says whether it is rules, a learned model, or the LLM. Two of the eight steps are the LLM, and every loop is decided by code.</p>
     </div>
     <figure class="fig">
       <div class="dg-wrap">
-    <svg class="dg" viewBox="0 0 730 900" role="img" aria-labelledby="dg-title dg-desc">
+    <svg class="dg" viewBox="0 0 730 958" role="img" aria-labelledby="dg-title dg-desc">
       <title id="dg-title">Tool selection pipeline as a flowchart</title>
-      <desc id="dg-desc">Three stages. Stage 1: intent extraction, hybrid retrieval, hard filters. Stage 2: reranker, progressive disclosure, the LLM selects a tool. Stage 3: schema on demand, validation, execution, then an outcome check. Loops: a new subgoal returns to intent extraction, a failed tool returns to the reranker or widens retrieval, a validation error returns to the LLM, an empty candidate set reports the missing capability, and a complete task ends in the final response.</desc>
+      <desc id="dg-desc">It starts at the user request. Three stages. Stage 1: intent extraction, hybrid retrieval, hard filters. Stage 2: reranker, progressive disclosure, the LLM selects a tool. Stage 3: schema on demand, validation, execution, then an outcome check. Loops: a new subgoal returns to intent extraction, a failed tool returns to the reranker or widens retrieval, a validation error returns to the LLM, an empty candidate set reports the missing capability, and a complete task ends in the final response.</desc>
       <defs>
         <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z"/></marker>
         <marker id="ah-r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z"/></marker>
@@ -1262,6 +1313,12 @@
         <marker id="ah-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z"/></marker>
       </defs>
 
+      <!-- entry point -->
+      <rect class="start" x="140" y="6" width="200" height="34" rx="17"/>
+      <text class="t" x="240" y="27" text-anchor="middle">User request</text>
+      <line class="ar" x1="240" y1="40" x2="240" y2="104"/>
+
+      <g transform="translate(0 58)">
       <!-- stage bands -->
       <rect class="band" x="16" y="14" width="674" height="236" rx="12"/>
       <text class="sl" x="676" y="32">STAGE 1 / DISCOVERY AND FILTERING</text>
@@ -1357,6 +1414,7 @@
       <path class="ar ar-r dash" d="M708 328 V140 H382"/>
       <text class="lb lb-r" x="430" y="320">tool failed: next candidate</text>
       <text class="lb lb-r" x="430" y="132">or widen retrieval</text>
+      </g>
     </svg>
       </div>
       <figcaption>Fig. 1. Discovery is a stage separate from execution, and the reasoning model never sees the full catalog. Tags: LLM (green), LEARNED (accent), RULES and INDEX (blue). Red arrows are failure paths, the accent arrow is the loop for a new subgoal.</figcaption>
@@ -1399,6 +1457,7 @@
     <div class="prose">
       <p>For classification, the rule is to stop asking the LLM to remember the taxonomy and give it the taxonomy when it needs it. I would keep that and add its counterpart for tools.</p>
       <p>Do not ask the LLM to be the only thing standing between a request and a side effect. Give it a small, filtered, well-described menu. Run the rules around it in code. Measure every stage, so that when the agent is wrong you know which part to fix.</p>
+      <p>My design rule fits in one line. The LLM reasons over the actions that are viable right now and does not carry the platform's whole capability surface in every prompt. Retrieve broadly, filter deterministically, rerank intelligently, and reveal full tool details only when the model needs them.</p>
       <p>At 100 tools, the model does the work. At 1,000, the control plane does most of it, and the model makes the last call.</p>
     </div>
   </div>
