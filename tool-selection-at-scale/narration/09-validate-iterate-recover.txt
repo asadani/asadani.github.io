@@ -1,0 +1,11 @@
+Validate, iterate, recover.
+
+Validate before executing. Deterministic checks on required parameters, types, permissions, read versus write intent, confirmation requirements and target scope. For writes I add a dry-run where the tool supports one. Feed validator errors back to the model verbatim. They are the cheapest correction signal in the system.
+
+Return observations, not payloads. The executor should cap and normalize the result, and keep a handle to the full output outside the context. A 200 KB response dumped into the prompt undoes everything the earlier stages saved.
+
+Rediscover on every subgoal. A tool's output can reveal the next need: a config reference that points to a deployment system you had no tools for. In my simulation 5 of the 29 failures (17%) were multi-hop cases where the right tool only became relevant after an intermediate result. Re-embedding the query after each observation partly fixed them. The agent should not carry every plausibly useful tool for the whole session.
+
+Name the failure class. "The agent used the wrong tool" is not a diagnosis. There are at least six distinct failures, each with a different detector and a different fix:
+
+Recovery paths follow from the table. Low discovery confidence: widen retrieval, reformulate the intent, or ask the user. A selected tool fails: return to the candidate list and take the next compatible one. Nothing viable: say which capability or connection is missing. Do not let the model invent an answer to fill the gap.

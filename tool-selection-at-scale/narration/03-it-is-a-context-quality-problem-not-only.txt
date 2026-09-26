@@ -1,0 +1,13 @@
+It is a context-quality problem, not only a knowledge problem.
+
+The article frames retrieval as supplying information the model lacks. That is half of it. The other half is that a model with all the information in a crowded context still does worse, even when the right answer is technically in there.
+
+Position effects. Liu et al. (Lost in the Middle, TACL 2024) found that accuracy is lowest when the relevant item sits in the middle of a long context. A tool list is exactly that shape.
+
+Tool overload, measured. RAG-MCP (Gan and Sun, 2025) reports tool selection accuracy of 43.13% with retrieval against 13.62% for the baseline that shows the model everything, and prompt tokens cut by more than half.
+
+Vendor numbers agree in direction. Anthropic's tool search write-up reports Opus 4 going from 49% to 74% on their MCP evaluation and Opus 4.5 from 79.5% to 88.1%, with about 85% fewer tokens.
+
+My own number is a simulation. On a calibrated 120-tool, six-server catalog, gating cut per-turn tool tokens from 47.3k to 2.4k (95.0%). No live agent ran. Treat it as an arithmetic result, not an accuracy result.
+
+These are four different benchmarks, so I am not comparing them to each other. They agree on the direction, and that is enough for the design rule: retrieval is a context-control mechanism. Expose the smallest decision space that still contains the answer.

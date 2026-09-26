@@ -1,0 +1,9 @@
+The recall chain.
+
+Once you add a reranker, the ceiling is no longer one number. Every stage can drop the right tool, and the drops compound. The precise form is a product of conditional recalls:
+
+The word "conditional" matters. Multiplying raw retrieval recall by raw reranker recall double counts, because the reranker only ever sees what retrieval returned. Here is an illustration with numbers I made up to show the shape, not measurements:
+
+Raising retrieval from 0.95 to 0.99 lifts the end result by about three points. Raising selection from 0.90 to 0.95 lifts it by about four. The weak stage is rarely the one people tune first, because retrieval is the stage everyone knows how to tune. The fix is to log four sets per request and compute the numbers per stage:
+
+Evaluating only the LLM is misleading, and the baseline write-up says so. At scale two numbers are not enough. You need four, and you need a labeled set where the gold tool is one the user could actually call.

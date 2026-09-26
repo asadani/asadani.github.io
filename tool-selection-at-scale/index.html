@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tool Selection at Scale: What Top-K RAG Leaves Out</title>
+<!-- SEO:HEAD -->
+<meta name="author" content="Anuj Sadani">
+<link rel="canonical" href="https://tech.anujsadani.in/tool-selection-at-scale/">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tech.anujsadani.in/tool-selection-at-scale/">
+<meta property="og:site_name" content="Anuj Sadani | Tech">
+<meta property="og:title" content="Tool Selection at Scale: What Top-K RAG Leaves Out">
+<meta property="og:description" content="Embed, retrieve, let the LLM decide works for about 100 tools. At 1,000 it needs a control plane: hybrid retrieval, hard filters, a learned reranker, progressive disclosure and per-stage evals.">
+<meta property="og:image" content="https://tech.anujsadani.in/assets/profile-pic.png">
+<meta property="article:published_time" content="2026-09-26">
+<meta property="article:author" content="Anuj Sadani">
+<meta name="twitter:card" content="summary_large_image">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://anujsadani.in/#person",
+      "name": "Anuj Sadani",
+      "givenName": "Anuj",
+      "familyName": "Sadani",
+      "url": "https://anujsadani.in/",
+      "image": "https://tech.anujsadani.in/assets/profile-pic.png",
+      "jobTitle": "Senior Vice President, GenAI Platform",
+      "description": "Anuj Sadani is Senior Vice President, GenAI Platform at Citi in Pune, India. He builds enterprise generative-AI systems -- RAG platforms, agentic workflows, and evaluation pipelines -- and leads the engineers who build them. He writes about AI engineering, infrastructure, and security, and is the author of The Clean Vibe Coder.",
+      "sameAs": [
+        "https://anujsadani.in/",
+        "https://tech.anujsadani.in/",
+        "https://github.com/asadani",
+        "https://linkedin.com/in/anujsadani",
+        "https://medium.com/@anuj.sadani",
+        "https://devpandaandvibedragon.substack.com/",
+        "https://ko-fi.com/anujsadani",
+        "https://www.amazon.com/stores/Anuj-Sadani/author/B0H34JHLSB",
+        "https://orcid.org/0009-0001-0124-3181"
+      ],
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Citi",
+        "url": "https://www.citigroup.com/"
+      },
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "Government College of Engineering, Amravati"
+      },
+      "homeLocation": {
+        "@type": "Place",
+        "name": "Pune, India"
+      },
+      "knowsAbout": [
+        "AI engineering",
+        "Retrieval-augmented generation",
+        "Agentic workflows",
+        "LLM evaluation",
+        "Intelligent document processing",
+        "Machine learning infrastructure",
+        "Software engineering leadership"
+      ],
+      "identifier": {
+        "@type": "PropertyValue",
+        "propertyID": "ORCID",
+        "value": "0009-0001-0124-3181"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Tool Selection at Scale: What Top-K RAG Leaves Out",
+      "url": "https://tech.anujsadani.in/tool-selection-at-scale/",
+      "mainEntityOfPage": "https://tech.anujsadani.in/tool-selection-at-scale/",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://tech.anujsadani.in/#blog"
+      },
+      "author": {
+        "@id": "https://anujsadani.in/#person"
+      },
+      "publisher": {
+        "@id": "https://anujsadani.in/#person"
+      },
+      "description": "Embed, retrieve, let the LLM decide works for about 100 tools. At 1,000 it needs a control plane: hybrid retrieval, hard filters, a learned reranker, progressive disclosure and per-stage evals.",
+      "datePublished": "2026-09-26",
+      "keywords": "ai-engineering"
+    }
+  ]
+}
+</script>
+<!-- /SEO:HEAD -->
+<meta name="description" content="Embed, retrieve, let the LLM decide works for about 100 tools. At 1,000 it needs a control plane: hybrid retrieval, hard filters, a learned reranker, progressive disclosure and per-stage evals.">
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #F5F1EB;
+    --bg-alt:       #EDEAE3;
+    --surface:      #FFFFFF;
+    --surface-tint: #FAF8F5;
+    --border:       #DDD9D0;
+    --border-light: #EAE7E0;
+    --text:         #1A1714;
+    --text-body:    #3D3A35;
+    --text-muted:   #6B6760;
+    --text-subtle:  #9B9892;
+    --accent:       #C85C2D;
+    --accent-light: #E8895D;
+    --accent-bg:    #FDF1EB;
+    --accent-border:#F0C4A8;
+    --green:        #2A7A4B;
+    --green-bg:     #EAF5EF;
+    --green-border: #A8D9BC;
+    --blue:         #2563A8;
+    --blue-bg:      #EAF1FA;
+    --blue-border:  #A8C5E8;
+    --red:          #B83535;
+    --red-bg:       #FAEBEB;
+    --red-border:   #E8AAAA;
+    --code-bg:      #1A1714;  /* code blocks stay dark in BOTH modes */
+    --shadow:       rgba(200,92,45,0.08);
+    --serif:        'Newsreader', Georgia, serif;
+    --sans:         'Inter', system-ui, sans-serif;
+    --mono:         'JetBrains Mono', 'Courier New', monospace;
+    color-scheme: light;
+  }
+
+  /* ─── DARK MODE ───────────────────────────────────────── */
+  /* Same design, dark palette. Toggled via [data-theme] on <html>
+     (nav button + OS default + localStorage — see scripts). Warm dark,
+     not pure black; the terracotta accent brightens so it reads on dark. */
+  [data-theme="dark"] {
+    --bg:           #14110D;
+    --bg-alt:       #1E1A14;
+    --surface:      #1A1611;
+    --surface-tint: #211C16;
+    --border:       #332C24;
+    --border-light: #2A241D;
+    --text:         #F2EEE7;
+    --text-body:    #D8D2C8;
+    --text-muted:   #A39C90;
+    --text-subtle:  #7A7468;
+    --accent:       #E8895D;
+    --accent-light: #F0A079;
+    --accent-bg:    #2C1E14;
+    --accent-border:#5A3826;
+    --green:        #5FD699;
+    --green-bg:     #14241B;
+    --green-border: #2E5640;
+    --blue:         #6FB0F0;
+    --blue-bg:      #142233;
+    --blue-border:  #2C4A6E;
+    --red:          #F08585;
+    --red-bg:       #2E1717;
+    --red-border:   #663434;
+    --code-bg:      #0E0B08;
+    --shadow:       rgba(0,0,0,0.45);
+    color-scheme: dark;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-body);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .nav-tag {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+  }
+  /* Light/dark toggle — shows the moon in light mode (click → dark) and
+     the sun in dark mode (click → light). */
+  .theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .theme-toggle:hover { color: var(--accent); border-color: var(--accent-border); }
+  .theme-icon-sun { display: none; }
+  [data-theme="dark"] .theme-icon-sun  { display: inline; }
+  [data-theme="dark"] .theme-icon-moon { display: none; }
+
+  /* ─── LAYOUT ──────────────────────────────────────────── */
+  .page-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-deck {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 640px;
+    font-weight: 300;
+  }
+  .hero-meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-family: var(--mono);
+  }
+  .hero-meta-sep { color: var(--border); }
+
+  /* ─── BODY TEXT ───────────────────────────────────────── */
+  .prose p {
+    color: var(--text-body);
+    margin-bottom: 20px;
+    font-size: 17px;
+    line-height: 1.78;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); font-weight: 600; }
+  em { font-style: italic; color: var(--text-body); }
+
+  /* ─── SECTION HEADING ─────────────────────────────────── */
+  /* scroll-margin-top keeps the sticky 52px nav from covering the heading
+     when you jump to a #anchor. */
+  .section { margin-top: 56px; scroll-margin-top: 72px; }
+  .section-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section-label a { color: inherit; text-decoration: none; transition: color 0.15s; }
+  .section-label a:hover { color: var(--text); }
+  .section h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+  /* Self-linking heading: the whole H2 is an anchor to its own section,
+     and a '#' affordance appears on hover. */
+  .section h2 a.anchor { color: inherit; text-decoration: none; position: relative; }
+  .section h2 a.anchor:hover::before {
+    content: '#';
+    position: absolute;
+    left: -22px;
+    color: var(--accent);
+    font-weight: 400;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 32px 0 14px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── BANNER ──────────────────────────────────────────── */
+  .banner {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .banner-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .banner p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .banner a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ─── PLAIN ENGLISH ───────────────────────────────────── */
+  .plain-english {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 8px 8px;
+    padding: 28px 32px;
+    margin: 0 0 56px;
+  }
+  .plain-english .pe-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .pe-list { list-style: none; padding: 0; }
+  .pe-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 16px;
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+  .pe-list li:last-child { border-bottom: none; }
+  .pe-num {
+    width: 26px;
+    height: 26px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-family: var(--mono);
+  }
+
+  /* ─── TOC (jump links) ────────────────────────────────── */
+  /* Optional. Hrefs point at the section ids; pairs with the
+     self-linking H2 anchors below. 2-up grid, single column on mobile. */
+  .toc {
+    background: var(--surface-tint);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px 22px;
+    margin: 0 0 56px;
+  }
+  .toc-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 28px;
+  }
+  .toc-list li { display: flex; align-items: baseline; gap: 10px; font-size: 14px; line-height: 1.5; }
+  .toc-num { font-family: var(--mono); font-size: 11px; color: var(--text-subtle); flex-shrink: 0; width: 18px; }
+  .toc-list a {
+    color: var(--text-body);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .toc-list a:hover { color: var(--accent); border-bottom-color: var(--accent-border); }
+
+  /* ─── CARDS GRID ──────────────────────────────────────── */
+  /* Auto-balancing so you never get an orphan row:
+       default 3-up → 3 cards = 1×3, 6 cards = 3×2
+       exactly 2 or 4 cards drop to 2 columns → 2 = 1×2, 4 = 2×2
+     Force a count with .cols-2 / .cols-3 if you ever need to. */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 24px 0;
+  }
+  .cards-grid:has(> .card:nth-child(2):last-child),
+  .cards-grid:has(> .card:nth-child(4):last-child),
+  .cards-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .cards-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    border-color: var(--accent-border);
+    box-shadow: 0 2px 8px var(--shadow);
+  }
+  .card-icon { font-size: 20px; margin-bottom: 10px; }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+  .card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .card.card-red { border-color: var(--red-border); }
+  .card.card-red:hover { border-color: var(--red); box-shadow: 0 2px 8px rgba(184,53,53,0.08); }
+  .card.card-red .card-icon-badge {
+    display: inline-block;
+    background: var(--red-bg);
+    color: var(--red);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-green { border-color: var(--green-border); }
+  .card.card-green:hover { border-color: var(--green); box-shadow: 0 2px 8px rgba(42,122,75,0.08); }
+  .card.card-green .card-icon-badge {
+    display: inline-block;
+    background: var(--green-bg);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-blue { border-color: var(--blue-border); }
+  .card.card-blue:hover { border-color: var(--blue); box-shadow: 0 2px 8px rgba(37,99,168,0.08); }
+  .card.card-blue .card-icon-badge {
+    display: inline-block;
+    background: var(--blue-bg);
+    color: var(--blue);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  /* ─── CODE BLOCK ──────────────────────────────────────── */
+  .code-block {
+    background: var(--code-bg);
+    border-radius: 7px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .code-block .cb-label {
+    padding: 9px 16px;
+    background: rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .code-block pre {
+    padding: 20px;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #e8e8e8;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-block .tok-key  { color: #fdba74; }
+  .code-block .tok-val  { color: #86efac; }
+  .code-block .tok-cmt  { color: #6b7280; font-style: italic; }
+  .code-block .tok-str  { color: #93c5fd; }
+  .code-block .tok-acc  { color: #fde047; }
+
+  /* ─── CALLOUT ─────────────────────────────────────────── */
+  .callout {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+  .callout .callout-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout p { font-size: 15px; color: var(--text-muted); margin: 0; line-height: 1.7; }
+
+  /* ─── DETAIL LIST ─────────────────────────────────────── */
+  ul.dl {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  /* Not flex: a <strong> lead-in + body text must flow inline as one
+     paragraph. Flex would split the →, the <strong>, and the body into
+     three separate columns. So: left gutter + absolutely positioned →. */
+  ul.dl li {
+    position: relative;
+    padding: 13px 18px 13px 34px;
+    font-size: 15px;
+    color: var(--text-body);
+    border-bottom: 1px solid var(--border-light);
+    line-height: 1.65;
+  }
+  ul.dl li:last-child { border-bottom: none; }
+  ul.dl li::before {
+    content: '→';
+    position: absolute;
+    left: 14px;
+    top: 13px;
+    color: var(--accent);
+    font-size: 14px;
+  }
+
+  /* ─── TABLE ───────────────────────────────────────────── */
+  /* Default column sizing is content-driven (table-layout: auto) — best
+     for prose tables. To CONTROL column widths, add class="fixed" to the
+     <table> AND a <colgroup> of <col style="width:..%"> — fixed layout is
+     what actually makes those widths stick (auto layout treats colgroup
+     widths as hints and routinely ignores them, the usual "table looks
+     off" cause). Long unbroken strings wrap rather than blow a column out;
+     on narrow screens the wrapper scrolls horizontally. */
+  .data-table {
+    overflow-x: auto;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .data-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .data-table table.fixed { table-layout: fixed; }
+  .data-table thead th {
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    white-space: nowrap;      /* short header labels stay on one line */
+    vertical-align: bottom;
+  }
+  .data-table tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-body);
+    vertical-align: top;
+    line-height: 1.55;
+    overflow-wrap: anywhere;  /* long tokens/URLs wrap, never overflow */
+  }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:hover td { background: var(--surface-tint); }
+  .data-table tbody td:first-child { font-weight: 600; color: var(--text); }  /* row label */
+  /* Alignment helpers — apply to the <th> AND every <td> in that column */
+  .data-table th.center, .data-table td.center { text-align: center; }
+  .data-table th.num,    .data-table td.num    { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .data-table th.nowrap, .data-table td.nowrap { white-space: nowrap; }
+  .td-yes  { color: var(--green); font-weight: 600; }
+  .td-no   { color: var(--red);   font-weight: 600; }
+  .td-mono { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+
+  /* ─── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-refs { font-size: 12px; color: var(--text-subtle); }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 40px 0 36px; }
+    .page-wrap { padding: 0 16px 60px; }
+    footer { padding: 16px 20px; }
+    .plain-english { padding: 20px; }
+    .toc-list { grid-template-columns: 1fr; }
+    /* All card grids collapse to a single column on phones. */
+    .cards-grid,
+    .cards-grid.cols-2,
+    .cards-grid.cols-3,
+    .cards-grid:has(> .card:nth-child(2):last-child),
+    .cards-grid:has(> .card:nth-child(4):last-child) { grid-template-columns: 1fr; }
+  }
+</style>
+<style>
+  /* Flowchart figure. Colors come only from the shared theme variables. */
+  .dg-wrap { overflow-x: auto; margin: 28px 0 0; padding: 12px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 10px; }
+  .dg { display: block; width: 100%; min-width: 640px; max-width: 730px; height: auto; margin: 0 auto; }
+  .dg text { font-family: var(--sans); fill: var(--text); }
+  .dg .t { font-size: 13px; font-weight: 600; }
+  .dg .s { font-size: 11px; fill: var(--text-muted); }
+  .dg .lb { font-size: 11px; font-style: italic; fill: var(--text-muted); }
+  .dg .lb-r { fill: var(--red); }
+  .dg .lb-g { fill: var(--green); }
+  .dg .lb-a { fill: var(--accent); }
+  .dg .pl { font-family: var(--mono); font-size: 9px; letter-spacing: .06em; text-anchor: middle; }
+  .dg .sl { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-anchor: end; fill: var(--accent); }
+  .dg .band { fill: none; stroke: var(--border); stroke-width: 1.5; stroke-dasharray: 4 4; }
+  .dg .node { fill: var(--surface); stroke: var(--border); stroke-width: 1.5; }
+  .dg .dec { fill: var(--surface-tint); stroke: var(--text-subtle); stroke-width: 1.5; }
+  .dg .ok { fill: var(--green-bg); stroke: var(--green-border); stroke-width: 1.5; }
+  .dg .bad { fill: var(--red-bg); stroke: var(--red-border); stroke-width: 1.5; }
+  .dg .p-llm { fill: var(--green-bg); stroke: var(--green-border); }
+  .dg .p-rules { fill: var(--blue-bg); stroke: var(--blue-border); }
+  .dg .p-learned { fill: var(--accent-bg); stroke: var(--accent-border); }
+  .dg .pt-llm { fill: var(--green); }
+  .dg .pt-rules { fill: var(--blue); }
+  .dg .pt-learned { fill: var(--accent); }
+  .dg .ar { fill: none; stroke: var(--text-subtle); stroke-width: 1.5; marker-end: url(#ah); }
+  .dg .ar-r { stroke: var(--red); marker-end: url(#ah-r); }
+  .dg .ar-g { stroke: var(--green); marker-end: url(#ah-g); }
+  .dg .ar-a { stroke: var(--accent); marker-end: url(#ah-a); }
+  .dg .dash { stroke-dasharray: 5 4; }
+  .dg #ah path { fill: var(--text-subtle); }
+  .dg #ah-r path { fill: var(--red); }
+  .dg #ah-g path { fill: var(--green); }
+  .dg #ah-a path { fill: var(--accent); }
+  figure.fig { margin: 8px 0 0; }
+  figure.fig figcaption { font-family: var(--mono); font-size: 12px; line-height: 1.6; color: var(--text-subtle); margin-top: 12px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">Anuj Sadani | Tech</a>
+  <div class="nav-right">
+    <span>Agents</span>
+    <span class="nav-tag">SEP 2026</span>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <span class="theme-icon-moon" aria-hidden="true">&#9790;</span>
+      <span class="theme-icon-sun" aria-hidden="true">&#9728;</span>
+    </button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">Agents / Tool Retrieval</div>
+    <h1>Tool Selection at Scale: What Top-K RAG Leaves Out</h1>
+    <p class="hero-deck">Embed, retrieve, let the LLM decide works for about 100 tools. At 1,000 it needs a control plane: hybrid retrieval, hard filters, a learned reranker, progressive disclosure and per-stage evals.</p>
+    <div class="hero-meta">
+      <span>September 2026</span>
+      <span class="hero-meta-sep">/</span>
+      <span>14 min read</span>
+    </div>
+  </header>
+
+  <div class="banner">
+    <span class="banner-badge">Builds on</span>
+    <p>A recent write-up on RAG for LLM classification argues that embeddings find candidates, RAG supplies definitions, the LLM decides, and validation may abstain. I agree with it. This post covers what changes when the categories are tools and there are thousands of them.</p>
+  </div>
+
+  <div class="plain-english">
+    <div class="pe-label">In Plain English</div>
+    <ul class="pe-list">
+      <li>
+        <span class="pe-num">1</span>
+        <div><strong>A wrong tool is not a wrong label.</strong> It is a side effect. That one difference moves safety out of the prompt and into deterministic code.</div>
+      </li>
+      <li>
+        <span class="pe-num">2</span>
+        <div><strong>Retrieval is context control.</strong> The goal is the smallest decision space that still contains the answer, not just "find the missing knowledge".</div>
+      </li>
+      <li>
+        <span class="pe-num">3</span>
+        <div><strong>Recall multiplies across stages.</strong> You need one number per stage, or you will fix the wrong one.</div>
+      </li>
+      <li>
+        <span class="pe-num">4</span>
+        <div><strong>Most failures are catalog failures.</strong> In my simulation, 72% traced back to ambiguous or cryptic tool descriptions, not to the model.</div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="toc" role="navigation" aria-label="Jump to section">
+    <div class="toc-label">Jump to</div>
+    <ol class="toc-list">
+      <li><span class="toc-num">01</span><a href="#baseline">What the pipeline gets right</a></li>
+      <li><span class="toc-num">02</span><a href="#not-categories">Tools are not categories</a></li>
+      <li><span class="toc-num">03</span><a href="#context-quality">A context-quality problem</a></li>
+      <li><span class="toc-num">04</span><a href="#recall-chain">The recall chain</a></li>
+      <li><span class="toc-num">05</span><a href="#catalog">The catalog is a product</a></li>
+      <li><span class="toc-num">06</span><a href="#discovery">Discovery per subgoal</a></li>
+      <li><span class="toc-num">07</span><a href="#filter-rank">Filter, then rank</a></li>
+      <li><span class="toc-num">08</span><a href="#disclosure">Progressive disclosure</a></li>
+      <li><span class="toc-num">09</span><a href="#validate-recover">Validate, iterate, recover</a></li>
+      <li><span class="toc-num">10</span><a href="#what-to-build">What to build at which scale</a></li>
+      <li><span class="toc-num">11</span><a href="#short-version">The short version</a></li>
+    </ol>
+  </div>
+
+  <!-- 01 -->
+  <!-- ARTICLE-AUDIO:BEGIN -->
+<link rel="stylesheet" href="/assets/player.css">
+<div class="ap" id="articleaudio">
+  <div class="ap-hd">
+    <span class="ap-ico" aria-hidden="true">&#9654;</span>
+    <div><span class="ap-kick">Audio edition</span><b>Listen to this article</b><span class="ap-sub">12 parts &middot; 14 min</span></div>
+    <button class="ap-rate" type="button" aria-label="Playback speed">1&#215;</button>
+    <button class="ap-more" type="button" aria-expanded="false">Parts</button>
+  </div>
+  <p class="ap-now"></p>
+  <audio controls preload="none"></audio>
+  <ol class="ap-list" hidden>
+      <li><button type="button" data-src="audio/00-introduction.mp3"><span class="ap-n">1</span><span class="ap-nm">Introduction</span><span class="ap-d">0:23</span></button></li>
+      <li><button type="button" data-src="audio/01-what-the-pipeline-gets-right.mp3"><span class="ap-n">2</span><span class="ap-nm">What the pipeline gets right</span><span class="ap-d">1:27</span></button></li>
+      <li><button type="button" data-src="audio/02-tools-are-not-categories.mp3"><span class="ap-n">3</span><span class="ap-nm">Tools are not categories</span><span class="ap-d">0:30</span></button></li>
+      <li><button type="button" data-src="audio/03-it-is-a-context-quality-problem-not-only.mp3"><span class="ap-n">4</span><span class="ap-nm">It is a context-quality problem, not only a knowledge problem</span><span class="ap-d">1:48</span></button></li>
+      <li><button type="button" data-src="audio/04-the-recall-chain.mp3"><span class="ap-n">5</span><span class="ap-nm">The recall chain</span><span class="ap-d">1:09</span></button></li>
+      <li><button type="button" data-src="audio/05-the-catalog-is-a-product.mp3"><span class="ap-n">6</span><span class="ap-nm">The catalog is a product</span><span class="ap-d">1:44</span></button></li>
+      <li><button type="button" data-src="audio/06-discovery-per-subgoal-three-retrievers-o.mp3"><span class="ap-n">7</span><span class="ap-nm">Discovery per subgoal, three retrievers, one pre-filter</span><span class="ap-d">1:08</span></button></li>
+      <li><button type="button" data-src="audio/07-filter-then-rank-and-where-i-would-chang.mp3"><span class="ap-n">8</span><span class="ap-nm">Filter, then rank, and where I would change the score</span><span class="ap-d">1:08</span></button></li>
+      <li><button type="button" data-src="audio/08-progressive-disclosure.mp3"><span class="ap-n">9</span><span class="ap-nm">Progressive disclosure</span><span class="ap-d">1:29</span></button></li>
+      <li><button type="button" data-src="audio/09-validate-iterate-recover.mp3"><span class="ap-n">10</span><span class="ap-nm">Validate, iterate, recover</span><span class="ap-d">1:41</span></button></li>
+      <li><button type="button" data-src="audio/10-what-to-build-at-which-scale.mp3"><span class="ap-n">11</span><span class="ap-nm">What to build at which scale</span><span class="ap-d">1:04</span></button></li>
+      <li><button type="button" data-src="audio/11-the-short-version.mp3"><span class="ap-n">12</span><span class="ap-nm">The short version</span><span class="ap-d">0:41</span></button></li>
+  </ol>
+</div>
+<div class="ap-mini" id="ap-mini" hidden>
+  <button class="ap-mb" data-act="play" aria-label="Play or pause">&#9654;</button>
+  <button class="ap-mt" data-act="goto" title="Back to the player"></button>
+  <div class="ap-mp" data-act="seek"><div class="ap-mpf"></div></div>
+  <em class="ap-mtime">0:00</em>
+  <button class="ap-mb ghost ap-mr" data-act="rate" aria-label="Playback speed">1&#215;</button>
+  <button class="ap-mb ghost" data-act="next" aria-label="Next part">&#9199;</button>
+</div>
+<script src="/assets/player.js" defer></script>
+<!-- ARTICLE-AUDIO:END -->
+
+<div class="section" id="baseline">
+    <div class="section-label">01 / Baseline</div>
+    <h2><a class="anchor" href="#baseline">What the pipeline gets right</a></h2>
+    <div class="prose">
+      <p>The claim is that a reliable classifier is a pipeline, not a prompt. Embeddings find the neighborhood. Retrieval returns definitions. The LLM compares them. A validation step chooses between a category and an abstention. I agree with every stage.</p>
+      <p>The ceiling rule in that write-up deserves one extension. If the correct category is not retrieved, the LLM cannot pick it. True. It is equally true of every stage after retrieval, and that is where scale starts to hurt.</p>
+      <p>At around 100 items the plain pipeline is enough. A 100-tool catalog at roughly 400 tokens per schema is 40k tokens. That figure is the one I used in my <a href="https://arxiv.org/abs/2604.21816">Tool Attention paper</a>, and real servers run higher: the public audits I cited put the full GitHub server at about 55,000 tokens for 93 tools, close to 590 each. Forty thousand tokens is wasteful but it fits, and a single top-10 embedding lookup rarely misses.</p>
+      <p>At 1,000 tools the same arithmetic gives 400k tokens. Retrieval stops being an optimization and becomes the only way in. That is the point where embed, retrieve, decide and validate is necessary and no longer sufficient. The rest of this post is about the parts I would add.</p>
+    </div>
+  </div>
+
+  <!-- 02 -->
+  <div class="section" id="not-categories">
+    <div class="section-label">02 / Framing</div>
+    <h2><a class="anchor" href="#not-categories">Tools are not categories</a></h2>
+    <div class="prose">
+      <p>It is tempting to treat tool selection as classification with a bigger label set. The analogy holds for the retrieval half and breaks for everything around it.</p>
+    </div>
+    <div class="data-table">
+      <table class="fixed">
+        <colgroup>
+          <col style="width:22%">
+          <col style="width:38%">
+          <col style="width:40%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Category classification</th>
+            <th>Tool selection</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Wrong answer</td>
+            <td>A wrong value in a row. Fixable later.</td>
+            <td>A side effect: a sent email, a deleted record, a charged card.</td>
+          </tr>
+          <tr>
+            <td>Ground truth</td>
+            <td>A taxonomy that changes slowly.</td>
+            <td>The catalog, plus per-user permissions, plus live connection state. It changes per session.</td>
+          </tr>
+          <tr>
+            <td>Decisions</td>
+            <td>One per input.</td>
+            <td>A sequence. Each observation changes which tools are relevant next.</td>
+          </tr>
+          <tr>
+            <td>Near-duplicates</td>
+            <td>Adjacent categories.</td>
+            <td>Overlapping tools from different servers, often three different <code>search</code> tools.</td>
+          </tr>
+          <tr>
+            <td>Abstention</td>
+            <td>One exit: insufficient evidence.</td>
+            <td>Three exits: ask the user, widen the search, or report the missing capability.</td>
+          </tr>
+          <tr>
+            <td>Trust</td>
+            <td>The input text is untrusted.</td>
+            <td>The definitions are untrusted too. A tool description is text the model obeys.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose">
+      <p>Row one is the one that changes the architecture. Safety cannot live in the prompt when a wrong choice writes to a production system. It has to live in code that runs regardless of what the model says.</p>
+    </div>
+  </div>
+
+  <!-- 03 -->
+  <div class="section" id="context-quality">
+    <div class="section-label">03 / Why retrieval at all</div>
+    <h2><a class="anchor" href="#context-quality">It is a context-quality problem, not only a knowledge problem</a></h2>
+    <div class="prose">
+      <p>The article frames retrieval as supplying information the model lacks. That is half of it. The other half is that a model with all the information in a crowded context still does worse, even when the right answer is technically in there.</p>
+    </div>
+    <ul class="dl">
+      <li><strong>Position effects.</strong> Liu et al. (<a href="https://aclanthology.org/2024.tacl-1.9/">Lost in the Middle</a>, TACL 2024) found that accuracy is lowest when the relevant item sits in the middle of a long context. A tool list is exactly that shape.</li>
+      <li><strong>Tool overload, measured.</strong> RAG-MCP (<a href="https://arxiv.org/abs/2505.03275">Gan and Sun, 2025</a>) reports tool selection accuracy of 43.13% with retrieval against 13.62% for the baseline that shows the model everything, and prompt tokens cut by more than half.</li>
+      <li><strong>Vendor numbers agree in direction.</strong> Anthropic's <a href="https://www.anthropic.com/engineering/advanced-tool-use">tool search</a> write-up reports Opus 4 going from 49% to 74% on their MCP evaluation and Opus 4.5 from 79.5% to 88.1%, with about 85% fewer tokens.</li>
+      <li><strong>My own number is a simulation.</strong> On a calibrated 120-tool, six-server catalog, gating cut per-turn tool tokens from 47.3k to 2.4k (95.0%). No live agent ran. Treat it as an arithmetic result, not an accuracy result.</li>
+    </ul>
+    <div class="prose">
+      <p>These are four different benchmarks, so I am not comparing them to each other. They agree on the direction, and that is enough for the design rule: retrieval is a context-control mechanism. Expose the smallest decision space that still contains the answer.</p>
+    </div>
+  </div>
+
+  <!-- 04 -->
+  <div class="section" id="recall-chain">
+    <div class="section-label">04 / Measurement</div>
+    <h2><a class="anchor" href="#recall-chain">The recall chain</a></h2>
+    <div class="prose">
+      <p>Once you add a reranker, the ceiling is no longer one number. Every stage can drop the right tool, and the drops compound. The precise form is a product of conditional recalls:</p>
+    </div>
+    <div class="code-block">
+      <div class="cb-label">End-to-end recall</div>
+<pre>P(right tool used) =   R_retrieve                    <span class="tok-cmt"># gold is in the candidate set</span>
+                     * R_filter  | retrieved         <span class="tok-cmt"># gold survives policy filters</span>
+                     * R_menu    | filtered          <span class="tok-cmt"># gold survives the reranker cut</span>
+                     * R_select  | menu              <span class="tok-cmt"># the LLM picks it from the menu</span></pre>
+    </div>
+    <div class="prose">
+      <p>The word "conditional" matters. Multiplying raw retrieval recall by raw reranker recall double counts, because the reranker only ever sees what retrieval returned. Here is an illustration with numbers I made up to show the shape, not measurements:</p>
+    </div>
+    <div class="data-table">
+      <table class="fixed">
+        <colgroup>
+          <col style="width:40%">
+          <col style="width:30%">
+          <col style="width:30%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Stage (illustrative)</th>
+            <th class="num">Conditional recall</th>
+            <th class="num">Cumulative</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Retrieve 40</td><td class="num">0.95</td><td class="num">0.950</td></tr>
+          <tr><td>Hard filters</td><td class="num">0.98</td><td class="num">0.931</td></tr>
+          <tr><td>Rerank to 6</td><td class="num">0.92</td><td class="num">0.857</td></tr>
+          <tr><td>LLM selects</td><td class="num">0.90</td><td class="num">0.771</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose">
+      <p>Raising retrieval from 0.95 to 0.99 lifts the end result by about three points. Raising selection from 0.90 to 0.95 lifts it by about four. The weak stage is rarely the one people tune first, because retrieval is the stage everyone knows how to tune. The fix is to log four sets per request and compute the numbers per stage:</p>
+    </div>
+    <div class="code-block">
+      <div class="cb-label">stage_recall.py</div>
+<pre>STAGES = ["retrieved", "filtered", "menu", "chosen"]   <span class="tok-cmt"># each is a set of tool_ids on the trace</span>
+
+<span class="tok-key">def</span> stage_recall(traces):
+    alive, out = traces, {}
+    <span class="tok-key">for</span> stage <span class="tok-key">in</span> STAGES:
+        kept = [t <span class="tok-key">for</span> t <span class="tok-key">in</span> alive <span class="tok-key">if</span> t.gold <span class="tok-key">in</span> getattr(t, stage)]
+        out[stage] = len(kept) / max(len(alive), 1)   <span class="tok-cmt"># conditional on the previous stage</span>
+        alive = kept
+    <span class="tok-key">return</span> out                                      <span class="tok-cmt"># multiply the values for end-to-end</span></pre>
+    </div>
+    <div class="prose">
+      <p>Evaluating only the LLM is misleading, and the baseline write-up says so. At scale two numbers are not enough. You need four, and you need a labeled set where the gold tool is one the user could actually call.</p>
+    </div>
+  </div>
+
+  <!-- 05 -->
+  <div class="section" id="catalog">
+    <div class="section-label">05 / Control part 1</div>
+    <h2><a class="anchor" href="#catalog">The catalog is a product</a></h2>
+    <div class="prose">
+      <p>The first thing that breaks at scale is not the model or the index. It is the catalog. In my simulation 29 of 500 tasks failed with tool gating. Fourteen (48%) came from a query matching several semantically similar tools. Seven (24%) came from cryptic legacy descriptions. That is 72% of failures caused by what the catalog says, and the model was not the problem. It is a simulated workload, so read the proportions as a hypothesis worth testing on your own traces.</p>
+      <p>So keep the registry outside the prompt and give every tool a card written for retrieval, not for the implementer:</p>
+    </div>
+    <div class="code-block">
+      <div class="cb-label">tool card (indexed fields in the top block, the rest loaded on demand)</div>
+<pre>{
+  <span class="tok-key">"tool_id"</span>:      <span class="tok-str">"github.search_code"</span>,
+  <span class="tok-key">"domain"</span>:       <span class="tok-str">"source_control"</span>,
+  <span class="tok-key">"summary"</span>:      <span class="tok-str">"Find where something is implemented across connected repositories"</span>,
+  <span class="tok-key">"capabilities"</span>: [<span class="tok-str">"code_search"</span>, <span class="tok-str">"repository_read"</span>],
+  <span class="tok-key">"prefer_over"</span>:  [<span class="tok-str">"web.search"</span>],
+  <span class="tok-key">"not_for"</span>:      <span class="tok-str">"Reading one known file. Use github.read_file."</span>,
+  <span class="tok-key">"examples"</span>:     [<span class="tok-str">"Find authentication middleware in the Varta repository"</span>],
+
+  <span class="tok-cmt">// not indexed: fetched only after the tool is selected</span>
+  <span class="tok-key">"requires"</span>:     { <span class="tok-key">"connection"</span>: <span class="tok-str">"github"</span>, <span class="tok-key">"scopes"</span>: [<span class="tok-str">"repo:read"</span>] },
+  <span class="tok-key">"risk"</span>:         <span class="tok-str">"read_only"</span>,
+  <span class="tok-key">"cost"</span>: <span class="tok-str">"low"</span>, <span class="tok-key">"p50_ms"</span>: 900,
+  <span class="tok-key">"owner"</span>: <span class="tok-str">"platform-team"</span>, <span class="tok-key">"schema_version"</span>: 7,
+  <span class="tok-key">"input_schema"</span>: { <span class="tok-cmt">/* full JSON Schema */</span> }
+}</pre>
+    </div>
+    <div class="prose">
+      <p>Three fields do more work than they look. <code>summary</code> is written in the voice of the user's intent. In my paper, regenerating summaries that way cut their average length by 63% and raised retrieval F1 by 8 points, on the same synthetic benchmark. <code>not_for</code> and <code>prefer_over</code> are the disambiguation fields. They give the reranker and the model a reason to choose between near-duplicates, and near-duplicates were the largest failure bucket. <code>owner</code> and <code>schema_version</code> exist because at 1,000 tools somebody has to be paged when a description rots.</p>
+      <p>One structural change belongs here too. A flat top-k over thousands of tools tends to fill the shortlist with ten variants of one family and crowd out the second family you needed. Group tools into domains and route in two hops, domain first and tool second. This is my rule from building these systems, not a measured result. Test it against a flat index on your own catalog before you trust it.</p>
+    </div>
+  </div>
+
+  <!-- 06 -->
+  <div class="section" id="discovery">
+    <div class="section-label">06 / Control part 2</div>
+    <h2><a class="anchor" href="#discovery">Discovery per subgoal, three retrievers, one pre-filter</a></h2>
+    <div class="prose">
+      <p>The baseline pipeline embeds the input once. A tool request is rarely one intent. "Find where auth is implemented in my repo and check whether it is deployed" is two subgoals with different tools. Embedding the whole sentence returns a blurred neighborhood that serves neither. I extract structured intent first and run discovery per subgoal:</p>
+    </div>
+    <div class="code-block">
+      <div class="cb-label">intent extraction output</div>
+<pre>{
+  <span class="tok-key">"subgoals"</span>: [
+    { <span class="tok-key">"goal"</span>: <span class="tok-str">"locate authentication implementation"</span>,
+      <span class="tok-key">"operations"</span>: [<span class="tok-str">"repository_search"</span>, <span class="tok-str">"code_read"</span>],
+      <span class="tok-key">"entities"</span>: [<span class="tok-str">"Varta repository"</span>], <span class="tok-key">"mutation"</span>: false },
+    { <span class="tok-key">"goal"</span>: <span class="tok-str">"check deployment status"</span>,
+      <span class="tok-key">"operations"</span>: [<span class="tok-str">"deployment_inspect"</span>],
+      <span class="tok-key">"entities"</span>: [<span class="tok-str">"Varta"</span>], <span class="tok-key">"mutation"</span>: false }
+  ]
+}</pre>
+    </div>
+    <div class="prose">
+      <p>Retrieval then runs three ways and fuses the ranks. Vectors catch paraphrase. BM25 catches the exact tokens embeddings blur: tool ids, product names, error codes. Capability matching uses the structured <code>operations</code> field. Reciprocal rank fusion (Cormack et al., SIGIR 2009, constant 60) merges them without needing comparable scores.</p>
+      <p>The detail people miss is the pre-filter. If you filter for permissions after retrieval, the top 40 can be full of tools this user cannot call, and your recall of <em>usable</em> tools collapses while the recall you measure looks fine. Push the static predicates into the index query.</p>
+    </div>
+    <div class="code-block">
+      <div class="cb-label">discover.py (sketch)</div>
+<pre><span class="tok-key">def</span> rrf(rankings, k=60):
+    score = defaultdict(float)
+    <span class="tok-key">for</span> ranking <span class="tok-key">in</span> rankings:
+        <span class="tok-key">for</span> rank, tool_id <span class="tok-key">in</span> enumerate(ranking, start=1):
+            score[tool_id] += 1.0 / (k + rank)
+    <span class="tok-key">return</span> sorted(score, key=score.get, reverse=True)
+
+<span class="tok-key">def</span> discover(sub, ctx, index, n=40, menu=6):
+    where = {<span class="tok-str">"connection"</span>: ctx.connections, <span class="tok-str">"env"</span>: ctx.env}    <span class="tok-cmt"># static, pushed into the index</span>
+    fused = rrf([
+        index.vector(sub.text, n=n, where=where),
+        index.bm25(sub.text, n=n, where=where),
+        index.by_capability(sub.operations, n=n, where=where),
+    ])[:n]
+    allowed = [t <span class="tok-key">for</span> t <span class="tok-key">in</span> fused <span class="tok-key">if</span> request_ok(t, sub, ctx)]   <span class="tok-cmt"># depends on this request</span>
+    ranked = reranker.score(sub, allowed)                      <span class="tok-cmt"># learned, relevance only</span>
+    <span class="tok-key">return</span> prefer_cheap_within(ranked, margin=0.05)[:menu]
+
+<span class="tok-key">def</span> request_ok(tool, sub, ctx):
+    <span class="tok-key">return</span> (tool.scopes &lt;= ctx.granted_scopes
+            <span class="tok-key">and</span> (tool.risk == <span class="tok-str">"read_only"</span> <span class="tok-key">or</span> sub.mutation))</pre>
+    </div>
+  </div>
+
+  <!-- 07 -->
+  <div class="section" id="filter-rank">
+    <div class="section-label">07 / Control part 3</div>
+    <h2><a class="anchor" href="#filter-rank">Filter, then rank, and where I would change the score</a></h2>
+    <div class="prose">
+      <p>Hard filters are deterministic policy, not LLM judgment: missing connection, missing scope, a write tool for a read-only request, a tool unavailable in this environment. They run before any model sees a candidate, and they are cheap to test.</p>
+      <p>The reranker then cuts roughly 30 to 50 candidates to a menu of 5 to 8. I keep the cut generous. A reranker error deletes the right tool for good, so this is the stage where I trade a few extra tokens for recall. In my paper I recommended k of 8 to 12 with the threshold doing the precision work.</p>
+      <p>A popular way to specify the reranker is a weighted sum: intent match, capability match, entity match, permission, history, minus risk, latency and cost. I like the inputs and would change how they combine.</p>
+    </div>
+    <div class="data-table">
+      <table class="fixed">
+        <colgroup>
+          <col style="width:20%">
+          <col style="width:40%">
+          <col style="width:40%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Term</th>
+            <th>Problem inside a weighted sum</th>
+            <th>Where I put it instead</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Permission</td>
+            <td>A missing scope is not a small penalty. It is a no. It also double counts with the hard filter.</td>
+            <td>Filter only.</td>
+          </tr>
+          <tr>
+            <td>Risk</td>
+            <td>Subtracting risk lets a slightly more relevant destructive tool beat a safe adequate one, or the reverse, and nobody audits the weights.</td>
+            <td>A risk policy after selection: confirm, dry-run or deny.</td>
+          </tr>
+          <tr>
+            <td>Cost, latency</td>
+            <td>They should never outvote relevance.</td>
+            <td>A tiebreaker among tools within a small relevance margin.</td>
+          </tr>
+          <tr>
+            <td>History</td>
+            <td>Popular tools collect more history and crowd out better new ones.</td>
+            <td>A learned feature, with deliberate exploration of new tools.</td>
+          </tr>
+          <tr>
+            <td>Hand-set weights</td>
+            <td>They do not survive a catalog change.</td>
+            <td>Train the relevance ranker on (subgoal, tool used, success) traces.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <div class="callout-lbl">The rule I use</div>
+      <p>Anything that must never happen belongs in a filter or a policy. Anything that is a preference belongs in the ranker. A weighted sum blurs the two, and the blur is where incidents come from.</p>
+    </div>
+  </div>
+
+  <!-- 08 -->
+  <div class="section" id="disclosure">
+    <div class="section-label">08 / Control part 4</div>
+    <h2><a class="anchor" href="#disclosure">Progressive disclosure</a></h2>
+    <div class="prose">
+      <p>Retrieval narrows which tools are visible. Progressive disclosure narrows how much the model sees about each one. The token figures below are rough, and they follow from the 400-token schema assumption above.</p>
+    </div>
+    <div class="data-table">
+      <table class="fixed">
+        <colgroup>
+          <col style="width:16%">
+          <col style="width:34%">
+          <col style="width:16%">
+          <col style="width:34%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Stage</th>
+            <th>The model sees</th>
+            <th class="num">~Tokens per tool</th>
+            <th>Trigger</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Discovery</td><td>Name and one-line capability</td><td class="num">30 to 40</td><td>Every subgoal</td></tr>
+          <tr><td>Selection</td><td>Constraints, risk, cost, one example</td><td class="num">100 to 150</td><td>Only when two menu items are close</td></tr>
+          <tr><td>Invocation</td><td>Full input schema</td><td class="num">400+</td><td>Only for the chosen tool</td></tr>
+          <tr><td>Recovery</td><td>The error, alternatives, a wider menu</td><td class="num">varies</td><td>After a failure or a rejected call</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose">
+      <p>A six-tool menu at discovery level is about 200 tokens. The same six with full schemas is about 2,400. The saving is real, and so is the risk: the model chooses from one-liners, so the one-liners must be good. That takes you straight back to the catalog.</p>
+      <p>Two operational details. First, keep the summary pool in the stable prefix of the prompt and put per-turn schemas right before the user message. In my simulation this gave an 84% prompt-cache hit rate over a 30-turn session against 22% for naive full-schema injection, because the tool list stopped invalidating the cache. Second, give the model an escape hatch: a <code>search_tools</code> meta-tool it can call when the menu is wrong. Anthropic's tool search is the same idea shipped as a platform feature.</p>
+      <p>Pair that with a gate: if the model calls a tool that is not in the active set, reject it with a structured error listing what is available. In my simulation the gate fired on 2.3% of turns. The model recovered on the next turn 78% of the time and asked the user a clarifying question the other 22%.</p>
+    </div>
+  </div>
+
+  <!-- 09 -->
+  <div class="section" id="validate-recover">
+    <div class="section-label">09 / Control parts 5 and 6</div>
+    <h2><a class="anchor" href="#validate-recover">Validate, iterate, recover</a></h2>
+    <div class="prose">
+      <p><strong>Validate before executing.</strong> Deterministic checks on required parameters, types, permissions, read versus write intent, confirmation requirements and target scope. For writes I add a dry-run where the tool supports one. Feed validator errors back to the model verbatim. They are the cheapest correction signal in the system.</p>
+      <p><strong>Return observations, not payloads.</strong> The executor should cap and normalize the result, and keep a handle to the full output outside the context. A 200 KB response dumped into the prompt undoes everything the earlier stages saved.</p>
+      <p><strong>Rediscover on every subgoal.</strong> A tool's output can reveal the next need: a config reference that points to a deployment system you had no tools for. In my simulation 5 of the 29 failures (17%) were multi-hop cases where the right tool only became relevant after an intermediate result. Re-embedding the query after each observation partly fixed them. The agent should not carry every plausibly useful tool for the whole session.</p>
+      <p><strong>Name the failure class.</strong> "The agent used the wrong tool" is not a diagnosis. There are at least six distinct failures, each with a different detector and a different fix:</p>
+    </div>
+    <div class="data-table">
+      <table class="fixed">
+        <colgroup>
+          <col style="width:28%">
+          <col style="width:36%">
+          <col style="width:36%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Failure class</th>
+            <th>How you see it</th>
+            <th>Where the fix lives</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>No suitable tool exists</td>
+            <td>Gold label is "none". Abstention rate on those cases.</td>
+            <td>Report the missing capability. Roadmap input.</td>
+          </tr>
+          <tr>
+            <td>Exists, not retrieved</td>
+            <td>Low <code>R_retrieve</code></td>
+            <td>Catalog text, hybrid retrieval, intent decomposition.</td>
+          </tr>
+          <tr>
+            <td>Retrieved, cut by reranker</td>
+            <td>Low <code>R_menu</code></td>
+            <td>Reranker training data, a larger menu, <code>not_for</code> fields.</td>
+          </tr>
+          <tr>
+            <td>Shown, not chosen</td>
+            <td>Low <code>R_select</code></td>
+            <td>Better one-liners, a selection-level disclosure step.</td>
+          </tr>
+          <tr>
+            <td>Chosen, invoked wrongly</td>
+            <td>Validator rejection rate per tool</td>
+            <td>Examples in the schema, clearer parameter names.</td>
+          </tr>
+          <tr>
+            <td>Ran, returned too little</td>
+            <td>Observation check fails; the subgoal is still open</td>
+            <td>Next tool in the candidate list, or a new discovery round.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose">
+      <p>Recovery paths follow from the table. Low discovery confidence: widen retrieval, reformulate the intent, or ask the user. A selected tool fails: return to the candidate list and take the next compatible one. Nothing viable: say which capability or connection is missing. Do not let the model invent an answer to fill the gap.</p>
+    </div>
+  </div>
+
+  <!-- 10 -->
+  <div class="section" id="what-to-build">
+    <div class="section-label">10 / Judgment</div>
+    <h2><a class="anchor" href="#what-to-build">What to build at which scale</a></h2>
+    <div class="prose">
+      <p>Here is the whole flow in one place, in three stages. The tag on each step says whether it is rules, a learned model, or the LLM. Two of the eight steps are the LLM, and every loop is decided by code.</p>
+    </div>
+    <figure class="fig">
+      <div class="dg-wrap">
+    <svg class="dg" viewBox="0 0 730 900" role="img" aria-labelledby="dg-title dg-desc">
+      <title id="dg-title">Tool selection pipeline as a flowchart</title>
+      <desc id="dg-desc">Three stages. Stage 1: intent extraction, hybrid retrieval, hard filters. Stage 2: reranker, progressive disclosure, the LLM selects a tool. Stage 3: schema on demand, validation, execution, then an outcome check. Loops: a new subgoal returns to intent extraction, a failed tool returns to the reranker or widens retrieval, a validation error returns to the LLM, an empty candidate set reports the missing capability, and a complete task ends in the final response.</desc>
+      <defs>
+        <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z"/></marker>
+        <marker id="ah-r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z"/></marker>
+        <marker id="ah-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z"/></marker>
+        <marker id="ah-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z"/></marker>
+      </defs>
+
+      <!-- stage bands -->
+      <rect class="band" x="16" y="14" width="674" height="236" rx="12"/>
+      <text class="sl" x="676" y="32">STAGE 1 / DISCOVERY AND FILTERING</text>
+      <rect class="band" x="16" y="270" width="674" height="234" rx="12"/>
+      <text class="sl" x="676" y="288">STAGE 2 / RANKING AND DISCLOSURE</text>
+      <rect class="band" x="16" y="524" width="674" height="366" rx="12"/>
+      <text class="sl" x="676" y="542">STAGE 3 / EXECUTION</text>
+
+      <!-- main flow -->
+      <rect class="node" x="100" y="46" width="280" height="48" rx="8"/>
+      <rect class="p-llm" x="108" y="61" width="54" height="18" rx="9"/>
+      <text class="pl pt-llm" x="135" y="73.5">LLM</text>
+      <text class="t" x="174" y="67">Intent extraction</text>
+      <text class="s" x="174" y="83">goal, entities, ops, subgoals</text>
+      <rect class="node" x="100" y="116" width="280" height="48" rx="8"/>
+      <rect class="p-rules" x="108" y="131" width="54" height="18" rx="9"/>
+      <text class="pl pt-rules" x="135" y="143.5">INDEX</text>
+      <text class="t" x="174" y="137">Hybrid retrieval</text>
+      <text class="s" x="174" y="153">pre-filtered, 30 to 50 candidates</text>
+      <rect class="node" x="100" y="186" width="280" height="48" rx="8"/>
+      <rect class="p-rules" x="108" y="201" width="54" height="18" rx="9"/>
+      <text class="pl pt-rules" x="135" y="213.5">RULES</text>
+      <text class="t" x="174" y="207">Hard filters</text>
+      <text class="s" x="174" y="223">scope, connection, env, write</text>
+      <rect class="node" x="100" y="304" width="280" height="48" rx="8"/>
+      <rect class="p-learned" x="108" y="319" width="54" height="18" rx="9"/>
+      <text class="pl pt-learned" x="135" y="331.5">LEARNED</text>
+      <text class="t" x="174" y="325">Reranker</text>
+      <text class="s" x="174" y="341">cross-encoder, menu of 5 to 8</text>
+      <rect class="node" x="100" y="374" width="280" height="48" rx="8"/>
+      <rect class="p-rules" x="108" y="389" width="54" height="18" rx="9"/>
+      <text class="pl pt-rules" x="135" y="401.5">RULES</text>
+      <text class="t" x="174" y="395">Progressive disclosure</text>
+      <text class="s" x="174" y="411">names and one-liners first</text>
+      <rect class="node" x="100" y="444" width="280" height="48" rx="8"/>
+      <rect class="p-llm" x="108" y="459" width="54" height="18" rx="9"/>
+      <text class="pl pt-llm" x="135" y="471.5">LLM</text>
+      <text class="t" x="174" y="465">LLM selects a tool</text>
+      <text class="s" x="174" y="481">bounded choice from the menu</text>
+      <rect class="node" x="100" y="558" width="280" height="48" rx="8"/>
+      <rect class="p-rules" x="108" y="573" width="54" height="18" rx="9"/>
+      <text class="pl pt-rules" x="135" y="585.5">RULES</text>
+      <text class="t" x="174" y="579">Schema on demand</text>
+      <text class="s" x="174" y="595">full schema, chosen tool only</text>
+      <rect class="node" x="100" y="740" width="280" height="48" rx="8"/>
+      <rect class="p-rules" x="108" y="755" width="54" height="18" rx="9"/>
+      <text class="pl pt-rules" x="135" y="767.5">RULES</text>
+      <text class="t" x="174" y="761">Execute and normalize</text>
+      <text class="s" x="174" y="777">capped result, handle to full</text>
+
+      <!-- decisions -->
+      <polygon class="dec" points="240,636 350,672 240,708 130,672"/>
+      <text class="t" x="240" y="669" text-anchor="middle">Valid?</text>
+      <text class="s" x="240" y="685" text-anchor="middle" style="font-size:10px">args, auth, policy</text>
+      <polygon class="dec" points="240,812 350,846 240,880 130,846"/>
+      <text class="t" x="240" y="850" text-anchor="middle">Outcome?</text>
+
+      <!-- side boxes -->
+      <rect class="bad" x="430" y="186" width="246" height="48" rx="8"/>
+      <text class="t" x="446" y="207" style="fill:var(--red)">Nothing viable</text>
+      <text class="s" x="446" y="223" style="fill:var(--red)">report the missing capability</text>
+      <rect class="ok" x="430" y="822" width="246" height="48" rx="8"/>
+      <text class="t" x="446" y="843" style="fill:var(--green)">Final response</text>
+      <text class="s" x="446" y="859" style="fill:var(--green)">answer with the observation</text>
+
+      <!-- arrows: main column -->
+      <line class="ar" x1="240" y1="94" x2="240" y2="116"/>
+      <line class="ar" x1="240" y1="164" x2="240" y2="186"/>
+      <line class="ar" x1="240" y1="234" x2="240" y2="304"/>
+      <line class="ar" x1="240" y1="352" x2="240" y2="374"/>
+      <line class="ar" x1="240" y1="422" x2="240" y2="444"/>
+      <line class="ar" x1="240" y1="492" x2="240" y2="558"/>
+      <line class="ar" x1="240" y1="606" x2="240" y2="636"/>
+      <line class="ar" x1="240" y1="708" x2="240" y2="740"/>
+      <text class="lb" x="250" y="727">valid</text>
+      <line class="ar" x1="240" y1="788" x2="240" y2="812"/>
+
+      <!-- exits and loops -->
+      <path class="ar ar-r" d="M380 210 H428"/>
+      <text class="lb lb-r" x="388" y="203">empty</text>
+
+      <path class="ar ar-g" d="M350 846 H428"/>
+      <text class="lb lb-g" x="362" y="839">done</text>
+
+      <path class="ar ar-a" d="M130 846 H56 V70 H98"/>
+      <text class="lb lb-a" transform="translate(44 460) rotate(-90)" text-anchor="middle">new subgoal: discover again</text>
+
+      <path class="ar ar-r" d="M350 672 H410 V468 H382"/>
+      <text class="lb lb-r" x="420" y="596">invalid: the validator</text>
+      <text class="lb lb-r" x="420" y="611">error goes back to the model</text>
+
+      <path class="ar ar-r" d="M380 764 H708 V328 H382"/>
+      <path class="ar ar-r dash" d="M708 328 V140 H382"/>
+      <text class="lb lb-r" x="430" y="320">tool failed: next candidate</text>
+      <text class="lb lb-r" x="430" y="132">or widen retrieval</text>
+    </svg>
+      </div>
+      <figcaption>Fig. 1. Discovery is a stage separate from execution, and the reasoning model never sees the full catalog. Tags: LLM (green), LEARNED (accent), RULES and INDEX (blue). Red arrows are failure paths, the accent arrow is the loop for a new subgoal.</figcaption>
+    </figure>
+    <div class="prose">
+      <p>You do not need all of it. The thresholds below are my judgment from building these systems, not measured boundaries. In my simulation the full-schema baseline crossed the 70% context-utilization line at about 50 tools, which is why the first row is short.</p>
+    </div>
+    <div class="data-table">
+      <table class="fixed">
+        <colgroup>
+          <col style="width:16%">
+          <col style="width:38%">
+          <col style="width:46%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Tools</th>
+            <th>What breaks first</th>
+            <th>Add</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Up to ~50</td><td>Nothing yet.</td><td>Nothing. Send them all.</td></tr>
+          <tr><td>50 to 200</td><td>Cost and mid-list misses.</td><td>The baseline pipeline: one embedding, top-k, definitions, validation.</td></tr>
+          <tr><td>200 to 1,000</td><td>Near-duplicates, multi-step tasks, unmeasurable failures.</td><td>Hybrid retrieval, hard filters, progressive disclosure, per-stage recall.</td></tr>
+          <tr><td>1,000+</td><td>Shortlists crowded by one family, catalog rot, stage latency.</td><td>Domain routing, a trained reranker, per-subgoal discovery, catalog ownership and linting.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <div class="callout-lbl">Where this breaks in production</div>
+      <p>Each stage adds latency, and I have not measured a full stack end to end, so budget it before you commit. Indexes go stale when a server ships a new schema, which is why <code>schema_version</code> exists. And tool descriptions are attacker-controlled text. In my simulation, gating cut the success rate of 50 poisoned descriptions from 38% to 6%. That was a side effect of never showing irrelevant tools, not a defense, and it needs a real one.</p>
+    </div>
+  </div>
+
+  <!-- 11 -->
+  <div class="section" id="short-version">
+    <div class="section-label">11 / Closer</div>
+    <h2><a class="anchor" href="#short-version">The short version</a></h2>
+    <div class="prose">
+      <p>For classification, the rule is to stop asking the LLM to remember the taxonomy and give it the taxonomy when it needs it. I would keep that and add its counterpart for tools.</p>
+      <p>Do not ask the LLM to be the only thing standing between a request and a side effect. Give it a small, filtered, well-described menu. Run the rules around it in code. Measure every stage, so that when the agent is wrong you know which part to fix.</p>
+      <p>At 100 tools, the model does the work. At 1,000, the control plane does most of it, and the model makes the last call.</p>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <span>asadani.tech &middot; September 2026</span>
+  <div class="footer-refs">
+    <a href="https://arxiv.org/abs/2604.21816">Tool Attention paper</a>
+    <a href="/">&larr; back to index</a>
+  </div>
+</footer>
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
+
+</body>
+</html>

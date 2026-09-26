@@ -1,0 +1,5 @@
+Introduction.
+
+Tool Selection at Scale: What Top-K RAG Leaves Out
+
+Embed, retrieve, let the LLM decide works for about 100 tools. At 1,000 it needs a control plane: hybrid retrieval, hard filters, a learned reranker, progressive disclosure and per-stage evals.

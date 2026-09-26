@@ -1,5 +1,22 @@
 [
   {
+    "slug": "tool-selection-at-scale",
+    "title": "Tool Selection at Scale: What Top-K RAG Leaves Out",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "agents",
+      "rag"
+    ],
+    "quote": "\"A wrong tool is not a wrong label. It is a side effect.\"",
+    "desc": "Embed, retrieve, let the LLM decide works for about 100 tools. At 1,000 it needs a control plane: hybrid retrieval, hard filters, a learned reranker, progressive disclosure and per-stage evals.",
+    "date": "2026-09-26",
+    "dateDisplay": "September 26, 2026",
+    "cta": "Read",
+    "shareUrl": "https://tech.anujsadani.in/tool-selection-at-scale/"
+  },
+  {
     "slug": "ai-slop",
     "title": "The Attention Invoice",
     "tags": [

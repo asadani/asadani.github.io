@@ -1,0 +1,50 @@
+{
+ "00-introduction": {
+  "k": "42af482ea92be236",
+  "d": 22.6
+ },
+ "01-what-the-pipeline-gets-right": {
+  "k": "30520bb985ef93dc",
+  "d": 87.2
+ },
+ "02-tools-are-not-categories": {
+  "k": "9e4ad4a7bcb4bda9",
+  "d": 30.2
+ },
+ "03-it-is-a-context-quality-problem-not-only": {
+  "k": "714592ef64b393b9",
+  "d": 107.7
+ },
+ "04-the-recall-chain": {
+  "k": "635ef11421055771",
+  "d": 68.8
+ },
+ "05-the-catalog-is-a-product": {
+  "k": "bb02f62add7399bd",
+  "d": 103.9
+ },
+ "06-discovery-per-subgoal-three-retrievers-o": {
+  "k": "7edc090122bab7e5",
+  "d": 68.3
+ },
+ "07-filter-then-rank-and-where-i-would-chang": {
+  "k": "5b38b5a65b7d2d62",
+  "d": 67.9
+ },
+ "08-progressive-disclosure": {
+  "k": "d06c298b9d0e944b",
+  "d": 89.1
+ },
+ "09-validate-iterate-recover": {
+  "k": "796da8faa36c9fbf",
+  "d": 101.5
+ },
+ "10-what-to-build-at-which-scale": {
+  "k": "72dd55d66834cfb1",
+  "d": 63.5
+ },
+ "11-the-short-version": {
+  "k": "9c462e5acfbb8f18",
+  "d": 41.1
+ }
+}

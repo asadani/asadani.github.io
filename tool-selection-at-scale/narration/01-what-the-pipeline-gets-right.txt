@@ -1,0 +1,9 @@
+What the pipeline gets right.
+
+The claim is that a reliable classifier is a pipeline, not a prompt. Embeddings find the neighborhood. Retrieval returns definitions. The LLM compares them. A validation step chooses between a category and an abstention. I agree with every stage.
+
+The ceiling rule in that write-up deserves one extension. If the correct category is not retrieved, the LLM cannot pick it. True. It is equally true of every stage after retrieval, and that is where scale starts to hurt.
+
+At around 100 items the plain pipeline is enough. A 100-tool catalog at roughly 400 tokens per schema is 40k tokens. That figure is the one I used in my Tool Attention paper, and real servers run higher: the public audits I cited put the full GitHub server at about 55,000 tokens for 93 tools, close to 590 each. Forty thousand tokens is wasteful but it fits, and a single top-10 embedding lookup rarely misses.
+
+At 1,000 tools the same arithmetic gives 400k tokens. Retrieval stops being an optimization and becomes the only way in. That is the point where embed, retrieve, decide and validate is necessary and no longer sufficient. The rest of this post is about the parts I would add.

@@ -1,0 +1,9 @@
+The catalog is a product.
+
+The first thing that breaks at scale is not the model or the index. It is the catalog. In my simulation 29 of 500 tasks failed with tool gating. Fourteen (48%) came from a query matching several semantically similar tools. Seven (24%) came from cryptic legacy descriptions. That is 72% of failures caused by what the catalog says, and the model was not the problem. It is a simulated workload, so read the proportions as a hypothesis worth testing on your own traces.
+
+So keep the registry outside the prompt and give every tool a card written for retrieval, not for the implementer:
+
+Three fields do more work than they look. summary is written in the voice of the user's intent. In my paper, regenerating summaries that way cut their average length by 63% and raised retrieval F1 by 8 points, on the same synthetic benchmark. not_for and prefer_over are the disambiguation fields. They give the reranker and the model a reason to choose between near-duplicates, and near-duplicates were the largest failure bucket. owner and schema_version exist because at 1,000 tools somebody has to be paged when a description rots.
+
+One structural change belongs here too. A flat top-k over thousands of tools tends to fill the shortlist with ten variants of one family and crowd out the second family you needed. Group tools into domains and route in two hops, domain first and tool second. This is my rule from building these systems, not a measured result. Test it against a flat index on your own catalog before you trust it.

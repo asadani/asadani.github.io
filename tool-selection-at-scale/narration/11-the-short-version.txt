@@ -1,0 +1,7 @@
+The short version.
+
+For classification, the rule is to stop asking the LLM to remember the taxonomy and give it the taxonomy when it needs it. I would keep that and add its counterpart for tools.
+
+Do not ask the LLM to be the only thing standing between a request and a side effect. Give it a small, filtered, well-described menu. Run the rules around it in code. Measure every stage, so that when the agent is wrong you know which part to fix.
+
+At 100 tools, the model does the work. At 1,000, the control plane does most of it, and the model makes the last call.

@@ -1,0 +1,7 @@
+What to build at which scale.
+
+Here is the whole flow in one place, in three stages. The tag on each step says whether it is rules, a learned model, or the LLM. Two of the eight steps are the LLM, and every loop is decided by code.
+
+You do not need all of it. The thresholds below are my judgment from building these systems, not measured boundaries. In my simulation the full-schema baseline crossed the 70% context-utilization line at about 50 tools, which is why the first row is short.
+
+Each stage adds latency, and I have not measured a full stack end to end, so budget it before you commit. Indexes go stale when a server ships a new schema, which is why schema_version exists. And tool descriptions are attacker-controlled text. In my simulation, gating cut the success rate of 50 poisoned descriptions from 38% to 6%. That was a side effect of never showing irrelevant tools, not a defense, and it needs a real one.

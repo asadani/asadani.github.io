@@ -1,0 +1,5 @@
+Tools are not categories.
+
+It is tempting to treat tool selection as classification with a bigger label set. The analogy holds for the retrieval half and breaks for everything around it.
+
+The first difference is the one that changes the architecture: a wrong tool is a side effect, not a wrong label. Safety cannot live in the prompt when a wrong choice writes to a production system. It has to live in code that runs regardless of what the model says.
