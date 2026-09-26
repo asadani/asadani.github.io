@@ -1,6 +1,6 @@
 Discovery per subgoal, three retrievers, one pre-filter.
 
-The baseline pipeline embeds the input once. A tool request is rarely one intent. "Find where auth is implemented in my repo and check whether it is deployed" is two subgoals with different tools. Embedding the whole sentence returns a blurred neighborhood that serves neither. I extract structured intent first and run discovery per subgoal:
+The baseline pipeline embeds the input once. A tool request is rarely one intent. "Find where sessions are validated in checkout-service and check whether the fix is deployed" is two subgoals with different tools. Embedding the whole sentence returns a blurred neighborhood that serves neither. I extract structured intent first and run discovery per subgoal:
 
 Retrieval then runs three ways and fuses the ranks. Vectors catch paraphrase. BM25 catches the exact tokens embeddings blur: tool ids, product names, error codes. Capability matching uses the structured operations field. Reciprocal rank fusion (Cormack et al., SIGIR 2009, constant 60) merges them without needing comparable scores.
 

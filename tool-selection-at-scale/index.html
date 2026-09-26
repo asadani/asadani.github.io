@@ -768,7 +768,7 @@
     <div class="hero-meta">
       <span>September 2026</span>
       <span class="hero-meta-sep">/</span>
-      <span>16 min read</span>
+      <span>18 min read</span>
     </div>
   </header>
 
@@ -811,19 +811,21 @@
       <li><span class="toc-num">07</span><a href="#filter-rank">Filter, then rank</a></li>
       <li><span class="toc-num">08</span><a href="#disclosure">Progressive disclosure</a></li>
       <li><span class="toc-num">09</span><a href="#validate-recover">Validate, iterate, recover</a></li>
-      <li><span class="toc-num">10</span><a href="#what-to-build">What to build at which scale</a></li>
-      <li><span class="toc-num">11</span><a href="#short-version">The short version</a></li>
+      <li><span class="toc-num">10</span><a href="#worked-example">One request, end to end</a></li>
+      <li><span class="toc-num">11</span><a href="#what-to-build">What to build at which scale</a></li>
+      <li><span class="toc-num">12</span><a href="#short-version">The short version</a></li>
     </ol>
   </div>
 
   <!-- 01 -->
   
+
 <!-- ARTICLE-AUDIO:BEGIN -->
 <link rel="stylesheet" href="/assets/player.css">
 <div class="ap" id="articleaudio">
   <div class="ap-hd">
     <span class="ap-ico" aria-hidden="true">&#9654;</span>
-    <div><span class="ap-kick">Audio edition</span><b>Listen to this article</b><span class="ap-sub">12 parts &middot; 16 min</span></div>
+    <div><span class="ap-kick">Audio edition</span><b>Listen to this article</b><span class="ap-sub">13 parts &middot; 19 min</span></div>
     <button class="ap-rate" type="button" aria-label="Playback speed">1&#215;</button>
     <button class="ap-more" type="button" aria-expanded="false">Parts</button>
   </div>
@@ -836,12 +838,13 @@
       <li><button type="button" data-src="audio/03-it-is-a-context-quality-problem-not-only.mp3"><span class="ap-n">4</span><span class="ap-nm">It is a context-quality problem, not only a knowledge problem</span><span class="ap-d">1:48</span></button></li>
       <li><button type="button" data-src="audio/04-the-recall-chain.mp3"><span class="ap-n">5</span><span class="ap-nm">The recall chain</span><span class="ap-d">1:09</span></button></li>
       <li><button type="button" data-src="audio/05-the-catalog-is-a-product.mp3"><span class="ap-n">6</span><span class="ap-nm">The catalog is a product</span><span class="ap-d">1:44</span></button></li>
-      <li><button type="button" data-src="audio/06-discovery-per-subgoal-three-retrievers-o.mp3"><span class="ap-n">7</span><span class="ap-nm">Discovery per subgoal, three retrievers, one pre-filter</span><span class="ap-d">1:31</span></button></li>
+      <li><button type="button" data-src="audio/06-discovery-per-subgoal-three-retrievers-o.mp3"><span class="ap-n">7</span><span class="ap-nm">Discovery per subgoal, three retrievers, one pre-filter</span><span class="ap-d">1:32</span></button></li>
       <li><button type="button" data-src="audio/07-filter-then-rank-and-where-i-would-chang.mp3"><span class="ap-n">8</span><span class="ap-nm">Filter, then rank, and where I would change the score</span><span class="ap-d">2:28</span></button></li>
       <li><button type="button" data-src="audio/08-progressive-disclosure.mp3"><span class="ap-n">9</span><span class="ap-nm">Progressive disclosure</span><span class="ap-d">1:36</span></button></li>
       <li><button type="button" data-src="audio/09-validate-iterate-recover.mp3"><span class="ap-n">10</span><span class="ap-nm">Validate, iterate, recover</span><span class="ap-d">1:46</span></button></li>
-      <li><button type="button" data-src="audio/10-what-to-build-at-which-scale.mp3"><span class="ap-n">11</span><span class="ap-nm">What to build at which scale</span><span class="ap-d">1:06</span></button></li>
-      <li><button type="button" data-src="audio/11-the-short-version.mp3"><span class="ap-n">12</span><span class="ap-nm">The short version</span><span class="ap-d">1:00</span></button></li>
+      <li><button type="button" data-src="audio/10-one-request-end-to-end.mp3"><span class="ap-n">11</span><span class="ap-nm">One request, end to end</span><span class="ap-d">2:36</span></button></li>
+      <li><button type="button" data-src="audio/11-what-to-build-at-which-scale.mp3"><span class="ap-n">12</span><span class="ap-nm">What to build at which scale</span><span class="ap-d">1:06</span></button></li>
+      <li><button type="button" data-src="audio/12-the-short-version.mp3"><span class="ap-n">13</span><span class="ap-nm">The short version</span><span class="ap-d">1:00</span></button></li>
   </ol>
 </div>
 <div class="ap-mini" id="ap-mini" hidden>
@@ -931,7 +934,7 @@
     <div class="section-label">03 / Why retrieval at all</div>
     <h2><a class="anchor" href="#context-quality">It is a context-quality problem, not only a knowledge problem</a></h2>
     <div class="prose">
-      <p>The article frames retrieval as supplying information the model lacks. That is half of it. The other half is that a model with all the information in a crowded context still does worse, even when the right answer is technically in there.</p>
+      <p>The baseline write-up frames retrieval as supplying information the model lacks. That is half of it. The other half is that a model with all the information in a crowded context still does worse, even when the right answer is technically in there.</p>
     </div>
     <ul class="dl">
       <li><strong>Position effects.</strong> Liu et al. (<a href="https://aclanthology.org/2024.tacl-1.9/">Lost in the Middle</a>, TACL 2024) found that accuracy is lowest when the relevant item sits in the middle of a long context. A tool list is exactly that shape.</li>
@@ -1022,7 +1025,7 @@
   <span class="tok-key">"input_concepts"</span>: [<span class="tok-str">"query"</span>, <span class="tok-str">"repository"</span>, <span class="tok-str">"organization"</span>],
   <span class="tok-key">"prefer_over"</span>:  [<span class="tok-str">"web.search"</span>],
   <span class="tok-key">"not_for"</span>:      <span class="tok-str">"Reading one known file. Use github.read_file."</span>,
-  <span class="tok-key">"examples"</span>:     [<span class="tok-str">"Find authentication middleware in the Varta repository"</span>],
+  <span class="tok-key">"examples"</span>:     [<span class="tok-str">"Find where login sessions are validated in the checkout-service repository"</span>],
 
   <span class="tok-cmt">// not indexed: fetched only after the tool is selected</span>
   <span class="tok-key">"requires"</span>:     { <span class="tok-key">"connection"</span>: <span class="tok-str">"github"</span>, <span class="tok-key">"scopes"</span>: [<span class="tok-str">"repo:read"</span>] },
@@ -1043,20 +1046,20 @@
     <div class="section-label">06 / Control part 2</div>
     <h2><a class="anchor" href="#discovery">Discovery per subgoal, three retrievers, one pre-filter</a></h2>
     <div class="prose">
-      <p>The baseline pipeline embeds the input once. A tool request is rarely one intent. "Find where auth is implemented in my repo and check whether it is deployed" is two subgoals with different tools. Embedding the whole sentence returns a blurred neighborhood that serves neither. I extract structured intent first and run discovery per subgoal:</p>
+      <p>The baseline pipeline embeds the input once. A tool request is rarely one intent. "Find where sessions are validated in checkout-service and check whether the fix is deployed" is two subgoals with different tools. Embedding the whole sentence returns a blurred neighborhood that serves neither. I extract structured intent first and run discovery per subgoal:</p>
     </div>
     <div class="code-block">
       <div class="cb-label">intent extraction output</div>
 <pre>{
   <span class="tok-key">"subgoals"</span>: [
-    { <span class="tok-key">"goal"</span>: <span class="tok-str">"locate authentication implementation"</span>,
+    { <span class="tok-key">"goal"</span>: <span class="tok-str">"locate session validation code"</span>,
       <span class="tok-key">"operations"</span>: [<span class="tok-str">"repository_search"</span>, <span class="tok-str">"code_read"</span>],
-      <span class="tok-key">"entities"</span>: [<span class="tok-str">"Varta repository"</span>],
+      <span class="tok-key">"entities"</span>: [<span class="tok-str">"checkout-service repository"</span>],
       <span class="tok-key">"required_access"</span>: [<span class="tok-str">"GitHub"</span>], <span class="tok-key">"mutation"</span>: false },
     { <span class="tok-key">"goal"</span>: <span class="tok-str">"check deployment status"</span>,
-      <span class="tok-key">"operations"</span>: [<span class="tok-str">"deployment_inspect"</span>],
-      <span class="tok-key">"entities"</span>: [<span class="tok-str">"Varta"</span>],
-      <span class="tok-key">"required_access"</span>: [<span class="tok-str">"deployment platform"</span>], <span class="tok-key">"mutation"</span>: false }
+      <span class="tok-key">"operations"</span>: [<span class="tok-str">"rollout_inspect"</span>],
+      <span class="tok-key">"entities"</span>: [<span class="tok-str">"checkout-service"</span>],
+      <span class="tok-key">"required_access"</span>: [<span class="tok-str">"Kubernetes"</span>], <span class="tok-key">"mutation"</span>: false }
   ]
 }</pre>
     </div>
@@ -1212,7 +1215,7 @@
       <div class="cb-label">discovery-level menu</div>
 <pre>1. github.search_code   Search code inside connected repositories
 2. github.read_file     Read a specific repository file
-3. library.search       Search user-owned Library artifacts
+3. jira.search_issues   Search issues and tickets
 4. web.search           Search public internet sources</pre>
     </div>
     <div class="prose">
@@ -1232,11 +1235,11 @@
     </div>
     <div class="code-block">
       <div class="cb-label">one request, three rounds of discovery (illustrative)</div>
-<pre>search the repository            <span class="tok-cmt"># round 1: discover(sub 1)</span>
+<pre>search the repository            <span class="tok-cmt"># round 1: github.search_code</span>
   -&gt; found a config reference
-config says deployment is managed elsewhere   <span class="tok-cmt"># new subgoal</span>
-retrieve deployment tools        <span class="tok-cmt"># round 2: discover(sub 2)</span>
-inspect the deployment configuration          <span class="tok-cmt"># round 3: schema on demand, validate, run</span></pre>
+config says it ships as a Kubernetes rollout <span class="tok-cmt"># new subgoal</span>
+retrieve Kubernetes tools        <span class="tok-cmt"># round 2: k8s.get_rollout_status</span>
+read the failing pod's logs                  <span class="tok-cmt"># round 3: k8s.get_pod_logs</span></pre>
     </div>
     <div class="prose">
       <p><strong>Name the failure class.</strong> "The agent used the wrong tool" is not a diagnosis. There are at least six distinct failures, each with a different detector and a different fix:</p>
@@ -1295,8 +1298,48 @@ inspect the deployment configuration          <span class="tok-cmt"># round 3: s
   </div>
 
   <!-- 10 -->
+  <div class="section" id="worked-example">
+    <div class="section-label">10 / Worked example</div>
+    <h2><a class="anchor" href="#worked-example">One request, end to end</a></h2>
+    <div class="prose">
+      <p>Everything above is easier to judge on a single request. This is an illustration, not a benchmark: the catalog size, the counts and the tool names are mine, chosen to be realistic. The catalog has 1,200 tools across 30 servers, and the request is:</p>
+      <p><em>"The checkout-service deploy failed last night. Find what changed, check the rollout, and tell the payments channel on Slack."</em></p>
+    </div>
+    <div class="data-table">
+      <table class="fixed">
+        <colgroup>
+          <col style="width:20%">
+          <col style="width:56%">
+          <col style="width:24%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Stage</th>
+            <th>What happens</th>
+            <th>The model sees</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Intent extraction</td><td>Three subgoals: find what changed (GitHub, read), check the rollout (Kubernetes, read), post a summary (Slack, write).</td><td>The request only.</td></tr>
+          <tr><td>Retrieval, per subgoal</td><td>40 candidates each, out of 1,200. For the rollout subgoal, BM25 catches the literal word "rollout" in <code>k8s.get_rollout_status</code>, which the vector search had ranked ninth.</td><td>Nothing yet.</td></tr>
+          <tr><td>Hard filters</td><td>Rollout subgoal: 9 candidates removed because this user has no Argo CD connection, and <code>k8s.rollout_restart</code> removed because the subgoal is read-only. 30 remain.</td><td>Nothing yet.</td></tr>
+          <tr><td>Rerank</td><td>30 become a menu of 6. The <code>not_for</code> field on <code>logs.search</code> ("for Kubernetes pod logs use <code>k8s.get_pod_logs</code>") settles a near-duplicate.</td><td>Nothing yet.</td></tr>
+          <tr><td>Disclosure and selection</td><td>The menu is shown at discovery level. The model picks <code>k8s.get_rollout_status</code>, and only then is its full schema revealed.</td><td>Six one-liners (about 200 tokens), then one schema (about 400).</td></tr>
+          <tr><td>Validation</td><td>The required parameter <code>namespace</code> is missing. The validator returns an error, the model supplies <code>payments</code>, and the second attempt passes.</td><td>The error string.</td></tr>
+          <tr><td>Execution</td><td>200 KB of pod events is capped to a 1.2 KB observation, with a handle to the full output kept outside the context.</td><td>1.2 KB.</td></tr>
+          <tr><td>Write subgoal</td><td>Posting to Slack is a write. The risk policy shows the user the draft message and waits for a confirmation before <code>slack.post_message</code> runs.</td><td>The draft message.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose">
+      <p>Count the tokens with the 400-token schema assumption from earlier. Showing the whole catalog would cost about 480k tokens on every turn, more than most context windows hold. This run used three menus of about 200 tokens and three schemas of about 400, roughly 1,800 tokens, a cut of more than 99%. Those are assumptions multiplied out, not a measurement.</p>
+      <p>The more useful observation is where the LLM acted. It made two kinds of decision: splitting the request, and choosing from a menu of six. Every other step was an index, a rule or a learned ranker. That is the point of the control plane. If this run had gone wrong, it would have gone wrong in one identifiable place. Had <code>k8s.get_rollout_status</code> never been retrieved, that is a retrieval miss. Had it been retrieved and cut, that is the reranker. Had it been chosen and called badly, the validator catches it before anything runs.</p>
+    </div>
+  </div>
+
+  <!-- 11 -->
   <div class="section" id="what-to-build">
-    <div class="section-label">10 / Judgment</div>
+    <div class="section-label">11 / Judgment</div>
     <h2><a class="anchor" href="#what-to-build">What to build at which scale</a></h2>
     <div class="prose">
       <p>Here is the whole flow in one place, in three stages. It starts where the user does, with the request. The tag on each step says whether it is rules, a learned model, or the LLM. Two of the eight steps are the LLM, and every loop is decided by code.</p>
@@ -1450,9 +1493,9 @@ inspect the deployment configuration          <span class="tok-cmt"># round 3: s
     </div>
   </div>
 
-  <!-- 11 -->
+  <!-- 12 -->
   <div class="section" id="short-version">
-    <div class="section-label">11 / Closer</div>
+    <div class="section-label">12 / Closer</div>
     <h2><a class="anchor" href="#short-version">The short version</a></h2>
     <div class="prose">
       <p>For classification, the rule is to stop asking the LLM to remember the taxonomy and give it the taxonomy when it needs it. I would keep that and add its counterpart for tools.</p>
