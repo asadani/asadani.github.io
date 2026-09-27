@@ -11,12 +11,12 @@
       "provenance"
     ],
     "quote": "\"If the answer depends on the probability, the system has no policy.\"",
-    "desc": "A practical guide to Jev and the decision models around it. Eleven chapters on reading a decision model's probabilities, what the early experiments actually showed, a fallback that made a good classifier worse, and the policy that has to sit between a prediction and an action. Free to read here and to listen to (100 minutes, synthetic voice); the typeset PDF is on Ko-fi.",
+    "desc": "A practical guide to Jev and the decision models around it. Thirteen chapters on reading a decision model's probabilities, what the early experiments actually showed, a fallback that made a good classifier worse, and the policy that has to sit between a prediction and an action. Free to read here and to listen to (114 minutes, synthetic voice); the typeset PDF is on Ko-fi.",
     "date": "2026-09-27",
     "dateDisplay": "September 27, 2026",
     "cta": "Read",
     "shareUrl": "https://tech.anujsadani.in/decision-models-guide/",
-    "pages": 63,
+    "pages": 71,
     "external": true
   },
   {

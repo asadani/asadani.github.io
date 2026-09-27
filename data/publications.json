@@ -66,11 +66,11 @@
   "digital": [
     {
       "title": "Decision Models: From a Typed Prediction to an Accountable Action",
-      "desc": "A practical guide to Jev and the decision models around it. A decision model returns a typed answer and a probability. Neither tells you the answer is right, that the probability means what you think, or that anyone was entitled to act on it. Eleven chapters on closing those three gaps: a measured Banking77 experiment, a fallback that made a good classifier worse, the alternatives, the policy between a prediction and an action, and an accountability argument. Every measurement is attributed; an appendix lists what was and was not verified.",
+      "desc": "A practical guide to Jev and the decision models around it. A decision model returns a typed answer and a probability. Neither tells you the answer is right, that the probability means what you think, or that anyone was entitled to act on it. Thirteen chapters on closing those three gaps: a measured Banking77 experiment, a fallback that made a good classifier worse, the alternatives, the policy between a prediction and an action, and an accountability argument. Every measurement is attributed; an appendix lists what was and was not verified.",
       "image": "/assets/covers/decision-models.jpg",
       "url": "https://ko-fi.com/s/9e3a539eb0",
       "hosted": "/decision-models-guide/",
-      "pages": 63,
+      "pages": 71,
       "datePublished": "2026-09-27"
     },
     {
