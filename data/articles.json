@@ -1,5 +1,25 @@
 [
   {
+    "slug": "decision-models-guide",
+    "title": "Decision Models: From a Typed Prediction to an Accountable Action",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "models",
+      "craft",
+      "provenance"
+    ],
+    "quote": "\"If the answer depends on the probability, the system has no policy.\"",
+    "desc": "A practical guide to Jev and the decision models around it. Eleven chapters on reading a decision model's probabilities, what the early experiments actually showed, a fallback that made a good classifier worse, and the policy that has to sit between a prediction and an action. Free to read here and to listen to (100 minutes, synthetic voice); the typeset PDF is on Ko-fi.",
+    "date": "2026-09-27",
+    "dateDisplay": "September 27, 2026",
+    "cta": "Read",
+    "shareUrl": "https://tech.anujsadani.in/decision-models-guide/",
+    "pages": 63,
+    "external": true
+  },
+  {
     "slug": "tool-selection-at-scale",
     "title": "Tool Selection at Scale: What Top-K RAG Leaves Out",
     "tags": [
