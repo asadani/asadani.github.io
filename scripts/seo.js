@@ -8,6 +8,7 @@
  *
  *   node scripts/seo.js            apply
  *   node scripts/seo.js --dry-run  report what would change, write nothing
+ *   node scripts/seo.js --sitemap-only  regenerate only the URL inventory
  *
  * Re-running is safe: pages already carrying an og:url are left alone, so this
  * never double-injects.
@@ -118,6 +119,11 @@ function sitemap() {
     { loc: SITE + '/', lastmod: newest, changefreq: 'weekly', priority: '1.0' },
     ...articles.map((a) => ({
       loc: urlOf(a), lastmod: a.date, changefreq: 'yearly', priority: '0.8',
+    })),
+    // Condensed editions have their own canonical URLs and can be useful
+    // entry points for readers who do not yet want the full book.
+    ...articles.filter((a) => a.summary).map((a) => ({
+      loc: urlOf(a) + 'summary/', lastmod: a.date, changefreq: 'yearly', priority: '0.7',
     })),
     // Book editions rank above ordinary essays: they are the long-form work
     // and the pages most worth surfacing. Books are now listed in
@@ -434,6 +440,7 @@ function write(rel, content) {
 }
 
 write('sitemap.xml', sitemap());
+if (!process.argv.includes('--sitemap-only')) {
 write('robots.txt', robots());
 write('llms.txt', llms());
 
@@ -456,4 +463,5 @@ report('articles', patchArticles());
 if (!REFRESH) {
   console.log('\n  (pages tagged before the SEO:HEAD markers are left alone;');
   console.log('   run with --refresh to migrate them onto the shared identity)');
+}
 }

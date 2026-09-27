@@ -618,3 +618,14 @@
   .flipcard.is-flipped .flipcard-front { opacity: 0; pointer-events: none; }
   .flipcard.is-flipped .flipcard-back { opacity: 1; pointer-events: auto; }
 }
+
+/* Curated entry points use the existing reading typography and palette. */
+.reading-start{padding-bottom:48px}
+.reading-start>p{color:var(--text-muted);line-height:1.7;margin:0 0 24px}
+.reading-paths{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:24px 0}
+.reading-paths h3{font-family:var(--serif);font-size:22px;line-height:1.35;margin:0 0 12px;color:var(--text)}
+.reading-paths p{font-size:15px;line-height:1.8;color:var(--text-muted)}
+.reading-start a{color:var(--text);text-decoration:underline;text-underline-offset:3px}
+.reading-start a:hover{text-decoration-thickness:2px}
+.reading-start a:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+@media(max-width:760px){.reading-paths{grid-template-columns:1fr;gap:20px}}
