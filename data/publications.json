@@ -65,6 +65,15 @@
   ],
   "digital": [
     {
+      "title": "When Software Hires Software: The Executive Playbook for the Agent-to-Agent Economy",
+      "desc": "An executive playbook on the agent-to-agent economy: autonomous procurement, algorithmic corporate wallets, machine-negotiated mortgage lending, and healthcare claims that argue with themselves. Five chapters -- one cross-cutting thesis, then four domains -- locate the Mandate Boundary in each: where software may decide alone, where a human still has to sign, and what to build by 2027 versus only position for by 2030. Every 2027 claim is sourced; every 2030 claim is flagged as the author's own extrapolation, not reported fact.",
+      "image": "/assets/covers/when-software-hires-software.jpg",
+      "url": "https://ko-fi.com/s/f2e1c7f55f",
+      "hosted": "/when-software-hires-software/",
+      "pages": 59,
+      "datePublished": "2026-09-29"
+    },
+    {
       "title": "Decision Models: From a Typed Prediction to an Accountable Action",
       "desc": "A practical guide to Jev and the decision models around it. A decision model returns a typed answer and a probability. Neither tells you the answer is right, that the probability means what you think, or that anyone was entitled to act on it. Thirteen chapters on closing those three gaps: a measured Banking77 experiment, a fallback that made a good classifier worse, the alternatives, the policy between a prediction and an action, and an accountability argument. Every measurement is attributed; an appendix lists what was and was not verified.",
       "image": "/assets/covers/decision-models.jpg",

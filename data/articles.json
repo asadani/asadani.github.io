@@ -1,5 +1,24 @@
 [
   {
+    "slug": "when-software-hires-software",
+    "title": "When Software Hires Software: The Executive Playbook for the Agent-to-Agent Economy",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "agents",
+      "provenance"
+    ],
+    "quote": "\"Software is starting to hire software.\"",
+    "desc": "An executive playbook on the agent-to-agent economy: autonomous procurement, algorithmic corporate wallets, machine-negotiated mortgage lending, and healthcare claims that argue with themselves. Five chapters -- one cross-cutting thesis, then four domains -- locate the Mandate Boundary in each: where software may decide alone, where a human still has to sign, and what to build by 2027 versus only position for by 2030. Free to read here and to listen to (102 minutes, synthetic voice); the typeset PDF is on Ko-fi.",
+    "date": "2026-09-29",
+    "dateDisplay": "September 29, 2026",
+    "cta": "Read",
+    "shareUrl": "https://tech.anujsadani.in/when-software-hires-software/",
+    "pages": 59,
+    "external": true
+  },
+  {
     "slug": "decision-models-guide",
     "title": "Decision Models: From a Typed Prediction to an Accountable Action",
     "tags": [
