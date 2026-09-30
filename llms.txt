@@ -8,6 +8,8 @@ Author profile: https://anujsadani.in
 
 ## Essays
 
+- [Building Decision Firewall, then narrowing it](https://tech.anujsadani.in/decision-firewall-building-and-narrowing/): How I built a decision-governance framework, tested it against competent application controls, and narrowed it to a reference implementation after the results challenged the adoption case.
+- [When Software Hires Software: The Executive Playbook for the Agent-to-Agent Economy](https://tech.anujsadani.in/when-software-hires-software/): An executive playbook on the agent-to-agent economy: autonomous procurement, algorithmic corporate wallets, machine-negotiated mortgage lending, and healthcare claims that argue with themselves. Five chapters -- one cross-cutting thesis, then four domains -- locate the Mandate Boundary in each: where software may decide alone, where a human still has to sign, and what to build by 2027 versus only position for by 2030. Free to read here and to listen to (102 minutes, synthetic voice); the typeset PDF is on Ko-fi.
 - [Decision Models: From a Typed Prediction to an Accountable Action](https://tech.anujsadani.in/decision-models-guide/): A practical guide to Jev and the decision models around it. Thirteen chapters on reading a decision model's probabilities, what the early experiments actually showed, a fallback that made a good classifier worse, and the policy that has to sit between a prediction and an action. Free to read here and to listen to (114 minutes, synthetic voice); the typeset PDF is on Ko-fi.
 - [Tool Selection at Scale: What Top-K RAG Leaves Out](https://tech.anujsadani.in/tool-selection-at-scale/): Embed, retrieve, let the LLM decide works for about 100 tools. At 1,000 it needs a control plane: hybrid retrieval, hard filters, a learned reranker, progressive disclosure and per-stage evals.
 - [Skills 101](https://tech.anujsadani.in/skills-101/): An interactive field guide to agent skills, sixteen chapters on one page. A placement console asks whether a responsibility belongs in a prompt, a skill, code, a tool, MCP, retrieval or an agent; a package inspector shows what a skill file holds, down to the real frontmatter; and steppers walk the lifecycle, the four ways skills meet MCP, and the failure chain where a green tool response is still the wrong outcome. Ends with a level-one skill you can copy and use. Narrated in a synthetic voice.
@@ -63,6 +65,7 @@ Author profile: https://anujsadani.in
 
 ## Digital releases
 
+- [When Software Hires Software: The Executive Playbook for the Agent-to-Agent Economy](https://tech.anujsadani.in/when-software-hires-software/): listed under Essays above. PDF at https://ko-fi.com/s/f2e1c7f55f.
 - [Decision Models: From a Typed Prediction to an Accountable Action](https://tech.anujsadani.in/decision-models-guide/): listed under Essays above. PDF at https://ko-fi.com/s/9e3a539eb0.
 - [The Attention Invoice](https://tech.anujsadani.in/ai-slop/): listed under Essays above. PDF at https://ko-fi.com/s/b2d61a99ec.
 - [The Meter Is Not the Money](https://tech.anujsadani.in/the-meter-is-not-the-money/): listed under Essays above. PDF at https://ko-fi.com/s/0f1f4f72ad.

@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Building Decision Firewall, then narrowing it: A build story about controls, evidence and scope</title>
+<meta name="description" content="How I built a decision-governance framework, tested it against competent application controls, and narrowed it to a reference implementation after the results challenged the adoption case.">
+<meta name="author" content="Anuj Sadani">
+<link rel="canonical" href="https://tech.anujsadani.in/decision-firewall-building-and-narrowing/">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tech.anujsadani.in/decision-firewall-building-and-narrowing/">
+<meta property="og:site_name" content="Anuj Sadani | Tech">
+<meta property="og:title" content="Building Decision Firewall, then narrowing it">
+<meta property="og:description" content="How I built a decision-governance framework, tested it against competent application controls, and narrowed it to a reference implementation after the results challenged the adoption case.">
+<meta property="og:image" content="https://tech.anujsadani.in/assets/profile-pic.png">
+<meta property="article:published_time" content="2026-09-30">
+<meta property="article:author" content="Anuj Sadani">
+<meta name="twitter:card" content="summary_large_image">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Building Decision Firewall, then narrowing it",
+  "description": "How I built a decision-governance framework, tested it against competent application controls, and narrowed it to a reference implementation after the results challenged the adoption case.",
+  "datePublished": "2026-09-30",
+  "url": "https://tech.anujsadani.in/decision-firewall-building-and-narrowing/",
+  "mainEntityOfPage": "https://tech.anujsadani.in/decision-firewall-building-and-narrowing/",
+  "inLanguage": "en",
+  "isPartOf": { "@id": "https://tech.anujsadani.in/#blog" },
+  "author": {
+    "@type": "Person",
+    "@id": "https://anujsadani.in/#person",
+    "name": "Anuj Sadani",
+    "url": "https://anujsadani.in/"
+  }
+}
+</script>
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #F5F1EB;
+    --bg-alt:       #EDEAE3;
+    --surface:      #FFFFFF;
+    --surface-tint: #FAF8F5;
+    --border:       #DDD9D0;
+    --border-light: #EAE7E0;
+    --text:         #1A1714;
+    --text-body:    #3D3A35;
+    --text-muted:   #6B6760;
+    --text-subtle:  #9B9892;
+    --accent:       #C85C2D;
+    --accent-light: #E8895D;
+    --accent-bg:    #FDF1EB;
+    --accent-border:#F0C4A8;
+    --green:        #2A7A4B;
+    --green-bg:     #EAF5EF;
+    --green-border: #A8D9BC;
+    --blue:         #2563A8;
+    --blue-bg:      #EAF1FA;
+    --blue-border:  #A8C5E8;
+    --red:          #B83535;
+    --red-bg:       #FAEBEB;
+    --red-border:   #E8AAAA;
+    --code-bg:      #1A1714;  /* code blocks stay dark in BOTH modes */
+    --shadow:       rgba(200,92,45,0.08);
+    --serif:        'Newsreader', Georgia, serif;
+    --sans:         'Inter', system-ui, sans-serif;
+    --mono:         'JetBrains Mono', 'Courier New', monospace;
+    color-scheme: light;
+  }
+
+  /* ─── DARK MODE ───────────────────────────────────────── */
+  /* Same design, dark palette. Toggled via [data-theme] on <html>
+     (nav button + OS default + localStorage — see scripts). Warm dark,
+     not pure black; the terracotta accent brightens so it reads on dark. */
+  [data-theme="dark"] {
+    --bg:           #14110D;
+    --bg-alt:       #1E1A14;
+    --surface:      #1A1611;
+    --surface-tint: #211C16;
+    --border:       #332C24;
+    --border-light: #2A241D;
+    --text:         #F2EEE7;
+    --text-body:    #D8D2C8;
+    --text-muted:   #A39C90;
+    --text-subtle:  #7A7468;
+    --accent:       #E8895D;
+    --accent-light: #F0A079;
+    --accent-bg:    #2C1E14;
+    --accent-border:#5A3826;
+    --green:        #5FD699;
+    --green-bg:     #14241B;
+    --green-border: #2E5640;
+    --blue:         #6FB0F0;
+    --blue-bg:      #142233;
+    --blue-border:  #2C4A6E;
+    --red:          #F08585;
+    --red-bg:       #2E1717;
+    --red-border:   #663434;
+    --code-bg:      #0E0B08;
+    --shadow:       rgba(0,0,0,0.45);
+    color-scheme: dark;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-body);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .nav-tag {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+  }
+  /* Light/dark toggle — shows the moon in light mode (click → dark) and
+     the sun in dark mode (click → light). */
+  .theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .theme-toggle:hover { color: var(--accent); border-color: var(--accent-border); }
+  .theme-icon-sun { display: none; }
+  [data-theme="dark"] .theme-icon-sun  { display: inline; }
+  [data-theme="dark"] .theme-icon-moon { display: none; }
+
+  /* ─── LAYOUT ──────────────────────────────────────────── */
+  .page-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-deck {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 640px;
+    font-weight: 300;
+  }
+  .hero-meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-family: var(--mono);
+  }
+  .hero-meta-sep { color: var(--border); }
+
+  /* ─── BODY TEXT ───────────────────────────────────────── */
+  .prose p {
+    color: var(--text-body);
+    margin-bottom: 20px;
+    font-size: 17px;
+    line-height: 1.78;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); font-weight: 600; }
+  em { font-style: italic; color: var(--text-body); }
+
+  /* ─── SECTION HEADING ─────────────────────────────────── */
+  /* scroll-margin-top keeps the sticky 52px nav from covering the heading
+     when you jump to a #anchor. */
+  .section { margin-top: 56px; scroll-margin-top: 72px; }
+  .section-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section-label a { color: inherit; text-decoration: none; transition: color 0.15s; }
+  .section-label a:hover { color: var(--text); }
+  .section h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+  /* Self-linking heading: the whole H2 is an anchor to its own section,
+     and a '#' affordance appears on hover. */
+  .section h2 a.anchor { color: inherit; text-decoration: none; position: relative; }
+  .section h2 a.anchor:hover::before {
+    content: '#';
+    position: absolute;
+    left: -22px;
+    color: var(--accent);
+    font-weight: 400;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 32px 0 14px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── BANNER ──────────────────────────────────────────── */
+  .banner {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .banner-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .banner p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .banner a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ─── PLAIN ENGLISH ───────────────────────────────────── */
+  .plain-english {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 8px 8px;
+    padding: 28px 32px;
+    margin: 0 0 56px;
+  }
+  .plain-english .pe-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .pe-list { list-style: none; padding: 0; }
+  .pe-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 16px;
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+  .pe-list li:last-child { border-bottom: none; }
+  .pe-num {
+    width: 26px;
+    height: 26px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-family: var(--mono);
+  }
+
+  /* ─── TOC (jump links) ────────────────────────────────── */
+  /* Optional. Hrefs point at the section ids; pairs with the
+     self-linking H2 anchors below. 2-up grid, single column on mobile. */
+  .toc {
+    background: var(--surface-tint);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px 22px;
+    margin: 0 0 56px;
+  }
+  .toc-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 28px;
+  }
+  .toc-list li { display: flex; align-items: baseline; gap: 10px; font-size: 14px; line-height: 1.5; }
+  .toc-num { font-family: var(--mono); font-size: 11px; color: var(--text-subtle); flex-shrink: 0; width: 18px; }
+  .toc-list a {
+    color: var(--text-body);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .toc-list a:hover { color: var(--accent); border-bottom-color: var(--accent-border); }
+
+  /* ─── CARDS GRID ──────────────────────────────────────── */
+  /* Auto-balancing so you never get an orphan row:
+       default 3-up → 3 cards = 1×3, 6 cards = 3×2
+       exactly 2 or 4 cards drop to 2 columns → 2 = 1×2, 4 = 2×2
+     Force a count with .cols-2 / .cols-3 if you ever need to. */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 24px 0;
+  }
+  .cards-grid:has(> .card:nth-child(2):last-child),
+  .cards-grid:has(> .card:nth-child(4):last-child),
+  .cards-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .cards-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    border-color: var(--accent-border);
+    box-shadow: 0 2px 8px var(--shadow);
+  }
+  .card-icon { font-size: 20px; margin-bottom: 10px; }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+  .card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .card.card-red { border-color: var(--red-border); }
+  .card.card-red:hover { border-color: var(--red); box-shadow: 0 2px 8px rgba(184,53,53,0.08); }
+  .card.card-red .card-icon-badge {
+    display: inline-block;
+    background: var(--red-bg);
+    color: var(--red);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-green { border-color: var(--green-border); }
+  .card.card-green:hover { border-color: var(--green); box-shadow: 0 2px 8px rgba(42,122,75,0.08); }
+  .card.card-green .card-icon-badge {
+    display: inline-block;
+    background: var(--green-bg);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .card.card-blue { border-color: var(--blue-border); }
+  .card.card-blue:hover { border-color: var(--blue); box-shadow: 0 2px 8px rgba(37,99,168,0.08); }
+  .card.card-blue .card-icon-badge {
+    display: inline-block;
+    background: var(--blue-bg);
+    color: var(--blue);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  /* ─── CODE BLOCK ──────────────────────────────────────── */
+  .code-block {
+    background: var(--code-bg);
+    border-radius: 7px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .code-block .cb-label {
+    padding: 9px 16px;
+    background: rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .code-block pre {
+    padding: 20px;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #e8e8e8;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-block .tok-key  { color: #fdba74; }
+  .code-block .tok-val  { color: #86efac; }
+  .code-block .tok-cmt  { color: #6b7280; font-style: italic; }
+  .code-block .tok-str  { color: #93c5fd; }
+  .code-block .tok-acc  { color: #fde047; }
+
+  /* ─── CALLOUT ─────────────────────────────────────────── */
+  .callout {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+  .callout .callout-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout p { font-size: 15px; color: var(--text-muted); margin: 0; line-height: 1.7; }
+
+  /* ─── DETAIL LIST ─────────────────────────────────────── */
+  ul.dl {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  /* Not flex: a <strong> lead-in + body text must flow inline as one
+     paragraph. Flex would split the →, the <strong>, and the body into
+     three separate columns. So: left gutter + absolutely positioned →. */
+  ul.dl li {
+    position: relative;
+    padding: 13px 18px 13px 34px;
+    font-size: 15px;
+    color: var(--text-body);
+    border-bottom: 1px solid var(--border-light);
+    line-height: 1.65;
+  }
+  ul.dl li:last-child { border-bottom: none; }
+  ul.dl li::before {
+    content: '→';
+    position: absolute;
+    left: 14px;
+    top: 13px;
+    color: var(--accent);
+    font-size: 14px;
+  }
+
+  /* ─── TABLE ───────────────────────────────────────────── */
+  /* Default column sizing is content-driven (table-layout: auto) — best
+     for prose tables. To CONTROL column widths, add class="fixed" to the
+     <table> AND a <colgroup> of <col style="width:..%"> — fixed layout is
+     what actually makes those widths stick (auto layout treats colgroup
+     widths as hints and routinely ignores them, the usual "table looks
+     off" cause). Long unbroken strings wrap rather than blow a column out;
+     on narrow screens the wrapper scrolls horizontally. */
+  .data-table {
+    overflow-x: auto;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .data-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .data-table table.fixed { table-layout: fixed; }
+  .data-table thead th {
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    white-space: nowrap;      /* short header labels stay on one line */
+    vertical-align: bottom;
+  }
+  .data-table tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-body);
+    vertical-align: top;
+    line-height: 1.55;
+    overflow-wrap: anywhere;  /* long tokens/URLs wrap, never overflow */
+  }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:hover td { background: var(--surface-tint); }
+  .data-table tbody td:first-child { font-weight: 600; color: var(--text); }  /* row label */
+  /* Alignment helpers — apply to the <th> AND every <td> in that column */
+  .data-table th.center, .data-table td.center { text-align: center; }
+  .data-table th.num,    .data-table td.num    { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .data-table th.nowrap, .data-table td.nowrap { white-space: nowrap; }
+  .td-yes  { color: var(--green); font-weight: 600; }
+  .td-no   { color: var(--red);   font-weight: 600; }
+  .td-mono { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+
+  /* ─── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-refs { font-size: 12px; color: var(--text-subtle); }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 40px 0 36px; }
+    .page-wrap { padding: 0 16px 60px; }
+    footer { padding: 16px 20px; }
+    .plain-english { padding: 20px; }
+    .toc-list { grid-template-columns: 1fr; }
+    /* All card grids collapse to a single column on phones. */
+    .cards-grid,
+    .cards-grid.cols-2,
+    .cards-grid.cols-3,
+    .cards-grid:has(> .card:nth-child(2):last-child),
+    .cards-grid:has(> .card:nth-child(4):last-child) { grid-template-columns: 1fr; }
+  }
+
+
+/* Article-local contrast corrections retain the warm light/dark palette. */
+:root { --accent: #A3441D; --text-subtle: var(--text-muted); --code-muted: #B5AEA5; }
+[data-theme="dark"] { --accent: #E8895D; --text-subtle: var(--text-muted); }
+.nav-tag, .banner-badge { color: var(--bg); }
+.code-block .cb-label, .code-block .tok-cmt { color: var(--code-muted); }
+.build-quote footer a { text-decoration: underline; }
+/* Article-specific quote and mind-map components. */
+.opening { margin-bottom: 32px; }
+.table-hint { display: none; font-size: 13px; color: var(--text-muted); margin-top: 16px; }
+.prose a, .build-map a, .build-quote a { color: var(--accent); text-underline-offset: 3px; }
+.prose code, .source-note code { overflow-wrap: anywhere; font-family: var(--mono); font-size: .82em; }
+.build-quote { border-left: 3px solid var(--accent); margin: 28px 0; padding: 16px 24px; background: var(--surface-tint); }
+.build-quote p { font: 500 25px/1.45 var(--serif); color: var(--text); }
+.build-quote footer { display: block; background: none; border: 0; margin-top: 12px; padding: 0; font-size: 13px; }
+.build-map { margin: 32px 0; padding: 12px 0; }
+.map-scroll { overflow-x: auto; scrollbar-color: var(--text-muted) var(--bg-alt); }
+.build-map svg { display: block; width: 100%; min-width: 650px; }
+.map-node { fill: var(--surface); stroke: var(--border); stroke-width: 1.5; }
+.map-root { fill: var(--accent-bg); stroke: var(--accent); stroke-width: 2; }
+.map-edge { stroke: var(--text-muted); stroke-width: 2; fill: none; }
+.map-label { font: 600 11px var(--mono); fill: var(--accent); }
+.map-heading { font: 600 13px var(--sans); fill: var(--text); }
+.map-sub { font: 12px var(--sans); fill: var(--text-muted); }
+.map-core { font: 600 21px var(--serif); fill: var(--text); }
+.build-map figcaption { color: var(--text-muted); font-size: 14px; padding: 8px 4px; }
+a:focus-visible, button:focus-visible, .map-scroll:focus-visible, .data-table:focus-visible, pre:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+@media (max-width: 600px) { .table-hint { display: block; } .nav-right > span:first-child { display: none; } .data-table table { min-width: 520px; } .build-quote { padding: 14px 18px; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; } }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">Anuj Sadani | Tech</a>
+  <div class="nav-right">
+    <span>Build notes</span>
+    <span class="nav-tag">SEP 2026</span><!-- e.g. APR 2026 -->
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <span class="theme-icon-moon" aria-hidden="true">&#9790;</span><!-- ☾ shown in light mode -->
+      <span class="theme-icon-sun" aria-hidden="true">&#9728;</span><!-- ☀ shown in dark mode -->
+    </button>
+  </div>
+</nav>
+
+<main class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">Decision governance / A project retrospective</div><!-- e.g. "Linux Kernel Policy — Official" -->
+    <h1>Building Decision Firewall, then narrowing it</h1>
+    <p class="hero-deck">A refund workflow grew into a framework. Testing it against a competent application changed the scope I kept and the claims I was willing to make.</p><!-- 1–2 sentence summary, 18px muted -->
+    <div class="hero-meta">
+      <span>September 30, 2026</span><!-- e.g. April 2026 -->
+      <span class="hero-meta-sep">/</span>
+      <span>Anuj Sadani · 13 min read</span><!-- e.g. source doc name or category -->
+    </div>
+  </header>
+
+<div class="banner"><span class="banner-badge">BUILD NOTES</span><p>I built the controls before I properly tested the reason to package them as a framework. The comparison changed what I was willing to claim.</p></div>
+
+<div class="prose opening">
+<p>I started Decision Firewall with a refund request. A model could read the customer's message, but I did not want its interpretation to become permission to move money. I wanted the payment record to establish the facts, and explicit policy to decide what could happen.</p>
+<p>That was a useful problem. The project that grew around it was harder to justify.</p>
+<p>By the time I asked for an independent comparison, I had a reusable runtime, historical-data workflows and an evaluation layer. The comparison found equal correctness against competent application controls, more integration friction, and a slower implementation. I kept the reference implementation and stopped the adoption claims.</p>
+<p>This is how I got there, including the parts I would now do in a different order. I directed the work through coding agents, questioned the measurements and commissioned a separate agent evaluation. I did not personally hand-write every implementation, and the evaluation did not measure human productivity.</p>
+</div>
+
+<div class="toc" role="navigation" aria-label="Article sections"><div class="toc-label">The path through the project</div><ol class="toc-list"><li><span class="toc-num">01</span><a href="#refund-first">A refund is small enough to explain</a></li><li><span class="toc-num">02</span><a href="#scope-growth">Every next layer sounded reasonable</a></li><li><span class="toc-num">03</span><a href="#technology">The laptop put useful limits on the design</a></li><li><span class="toc-num">04</span><a href="#comparator">Compared with what?</a></li><li><span class="toc-num">05</span><a href="#public-benchmarks">A classifier cannot demonstrate authorization value</a></li><li><span class="toc-num">06</span><a href="#observability">Audit was useful. Telemetry was not a free win.</a></li><li><span class="toc-num">07</span><a href="#independent-pilot">The comparison that changed the recommendation</a></li><li><span class="toc-num">08</span><a href="#fixes">I fixed the defects without rewriting the study</a></li><li><span class="toc-num">09</span><a href="#overengineering">A useful control can still be an expensive abstraction</a></li><li><span class="toc-num">10</span><a href="#what-remains">A reference implementation is a legitimate outcome</a></li><li><span class="toc-num">11</span><a href="#next-build">Write the comparison before the expansion</a></li></ol></div>
+
+<section class="section" id="refund-first">
+<div class="section-label">01 / The starting problem</div><h2><a class="anchor" href="#refund-first">A refund is small enough to explain</a></h2>
+<div class="prose">
+<p>I picked subscription refunds because an incorrect action has a visible consequence. A duplicate-charge claim needs transaction evidence. A cancellation may depend on when it happened and whether the service was used. A previous partial refund changes the remaining balance.</p>
+<p>The demonstration policy made those distinctions concrete. Verified duplicate charges could be refunded against the duplicate payment. Cancellation qualified within seven days only if the subscription was unused. Eligible refunds up to ₹1,000 could proceed automatically; larger ones needed review. A configurable ₹10,000 daily automated limit routed excess demand to review. These were example rules, not statements of legal entitlement. Every payment effect was simulated. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/product.md">Original demonstration policy</a>.</p>
+<p>I also kept customer value and retention pressure out of eligibility. A convincing message about a valuable customer must not manufacture a duplicate payment. That separation mattered more than the model's confidence score.</p>
+</div>
+<div class="plain-english"><div class="pe-label">The distinction I needed</div><ul class="pe-list">
+<li><span class="pe-num">1</span><div><strong>An assessment is an interpretation.</strong> The message sounds like a duplicate-charge complaint.</div></li>
+<li><span class="pe-num">2</span><div><strong>An authorization is permission for an exact action.</strong> Refund this amount against this payment, using these facts and this policy, before this permission expires.</div></li>
+</ul></div>
+</section>
+
+<section class="section" id="scope-growth">
+<div class="section-label">02 / How the plan grew</div><h2><a class="anchor" href="#scope-growth">Every next layer sounded reasonable</a></h2>
+<div class="prose">
+<p>I did not want to stop at a refund application. I asked for a framework that other developers could use with their own decision models and business rules. Refunds became a domain pack; access control and a simulated deployment example tested the boundary around the core.</p>
+<p>Then I asked what happened before and after the decision. How would someone import previous decisions? Where would reviewed labels live? Could they compare policies without executing anything? Could telemetry explain what happened? I had LangChain's abstraction style and Langfuse's observability experience in mind, without a reason to reproduce either product.</p>
+<p>The plan acquired CSV/JSONL history ingestion, immutable dataset snapshots, optional historical retrieval, named Python rules and offline experiments. Those features had sensible constraints: a historical approval must never become a live authorization; held-out examples must not leak into model context; a policy experiment must never invoke an executor.</p>
+<p>I later added preparation before inference. It could validate structured intent and request missing evidence before spending a model call. It still needed final authorization against fresh facts. The extra stage was a capability to test, not an automatic improvement.</p>
+<p>The mistake was treating a coherent feature list as enough evidence for the package around it.</p>
+</div>
+<figure class="build-map"><div class="map-scroll" role="region" aria-label="Build mind map; scroll horizontally on narrow screens" tabindex="0"><svg viewBox="0 0 712 435" role="img" aria-labelledby="map-title map-desc"><title id="map-title">Mind map of the Decision Firewall build</title><desc id="map-desc">The project began with refund governance, expanded into a reusable framework, then faced a competent application comparator. Equal correctness and added friction led to defect repair and narrowing to a reference implementation and conformance kit.</desc><path d="M 244 218 H 225 V 69 H 206" class="map-edge"/><path d="M 244 218 H 225 V 219 H 206" class="map-edge"/><path d="M 244 218 H 225 V 369 H 206" class="map-edge"/><path d="M 468 218 H 487 V 69 H 506" class="map-edge"/><path d="M 468 218 H 487 V 219 H 506" class="map-edge"/><path d="M 468 218 H 487 V 369 H 506" class="map-edge"/><rect x="16" y="20" width="190" height="98" rx="8" class="map-node"/><text x="29" y="44" class="map-label">01 / START</text><text x="29" y="72" class="map-heading">One refund workflow</text><text x="29" y="97" class="map-sub">Assessment ≠ authority</text><rect x="16" y="170" width="190" height="98" rx="8" class="map-node"/><text x="29" y="194" class="map-label">02 / EXPAND</text><text x="29" y="222" class="map-heading">Reusable framework</text><text x="29" y="247" class="map-sub">History, rules, evaluation</text><rect x="16" y="320" width="190" height="98" rx="8" class="map-node"/><text x="29" y="344" class="map-label">03 / COMPARE</text><text x="29" y="372" class="map-heading">Competent application</text><text x="29" y="397" class="map-sub">Same requirements</text><rect x="506" y="20" width="190" height="98" rx="8" class="map-node"/><text x="519" y="44" class="map-label">04 / OBSERVE</text><text x="519" y="72" class="map-heading">Equal correctness</text><text x="519" y="97" class="map-sub">Added cost and friction</text><rect x="506" y="170" width="190" height="98" rx="8" class="map-node"/><text x="519" y="194" class="map-label">05 / REPAIR</text><text x="519" y="222" class="map-heading">Confirmed defects</text><text x="519" y="247" class="map-sub">Targeted regression tests</text><rect x="506" y="320" width="190" height="98" rx="8" class="map-node"/><text x="519" y="344" class="map-label">06 / NARROW</text><text x="519" y="372" class="map-heading">Reference + conformance</text><text x="519" y="397" class="map-sub">No adoption claim</text><rect x="244" y="175" width="224" height="86" rx="9" class="map-root"/><text x="356" y="209" text-anchor="middle" class="map-core">Decision Firewall</text><text x="356" y="236" text-anchor="middle" class="map-sub">What earned its place?</text></svg></div><figcaption>The project changed direction when the comparator changed. Scroll the map on small screens. Follow a branch: <a href="#refund-first">start</a> · <a href="#scope-growth">expand</a> · <a href="#comparator">compare</a> · <a href="#independent-pilot">observe</a> · <a href="#fixes">repair</a> · <a href="#what-remains">narrow</a>.</figcaption></figure>
+</section>
+
+<section class="section" id="technology">
+<div class="section-label">03 / What I actually built with</div><h2><a class="anchor" href="#technology">The laptop put useful limits on the design</a></h2>
+<div class="prose">
+<p>My local machine had a GTX 1650 with 4 GB VRAM and roughly 8 GB system RAM. I chose Laya as the first decision-model adapter and left Jev out of this release. The fixture path had to work without downloading any model.</p>
+<p>The recorded local run used <code>convaiinnovations/laya-typed-decisions</code>, pinned to revision <code>1a793eb568e6718f15941d08f85432581df534e3</code>, with SDK 0.3.20. It ran on CUDA in FP32. Cold loading took 28.42 seconds; median recorded inference was 47.45 milliseconds across 34 assessments, including the first inference. Those are local measurements, not an accuracy result. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/benchmarks/post-review-refund/summary.md">Local-model report</a>.</p>
+</div>
+<p class="table-hint">On a narrow screen, scroll the table sideways.</p><div class="data-table" tabindex="0" role="region" aria-label="Technology choices"><table><thead><tr><th scope="col">Part</th><th scope="col">Choice and responsibility</th></tr></thead><tbody>
+<tr><td>Core contracts</td><td>Python 3.12 and Pydantic for validated proposals, assessments and lifecycle records.</td></tr>
+<tr><td>Durable state</td><td>SQLite transactions for authorization claims and reservations; a separate simulated effect ledger with idempotency keys.</td></tr>
+<tr><td>Audit</td><td>RFC 8785 canonical JSON, SHA-256 and Ed25519 signatures for linked records and verifiable receipts.</td></tr>
+<tr><td>Developer surface</td><td>Typer SDK/CLI workflows. The optional refund inspector uses FastAPI and Jinja templates.</td></tr>
+<tr><td>Model and telemetry adapters</td><td>Optional Laya/PyTorch; optional OpenTelemetry export through OTLP. Neither is required by the model-free core.</td></tr>
+</tbody></table></div>
+<div class="prose"><p>I kept model output away from execution credentials. Domain packs supplied facts and policy; executors owned the downstream effect boundary. A signed record can prove that recorded content has not changed under a trusted key. It cannot prove that the evidence was true, or protect a machine whose signing key has been compromised. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/framework/architecture.md">Architecture and trust boundaries</a>.</p></div>
+</section>
+
+<section class="section" id="comparator">
+<div class="section-label">04 / The question I asked too late</div><h2><a class="anchor" href="#comparator">Compared with what?</a></h2>
+<blockquote class="build-quote"><p>“Is the same foot just sitting at two different places, or genuinely there is some distinction?”</p><footer>My question during the build conversation.</footer></blockquote>
+<div class="prose">
+<p>I had asked for with-and-without numbers. The important part was deciding what “without” meant. A model classification mapped straight to a refund is an easy opponent. A competent application already checks the ledger, binds approval to an action and handles uncertain execution.</p>
+<p>The synthetic refund comparison therefore had a deliberately minimal model-directed arm and two governed arms. Both governed approaches saw the same evidence and fault schedules. Both used the same simulator, including its own balance and destination protections.</p>
+<p>In the controlled-fixture condition, application controls and Decision Firewall each produced zero contract-violating effects and zero unresolved attempts after recovery. The minimal arm produced 95 violating effects across 170 request trials. That demonstrated why application controls matter. It did not establish a special property of the framework.</p>
+<p>The framework also cost time. On the matched straightforward-success subset, the application's p95 was 26.52 ms and the framework's was 67.89 ms. The paired median added cost was 23.23 ms across 25 paired trials. The full run had 32 frozen scenarios repeated five times; repetition measured runtime variation, not 160 independent business situations. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/benchmarks/post-review-refund/summary.md">Protocol and measured refund results</a>.</p>
+<p>I had also questioned an increasing “p value.” Here the reported p50 and p95 were latency percentiles, not statistical p-values. Higher p95 meant a slower tail in that run. Calling it a percentile did not make the overhead disappear.</p>
+</div>
+</section>
+
+<section class="section" id="public-benchmarks">
+<div class="section-label">05 / More rows, then a different question</div><h2><a class="anchor" href="#public-benchmarks">A classifier cannot demonstrate authorization value</a></h2>
+<div class="prose">
+<p>I asked to run the full available data rather than rely on a convenient sample. Across BANKING77 and Bitext, the comparison accounted for 39,955 source rows. The classifier was CPU naive Bayes, not Laya. Wrapping an unchanged classifier did not change its predictions.</p>
+</div>
+<p class="table-hint">On a narrow screen, scroll the table sideways.</p><div class="data-table" tabindex="0" role="region" aria-label="Classification results"><table><thead><tr><th scope="col">Evaluation</th><th scope="col" class="num">Rows</th><th scope="col">Accuracy in every arm</th></tr></thead><tbody>
+<tr><td>BANKING77 official test</td><td class="num">3,080</td><td>78.60%</td></tr>
+<tr><td>BANKING77 training rows, out-of-fold</td><td class="num">10,003</td><td>78.10%</td></tr>
+<tr><td>Bitext, out-of-fold</td><td class="num">26,872</td><td>98.31%</td></tr>
+</tbody></table></div>
+<div class="prose">
+<p>I kept the official test separate from the out-of-fold scores. Bitext's split was ours, not a publisher leaderboard split. The prepared BANKING77 test path added a paired median 13.527 ms, with no prediction changes. There was no action to authorize in this task. Unless I independently needed validation or signed preparation records, I had added work without helping classification. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/benchmarks/paired-public/summary.md">Full-data report and split limitations</a>.</p>
+<p>I then asked for tool-using tasks. Laya could not fill the conversational agent and simulated-user roles, so a later development pilot used <code>openai/gpt-oss-20b</code> through OpenRouter, with a token cap, seeded requests and bounded rate-limit backoff. It scheduled 90 episodes across selected τ-bench and AgentDojo tasks; 78 completed and 12 remained incomplete. This was not a full-suite score.</p>
+<p>On the attacked AgentDojo subset, the baseline recorded 8 attacker successes in 9 completed episodes; application controls and the framework each recorded 0 in 10. Both controlled arms completed the user task in only 4 of those 10 episodes. Blocking an attack while failing a legitimate request was part of the result. The controls matched again. The model judge and selected attack also limit what I can infer. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/benchmarks/agent-pilot/summary.md">Later agent pilot</a>.</p>
+</div>
+</section>
+
+<section class="section" id="observability">
+<div class="section-label">06 / Where there was supplied functionality</div><h2><a class="anchor" href="#observability">Audit was useful. Telemetry was not a free win.</a></h2>
+<div class="prose">
+<p>I thought observability might be the stronger reason to reuse the framework. An application team would otherwise write lifecycle instrumentation and decide how to connect an execution attempt to the evidence behind it.</p>
+<p>The local reuse study made that concrete. The application had eight explicit event call sites and four operation decorators; the framework integration passed an observer and needed no application event hooks. Framework receipts verified and rejected tampering in 60 of 60 synthetic cases. The application baseline had unsigned logs, so signing was additional bundled functionality, not a capability it was unable to implement.</p>
+<p>The same report showed gaps. In the measured callable-policy path, framework spans lacked the evaluation ID, policy version, disposition and reasons. The manually instrumented application exported the first three; the shared allowlist omitted reasons in both. Neither exported any of the four sensitive canaries. Both completed an effect despite exporter failure, while required local audit failure blocked execution. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/benchmarks/post-review-observability/summary.md">Observability measurements</a>.</p>
+<p>I now separate those contracts. Telemetry helps me find the relevant records and may be dropped under backpressure. The required audit path participates in the authorization contract. A dashboard cannot substitute for a durable answer about whether an action happened.</p>
+<p>That distinction is worth keeping. It still does not establish that a team saves investigation time by adopting this runtime. Telemetry alone is a weak reason to accept the whole dependency when its observer utility can be reused separately.</p>
+</div>
+</section>
+
+<section class="section" id="independent-pilot">
+<div class="section-label">07 / Letting another build challenge it</div><h2><a class="anchor" href="#independent-pilot">The comparison that changed the recommendation</a></h2>
+<div class="prose">
+<p>I had no human participants available, so I commissioned a separate Claude Code agent evaluation. One builder used the framework; another built equivalent application controls against the same purchase-order requirements. Policy maintenance and incident investigation followed.</p>
+<p>This was independent of the framework builder, not independent in the sense of a large external study. There was one task and one builder per arm, using the same model. I wanted an adversarial check on the project, not an agent-generated testimonial.</p>
+</div>
+<p class="table-hint">On a narrow screen, scroll the table sideways.</p><div class="data-table" tabindex="0" role="region" aria-label="Independent comparison"><table><thead><tr><th scope="col">Measured item</th><th scope="col" class="num">Framework</th><th scope="col" class="num">Application</th></tr></thead><tbody>
+<tr><td>Visible acceptance tests</td><td class="num">26/26</td><td class="num">26/26</td></tr>
+<tr><td>Held-out acceptance tests</td><td class="num">114/115</td><td class="num">114/115</td></tr>
+<tr><td>Policy-change tests</td><td class="num">15/15</td><td class="num">15/15</td></tr>
+<tr><td>Investigation score</td><td class="num">48/48</td><td class="num">48/48</td></tr>
+<tr><td>Build tool calls</td><td class="num">45</td><td class="num">34</td></tr>
+<tr><td>Policy-change tool calls</td><td class="num">32</td><td class="num">20</td></tr>
+<tr><td>Library-contract workarounds</td><td class="num">8</td><td class="num">0</td></tr>
+<tr><td>Held-out suite time</td><td class="num">39.6 s</td><td class="num">4.5 s</td></tr>
+</tbody></table></div>
+<div class="prose">
+<p>The application also recorded two test/path workarounds; zero above refers specifically to library-contract workarounds. Both arms failed the same approval-after-outage test. The frozen spec was ambiguous about invalidating the authorization versus invalidating the approval as well. No downstream effect occurred. I kept the scored failure rather than rewriting the result.</p>
+<p>The framework builder requested seven core changes and implemented eight workarounds. Its implementation duplicated many issue-time checks to get specific refusal reasons before calling the framework. At that point reuse was visibly fighting the integration.</p>
+<p>There were important confounds. The 374-line requirements already supplied much of the lifecycle design. Investigators received downstream exports, and neither could run its operator CLI because of a harness import problem. The framework builder hit a spend limit and was resumed. Held-out tests were withheld, not access-controlled; the evaluator's tool-call audit found no builder access. The report records the remaining deviations.</p>
+<p>I cannot turn those agent tool counts into developer hours. I also cannot use the limitations to claim a benefit that was not measured. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/evaluations/2026-09-29/COMPARISON.md">Independent comparison and full caveats</a>.</p>
+</div>
+<blockquote class="build-quote"><p>“Stop feature expansion and adoption/migration claims.”</p><footer>The independent evaluator's <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/evaluations/2026-09-29/COMPARISON.md">recommendation</a>.</footer></blockquote>
+</section>
+
+<section class="section" id="fixes">
+<div class="section-label">08 / What passing tests had missed</div><h2><a class="anchor" href="#fixes">I fixed the defects without rewriting the study</a></h2>
+<div class="prose">
+<p>The review produced 21 findings, with none rated critical or high. Four were confirmed defects. An approval could bind to evidence refreshed after the evaluation the reviewer saw. Deactivating a rejecting reviewer could revive an older approval. An oversized integer in adapter metadata could strand an action that had already happened. And the repository tests failed to detect six of nine injected runtime faults.</p>
+<p>That last result made the green suite less reassuring. Some downstream checks were hiding missing guarantees in the layer I was trying to evaluate.</p>
+<p>The 0.3.1 correction required the inspected evaluation ID when approving and rejected material changes. It preserved the latest rejection for that proposal revision. It encoded large metadata integers losslessly for canonical audit and added tests aimed directly at the core invariants.</p>
+<p>The recorded Windows verification finished with 298 passing tests, including 22 corrective tests, and detected all nine targeted mutations. That is bounded regression evidence. It is not exhaustive fault coverage, and it is not a rerun of the adoption pilot. Old reports remain unchanged. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/verification/0.3.1/README.md">Corrective release and migration boundary</a>.</p>
+</div>
+</section>
+
+<section class="section" id="overengineering">
+<div class="section-label">09 / Where I would spend less</div><h2><a class="anchor" href="#overengineering">A useful control can still be an expensive abstraction</a></h2>
+<div class="prose">
+<p>The global SQLite write lock remains. It spans adapter I/O and explains the roughly ninefold held-out-suite time in the pilot. That ratio describes that suite, not every request or deployment. Releasing the lock safely would require a different concurrency and recovery design; it is not a cosmetic performance patch.</p>
+<p>I did not need another architecture project to avoid saying that this implementation was slow. I needed to document its operating limit and narrow the recommendation.</p>
+<p>I also overreached in the sequence of work. History ingestion and model-context budgets can each be useful, but I built that surrounding workflow before establishing whether an unfamiliar integrator benefited from the central runtime. Classification benchmarks answered a question the framework was not designed to win. A refund-specific browser added a second lifecycle surface to maintain.</p>
+<p>Some controls remain necessary: exact action binding, unresolved-outcome recovery and authoritative downstream idempotency. The packaging around them has to earn its place. Moving application checks into a reusable dependency does not make those checks more correct merely because the dependency has a name.</p>
+<p>The review also found genuine limits to generality: an assessment/message-shaped submission contract, one caller identity per runtime instance and a fixed approval lifetime. A domain-neutral core can still impose awkward assumptions on another domain.</p>
+</div>
+</section>
+
+<section class="section" id="what-remains">
+<div class="section-label">10 / What I kept</div><h2><a class="anchor" href="#what-remains">A reference implementation is a legitimate outcome</a></h2>
+<div class="prose">
+<p>The core claims did not all collapse. The independent review verified action/evidence binding and recovery without replacement dispatch. A capacity-one resource admitted exactly one dispatch across eight operating-system processes. Historical replay called neither the evidence resolver nor the executor.</p>
+<p>I kept that implementation and the conformance kit. They give a builder concrete failure cases to inspect, including stale evidence and a lost response after success. I am comfortable offering those artifacts for study. I am not recommending that an application with equivalent controls migrate to obtain an unmeasured advantage.</p>
+<p>The kit also makes the distinction testable outside the model. This is the model-free entry point in the repository; use Python 3.12 or newer and activate the virtual environment for the local shell before installing:</p>
+</div>
+<div class="code-block"><div class="cb-label">Local, simulated effects only</div><pre tabindex="0" aria-label="Local setup commands">git clone https://github.com/asadani/decision-firewall.git
+cd decision-firewall
+python -m venv .venv
+<span class="tok-cmt"># Activate .venv for your shell, then:</span>
+python -m pip install .
+firewall framework --domain refunds demo
+firewall conformance decision_firewall.conformance_fixtures:deployments --save conformance.json</pre></div>
+<div class="prose"><p>The deployment fixture covers 17 declared checks. Unsupported cases are reported separately; a pass is not production certification. Authentication, credential isolation and the authoritative effect boundary still belong to the integrating deployment. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/framework/release-tools.md">Conformance contract</a>.</p></div>
+</section>
+
+<section class="section" id="next-build">
+<div class="section-label">11 / What I would change next time</div><h2><a class="anchor" href="#next-build">Write the comparison before the expansion</a></h2>
+<div class="prose">
+<p>My useful contribution was steering the work toward a harder question. I asked whether the baseline was competent, whether all rows were counted, whether a blocked call also blocked a legitimate task, and whether supplied telemetry actually exported the fields I needed. I should have asked the first question before authorizing the wider framework plan.</p>
+<p>On the next build, I would implement one consequential workflow and its modular application comparator before adding the developer platform around it. I would decide what would count as a reason to adopt: fewer integration defects, less maintenance effort, or faster incident reconstruction. Then I would choose a study that can measure that reason.</p>
+<p>A future test could use several integrations, less prescriptive requirements and incidents without an answer-bearing downstream export. Human participants would be needed for human-productivity claims. That is a possible follow-up, not an explanation for dismissing the result I have.</p>
+<p>I started by trying to make model-driven actions accountable. I ended by having to make the framework's own claims accountable. Keeping the code was easy. Narrowing what I said about it was the more useful engineering decision.</p>
+</div>
+</section>
+
+<aside class="callout source-note"><div class="callout-lbl">Evidence and version boundary</div><p>This article describes the build conversation and the repository evidence available on September 30, 2026. Links to reports and code are pinned to commit <code>a9b9a52</code>. The independent pilot evaluated an earlier snapshot; 0.3.1 fixes do not retroactively improve its results. The <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/EVIDENCE.md">evidence index</a> distinguishes historical runs, corrective checks and untested claims. Financial and deployment effects were simulated throughout. The quotes above come from my build conversation and the evaluator's report, not reconstructed interviews.</p></aside>
+
+</main><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <span>tech.anujsadani.in · September 2026</span><!-- e.g. site name or published date -->
+  <div class="footer-refs">
+    <a href="/">← back to index</a>
+  </div>
+</footer>
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
+
+</body>
+</html>

@@ -1,5 +1,23 @@
 [
   {
+    "slug": "decision-firewall-building-and-narrowing",
+    "title": "Building Decision Firewall, then narrowing it",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "agentic-coding",
+      "evals",
+      "craft"
+    ],
+    "quote": "\"Keeping the code was easy. Narrowing what I said about it was the more useful engineering decision.\"",
+    "desc": "How I built a decision-governance framework, tested it against competent application controls, and narrowed it to a reference implementation after the results challenged the adoption case.",
+    "date": "2026-09-30",
+    "dateDisplay": "September 30, 2026",
+    "cta": "Read",
+    "shareUrl": "https://tech.anujsadani.in/decision-firewall-building-and-narrowing/"
+  },
+  {
     "slug": "when-software-hires-software",
     "title": "When Software Hires Software: The Executive Playbook for the Agent-to-Agent Economy",
     "tags": [
