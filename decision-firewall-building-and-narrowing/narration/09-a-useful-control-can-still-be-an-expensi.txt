@@ -1,11 +1,9 @@
 A useful control can still be an expensive abstraction.
 
-The global S Q Lite write lock remains. It spans adapter I/O and explains the roughly ninefold held-out-suite time in the pilot. That ratio describes that suite, not every request or deployment. Releasing the lock safely would require a different concurrency and recovery design; it is not a cosmetic performance patch.
+The global S Q Lite write lock still spans adapter I/O. It explains the roughly ninefold suite-time difference in the pilot, not a universal per-request slowdown. Fixing it safely would require a different concurrency and recovery design.
 
-I did not need another architecture project to avoid saying that this implementation was slow. I needed to document its operating limit and narrow the recommendation.
+I chose to document the limit rather than start another architecture project to rescue the adoption argument. History ingestion and model-context budgets could wait too. I had built those surrounding features before proving the central abstraction helped an unfamiliar integrator.
 
-I also overreached in the sequence of work. History ingestion and model-context budgets can each be useful, but I built that surrounding workflow before establishing whether an unfamiliar integrator benefited from the central runtime. Classification benchmarks answered a question the framework was not designed to win. A refund-specific browser added a second lifecycle surface to maintain.
+The review exposed assumptions inside the supposedly generic interface: a message-shaped submission contract, one caller identity per runtime instance and a fixed approval lifetime. Moving code into a shared package had moved those assumptions into someone else’s application.
 
-Some controls remain necessary: exact action binding, unresolved-outcome recovery and authoritative downstream idempotency. The packaging around them has to earn its place. Moving application checks into a reusable dependency does not make those checks more correct merely because the dependency has a name.
-
-The review also found genuine limits to generality: an assessment/message-shaped submission contract, one caller identity per runtime instance and a fixed approval lifetime. A domain-neutral core can still impose awkward assumptions on another domain.
+That is the distinction I now look for. The refund needs recovery after a lost response. Whether recovery belongs in this dependency is a separate engineering decision.

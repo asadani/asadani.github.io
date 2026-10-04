@@ -1,50 +1,50 @@
 {
  "00-introduction": {
-  "k": "ee857ff30bb41c80",
-  "d": 81.1
+  "k": "8b5c2cee28ffe291",
+  "d": 95.8
  },
  "01-a-refund-is-small-enough-to-explain": {
-  "k": "047793dbba5115a3",
-  "d": 87.8
+  "k": "a621c355730f02de",
+  "d": 139.5
  },
  "02-every-next-layer-sounded-reasonable": {
-  "k": "df32d13064012bbf",
-  "d": 91.4
+  "k": "8152a2c98323be68",
+  "d": 64.4
  },
  "03-the-laptop-put-useful-limits-on-the-desi": {
-  "k": "fb9de22867d5e56f",
-  "d": 118.2
+  "k": "b77eab592ba775b6",
+  "d": 93.2
  },
  "04-compared-with-what": {
-  "k": "5a4afcd838a34de3",
-  "d": 123.3
+  "k": "9d73a78cd943f70a",
+  "d": 104.7
  },
  "05-a-classifier-cannot-demonstrate-authoriz": {
-  "k": "332a1b9ff9146ed0",
-  "d": 139.2
+  "k": "ee86ee9cd1eceb7f",
+  "d": 89.0
  },
  "06-audit-was-useful-telemetry-was-not-a-fre": {
-  "k": "1491eb5e4de7eb94",
-  "d": 110.7
+  "k": "d91dbc8647034601",
+  "d": 79.4
  },
  "07-the-comparison-that-changed-the-recommen": {
-  "k": "5c196bd42ceb2571",
-  "d": 170.7
+  "k": "e040c4b5be64081b",
+  "d": 133.3
  },
  "08-i-fixed-the-defects-without-rewriting-th": {
-  "k": "a1f45888f9e11554",
-  "d": 84.3
+  "k": "9108a2f1c243ac42",
+  "d": 72.2
  },
  "09-a-useful-control-can-still-be-an-expensi": {
-  "k": "71b5dec01ed0d3b2",
-  "d": 99.9
+  "k": "b3d9291d764c3484",
+  "d": 69.8
  },
  "10-a-reference-implementation-is-a-legitima": {
-  "k": "b83e2d1b7b06be51",
-  "d": 78.1
+  "k": "3585bc8c8506c866",
+  "d": 91.3
  },
  "11-write-the-comparison-before-the-expansio": {
-  "k": "b373a8860f0e1a70",
-  "d": 97.5
+  "k": "93264a80df7912aa",
+  "d": 82.9
  }
 }

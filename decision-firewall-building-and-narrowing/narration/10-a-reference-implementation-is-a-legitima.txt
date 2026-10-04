@@ -1,9 +1,11 @@
 A reference implementation is a legitimate outcome.
 
-The core claims did not all collapse. The independent review verified action/evidence binding and recovery without replacement dispatch. A capacity-one resource admitted exactly one dispatch across eight operating-system processes. Historical replay called neither the evidence resolver nor the executor.
+I kept Decision Firewall as an open-source reference implementation and conformance kit. The review verified action/evidence binding and recovery without replacement dispatch. A capacity-one resource admitted exactly one dispatch across eight operating-system processes. Historical replay called neither the evidence resolver nor the executor.
 
-I kept that implementation and the conformance kit. They give a builder concrete failure cases to inspect, including stale evidence and a lost response after success. I am comfortable offering those artifacts for study. I am not recommending that an application with equivalent controls migrate to obtain an unmeasured advantage.
+Those are useful behaviours to inspect in runnable code. The repository includes the reports and failure cases, so a builder can study the contract without accepting an adoption recommendation.
 
-The kit also makes the distinction testable outside the model. The written article includes the model-free setup commands and the conformance invocation. Python three point twelve or newer is required.
+Start with the model-free path using Python three point twelve, the tested runtime. The installation commands are in the written article.
 
-The deployment fixture covers seventeen declared checks. Unsupported cases are reported separately; a pass is not production certification. Authentication, credential isolation and the authoritative effect boundary still belong to the integrating deployment.
+After running it, inspect which exact action the authorization binds and how the execution attempt connects to its receipt. Then read the seventeen declared deployment conformance checks: which cases pass, which are unsupported, and what the adapter must guarantee.
+
+For an application of my own, I would turn the lost-response example into a test: restart after downstream success, reconcile the original key, then assert one effect and no remaining reservation once success is resolved. Passing a happy-path refund would not answer that question. Production identity and protection against bypassing the controls still need deployment integration.

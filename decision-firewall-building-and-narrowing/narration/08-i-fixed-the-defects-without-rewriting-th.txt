@@ -1,9 +1,9 @@
 I fixed the defects without rewriting the study.
 
-The review produced twenty one findings, with none rated critical or high. Four were confirmed defects. An approval could bind to evidence refreshed after the evaluation the reviewer saw. Deactivating a rejecting reviewer could revive an older approval. An oversized integer in adapter metadata could strand an action that had already happened. And the repository tests failed to detect six of nine injected runtime faults.
+The review found four confirmed defects among twenty one findings. Approval could execute against evidence the reviewer had not seen. Deactivating a rejecting reviewer could revive an older approval. Oversized integer metadata could strand an already-executed action. The repository tests missed six of nine injected runtime faults.
 
-That last result made the green suite less reassuring. Some downstream checks were hiding missing guarantees in the layer I was trying to evaluate.
+The mutation result mattered: downstream protections had hidden missing guarantees in the layer I meant to test. A green end-to-end suite was insufficient evidence that each boundary enforced its contract.
 
-The zero point three point one correction required the inspected evaluation ID when approving and rejected material changes. It preserved the latest rejection for that proposal revision. It encoded large metadata integers losslessly for canonical audit and added tests aimed directly at the core invariants.
+The zero point three point one fixes bound review to the inspected evaluation, preserved rejection and handled large integers losslessly. Direct invariant tests detected all nine targeted mutations; recorded Windows verification had two hundred and ninety eight passing tests, including twenty two corrective tests. Corrective release.
 
-The recorded Windows verification finished with two hundred and ninety eight passing tests, including twenty two corrective tests, and detected all nine targeted mutations. That is bounded regression evidence. It is not exhaustive fault coverage, and it is not a rerun of the adoption pilot. Old reports remain unchanged.
+I fixed the defects and kept the earlier comparison unchanged. Repairing correctness did not retroactively demonstrate easier integration.

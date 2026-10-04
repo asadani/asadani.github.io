@@ -1,11 +1,11 @@
 Write the comparison before the expansion.
 
-My useful contribution was steering the work toward a harder question. I asked whether the baseline was competent, whether all rows were counted, whether a blocked call also blocked a legitimate task, and whether supplied telemetry actually exported the fields I needed. I should have asked the first question before authorizing the wider framework plan.
+Next time I would build one consequential workflow and a competent application comparator before adding the developer platform. I would write down the proposed benefit first, then choose a measurement capable of finding it.
 
-On the next build, I would implement one consequential workflow and its modular application comparator before adding the developer platform around it. I would decide what would count as a reason to adopt: fewer integration defects, less maintenance effort, or faster incident reconstruction. Then I would choose a study that can measure that reason.
+If the claim is easier integration, classification accuracy cannot establish it. If the claim is faster investigation, giving both investigators an answer-bearing export makes a weak test. Several integrations and human participants would be needed to investigate human-productivity benefits.
 
-A future test could use several integrations, less prescriptive requirements and incidents without an answer-bearing downstream export. Human participants would be needed for human-productivity claims. That is a possible follow-up, not an explanation for dismissing the result I have.
+My useful contribution was pressing those questions, although I asked them late. I started by separating a model’s assessment from permission to act. I ended by separating a useful control from an unproven reason to adopt a framework.
 
-I started by trying to make model-driven actions accountable. I ended by having to make the framework's own claims accountable. Keeping the code was easy. Narrowing what I said about it was the more useful engineering decision.
+The refund still needs to survive a lost response. The library around that behaviour has to earn its place.
 
-These are the results reported in the article published on September thirtieth, twenty twenty six. The independent pilot evaluated an earlier snapshot. The zero point three point one fixes do not retroactively improve those results. Financial and deployment effects were simulated throughout.
+This narration follows the article revised on October fourth, twenty twenty six. The measured results remain those reported on September thirtieth. The independent pilot evaluated an earlier snapshot. The zero point three point one fixes do not retroactively improve those results. Financial and deployment effects were simulated throughout.

@@ -1,11 +1,9 @@
 Audit was useful. Telemetry was not a free win.
 
-I thought observability might be the stronger reason to reuse the framework. An application team would otherwise write lifecycle instrumentation and decide how to connect an execution attempt to the evidence behind it.
+I thought audit and observability might justify reuse even when decisions matched. The application baseline needed eight explicit event call sites and four operation decorators. The framework integration supplied an observer with no application event hooks.
 
-The local reuse study made that concrete. The application had eight explicit event call sites and four operation decorators; the framework integration passed an observer and needed no application event hooks. Framework receipts verified and rejected tampering in sixty of sixty synthetic cases. The application baseline had unsigned logs, so signing was additional bundled functionality, not a capability it was unable to implement.
+That was supplied functionality. It also had gaps: the measured framework spans omitted the evaluation ID, policy version, disposition and reasons. The manually instrumented application exported the first three. Neither exported the sensitive canaries. Exporter failure allowed execution to continue; required local audit failure blocked it. Measured observability report.
 
-The same report showed gaps. In the measured callable-policy path, framework spans lacked the evaluation ID, policy version, disposition and reasons. The manually instrumented application exported the first three; the shared allowlist omitted reasons in both. Neither exported any of the four sensitive canaries. Both completed an effect despite exporter failure, while required local audit failure blocked execution.
+For the lost-response refund, telemetry helps locate the attempt. The durable record and downstream ledger establish what happened. I can tolerate a missing diagnostic span; I cannot safely forget the unresolved refund and release its reservation.
 
-I now separate those contracts. Telemetry helps me find the relevant records and may be dropped under backpressure. The required audit path participates in the authorization contract. A dashboard cannot substitute for a durable answer about whether an action happened.
-
-That distinction is worth keeping. It still does not establish that a team saves investigation time by adopting this runtime. Telemetry alone is a weak reason to accept the whole dependency when its observer utility can be reused separately.
+Signed receipts add a check that recorded content has not changed under a trusted key. They do not prove that the original evidence was true. I kept that distinction, while recognising that telemetry alone did not justify adopting the whole runtime.

@@ -114,11 +114,11 @@ function personNode() {
 
 /* ── sitemap.xml ──────────────────────────────────────────────────────── */
 function sitemap() {
-  const newest = articles[0] && articles[0].date;
+  const newest = articles.map(a => a.modified || a.date || '').sort().pop();
   const entries = [
     { loc: SITE + '/', lastmod: newest, changefreq: 'weekly', priority: '1.0' },
     ...articles.map((a) => ({
-      loc: urlOf(a), lastmod: a.date, changefreq: 'yearly', priority: '0.8',
+      loc: urlOf(a), lastmod: a.modified || a.date, changefreq: 'yearly', priority: '0.8',
     })),
     // Condensed editions have their own canonical URLs and can be useful
     // entry points for readers who do not yet want the full book.

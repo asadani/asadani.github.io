@@ -1,17 +1,15 @@
 The comparison that changed the recommendation.
 
-I had no human participants available, so I commissioned a separate Claude Code agent evaluation. One builder used the framework; another built equivalent application controls against the same purchase-order requirements. Policy maintenance and incident investigation followed.
+I had no human participants, so I commissioned a separate Claude Code agent evaluation. One builder used the framework; another implemented equivalent application controls for the same purchase-order requirements. Both then handled a policy change and an investigation.
 
-This was independent of the framework builder, not independent in the sense of a large external study. There was one task and one builder per arm, using the same model. I wanted an adversarial check on the project, not an agent-generated testimonial.
+This was one paired pilot, independent of the framework builder, using the same model for both arms. It gave me a concrete integration comparison:
 
 Both implementations passed twenty six out of twenty six visible acceptance tests, and one hundred and fourteen out of one hundred and fifteen held-out tests. Both passed fifteen out of fifteen policy-change tests and scored forty eight out of forty eight on investigation. The framework builder used forty five tool calls, versus thirty four for the application builder. The policy change took thirty two tool calls in the framework arm and twenty in the application arm. The framework had eight library-contract workarounds; the application had none. The held-out suite took thirty nine point six seconds with the framework and four point five seconds with the application.
 
-The application also recorded two test and path workarounds; zero in that comparison refers specifically to library-contract workarounds. Both arms failed the same approval-after-outage test. The frozen spec was ambiguous about invalidating the authorization versus invalidating the approval as well. No downstream effect occurred. I kept the scored failure rather than rewriting the result.
+The framework required eight library-contract workarounds and seven core-change requests. The builder duplicated checks to obtain specific refusal reasons before calling it. Reuse was fighting the integration.
 
-The framework builder requested seven core changes and implemented eight workarounds. Its implementation duplicated many issue-time checks to get specific refusal reasons before calling the framework. At that point reuse was visibly fighting the integration.
+Both failed the same held-out approval-after-outage case because the spec was ambiguous; no downstream effect occurred. The baseline’s zero workarounds refers to library contracts, not its two test and path adjustments.
 
-There were important confounds. The three hundred and seventy four-line requirements already supplied much of the lifecycle design. Investigators received downstream exports, and neither could run its operator CLI because of a harness import problem. The framework builder hit a spend limit and was resumed. Held-out tests were withheld, not access-controlled; the evaluator's tool-call audit found no builder access. The report records the remaining deviations.
-
-I cannot turn those agent tool counts into developer hours. I also cannot use the limitations to claim a benefit that was not measured.
+The three hundred and seventy four-line spec supplied much of the lifecycle design. Investigators had downstream exports and a harness problem prevented operator-CLI use. A spend-limit interruption also affected the framework build. Tool calls are not developer hours, and these conditions limit generalisation. Full comparison and deviations.
 
 The independent evaluator recommended: “Stop feature expansion and adoption and migration claims.”

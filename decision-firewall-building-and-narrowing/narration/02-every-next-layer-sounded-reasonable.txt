@@ -1,11 +1,9 @@
 Every next layer sounded reasonable.
 
-I did not want to stop at a refund application. I asked for a framework that other developers could use with their own decision models and business rules. Refunds became a domain pack; access control and a simulated deployment example tested the boundary around the core.
+I wanted developers to bring their own decision models and business rules. Refunds became a domain pack, with access control and simulated deployment examples testing whether the core travelled beyond payments.
 
-Then I asked what happened before and after the decision. How would someone import previous decisions? Where would reviewed labels live? Could they compare policies without executing anything? Could telemetry explain what happened? I had LangChain's abstraction style and Langfuse's observability experience in mind, without a reason to reproduce either product.
+Each next request sounded reasonable. Import old decisions. Keep reviewed labels separate from historical approvals. Compare policies offline. Retrieve examples without leaking evaluation data. I had LangChain’s abstractions and Langfuse’s observability experience in mind.
 
-The plan acquired C S V and JSON lines history ingestion, immutable dataset snapshots, optional historical retrieval, named Python rules and offline experiments. Those features had sensible constraints: a historical approval must never become a live authorization; held-out examples must not leak into model context; a policy experiment must never invoke an executor.
+The plan grew into history ingestion, dataset snapshots and named Python rules, with optional context retrieval and telemetry. Preparation before inference could request missing evidence before spending a model call. All of it had a plausible use.
 
-I later added preparation before inference. It could validate structured intent and request missing evidence before spending a model call. It still needed final authorization against fresh facts. The extra stage was a capability to test, not an automatic improvement.
-
-The mistake was treating a coherent feature list as enough evidence for the package around it.
+I had not yet established that another developer benefited from adopting the runtime underneath it. A coherent feature list had become my substitute for that evidence.

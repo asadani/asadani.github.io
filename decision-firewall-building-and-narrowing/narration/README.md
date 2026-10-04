@@ -1,12 +1,12 @@
 # Audio edition
 
-Generated locally on October 4, 2026 with [narrate-your-writing](https://github.com/asadani/narrate-your-writing), Kokoro ONNX, the `bm_george+bm_fable` blend, British English and speed `0.9`.
+Regenerated for the October 4, 2026 article revision, locally on October 4, 2026 with [narrate-your-writing](https://github.com/asadani/narrate-your-writing), Kokoro ONNX, the `bm_george+bm_fable` blend, British English and speed `0.9`.
 
-These twelve scripts are an adaptation for listening, not a verbatim HTML extraction. They retain the opening argument, both attributed quotes and the numerical comparisons from all three tables. Navigation, visual mind-map labels, raw code, checkpoint hashes and source-link labels are omitted. Numbers are written as spoken words. The written article remains the source for executable commands and linked evidence. The spoken introduction and visible player identify the voice as synthetic.
+These twelve scripts are an adaptation for listening, not a verbatim HTML extraction. They retain the opening argument, both attributed quotes and the numerical comparisons from the remaining pilot table, plus the worked refund-recovery example. Navigation, visual mind-map labels, raw code, checkpoint hashes and source-link labels are omitted. Numbers are written as spoken words. The written article remains the source for executable commands and linked evidence. The spoken introduction and visible player identify the voice as synthetic.
 
 The verified render used `CUDAExecutionProvider` on an NVIDIA GTX 1650 with 4 GB VRAM, ONNX Runtime GPU 1.22.0 and cuDNN 9.10.2.21. Inference-time CPU retry was disabled. An initial attempt with cuDNN 9.27 failed during convolution and attempted CPU fallback; it was stopped and all tracks were regenerated with `--force`. Those initial results are not published.
 
-[The render manifest](../audio/render.json) records package versions, model/voice hashes, per-track script/audio hashes and measured durations. It identifies the article's text commit separately from this audio addition. These are narration provenance records, not framework benchmark results.
+[The render manifest](../audio/render.json) records package versions, model/voice hashes, per-track script/audio hashes and measured durations. It records a SHA-256 hash of the revised article content (with its scope declared) and the parent Git commit, separately from the audio addition. These are narration provenance records, not framework benchmark results.
 
 To rerender from a checkout of `narrate-your-writing`, using its GPU environment:
 

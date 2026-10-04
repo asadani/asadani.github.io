@@ -1,13 +1,15 @@
 Introduction.
 
-Building Decision Firewall, then narrowing it.
+Decision Firewall: what building an AI governance framework taught me.
 
 This is a synthetic narration generated locally with Kokoro. Tables are adapted into spoken comparisons; code listings and source links are available in the written article.
 
-I started Decision Firewall with a refund request. A model could read the customer's message, but I did not want its interpretation to become permission to move money. I wanted the payment record to establish the facts, and explicit policy to decide what could happen.
+A refund can succeed while the application thinks it failed. The payment service moves the money, its response disappears, and the next retry becomes the dangerous part.
 
-That was a useful problem. The project that grew around it was harder to justify.
+That was the kind of problem I wanted Decision Firewall to handle. I started with a model interpreting a customer request and a separate control layer deciding whether an exact action could execute. Then I expanded it into a framework.
 
-By the time I asked for an independent comparison, I had a reusable runtime, historical-data workflows and an evaluation layer. The comparison found equal correctness against competent application controls, more integration friction, and a slower implementation. I kept the reference implementation and stopped the adoption claims.
+The controls worked in the tested cases. The case for the framework was weaker. A separate paired agent pilot found equal correctness against competent application controls, more integration friction and a slower implementation. I kept the code and narrowed its purpose.
 
-This is how I got there, including the parts I would now do in a different order. I directed the work through coding agents, questioned the measurements and commissioned a separate agent evaluation. I did not personally hand-write every implementation, and the evaluation did not measure human productivity.
+I’ve open-sourced Decision Firewall, including the reference implementation, conformance checks and evaluation reports. Its new code is Apache two point zero licensed. The simulated workflows run without a model.
+
+This is the build story I wish I had read before expanding the scope. I directed the implementation through coding agents; my work was choosing the boundaries and challenging the evidence. The comparison measured agent builds, not human productivity.

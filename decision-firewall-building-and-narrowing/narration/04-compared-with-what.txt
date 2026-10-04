@@ -2,12 +2,12 @@ Compared with what.
 
 During the build, I asked: “Is the same foot just sitting at two different places, or genuinely there is some distinction?”
 
-I had asked for with-and-without numbers. The important part was deciding what “without” meant. A model classification mapped straight to a refund is an easy opponent. A competent application already checks the ledger, binds approval to an action and handles uncertain execution.
+I asked for numbers with and without the framework. The hard part was choosing “without.” A model directly triggering refunds is an easy opponent. A competent application already validates the ledger and handles uncertain execution.
 
-The synthetic refund comparison therefore had a deliberately minimal model-directed arm and two governed arms. Both governed approaches saw the same evidence and fault schedules. Both used the same simulator, including its own balance and destination protections.
+The synthetic comparison used a deliberately minimal model-directed arm and two governed arms, sharing evidence, fault schedules and a simulator with its own protections. With fixture assessments, both application controls and Decision Firewall produced zero contract-violating effects and zero unresolved attempts after recovery. The minimal arm produced ninety five violating effects across one hundred and seventy request trials.
 
-In the controlled-fixture condition, application controls and Decision Firewall each produced zero contract-violating effects and zero unresolved attempts after recovery. The minimal arm produced ninety five violating effects across one hundred and seventy request trials. That demonstrated why application controls matter. It did not establish a special property of the framework.
+That established the value of controls. It did not distinguish the two ways of implementing them.
 
-The framework also cost time. On the matched straightforward-success subset, the application's ninety fifth percentile latency was twenty six point five two milliseconds and the framework's was sixty seven point eight nine milliseconds. The paired median added cost was twenty three point two three milliseconds across twenty five paired trials. The full run had thirty two frozen scenarios repeated five times; repetition measured runtime variation, not one hundred and sixty independent business situations.
+On the matched straightforward-success subset, application ninety fifth percentile latency latency was twenty six point five two milliseconds versus sixty seven point eight nine milliseconds for the framework. The paired median added cost was twenty three point two three milliseconds across twenty five pairs. The full run repeated thirty two frozen scenarios five times; those repetitions measured runtime variation, not independent business situations. Refund comparison.
 
-I had also questioned an increasing “p value.” Here the reported median latency and ninety fifth percentile latency were latency percentiles, not statistical p-values. Higher ninety fifth percentile latency meant a slower tail in that run. Calling it a percentile did not make the overhead disappear.
+My next question should have been about integration effort: if both enforce the same contract, does the package make that contract easier to implement and maintain?

@@ -1,11 +1,19 @@
 A refund is small enough to explain.
 
-I picked subscription refunds because an incorrect action has a visible consequence. A duplicate-charge claim needs transaction evidence. A cancellation may depend on when it happened and whether the service was used. A previous partial refund changes the remaining balance.
+I picked subscription refunds because the facts are inspectable. A duplicate-charge claim needs two payment records. Cancellation eligibility depends on timing and usage. A prior refund reduces the amount still available.
 
-The demonstration policy made those distinctions concrete. Verified duplicate charges could be refunded against the duplicate payment. Cancellation qualified within seven days only if the subscription was unused. Eligible refunds up to one thousand rupees could proceed automatically; larger ones needed review. A configurable ten thousand rupees daily automated limit routed excess demand to review. These were example rules, not statements of legal entitlement. Every payment effect was simulated.
+The example policy allowed verified duplicates and unused subscriptions cancelled within seven days. Eligible amounts up to one thousand rupees could proceed automatically; larger amounts needed review. A ten thousand rupees daily automated limit sent excess demand to review. These were demonstration rules, with simulated payments.
 
-I also kept customer value and retention pressure out of eligibility. A convincing message about a valuable customer must not manufacture a duplicate payment. That separation mattered more than the model's confidence score.
+Here is an illustrative eight hundred rupees duplicate refund, using the recovery contract I built. The amount is an example, not an additional benchmark result.
 
-An assessment is an interpretation. The message sounds like a duplicate-charge complaint.
+Interpret the request. The model classifies “I was charged twice” as a duplicate-charge claim. That supplies no proof that a second payment exists.
 
-An authorization is permission for an exact action. Refund this amount against this payment, using these facts and this policy, before this permission expires.
+Authorize the exact action. The ledger verifies the duplicate and eight hundred rupees remaining. Policy checks eligibility and budget. Permission binds the duplicate payment, amount and original destination to the evidence and policy versions.
+
+Dispatch, then lose the response. The runtime reserves the balance and claims the authorization. The simulator records a successful refund under its idempotency key, but the caller receives no definitive outcome.
+
+Recover without a second refund. The attempt stays unresolved and retains its reservation. Reconciliation asks the payment adapter about the same key, discovers success and records the outcome. It does not create a new key and try again.
+
+A timeout tells me the response is missing. It does not tell me the refund failed. That distinction survives a process restart only if the key and execution state are durable. The customer’s refund request also needs a status separate from a failed or malformed execution attempt.
+
+This is useful application engineering. A framework can package it; it does not own the idea. Executor contract.

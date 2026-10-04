@@ -3,37 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Building Decision Firewall, then narrowing it: A build story about controls, evidence and scope</title>
-<meta name="description" content="How I built a decision-governance framework, tested it against competent application controls, and narrowed it to a reference implementation after the results challenged the adoption case.">
+<title>Decision Firewall: what building an AI governance framework taught me</title>
+<meta name="description" content="A refund-recovery example, measured comparisons and lessons from building Decision Firewall, an open-source reference for AI action authorization and audit.">
 <meta name="author" content="Anuj Sadani">
 <link rel="canonical" href="https://tech.anujsadani.in/decision-firewall-building-and-narrowing/">
 
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://tech.anujsadani.in/decision-firewall-building-and-narrowing/">
 <meta property="og:site_name" content="Anuj Sadani | Tech">
-<meta property="og:title" content="Building Decision Firewall, then narrowing it">
-<meta property="og:description" content="How I built a decision-governance framework, tested it against competent application controls, and narrowed it to a reference implementation after the results challenged the adoption case.">
+<meta property="og:title" content="Decision Firewall: what building an AI governance framework taught me">
+<meta property="og:description" content="A refund-recovery example, measured comparisons and lessons from building Decision Firewall, an open-source reference for AI action authorization and audit.">
 <meta property="og:image" content="https://tech.anujsadani.in/assets/profile-pic.png">
 <meta property="article:published_time" content="2026-09-30">
 <meta property="article:author" content="Anuj Sadani">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Decision Firewall: what building an AI governance framework taught me">
+<meta name="twitter:description" content="A refund-recovery example, measured comparisons and lessons from building Decision Firewall, an open-source reference for AI action authorization and audit.">
+<meta property="article:modified_time" content="2026-10-04">
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "Building Decision Firewall, then narrowing it",
-  "description": "How I built a decision-governance framework, tested it against competent application controls, and narrowed it to a reference implementation after the results challenged the adoption case.",
+  "headline": "Decision Firewall: what building an AI governance framework taught me",
+  "description": "A refund-recovery example, measured comparisons and lessons from building Decision Firewall, an open-source reference for AI action authorization and audit.",
   "datePublished": "2026-09-30",
   "url": "https://tech.anujsadani.in/decision-firewall-building-and-narrowing/",
   "mainEntityOfPage": "https://tech.anujsadani.in/decision-firewall-building-and-narrowing/",
   "inLanguage": "en",
-  "isPartOf": { "@id": "https://tech.anujsadani.in/#blog" },
+  "isPartOf": {
+    "@id": "https://tech.anujsadani.in/#blog"
+  },
   "author": {
     "@type": "Person",
     "@id": "https://anujsadani.in/#person",
     "name": "Anuj Sadani",
     "url": "https://anujsadani.in/"
+  },
+  "dateModified": "2026-10-04",
+  "image": "https://tech.anujsadani.in/assets/profile-pic.png",
+  "about": {
+    "@type": "SoftwareSourceCode",
+    "name": "Decision Firewall",
+    "codeRepository": "https://github.com/asadani/decision-firewall",
+    "license": "https://www.apache.org/licenses/LICENSE-2.0"
   }
 }
 </script>
@@ -698,41 +711,43 @@ a:focus-visible, button:focus-visible, .map-scroll:focus-visible, .data-table:fo
   <!-- HERO -->
   <header class="hero">
     <div class="hero-eyebrow">Decision governance / A project retrospective</div><!-- e.g. "Linux Kernel Policy — Official" -->
-    <h1>Building Decision Firewall, then narrowing it</h1>
-    <p class="hero-deck">A refund workflow grew into a framework. Testing it against a competent application changed the scope I kept and the claims I was willing to make.</p><!-- 1–2 sentence summary, 18px muted -->
+    <h1>Decision Firewall: what building an AI governance framework taught me</h1>
+    <p class="hero-deck">I built controls for model-driven actions, then tested whether packaging them as a framework helped. A lost-response refund explains what was worth keeping.</p><!-- 1–2 sentence summary, 18px muted -->
     <div class="hero-meta">
-      <span>September 30, 2026</span><!-- e.g. April 2026 -->
+      <span>September 30, 2026 · Updated October 4, 2026</span><!-- e.g. April 2026 -->
       <span class="hero-meta-sep">/</span>
-      <span>Anuj Sadani · 13 min read</span><!-- e.g. source doc name or category -->
+      <span>Anuj Sadani · 10 min read</span><!-- e.g. source doc name or category -->
     </div>
   </header>
 
 <div class="banner"><span class="banner-badge">BUILD NOTES</span><p>I built the controls before I properly tested the reason to package them as a framework. The comparison changed what I was willing to claim.</p></div>
+
+
 
 <!-- ARTICLE-AUDIO:BEGIN -->
 <link rel="stylesheet" href="/assets/player.css">
 <div class="ap" id="articleaudio">
   <div class="ap-hd">
     <span class="ap-ico" aria-hidden="true">&#9654;</span>
-    <div><span class="ap-kick">Audio edition</span><b>Listen to this article</b><span class="ap-sub">12 parts &middot; 21 min &middot; Kokoro synthetic voice</span></div>
+    <div><span class="ap-kick">Audio edition</span><b>Listen to this article</b><span class="ap-sub">12 parts &middot; 19 min &middot; Kokoro synthetic voice</span></div>
     <button class="ap-rate" type="button" aria-label="Playback speed">1&#215;</button>
     <button class="ap-more" type="button" aria-expanded="false">Parts</button>
   </div>
   <p class="ap-now"></p>
   <audio controls preload="none"></audio>
   <ol class="ap-list" hidden>
-      <li><button type="button" data-src="audio/00-introduction.mp3"><span class="ap-n">1</span><span class="ap-nm">Introduction</span><span class="ap-d">1:21</span></button></li>
-      <li><button type="button" data-src="audio/01-a-refund-is-small-enough-to-explain.mp3"><span class="ap-n">2</span><span class="ap-nm">A refund is small enough to explain</span><span class="ap-d">1:28</span></button></li>
-      <li><button type="button" data-src="audio/02-every-next-layer-sounded-reasonable.mp3"><span class="ap-n">3</span><span class="ap-nm">Every next layer sounded reasonable</span><span class="ap-d">1:31</span></button></li>
-      <li><button type="button" data-src="audio/03-the-laptop-put-useful-limits-on-the-desi.mp3"><span class="ap-n">4</span><span class="ap-nm">The laptop put useful limits on the design</span><span class="ap-d">1:58</span></button></li>
-      <li><button type="button" data-src="audio/04-compared-with-what.mp3"><span class="ap-n">5</span><span class="ap-nm">Compared with what</span><span class="ap-d">2:03</span></button></li>
-      <li><button type="button" data-src="audio/05-a-classifier-cannot-demonstrate-authoriz.mp3"><span class="ap-n">6</span><span class="ap-nm">A classifier cannot demonstrate authorization value</span><span class="ap-d">2:19</span></button></li>
-      <li><button type="button" data-src="audio/06-audit-was-useful-telemetry-was-not-a-fre.mp3"><span class="ap-n">7</span><span class="ap-nm">Audit was useful. Telemetry was not a free win</span><span class="ap-d">1:51</span></button></li>
-      <li><button type="button" data-src="audio/07-the-comparison-that-changed-the-recommen.mp3"><span class="ap-n">8</span><span class="ap-nm">The comparison that changed the recommendation</span><span class="ap-d">2:51</span></button></li>
-      <li><button type="button" data-src="audio/08-i-fixed-the-defects-without-rewriting-th.mp3"><span class="ap-n">9</span><span class="ap-nm">I fixed the defects without rewriting the study</span><span class="ap-d">1:24</span></button></li>
-      <li><button type="button" data-src="audio/09-a-useful-control-can-still-be-an-expensi.mp3"><span class="ap-n">10</span><span class="ap-nm">A useful control can still be an expensive abstraction</span><span class="ap-d">1:40</span></button></li>
-      <li><button type="button" data-src="audio/10-a-reference-implementation-is-a-legitima.mp3"><span class="ap-n">11</span><span class="ap-nm">A reference implementation is a legitimate outcome</span><span class="ap-d">1:18</span></button></li>
-      <li><button type="button" data-src="audio/11-write-the-comparison-before-the-expansio.mp3"><span class="ap-n">12</span><span class="ap-nm">Write the comparison before the expansion</span><span class="ap-d">1:38</span></button></li>
+      <li><button type="button" data-src="audio/00-introduction.mp3?v=4ddabb245a76"><span class="ap-n">1</span><span class="ap-nm">Introduction</span><span class="ap-d">1:36</span></button></li>
+      <li><button type="button" data-src="audio/01-a-refund-is-small-enough-to-explain.mp3?v=b2fa836f2bca"><span class="ap-n">2</span><span class="ap-nm">A refund is small enough to explain</span><span class="ap-d">2:20</span></button></li>
+      <li><button type="button" data-src="audio/02-every-next-layer-sounded-reasonable.mp3?v=2bb494d72a02"><span class="ap-n">3</span><span class="ap-nm">Every next layer sounded reasonable</span><span class="ap-d">1:04</span></button></li>
+      <li><button type="button" data-src="audio/03-the-laptop-put-useful-limits-on-the-desi.mp3?v=5ac6872de31c"><span class="ap-n">4</span><span class="ap-nm">The laptop put useful limits on the design</span><span class="ap-d">1:33</span></button></li>
+      <li><button type="button" data-src="audio/04-compared-with-what.mp3?v=13228a87e497"><span class="ap-n">5</span><span class="ap-nm">Compared with what</span><span class="ap-d">1:45</span></button></li>
+      <li><button type="button" data-src="audio/05-a-classifier-cannot-demonstrate-authoriz.mp3?v=4c1ea934d999"><span class="ap-n">6</span><span class="ap-nm">A classifier cannot demonstrate authorization value</span><span class="ap-d">1:29</span></button></li>
+      <li><button type="button" data-src="audio/06-audit-was-useful-telemetry-was-not-a-fre.mp3?v=cfce608cb3e1"><span class="ap-n">7</span><span class="ap-nm">Audit was useful. Telemetry was not a free win</span><span class="ap-d">1:19</span></button></li>
+      <li><button type="button" data-src="audio/07-the-comparison-that-changed-the-recommen.mp3?v=a1056997340e"><span class="ap-n">8</span><span class="ap-nm">The comparison that changed the recommendation</span><span class="ap-d">2:13</span></button></li>
+      <li><button type="button" data-src="audio/08-i-fixed-the-defects-without-rewriting-th.mp3?v=7408cc01b380"><span class="ap-n">9</span><span class="ap-nm">I fixed the defects without rewriting the study</span><span class="ap-d">1:12</span></button></li>
+      <li><button type="button" data-src="audio/09-a-useful-control-can-still-be-an-expensi.mp3?v=1032cc9ebddb"><span class="ap-n">10</span><span class="ap-nm">A useful control can still be an expensive abstraction</span><span class="ap-d">1:10</span></button></li>
+      <li><button type="button" data-src="audio/10-a-reference-implementation-is-a-legitima.mp3?v=f4265b98412d"><span class="ap-n">11</span><span class="ap-nm">A reference implementation is a legitimate outcome</span><span class="ap-d">1:31</span></button></li>
+      <li><button type="button" data-src="audio/11-write-the-comparison-before-the-expansio.mp3?v=2fc6f109c05c"><span class="ap-n">12</span><span class="ap-nm">Write the comparison before the expansion</span><span class="ap-d">1:23</span></button></li>
   </ol>
 </div>
 <div class="ap-mini" id="ap-mini" hidden>
@@ -752,10 +767,11 @@ a:focus-visible, button:focus-visible, .map-scroll:focus-visible, .data-table:fo
 #articleaudio audio { scroll-margin-top: 72px; }
 </style>
 <div class="prose opening">
-<p>I started Decision Firewall with a refund request. A model could read the customer's message, but I did not want its interpretation to become permission to move money. I wanted the payment record to establish the facts, and explicit policy to decide what could happen.</p>
-<p>That was a useful problem. The project that grew around it was harder to justify.</p>
-<p>By the time I asked for an independent comparison, I had a reusable runtime, historical-data workflows and an evaluation layer. The comparison found equal correctness against competent application controls, more integration friction, and a slower implementation. I kept the reference implementation and stopped the adoption claims.</p>
-<p>This is how I got there, including the parts I would now do in a different order. I directed the work through coding agents, questioned the measurements and commissioned a separate agent evaluation. I did not personally hand-write every implementation, and the evaluation did not measure human productivity.</p>
+<p>A refund can succeed while the application thinks it failed. The payment service moves the money, its response disappears, and the next retry becomes the dangerous part.</p>
+<p>That was the kind of problem I wanted Decision Firewall to handle. I started with a model interpreting a customer request and a separate control layer deciding whether an exact action could execute. Then I expanded it into a framework.</p>
+<p>The controls worked in the tested cases. The case for the framework was weaker. A separate paired agent pilot found equal correctness against competent application controls, more integration friction and a slower implementation. I kept the code and narrowed its purpose.</p>
+<p>I’ve open-sourced <a href="https://github.com/asadani/decision-firewall">Decision Firewall</a>, including the reference implementation, conformance checks and evaluation reports. Its new code is Apache-2.0 licensed. The simulated workflows run without a model.</p>
+<p>This is the build story I wish I had read before expanding the scope. I directed the implementation through coding agents; my work was choosing the boundaries and challenging the evidence. The comparison measured agent builds, not human productivity.</p>
 </div>
 
 <div class="toc" role="navigation" aria-label="Article sections"><div class="toc-label">The path through the project</div><ol class="toc-list"><li><span class="toc-num">01</span><a href="#refund-first">A refund is small enough to explain</a></li><li><span class="toc-num">02</span><a href="#scope-growth">Every next layer sounded reasonable</a></li><li><span class="toc-num">03</span><a href="#technology">The laptop put useful limits on the design</a></li><li><span class="toc-num">04</span><a href="#comparator">Compared with what?</a></li><li><span class="toc-num">05</span><a href="#public-benchmarks">A classifier cannot demonstrate authorization value</a></li><li><span class="toc-num">06</span><a href="#observability">Audit was useful. Telemetry was not a free win.</a></li><li><span class="toc-num">07</span><a href="#independent-pilot">The comparison that changed the recommendation</a></li><li><span class="toc-num">08</span><a href="#fixes">I fixed the defects without rewriting the study</a></li><li><span class="toc-num">09</span><a href="#overengineering">A useful control can still be an expensive abstraction</a></li><li><span class="toc-num">10</span><a href="#what-remains">A reference implementation is a legitimate outcome</a></li><li><span class="toc-num">11</span><a href="#next-build">Write the comparison before the expansion</a></li></ol></div>
@@ -763,91 +779,77 @@ a:focus-visible, button:focus-visible, .map-scroll:focus-visible, .data-table:fo
 <section class="section" id="refund-first">
 <div class="section-label">01 / The starting problem</div><h2><a class="anchor" href="#refund-first">A refund is small enough to explain</a></h2>
 <div class="prose">
-<p>I picked subscription refunds because an incorrect action has a visible consequence. A duplicate-charge claim needs transaction evidence. A cancellation may depend on when it happened and whether the service was used. A previous partial refund changes the remaining balance.</p>
-<p>The demonstration policy made those distinctions concrete. Verified duplicate charges could be refunded against the duplicate payment. Cancellation qualified within seven days only if the subscription was unused. Eligible refunds up to ₹1,000 could proceed automatically; larger ones needed review. A configurable ₹10,000 daily automated limit routed excess demand to review. These were example rules, not statements of legal entitlement. Every payment effect was simulated. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/product.md">Original demonstration policy</a>.</p>
-<p>I also kept customer value and retention pressure out of eligibility. A convincing message about a valuable customer must not manufacture a duplicate payment. That separation mattered more than the model's confidence score.</p>
+<p>I picked subscription refunds because the facts are inspectable. A duplicate-charge claim needs two payment records. Cancellation eligibility depends on timing and usage. A prior refund reduces the amount still available.</p>
+<p>The example policy allowed verified duplicates and unused subscriptions cancelled within seven days. Eligible amounts up to ₹1,000 could proceed automatically; larger amounts needed review. A ₹10,000 daily automated limit sent excess demand to review. These were demonstration rules, with simulated payments.</p>
+<p>Here is an illustrative ₹800 duplicate refund, using the recovery contract I built. The amount is an example, not an additional benchmark result.</p>
+</div><div class="plain-english"><div class="pe-label">Follow one refund through a lost response</div><ol class="pe-list">
+<li><span class="pe-num">1</span><div><strong>Interpret the request.</strong> The model classifies “I was charged twice” as a duplicate-charge claim. That supplies no proof that a second payment exists.</div></li>
+<li><span class="pe-num">2</span><div><strong>Authorize the exact action.</strong> The ledger verifies the duplicate and ₹800 remaining. Policy checks eligibility and budget. Permission binds the duplicate payment, amount and original destination to the evidence and policy versions.</div></li>
+<li><span class="pe-num">3</span><div><strong>Dispatch, then lose the response.</strong> The runtime reserves the balance and claims the authorization. The simulator records a successful refund under its idempotency key, but the caller receives no definitive outcome.</div></li>
+<li><span class="pe-num">4</span><div><strong>Recover without a second refund.</strong> The attempt stays unresolved and retains its reservation. Reconciliation asks the payment adapter about the same key, discovers success and records the outcome. It does not create a new key and try again.</div></li>
+</ol></div><div class="prose">
+<p>A timeout tells me the response is missing. It does not tell me the refund failed. That distinction survives a process restart only if the key and execution state are durable. The customer’s refund request also needs a status separate from a failed or malformed execution attempt.</p>
+<p>This is useful application engineering. A framework can package it; it does not own the idea. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/framework/executors.md">Executor contract</a>.</p>
 </div>
-<div class="plain-english"><div class="pe-label">The distinction I needed</div><ul class="pe-list">
-<li><span class="pe-num">1</span><div><strong>An assessment is an interpretation.</strong> The message sounds like a duplicate-charge complaint.</div></li>
-<li><span class="pe-num">2</span><div><strong>An authorization is permission for an exact action.</strong> Refund this amount against this payment, using these facts and this policy, before this permission expires.</div></li>
-</ul></div>
 </section>
 
 <section class="section" id="scope-growth">
 <div class="section-label">02 / How the plan grew</div><h2><a class="anchor" href="#scope-growth">Every next layer sounded reasonable</a></h2>
 <div class="prose">
-<p>I did not want to stop at a refund application. I asked for a framework that other developers could use with their own decision models and business rules. Refunds became a domain pack; access control and a simulated deployment example tested the boundary around the core.</p>
-<p>Then I asked what happened before and after the decision. How would someone import previous decisions? Where would reviewed labels live? Could they compare policies without executing anything? Could telemetry explain what happened? I had LangChain's abstraction style and Langfuse's observability experience in mind, without a reason to reproduce either product.</p>
-<p>The plan acquired CSV/JSONL history ingestion, immutable dataset snapshots, optional historical retrieval, named Python rules and offline experiments. Those features had sensible constraints: a historical approval must never become a live authorization; held-out examples must not leak into model context; a policy experiment must never invoke an executor.</p>
-<p>I later added preparation before inference. It could validate structured intent and request missing evidence before spending a model call. It still needed final authorization against fresh facts. The extra stage was a capability to test, not an automatic improvement.</p>
-<p>The mistake was treating a coherent feature list as enough evidence for the package around it.</p>
-</div>
-<figure class="build-map"><div class="map-scroll" role="region" aria-label="Build mind map; scroll horizontally on narrow screens" tabindex="0"><svg viewBox="0 0 712 435" role="img" aria-labelledby="map-title map-desc"><title id="map-title">Mind map of the Decision Firewall build</title><desc id="map-desc">The project began with refund governance, expanded into a reusable framework, then faced a competent application comparator. Equal correctness and added friction led to defect repair and narrowing to a reference implementation and conformance kit.</desc><path d="M 244 218 H 225 V 69 H 206" class="map-edge"/><path d="M 244 218 H 225 V 219 H 206" class="map-edge"/><path d="M 244 218 H 225 V 369 H 206" class="map-edge"/><path d="M 468 218 H 487 V 69 H 506" class="map-edge"/><path d="M 468 218 H 487 V 219 H 506" class="map-edge"/><path d="M 468 218 H 487 V 369 H 506" class="map-edge"/><rect x="16" y="20" width="190" height="98" rx="8" class="map-node"/><text x="29" y="44" class="map-label">01 / START</text><text x="29" y="72" class="map-heading">One refund workflow</text><text x="29" y="97" class="map-sub">Assessment ≠ authority</text><rect x="16" y="170" width="190" height="98" rx="8" class="map-node"/><text x="29" y="194" class="map-label">02 / EXPAND</text><text x="29" y="222" class="map-heading">Reusable framework</text><text x="29" y="247" class="map-sub">History, rules, evaluation</text><rect x="16" y="320" width="190" height="98" rx="8" class="map-node"/><text x="29" y="344" class="map-label">03 / COMPARE</text><text x="29" y="372" class="map-heading">Competent application</text><text x="29" y="397" class="map-sub">Same requirements</text><rect x="506" y="20" width="190" height="98" rx="8" class="map-node"/><text x="519" y="44" class="map-label">04 / OBSERVE</text><text x="519" y="72" class="map-heading">Equal correctness</text><text x="519" y="97" class="map-sub">Added cost and friction</text><rect x="506" y="170" width="190" height="98" rx="8" class="map-node"/><text x="519" y="194" class="map-label">05 / REPAIR</text><text x="519" y="222" class="map-heading">Confirmed defects</text><text x="519" y="247" class="map-sub">Targeted regression tests</text><rect x="506" y="320" width="190" height="98" rx="8" class="map-node"/><text x="519" y="344" class="map-label">06 / NARROW</text><text x="519" y="372" class="map-heading">Reference + conformance</text><text x="519" y="397" class="map-sub">No adoption claim</text><rect x="244" y="175" width="224" height="86" rx="9" class="map-root"/><text x="356" y="209" text-anchor="middle" class="map-core">Decision Firewall</text><text x="356" y="236" text-anchor="middle" class="map-sub">What earned its place?</text></svg></div><figcaption>The project changed direction when the comparator changed. Scroll the map on small screens. Follow a branch: <a href="#refund-first">start</a> · <a href="#scope-growth">expand</a> · <a href="#comparator">compare</a> · <a href="#independent-pilot">observe</a> · <a href="#fixes">repair</a> · <a href="#what-remains">narrow</a>.</figcaption></figure>
+<p>I wanted developers to bring their own decision models and business rules. Refunds became a domain pack, with access control and simulated deployment examples testing whether the core travelled beyond payments.</p>
+<p>Each next request sounded reasonable. Import old decisions. Keep reviewed labels separate from historical approvals. Compare policies offline. Retrieve examples without leaking evaluation data. I had LangChain’s abstractions and Langfuse’s observability experience in mind.</p>
+<p>The plan grew into history ingestion, dataset snapshots and named Python rules, with optional context retrieval and telemetry. Preparation before inference could request missing evidence before spending a model call. All of it had a plausible use.</p>
+<p>I had not yet established that another developer benefited from adopting the runtime underneath it. A coherent feature list had become my substitute for that evidence.</p>
+</div><figure class="build-map"><div class="map-scroll" role="region" aria-label="Build mind map; scroll horizontally on narrow screens" tabindex="0"><svg viewBox="0 0 712 435" role="img" aria-labelledby="map-title map-desc"><title id="map-title">Mind map of the Decision Firewall build</title><desc id="map-desc">The project began with refund governance, expanded into a reusable framework, then faced a competent application comparator. Equal correctness and added friction led to defect repair and narrowing to a reference implementation and conformance kit.</desc><path d="M 244 218 H 225 V 69 H 206" class="map-edge"/><path d="M 244 218 H 225 V 219 H 206" class="map-edge"/><path d="M 244 218 H 225 V 369 H 206" class="map-edge"/><path d="M 468 218 H 487 V 69 H 506" class="map-edge"/><path d="M 468 218 H 487 V 219 H 506" class="map-edge"/><path d="M 468 218 H 487 V 369 H 506" class="map-edge"/><rect x="16" y="20" width="190" height="98" rx="8" class="map-node"/><text x="29" y="44" class="map-label">01 / START</text><text x="29" y="72" class="map-heading">One refund workflow</text><text x="29" y="97" class="map-sub">Assessment ≠ authority</text><rect x="16" y="170" width="190" height="98" rx="8" class="map-node"/><text x="29" y="194" class="map-label">02 / EXPAND</text><text x="29" y="222" class="map-heading">Reusable framework</text><text x="29" y="247" class="map-sub">History, rules, evaluation</text><rect x="16" y="320" width="190" height="98" rx="8" class="map-node"/><text x="29" y="344" class="map-label">03 / COMPARE</text><text x="29" y="372" class="map-heading">Competent application</text><text x="29" y="397" class="map-sub">Same requirements</text><rect x="506" y="20" width="190" height="98" rx="8" class="map-node"/><text x="519" y="44" class="map-label">04 / OBSERVE</text><text x="519" y="72" class="map-heading">Equal correctness</text><text x="519" y="97" class="map-sub">Added cost and friction</text><rect x="506" y="170" width="190" height="98" rx="8" class="map-node"/><text x="519" y="194" class="map-label">05 / REPAIR</text><text x="519" y="222" class="map-heading">Confirmed defects</text><text x="519" y="247" class="map-sub">Targeted regression tests</text><rect x="506" y="320" width="190" height="98" rx="8" class="map-node"/><text x="519" y="344" class="map-label">06 / NARROW</text><text x="519" y="372" class="map-heading">Reference + conformance</text><text x="519" y="397" class="map-sub">No adoption claim</text><rect x="244" y="175" width="224" height="86" rx="9" class="map-root"/><text x="356" y="209" text-anchor="middle" class="map-core">Decision Firewall</text><text x="356" y="236" text-anchor="middle" class="map-sub">What earned its place?</text></svg></div><figcaption>The project changed direction when the comparator changed. Scroll the map on small screens. Follow a branch: <a href="#refund-first">start</a> · <a href="#scope-growth">expand</a> · <a href="#comparator">compare</a> · <a href="#independent-pilot">observe</a> · <a href="#fixes">repair</a> · <a href="#what-remains">narrow</a>.</figcaption></figure>
 </section>
 
 <section class="section" id="technology">
 <div class="section-label">03 / What I actually built with</div><h2><a class="anchor" href="#technology">The laptop put useful limits on the design</a></h2>
 <div class="prose">
-<p>My local machine had a GTX 1650 with 4 GB VRAM and roughly 8 GB system RAM. I chose Laya as the first decision-model adapter and left Jev out of this release. The fixture path had to work without downloading any model.</p>
-<p>The recorded local run used <code>convaiinnovations/laya-typed-decisions</code>, pinned to revision <code>1a793eb568e6718f15941d08f85432581df534e3</code>, with SDK 0.3.20. It ran on CUDA in FP32. Cold loading took 28.42 seconds; median recorded inference was 47.45 milliseconds across 34 assessments, including the first inference. Those are local measurements, not an accuracy result. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/benchmarks/post-review-refund/summary.md">Local-model report</a>.</p>
+<p>My GTX 1650 had 4 GB VRAM, alongside roughly 8 GB system RAM. I chose Laya for typed assessments, left Jev out, and required a fixture path that worked without model downloads. That made the control lifecycle testable before inference was available.</p>
+<p>I used Python 3.12 and Pydantic for contracts, SQLite for durable authorization state, and a separate simulated payment ledger for effects. Integer minor units kept financial arithmetic out of model output. Ed25519 signatures and canonical JSON supported verifiable audit records. Typer exposed the CLI; FastAPI and Jinja powered an optional refund inspector.</p>
+<p>The model adapter could return an assessment but held no execution credentials. Domain code resolved trusted evidence and evaluated policy. The executor owned the downstream effect. Optional OpenTelemetry export sat alongside the required local audit path.</p>
+<p>The recorded Laya run used CUDA in FP32: 28.42 seconds to load and 47.45 ms median inference across 34 assessments, including the first. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/benchmarks/post-review-refund/summary.md">The report pins the checkpoint and SDK</a>. Small hardware shaped the implementation; those timings did not establish model accuracy.</p>
 </div>
-<p class="table-hint">On a narrow screen, scroll the table sideways.</p><div class="data-table" tabindex="0" role="region" aria-label="Technology choices"><table><thead><tr><th scope="col">Part</th><th scope="col">Choice and responsibility</th></tr></thead><tbody>
-<tr><td>Core contracts</td><td>Python 3.12 and Pydantic for validated proposals, assessments and lifecycle records.</td></tr>
-<tr><td>Durable state</td><td>SQLite transactions for authorization claims and reservations; a separate simulated effect ledger with idempotency keys.</td></tr>
-<tr><td>Audit</td><td>RFC 8785 canonical JSON, SHA-256 and Ed25519 signatures for linked records and verifiable receipts.</td></tr>
-<tr><td>Developer surface</td><td>Typer SDK/CLI workflows. The optional refund inspector uses FastAPI and Jinja templates.</td></tr>
-<tr><td>Model and telemetry adapters</td><td>Optional Laya/PyTorch; optional OpenTelemetry export through OTLP. Neither is required by the model-free core.</td></tr>
-</tbody></table></div>
-<div class="prose"><p>I kept model output away from execution credentials. Domain packs supplied facts and policy; executors owned the downstream effect boundary. A signed record can prove that recorded content has not changed under a trusted key. It cannot prove that the evidence was true, or protect a machine whose signing key has been compromised. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/framework/architecture.md">Architecture and trust boundaries</a>.</p></div>
 </section>
 
 <section class="section" id="comparator">
 <div class="section-label">04 / The question I asked too late</div><h2><a class="anchor" href="#comparator">Compared with what?</a></h2>
-<blockquote class="build-quote"><p>“Is the same foot just sitting at two different places, or genuinely there is some distinction?”</p><footer>My question during the build conversation.</footer></blockquote>
-<div class="prose">
-<p>I had asked for with-and-without numbers. The important part was deciding what “without” meant. A model classification mapped straight to a refund is an easy opponent. A competent application already checks the ledger, binds approval to an action and handles uncertain execution.</p>
-<p>The synthetic refund comparison therefore had a deliberately minimal model-directed arm and two governed arms. Both governed approaches saw the same evidence and fault schedules. Both used the same simulator, including its own balance and destination protections.</p>
-<p>In the controlled-fixture condition, application controls and Decision Firewall each produced zero contract-violating effects and zero unresolved attempts after recovery. The minimal arm produced 95 violating effects across 170 request trials. That demonstrated why application controls matter. It did not establish a special property of the framework.</p>
-<p>The framework also cost time. On the matched straightforward-success subset, the application's p95 was 26.52 ms and the framework's was 67.89 ms. The paired median added cost was 23.23 ms across 25 paired trials. The full run had 32 frozen scenarios repeated five times; repetition measured runtime variation, not 160 independent business situations. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/benchmarks/post-review-refund/summary.md">Protocol and measured refund results</a>.</p>
-<p>I had also questioned an increasing “p value.” Here the reported p50 and p95 were latency percentiles, not statistical p-values. Higher p95 meant a slower tail in that run. Calling it a percentile did not make the overhead disappear.</p>
+<blockquote class="build-quote"><p>“Is the same foot just sitting at two different places, or genuinely there is some distinction?”</p><footer>My question during the build conversation.</footer></blockquote><div class="prose">
+<p>I asked for numbers with and without the framework. The hard part was choosing “without.” A model directly triggering refunds is an easy opponent. A competent application already validates the ledger and handles uncertain execution.</p>
+<p>The synthetic comparison used a deliberately minimal model-directed arm and two governed arms, sharing evidence, fault schedules and a simulator with its own protections. With fixture assessments, both application controls and Decision Firewall produced zero contract-violating effects and zero unresolved attempts after recovery. The minimal arm produced 95 violating effects across 170 request trials.</p>
+<p>That established the value of controls. It did not distinguish the two ways of implementing them.</p>
+<p>On the matched straightforward-success subset, application p95 latency was 26.52 ms versus 67.89 ms for the framework. The paired median added cost was 23.23 ms across 25 pairs. The full run repeated 32 frozen scenarios five times; those repetitions measured runtime variation, not independent business situations. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/benchmarks/post-review-refund/summary.md">Refund comparison</a>.</p>
+<p>My next question should have been about integration effort: if both enforce the same contract, does the package make that contract easier to implement and maintain?</p>
 </div>
 </section>
 
 <section class="section" id="public-benchmarks">
 <div class="section-label">05 / More rows, then a different question</div><h2><a class="anchor" href="#public-benchmarks">A classifier cannot demonstrate authorization value</a></h2>
 <div class="prose">
-<p>I asked to run the full available data rather than rely on a convenient sample. Across BANKING77 and Bitext, the comparison accounted for 39,955 source rows. The classifier was CPU naive Bayes, not Laya. Wrapping an unchanged classifier did not change its predictions.</p>
-</div>
-<p class="table-hint">On a narrow screen, scroll the table sideways.</p><div class="data-table" tabindex="0" role="region" aria-label="Classification results"><table><thead><tr><th scope="col">Evaluation</th><th scope="col" class="num">Rows</th><th scope="col">Accuracy in every arm</th></tr></thead><tbody>
-<tr><td>BANKING77 official test</td><td class="num">3,080</td><td>78.60%</td></tr>
-<tr><td>BANKING77 training rows, out-of-fold</td><td class="num">10,003</td><td>78.10%</td></tr>
-<tr><td>Bitext, out-of-fold</td><td class="num">26,872</td><td>98.31%</td></tr>
-</tbody></table></div>
-<div class="prose">
-<p>I kept the official test separate from the out-of-fold scores. Bitext's split was ours, not a publisher leaderboard split. The prepared BANKING77 test path added a paired median 13.527 ms, with no prediction changes. There was no action to authorize in this task. Unless I independently needed validation or signed preparation records, I had added work without helping classification. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/benchmarks/paired-public/summary.md">Full-data report and split limitations</a>.</p>
-<p>I then asked for tool-using tasks. Laya could not fill the conversational agent and simulated-user roles, so a later development pilot used <code>openai/gpt-oss-20b</code> through OpenRouter, with a token cap, seeded requests and bounded rate-limit backoff. It scheduled 90 episodes across selected τ-bench and AgentDojo tasks; 78 completed and 12 remained incomplete. This was not a full-suite score.</p>
-<p>On the attacked AgentDojo subset, the baseline recorded 8 attacker successes in 9 completed episodes; application controls and the framework each recorded 0 in 10. Both controlled arms completed the user task in only 4 of those 10 episodes. Blocking an attack while failing a legitimate request was part of the result. The controls matched again. The model judge and selected attack also limit what I can infer. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/benchmarks/agent-pilot/summary.md">Later agent pilot</a>.</p>
+<p>Instead, I first asked for more data. The classification comparison accounted for 39,955 BANKING77 and Bitext source rows using a CPU naive Bayes classifier. Wrapping the same classifier left its predictions unchanged. BANKING77 official-test accuracy was 78.60% in every arm; the prepared path added 13.527 ms paired median latency.</p>
+<p>There was no consequential action to authorize. I had measured overhead on a task that could not demonstrate the central benefit. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/benchmarks/paired-public/summary.md">Full counts and separate out-of-fold results</a>.</p>
+<p>A later tool-use pilot used <code>openai/gpt-oss-20b</code> through OpenRouter because Laya could not fill the conversational roles. It scheduled 90 selected τ-bench and AgentDojo episodes; 78 completed and 12 remained incomplete.</p>
+<p>On the attacked AgentDojo subset, the baseline had eight attacker successes in nine completed episodes. Both controlled arms had zero in ten, but completed the legitimate task in only four of those ten. A blocked attack and a completed user task needed separate columns. This selected development pilot was not a full-suite score. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/benchmarks/agent-pilot/summary.md">Agent pilot</a>.</p>
 </div>
 </section>
 
 <section class="section" id="observability">
 <div class="section-label">06 / Where there was supplied functionality</div><h2><a class="anchor" href="#observability">Audit was useful. Telemetry was not a free win.</a></h2>
 <div class="prose">
-<p>I thought observability might be the stronger reason to reuse the framework. An application team would otherwise write lifecycle instrumentation and decide how to connect an execution attempt to the evidence behind it.</p>
-<p>The local reuse study made that concrete. The application had eight explicit event call sites and four operation decorators; the framework integration passed an observer and needed no application event hooks. Framework receipts verified and rejected tampering in 60 of 60 synthetic cases. The application baseline had unsigned logs, so signing was additional bundled functionality, not a capability it was unable to implement.</p>
-<p>The same report showed gaps. In the measured callable-policy path, framework spans lacked the evaluation ID, policy version, disposition and reasons. The manually instrumented application exported the first three; the shared allowlist omitted reasons in both. Neither exported any of the four sensitive canaries. Both completed an effect despite exporter failure, while required local audit failure blocked execution. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/benchmarks/post-review-observability/summary.md">Observability measurements</a>.</p>
-<p>I now separate those contracts. Telemetry helps me find the relevant records and may be dropped under backpressure. The required audit path participates in the authorization contract. A dashboard cannot substitute for a durable answer about whether an action happened.</p>
-<p>That distinction is worth keeping. It still does not establish that a team saves investigation time by adopting this runtime. Telemetry alone is a weak reason to accept the whole dependency when its observer utility can be reused separately.</p>
+<p>I thought audit and observability might justify reuse even when decisions matched. The application baseline needed eight explicit event call sites and four operation decorators. The framework integration supplied an observer with no application event hooks.</p>
+<p>That was supplied functionality. It also had gaps: the measured framework spans omitted the evaluation ID, policy version, disposition and reasons. The manually instrumented application exported the first three. Neither exported the sensitive canaries. Exporter failure allowed execution to continue; required local audit failure blocked it. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/benchmarks/post-review-observability/summary.md">Measured observability report</a>.</p>
+<p>For the lost-response refund, telemetry helps locate the attempt. The durable record and downstream ledger establish what happened. I can tolerate a missing diagnostic span; I cannot safely forget the unresolved refund and release its reservation.</p>
+<p>Signed receipts add a check that recorded content has not changed under a trusted key. They do not prove that the original evidence was true. I kept that distinction, while recognising that telemetry alone did not justify adopting the whole runtime.</p>
 </div>
 </section>
 
 <section class="section" id="independent-pilot">
 <div class="section-label">07 / Letting another build challenge it</div><h2><a class="anchor" href="#independent-pilot">The comparison that changed the recommendation</a></h2>
 <div class="prose">
-<p>I had no human participants available, so I commissioned a separate Claude Code agent evaluation. One builder used the framework; another built equivalent application controls against the same purchase-order requirements. Policy maintenance and incident investigation followed.</p>
-<p>This was independent of the framework builder, not independent in the sense of a large external study. There was one task and one builder per arm, using the same model. I wanted an adversarial check on the project, not an agent-generated testimonial.</p>
-</div>
-<p class="table-hint">On a narrow screen, scroll the table sideways.</p><div class="data-table" tabindex="0" role="region" aria-label="Independent comparison"><table><thead><tr><th scope="col">Measured item</th><th scope="col" class="num">Framework</th><th scope="col" class="num">Application</th></tr></thead><tbody>
+<p>I had no human participants, so I commissioned a separate Claude Code agent evaluation. One builder used the framework; another implemented equivalent application controls for the same purchase-order requirements. Both then handled a policy change and an investigation.</p>
+<p>This was one paired pilot, independent of the framework builder, using the same model for both arms. It gave me a concrete integration comparison:</p>
+</div><div class="data-table" tabindex="0" role="region" aria-label="Independent comparison"><table><thead><tr><th scope="col">Measured item</th><th scope="col" class="num">Framework</th><th scope="col" class="num">Application</th></tr></thead><tbody>
 <tr><td>Visible acceptance tests</td><td class="num">26/26</td><td class="num">26/26</td></tr>
 <tr><td>Held-out acceptance tests</td><td class="num">114/115</td><td class="num">114/115</td></tr>
 <tr><td>Policy-change tests</td><td class="num">15/15</td><td class="num">15/15</td></tr>
@@ -856,65 +858,63 @@ a:focus-visible, button:focus-visible, .map-scroll:focus-visible, .data-table:fo
 <tr><td>Policy-change tool calls</td><td class="num">32</td><td class="num">20</td></tr>
 <tr><td>Library-contract workarounds</td><td class="num">8</td><td class="num">0</td></tr>
 <tr><td>Held-out suite time</td><td class="num">39.6 s</td><td class="num">4.5 s</td></tr>
-</tbody></table></div>
-<div class="prose">
-<p>The application also recorded two test/path workarounds; zero above refers specifically to library-contract workarounds. Both arms failed the same approval-after-outage test. The frozen spec was ambiguous about invalidating the authorization versus invalidating the approval as well. No downstream effect occurred. I kept the scored failure rather than rewriting the result.</p>
-<p>The framework builder requested seven core changes and implemented eight workarounds. Its implementation duplicated many issue-time checks to get specific refusal reasons before calling the framework. At that point reuse was visibly fighting the integration.</p>
-<p>There were important confounds. The 374-line requirements already supplied much of the lifecycle design. Investigators received downstream exports, and neither could run its operator CLI because of a harness import problem. The framework builder hit a spend limit and was resumed. Held-out tests were withheld, not access-controlled; the evaluator's tool-call audit found no builder access. The report records the remaining deviations.</p>
-<p>I cannot turn those agent tool counts into developer hours. I also cannot use the limitations to claim a benefit that was not measured. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/evaluations/2026-09-29/COMPARISON.md">Independent comparison and full caveats</a>.</p>
-</div>
-<blockquote class="build-quote"><p>“Stop feature expansion and adoption/migration claims.”</p><footer>The independent evaluator's <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/evaluations/2026-09-29/COMPARISON.md">recommendation</a>.</footer></blockquote>
+</tbody></table></div><div class="prose">
+<p>The framework required eight library-contract workarounds and seven core-change requests. The builder duplicated checks to obtain specific refusal reasons before calling it. Reuse was fighting the integration.</p>
+<p>Both failed the same held-out approval-after-outage case because the spec was ambiguous; no downstream effect occurred. The baseline’s zero workarounds refers to library contracts, not its two test/path adjustments.</p>
+<p>The 374-line spec supplied much of the lifecycle design. Investigators had downstream exports and a harness problem prevented operator-CLI use. A spend-limit interruption also affected the framework build. Tool calls are not developer hours, and these conditions limit generalisation. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/evaluations/2026-09-29/COMPARISON.md">Full comparison and deviations</a>.</p>
+</div><blockquote class="build-quote"><p>“Stop feature expansion and adoption/migration claims.”</p><footer>The independent evaluator’s <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/evaluations/2026-09-29/COMPARISON.md">recommendation</a>.</footer></blockquote>
 </section>
 
 <section class="section" id="fixes">
 <div class="section-label">08 / What passing tests had missed</div><h2><a class="anchor" href="#fixes">I fixed the defects without rewriting the study</a></h2>
 <div class="prose">
-<p>The review produced 21 findings, with none rated critical or high. Four were confirmed defects. An approval could bind to evidence refreshed after the evaluation the reviewer saw. Deactivating a rejecting reviewer could revive an older approval. An oversized integer in adapter metadata could strand an action that had already happened. And the repository tests failed to detect six of nine injected runtime faults.</p>
-<p>That last result made the green suite less reassuring. Some downstream checks were hiding missing guarantees in the layer I was trying to evaluate.</p>
-<p>The 0.3.1 correction required the inspected evaluation ID when approving and rejected material changes. It preserved the latest rejection for that proposal revision. It encoded large metadata integers losslessly for canonical audit and added tests aimed directly at the core invariants.</p>
-<p>The recorded Windows verification finished with 298 passing tests, including 22 corrective tests, and detected all nine targeted mutations. That is bounded regression evidence. It is not exhaustive fault coverage, and it is not a rerun of the adoption pilot. Old reports remain unchanged. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/verification/0.3.1/README.md">Corrective release and migration boundary</a>.</p>
+<p>The review found four confirmed defects among 21 findings. Approval could execute against evidence the reviewer had not seen. Deactivating a rejecting reviewer could revive an older approval. Oversized integer metadata could strand an already-executed action. The repository tests missed six of nine injected runtime faults.</p>
+<p>The mutation result mattered: downstream protections had hidden missing guarantees in the layer I meant to test. A green end-to-end suite was insufficient evidence that each boundary enforced its contract.</p>
+<p>The 0.3.1 fixes bound review to the inspected evaluation, preserved rejection and handled large integers losslessly. Direct invariant tests detected all nine targeted mutations; recorded Windows verification had 298 passing tests, including 22 corrective tests. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/verification/0.3.1/README.md">Corrective release</a>.</p>
+<p>I fixed the defects and kept the earlier comparison unchanged. Repairing correctness did not retroactively demonstrate easier integration.</p>
 </div>
 </section>
 
 <section class="section" id="overengineering">
 <div class="section-label">09 / Where I would spend less</div><h2><a class="anchor" href="#overengineering">A useful control can still be an expensive abstraction</a></h2>
 <div class="prose">
-<p>The global SQLite write lock remains. It spans adapter I/O and explains the roughly ninefold held-out-suite time in the pilot. That ratio describes that suite, not every request or deployment. Releasing the lock safely would require a different concurrency and recovery design; it is not a cosmetic performance patch.</p>
-<p>I did not need another architecture project to avoid saying that this implementation was slow. I needed to document its operating limit and narrow the recommendation.</p>
-<p>I also overreached in the sequence of work. History ingestion and model-context budgets can each be useful, but I built that surrounding workflow before establishing whether an unfamiliar integrator benefited from the central runtime. Classification benchmarks answered a question the framework was not designed to win. A refund-specific browser added a second lifecycle surface to maintain.</p>
-<p>Some controls remain necessary: exact action binding, unresolved-outcome recovery and authoritative downstream idempotency. The packaging around them has to earn its place. Moving application checks into a reusable dependency does not make those checks more correct merely because the dependency has a name.</p>
-<p>The review also found genuine limits to generality: an assessment/message-shaped submission contract, one caller identity per runtime instance and a fixed approval lifetime. A domain-neutral core can still impose awkward assumptions on another domain.</p>
+<p>The global SQLite write lock still spans adapter I/O. It explains the roughly ninefold suite-time difference in the pilot, not a universal per-request slowdown. Fixing it safely would require a different concurrency and recovery design.</p>
+<p>I chose to document the limit rather than start another architecture project to rescue the adoption argument. History ingestion and model-context budgets could wait too. I had built those surrounding features before proving the central abstraction helped an unfamiliar integrator.</p>
+<p>The review exposed assumptions inside the supposedly generic interface: a message-shaped submission contract, one caller identity per runtime instance and a fixed approval lifetime. Moving code into a shared package had moved those assumptions into someone else’s application.</p>
+<p>That is the distinction I now look for. The refund needs recovery after a lost response. Whether recovery belongs in this dependency is a separate engineering decision.</p>
 </div>
 </section>
 
 <section class="section" id="what-remains">
 <div class="section-label">10 / What I kept</div><h2><a class="anchor" href="#what-remains">A reference implementation is a legitimate outcome</a></h2>
 <div class="prose">
-<p>The core claims did not all collapse. The independent review verified action/evidence binding and recovery without replacement dispatch. A capacity-one resource admitted exactly one dispatch across eight operating-system processes. Historical replay called neither the evidence resolver nor the executor.</p>
-<p>I kept that implementation and the conformance kit. They give a builder concrete failure cases to inspect, including stale evidence and a lost response after success. I am comfortable offering those artifacts for study. I am not recommending that an application with equivalent controls migrate to obtain an unmeasured advantage.</p>
-<p>The kit also makes the distinction testable outside the model. This is the model-free entry point in the repository; use Python 3.12 or newer and activate the virtual environment for the local shell before installing:</p>
-</div>
-<div class="code-block"><div class="cb-label">Local, simulated effects only</div><pre tabindex="0" aria-label="Local setup commands">git clone https://github.com/asadani/decision-firewall.git
+<p>I kept Decision Firewall as an open-source reference implementation and conformance kit. The review verified action/evidence binding and recovery without replacement dispatch. A capacity-one resource admitted exactly one dispatch across eight operating-system processes. Historical replay called neither the evidence resolver nor the executor.</p>
+<p>Those are useful behaviours to inspect in runnable code. The <a href="https://github.com/asadani/decision-firewall">repository</a> includes the reports and failure cases, so a builder can study the contract without accepting an adoption recommendation.</p>
+<p>Start with the model-free path using Python 3.12, the tested runtime. Activate the virtual environment for your shell before installing:</p>
+</div><div class="code-block"><div class="cb-label">Local, simulated effects only</div><pre tabindex="0" aria-label="Local setup commands">git clone https://github.com/asadani/decision-firewall.git
 cd decision-firewall
 python -m venv .venv
 <span class="tok-cmt"># Activate .venv for your shell, then:</span>
-python -m pip install .
+python -m pip install -r requirements-core.lock
+python -m pip install --no-deps -e .
 firewall framework --domain refunds demo
-firewall conformance decision_firewall.conformance_fixtures:deployments --save conformance.json</pre></div>
-<div class="prose"><p>The deployment fixture covers 17 declared checks. Unsupported cases are reported separately; a pass is not production certification. Authentication, credential isolation and the authoritative effect boundary still belong to the integrating deployment. <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/framework/release-tools.md">Conformance contract</a>.</p></div>
+firewall conformance decision_firewall.conformance_fixtures:deployments --save conformance.json</pre></div><div class="prose">
+<p>After running it, inspect which exact action the authorization binds and how the execution attempt connects to its receipt. Then read the <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/framework/release-tools.md">17 declared deployment conformance checks</a>: which cases pass, which are unsupported, and what the adapter must guarantee.</p>
+<p>For an application of my own, I would turn the lost-response example into a test: restart after downstream success, reconcile the original key, then assert one effect and no remaining reservation once success is resolved. Passing a happy-path refund would not answer that question. Production identity and protection against bypassing the controls still need deployment integration.</p>
+</div>
 </section>
 
 <section class="section" id="next-build">
 <div class="section-label">11 / What I would change next time</div><h2><a class="anchor" href="#next-build">Write the comparison before the expansion</a></h2>
 <div class="prose">
-<p>My useful contribution was steering the work toward a harder question. I asked whether the baseline was competent, whether all rows were counted, whether a blocked call also blocked a legitimate task, and whether supplied telemetry actually exported the fields I needed. I should have asked the first question before authorizing the wider framework plan.</p>
-<p>On the next build, I would implement one consequential workflow and its modular application comparator before adding the developer platform around it. I would decide what would count as a reason to adopt: fewer integration defects, less maintenance effort, or faster incident reconstruction. Then I would choose a study that can measure that reason.</p>
-<p>A future test could use several integrations, less prescriptive requirements and incidents without an answer-bearing downstream export. Human participants would be needed for human-productivity claims. That is a possible follow-up, not an explanation for dismissing the result I have.</p>
-<p>I started by trying to make model-driven actions accountable. I ended by having to make the framework's own claims accountable. Keeping the code was easy. Narrowing what I said about it was the more useful engineering decision.</p>
+<p>Next time I would build one consequential workflow and a competent application comparator before adding the developer platform. I would write down the proposed benefit first, then choose a measurement capable of finding it.</p>
+<p>If the claim is easier integration, classification accuracy cannot establish it. If the claim is faster investigation, giving both investigators an answer-bearing export makes a weak test. Several integrations and human participants would be needed to investigate human-productivity benefits.</p>
+<p>My useful contribution was pressing those questions, although I asked them late. I started by separating a model’s assessment from permission to act. I ended by separating a useful control from an unproven reason to adopt a framework.</p>
+<p>The refund still needs to survive a lost response. The library around that behaviour has to earn its place.</p>
 </div>
 </section>
 
-<aside class="callout source-note"><div class="callout-lbl">Evidence and version boundary</div><p>This article describes the build conversation and the repository evidence available on September 30, 2026. Links to reports and code are pinned to commit <code>a9b9a52</code>. The independent pilot evaluated an earlier snapshot; 0.3.1 fixes do not retroactively improve its results. The <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/EVIDENCE.md">evidence index</a> distinguishes historical runs, corrective checks and untested claims. Financial and deployment effects were simulated throughout. The quotes above come from my build conversation and the evaluator's report, not reconstructed interviews.</p></aside>
+<aside class="callout source-note"><div class="callout-lbl">Evidence and version boundary</div><p>Revised October 4, 2026 for a clearer walkthrough; the reported results remain the repository evidence available on September 30, 2026. The ₹800 recovery example is illustrative, not a new measured run. Links to reports and code are pinned to commit <code>a9b9a52</code>. The independent pilot evaluated an earlier snapshot; 0.3.1 fixes do not retroactively improve its results. The <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/EVIDENCE.md">evidence index</a> distinguishes historical runs, corrective checks and untested claims. Financial and deployment effects were simulated throughout. The quotes above come from my build conversation and the evaluator's report, not reconstructed interviews.</p></aside>
 
 </main><!-- /page-wrap -->
 

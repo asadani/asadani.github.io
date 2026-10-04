@@ -1,7 +1,7 @@
 [
   {
     "slug": "decision-firewall-building-and-narrowing",
-    "title": "Building Decision Firewall, then narrowing it",
+    "title": "Decision Firewall: what building an AI governance framework taught me",
     "tags": [
       "ai-engineering"
     ],
@@ -10,12 +10,13 @@
       "evals",
       "craft"
     ],
-    "quote": "\"Keeping the code was easy. Narrowing what I said about it was the more useful engineering decision.\"",
-    "desc": "How I built a decision-governance framework, tested it against competent application controls, and narrowed it to a reference implementation after the results challenged the adoption case.",
+    "quote": "\"The refund still needs to survive a lost response. The library around that behaviour has to earn its place.\"",
+    "desc": "A refund-recovery example, measured comparisons and lessons from building Decision Firewall, an open-source reference for AI action authorization and audit.",
     "date": "2026-09-30",
     "dateDisplay": "September 30, 2026",
     "cta": "Read",
-    "shareUrl": "https://tech.anujsadani.in/decision-firewall-building-and-narrowing/"
+    "shareUrl": "https://tech.anujsadani.in/decision-firewall-building-and-narrowing/",
+    "modified": "2026-10-04"
   },
   {
     "slug": "when-software-hires-software",
