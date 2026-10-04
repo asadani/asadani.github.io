@@ -1,0 +1,11 @@
+Audit was useful. Telemetry was not a free win.
+
+I thought observability might be the stronger reason to reuse the framework. An application team would otherwise write lifecycle instrumentation and decide how to connect an execution attempt to the evidence behind it.
+
+The local reuse study made that concrete. The application had eight explicit event call sites and four operation decorators; the framework integration passed an observer and needed no application event hooks. Framework receipts verified and rejected tampering in sixty of sixty synthetic cases. The application baseline had unsigned logs, so signing was additional bundled functionality, not a capability it was unable to implement.
+
+The same report showed gaps. In the measured callable-policy path, framework spans lacked the evaluation ID, policy version, disposition and reasons. The manually instrumented application exported the first three; the shared allowlist omitted reasons in both. Neither exported any of the four sensitive canaries. Both completed an effect despite exporter failure, while required local audit failure blocked execution.
+
+I now separate those contracts. Telemetry helps me find the relevant records and may be dropped under backpressure. The required audit path participates in the authorization contract. A dashboard cannot substitute for a durable answer about whether an action happened.
+
+That distinction is worth keeping. It still does not establish that a team saves investigation time by adopting this runtime. Telemetry alone is a weak reason to accept the whole dependency when its observer utility can be reused separately.

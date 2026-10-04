@@ -1,0 +1,11 @@
+A refund is small enough to explain.
+
+I picked subscription refunds because an incorrect action has a visible consequence. A duplicate-charge claim needs transaction evidence. A cancellation may depend on when it happened and whether the service was used. A previous partial refund changes the remaining balance.
+
+The demonstration policy made those distinctions concrete. Verified duplicate charges could be refunded against the duplicate payment. Cancellation qualified within seven days only if the subscription was unused. Eligible refunds up to one thousand rupees could proceed automatically; larger ones needed review. A configurable ten thousand rupees daily automated limit routed excess demand to review. These were example rules, not statements of legal entitlement. Every payment effect was simulated.
+
+I also kept customer value and retention pressure out of eligibility. A convincing message about a valuable customer must not manufacture a duplicate payment. That separation mattered more than the model's confidence score.
+
+An assessment is an interpretation. The message sounds like a duplicate-charge complaint.
+
+An authorization is permission for an exact action. Refund this amount against this payment, using these facts and this policy, before this permission expires.

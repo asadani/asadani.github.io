@@ -1,0 +1,9 @@
+The laptop put useful limits on the design.
+
+My local machine had a G T X sixteen fifty with four gigabytes video memory and roughly eight gigabytes system memory. I chose Laya as the first decision-model adapter and left Jev out of this release. The fixture path had to work without downloading any model.
+
+The recorded local run used the Laya typed-decisions checkpoint, pinned to the checkpoint revision linked in the article, with SDK zero point three point twenty. It ran on cuda in thirty two bit floating point. Cold loading took twenty eight point four two seconds; median recorded inference was forty seven point four five milliseconds across thirty four assessments, including the first inference. Those are local measurements, not an accuracy result.
+
+The core used Python three point twelve and Pydantic for validated proposals, assessments and lifecycle records. S Q Lite transactions held authorization claims and reservations, with a separate simulated effect ledger using idempotency keys. Audit used R F C eighty seven eighty five canonical JSON, S H A two fifty six and Ed two five five one nine signatures. The developer interface used Typer; the optional refund inspector used Fast A P I and Jinja templates. Laya and PyTorch were optional model dependencies. OpenTelemetry export through O T L P was also optional. Neither inference nor telemetry was required by the model-free core.
+
+I kept model output away from execution credentials. Domain packs supplied facts and policy; executors owned the downstream effect boundary. A signed record can prove that recorded content has not changed under a trusted key. It cannot prove that the evidence was true, or protect a machine whose signing key has been compromised.

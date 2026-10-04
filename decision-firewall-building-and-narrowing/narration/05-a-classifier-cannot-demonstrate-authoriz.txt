@@ -1,0 +1,11 @@
+A classifier cannot demonstrate authorization value.
+
+I asked to run the full available data rather than rely on a convenient sample. Across Banking seventy seven and Bitext, the comparison accounted for thirty nine thousand nine hundred and fifty five source rows. The classifier was C P U naive Bayes, not Laya. Wrapping an unchanged classifier did not change its predictions.
+
+On the Banking seventy seven official test, all arms had seventy eight point six zero percent accuracy across three thousand eighty rows. On the ten thousand three training rows evaluated out of fold, all arms had seventy eight point one zero percent accuracy. On the twenty six thousand eight hundred and seventy two Bitext rows evaluated out of fold, all arms had ninety eight point three one percent accuracy.
+
+I kept the official test separate from the out-of-fold scores. Bitext's split was ours, not a publisher leaderboard split. The prepared Banking seventy seven test path added a paired median thirteen point five two seven milliseconds, with no prediction changes. There was no action to authorize in this task. Unless I independently needed validation or signed preparation records, I had added work without helping classification.
+
+I then asked for tool-using tasks. Laya could not fill the conversational agent and simulated-user roles, so a later development pilot used Open A I, G P T O S S twenty B through OpenRouter, with a token cap, seeded requests and bounded rate-limit backoff. It scheduled ninety episodes across selected tau bench and AgentDojo tasks; seventy eight completed and twelve remained incomplete. This was not a full-suite score.
+
+On the attacked AgentDojo subset, the baseline recorded eight attacker successes in nine completed episodes; application controls and the framework each recorded zero in ten. Both controlled arms completed the user task in only four of those ten episodes. Blocking an attack while failing a legitimate request was part of the result. The controls matched again. The model judge and selected attack also limit what I can infer.

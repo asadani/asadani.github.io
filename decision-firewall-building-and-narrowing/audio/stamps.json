@@ -1,0 +1,50 @@
+{
+ "00-introduction": {
+  "k": "ee857ff30bb41c80",
+  "d": 81.1
+ },
+ "01-a-refund-is-small-enough-to-explain": {
+  "k": "047793dbba5115a3",
+  "d": 87.8
+ },
+ "02-every-next-layer-sounded-reasonable": {
+  "k": "df32d13064012bbf",
+  "d": 91.4
+ },
+ "03-the-laptop-put-useful-limits-on-the-desi": {
+  "k": "fb9de22867d5e56f",
+  "d": 118.2
+ },
+ "04-compared-with-what": {
+  "k": "5a4afcd838a34de3",
+  "d": 123.3
+ },
+ "05-a-classifier-cannot-demonstrate-authoriz": {
+  "k": "332a1b9ff9146ed0",
+  "d": 139.2
+ },
+ "06-audit-was-useful-telemetry-was-not-a-fre": {
+  "k": "1491eb5e4de7eb94",
+  "d": 110.7
+ },
+ "07-the-comparison-that-changed-the-recommen": {
+  "k": "5c196bd42ceb2571",
+  "d": 170.7
+ },
+ "08-i-fixed-the-defects-without-rewriting-th": {
+  "k": "a1f45888f9e11554",
+  "d": 84.3
+ },
+ "09-a-useful-control-can-still-be-an-expensi": {
+  "k": "71b5dec01ed0d3b2",
+  "d": 99.9
+ },
+ "10-a-reference-implementation-is-a-legitima": {
+  "k": "b83e2d1b7b06be51",
+  "d": 78.1
+ },
+ "11-write-the-comparison-before-the-expansio": {
+  "k": "b373a8860f0e1a70",
+  "d": 97.5
+ }
+}

@@ -1,0 +1,133 @@
+{
+  "rendered_date": "2026-10-04",
+  "engine": "kokoro-onnx",
+  "voice": "bm_george+bm_fable",
+  "speed": 0.9,
+  "language": "en-gb",
+  "sample_rate": 24000,
+  "provider": "CUDAExecutionProvider",
+  "gpu": "NVIDIA GeForce GTX 1650 (4096 MiB)",
+  "inference_time_cpu_retry": false,
+  "article_text_commit": "543267f5728643e03f66fb223d5fca713dbe4213",
+  "narration_tool_sha256": "54b8605f85e7122a0834bdc665f21bb1fee0720d8c9c0e2e657d5cc685726965",
+  "model_sha256": "7d5df8ecf7d4b1878015a32686053fd0eebe2bc377234608764cc0ef3636a6c5",
+  "voices_sha256": "bca610b8308e8d99f32e6fe4197e7ec01679264efed0cac9140fe9c29f1fbf7d",
+  "packages": {
+    "kokoro-onnx": "0.6.1",
+    "onnxruntime-gpu": "1.22.0",
+    "nvidia-cudnn-cu12": "9.10.2.21",
+    "soundfile": "0.14.0",
+    "numpy": "2.5.3"
+  },
+  "total_seconds": 1282.106,
+  "tracks": [
+    {
+      "file": "00-introduction.mp3",
+      "title": "Introduction",
+      "seconds": 81.147,
+      "bytes": 567912,
+      "sha256": "a5c9ee42ae6875d892e1d2c06acbc28387166d9154c2a2607fe2d6d2f83a4183",
+      "script_sha256": "a5d4e551b886acb24ba21f2a0566daf9990d950aca007f1d9754dcd58e6c59dc",
+      "peak": 0.889406681060791
+    },
+    {
+      "file": "01-a-refund-is-small-enough-to-explain.mp3",
+      "title": "A refund is small enough to explain",
+      "seconds": 87.818,
+      "bytes": 621216,
+      "sha256": "ebebd1d0e3b8792634bc6f07ecef4bfae3fa9a411e693162311454b3b247f82f",
+      "script_sha256": "0955a16d62123284999ee742dd68a7efbbde9c34a0294a0508474af904ad4f3d",
+      "peak": 0.9023273587226868
+    },
+    {
+      "file": "02-every-next-layer-sounded-reasonable.mp3",
+      "title": "Every next layer sounded reasonable",
+      "seconds": 91.413,
+      "bytes": 655752,
+      "sha256": "36f1c913da3a15f9bc1325aed5bd5f62f0281f85ad1bbd7549c8410b12ae2a85",
+      "script_sha256": "85a20758a87e0f20564360a7bf95691add9a5cfba195dd57d3a6179ab387b007",
+      "peak": 0.8894630670547485
+    },
+    {
+      "file": "03-the-laptop-put-useful-limits-on-the-desi.mp3",
+      "title": "The laptop put useful limits on the design",
+      "seconds": 118.169,
+      "bytes": 847968,
+      "sha256": "168d502f081bff6d13f080bdc166d67cf3d979625649ea9c1b07ac1fcf77ad73",
+      "script_sha256": "c90c405debbf9009700edabe31c11e792201949b30ec9ce9394c52f3ed766c3e",
+      "peak": 0.881476879119873
+    },
+    {
+      "file": "04-compared-with-what.mp3",
+      "title": "Compared with what",
+      "seconds": 123.333,
+      "bytes": 880656,
+      "sha256": "b06f904186575218ead39e3469a56af5a421fb2f0258ac47d4c565f0426b75fc",
+      "script_sha256": "54ab0d484ddf504201445ef7e190196ab5aba9309b482ddc4eb653146f7bc790",
+      "peak": 0.8901280164718628
+    },
+    {
+      "file": "05-a-classifier-cannot-demonstrate-authoriz.mp3",
+      "title": "A classifier cannot demonstrate authorization value",
+      "seconds": 139.157,
+      "bytes": 1001904,
+      "sha256": "ebff4b69dfe1a1f1f7ddd886a43caeaa5632ed8eebd4d9ea16988f94c719a613",
+      "script_sha256": "74342445a5333f7eb84163917f401711208acadc7b734f8e3645b3cf256a06bd",
+      "peak": 0.8919061422348022
+    },
+    {
+      "file": "06-audit-was-useful-telemetry-was-not-a-fre.mp3",
+      "title": "Audit was useful. Telemetry was not a free win",
+      "seconds": 110.655,
+      "bytes": 781800,
+      "sha256": "d4f91e034c71240dac5150b8533c9b0591cde0bc288b3c4ce07a40910ef78b6a",
+      "script_sha256": "1f25f3ad20a2169a88c075431a8baa0a15a428f1cfc4d524182aa0a9d4d6ee0b",
+      "peak": 0.902389645576477
+    },
+    {
+      "file": "07-the-comparison-that-changed-the-recommen.mp3",
+      "title": "The comparison that changed the recommendation",
+      "seconds": 170.652,
+      "bytes": 1213344,
+      "sha256": "fed1b10b773e0d1e7422e3fe372ef55a60fe2baff16997e88e7bb74ab30bae85",
+      "script_sha256": "b2994373870fc5d0d51018a70c8d3781ee9e09805c6f43b09bc0df6e43f90b0d",
+      "peak": 0.8961362838745117
+    },
+    {
+      "file": "08-i-fixed-the-defects-without-rewriting-th.mp3",
+      "title": "I fixed the defects without rewriting the study",
+      "seconds": 84.26,
+      "bytes": 603600,
+      "sha256": "c00586f72ed805103a37ee5b8c19032f56dd0649fe3ff3fcb31bb7f524873377",
+      "script_sha256": "ef8155fcb0307bc6b1b14b4044420312bbc4c3875426da21e62eb5874b93b119",
+      "peak": 0.8725894689559937
+    },
+    {
+      "file": "09-a-useful-control-can-still-be-an-expensi.mp3",
+      "title": "A useful control can still be an expensive abstraction",
+      "seconds": 99.861,
+      "bytes": 714288,
+      "sha256": "3299708d40889475fdb32099c87ddd1d7f3d39411d35f453cfb497a2379154d7",
+      "script_sha256": "b585fa5783f7722c0845e66237e83ced1a1bc1ca69a252c9c786069da54ef352",
+      "peak": 0.8905466198921204
+    },
+    {
+      "file": "10-a-reference-implementation-is-a-legitima.mp3",
+      "title": "A reference implementation is a legitimate outcome",
+      "seconds": 78.127,
+      "bytes": 560832,
+      "sha256": "aa590bdee4afe01f219e133c2238e5eb815c389fb4b02203b24e16215a64f4e9",
+      "script_sha256": "0babb09515e33d4aa3e562d4809f729903994b4d55fad85ac2ad06d4df365ef0",
+      "peak": 0.8919781446456909
+    },
+    {
+      "file": "11-write-the-comparison-before-the-expansio.mp3",
+      "title": "Write the comparison before the expansion",
+      "seconds": 97.514,
+      "bytes": 697032,
+      "sha256": "ce433a5b23ebad3b39668d612340196a9a9e192367aa901e4aa053adc1cb987f",
+      "script_sha256": "2c9ef5f594d420b61ad72f6df943aabdc9429a6e557a7000b2979dd69600307a",
+      "peak": 0.8882370591163635
+    }
+  ]
+}

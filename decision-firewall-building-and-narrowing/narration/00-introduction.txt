@@ -1,0 +1,13 @@
+Introduction.
+
+Building Decision Firewall, then narrowing it.
+
+This is a synthetic narration generated locally with Kokoro. Tables are adapted into spoken comparisons; code listings and source links are available in the written article.
+
+I started Decision Firewall with a refund request. A model could read the customer's message, but I did not want its interpretation to become permission to move money. I wanted the payment record to establish the facts, and explicit policy to decide what could happen.
+
+That was a useful problem. The project that grew around it was harder to justify.
+
+By the time I asked for an independent comparison, I had a reusable runtime, historical-data workflows and an evaluation layer. The comparison found equal correctness against competent application controls, more integration friction, and a slower implementation. I kept the reference implementation and stopped the adoption claims.
+
+This is how I got there, including the parts I would now do in a different order. I directed the work through coding agents, questioned the measurements and commissioned a separate agent evaluation. I did not personally hand-write every implementation, and the evaluation did not measure human productivity.

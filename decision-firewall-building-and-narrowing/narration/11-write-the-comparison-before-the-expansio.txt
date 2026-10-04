@@ -1,0 +1,11 @@
+Write the comparison before the expansion.
+
+My useful contribution was steering the work toward a harder question. I asked whether the baseline was competent, whether all rows were counted, whether a blocked call also blocked a legitimate task, and whether supplied telemetry actually exported the fields I needed. I should have asked the first question before authorizing the wider framework plan.
+
+On the next build, I would implement one consequential workflow and its modular application comparator before adding the developer platform around it. I would decide what would count as a reason to adopt: fewer integration defects, less maintenance effort, or faster incident reconstruction. Then I would choose a study that can measure that reason.
+
+A future test could use several integrations, less prescriptive requirements and incidents without an answer-bearing downstream export. Human participants would be needed for human-productivity claims. That is a possible follow-up, not an explanation for dismissing the result I have.
+
+I started by trying to make model-driven actions accountable. I ended by having to make the framework's own claims accountable. Keeping the code was easy. Narrowing what I said about it was the more useful engineering decision.
+
+These are the results reported in the article published on September thirtieth, twenty twenty six. The independent pilot evaluated an earlier snapshot. The zero point three point one fixes do not retroactively improve those results. Financial and deployment effects were simulated throughout.
