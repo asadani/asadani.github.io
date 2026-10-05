@@ -1,5 +1,5 @@
 {
-  "rendered_date": "2026-10-04",
+  "rendered_date": "2026-10-05",
   "engine": "kokoro-onnx",
   "voice": "bm_george+bm_fable",
   "speed": 0.9,
@@ -8,9 +8,9 @@
   "provider": "CUDAExecutionProvider",
   "gpu": "NVIDIA GeForce GTX 1650 (4096 MiB)",
   "inference_time_cpu_retry": false,
-  "source_parent_commit": "ca6dbbaee561b00f496e1268f7e2880bdaba18c1",
-  "article_content_sha256": "5d8472f7a94e4971421d79181c7bf66bccdaee4e52d7dd355d128ec2eb07d73b",
-  "article_content_hash_scope": "UTF-8 opening prose through before closing main, including sections and evidence note",
+  "source_parent_commit": "c4c7921d65f08cd6284674ee0575cfb188f80ca3",
+  "article_content_sha256": "ff1acc7032aa5ccf8342711d448e81cd483d4179749eff342251244e6884994b",
+  "article_content_hash_scope": "UTF-8 with LF newlines, from opening prose div through before closing main, including sections and evidence note",
   "narration_tool_sha256": "54b8605f85e7122a0834bdc665f21bb1fee0720d8c9c0e2e657d5cc685726965",
   "model_sha256": "7d5df8ecf7d4b1878015a32686053fd0eebe2bc377234608764cc0ef3636a6c5",
   "voices_sha256": "bca610b8308e8d99f32e6fe4197e7ec01679264efed0cac9140fe9c29f1fbf7d",
@@ -21,7 +21,7 @@
     "soundfile": "0.14.0",
     "numpy": "2.5.3"
   },
-  "total_seconds": 1115.488,
+  "total_seconds": 1223.257,
   "tracks": [
     {
       "file": "00-introduction.mp3",
@@ -30,7 +30,8 @@
       "bytes": 668160,
       "sha256": "4ddabb245a7672189fac9c7f91df4550691c276a6d5af4b1a2bcda18ded1088e",
       "script_sha256": "5056228c313c379e3665077b5480a31d369d9f20992167f969fb62275708bbdd",
-      "peak": 0.8918508887290955
+      "peak": 0.8918508887290955,
+      "rendered_date": "2026-10-04"
     },
     {
       "file": "01-a-refund-is-small-enough-to-explain.mp3",
@@ -39,7 +40,8 @@
       "bytes": 982176,
       "sha256": "b2fa836f2bcaa25a83fcfd8ada596b3ed272ab1d17f6445b8fe6a7f2dbfd7279",
       "script_sha256": "1cb8c9e3f727df1495560f5089c501f99e66bd4c175c47eb15168c8131c992af",
-      "peak": 0.896469235420227
+      "peak": 0.896469235420227,
+      "rendered_date": "2026-10-04"
     },
     {
       "file": "02-every-next-layer-sounded-reasonable.mp3",
@@ -48,7 +50,8 @@
       "bytes": 452592,
       "sha256": "2bb494d72a026ef2cf964eb02a4a80b69d3689eacb538372a57d5bd0b7468cd6",
       "script_sha256": "afb891483686499d59bdfdadc739c120596346bb0d8a193ebc09dc5790ed1c54",
-      "peak": 0.8939878344535828
+      "peak": 0.8939878344535828,
+      "rendered_date": "2026-10-04"
     },
     {
       "file": "03-the-laptop-put-useful-limits-on-the-desi.mp3",
@@ -57,7 +60,8 @@
       "bytes": 663240,
       "sha256": "5ac6872de31c585a098cca88ef8e05e36d0554501fe06d76bc90df5c8276cc8c",
       "script_sha256": "3462cc0672eed0809595e16ec73798873dbab8b2ebe7b10a1559ef0da2ef85c6",
-      "peak": 0.881476879119873
+      "peak": 0.881476879119873,
+      "rendered_date": "2026-10-04"
     },
     {
       "file": "04-compared-with-what.mp3",
@@ -66,7 +70,8 @@
       "bytes": 750408,
       "sha256": "13228a87e49705915f7611228140daffc1571b8d27f7d6c0116a6bb33f804650",
       "script_sha256": "f22f0f128f775793b98b6720095297c997cc7f3762372f52d46392fb4862a4b9",
-      "peak": 0.8905671834945679
+      "peak": 0.8905671834945679,
+      "rendered_date": "2026-10-04"
     },
     {
       "file": "05-a-classifier-cannot-demonstrate-authoriz.mp3",
@@ -75,7 +80,8 @@
       "bytes": 625656,
       "sha256": "4c1ea934d99992f3d49c4607fbdeb0e47492ba49cae0e47accde551d98826f9a",
       "script_sha256": "60db3ac4be88635bd68a064f3ed9c861c5820f2e426f575b853a515b59245504",
-      "peak": 0.8922744989395142
+      "peak": 0.8922744989395142,
+      "rendered_date": "2026-10-04"
     },
     {
       "file": "06-audit-was-useful-telemetry-was-not-a-fre.mp3",
@@ -84,7 +90,8 @@
       "bytes": 564696,
       "sha256": "cfce608cb3e1c86596087ee821b20b3c752b1fecb400bd6cd28963122a8094e0",
       "script_sha256": "0c86a38ecab39c0192964e44d5a32e82994734a2a21d9c93f0ca7f1577ef6083",
-      "peak": 0.902389645576477
+      "peak": 0.902389645576477,
+      "rendered_date": "2026-10-04"
     },
     {
       "file": "07-the-comparison-that-changed-the-recommen.mp3",
@@ -93,7 +100,8 @@
       "bytes": 945360,
       "sha256": "a1056997340e594a1d13991996783b2d47f5c36889e06ab6839f698b2a306417",
       "script_sha256": "f01e9cb6b81a6b75b47944c4713b67a25380b08a33914fa8ca2b4c79a8874dfb",
-      "peak": 0.8820430636405945
+      "peak": 0.8820430636405945,
+      "rendered_date": "2026-10-04"
     },
     {
       "file": "08-i-fixed-the-defects-without-rewriting-th.mp3",
@@ -102,7 +110,8 @@
       "bytes": 509544,
       "sha256": "7408cc01b3808ea20f25c88921e47d9f4ce92a866a5bac5f823090690ad3b61e",
       "script_sha256": "df8c5b1036cde3934fd3b46e2bc69752e1af4488142442c48985f887dfa2b93c",
-      "peak": 0.8868535161018372
+      "peak": 0.8868535161018372,
+      "rendered_date": "2026-10-04"
     },
     {
       "file": "09-a-useful-control-can-still-be-an-expensi.mp3",
@@ -111,25 +120,29 @@
       "bytes": 492432,
       "sha256": "1032cc9ebddbaa61cf09772409adda2389903309bfb3dcbc00d95ce346d7e2d1",
       "script_sha256": "3e49003c8252580449afc80b7bcf203c735fd7ad18f009f4cc217b315870762e",
-      "peak": 0.878753662109375
+      "peak": 0.878753662109375,
+      "rendered_date": "2026-10-04"
     },
     {
       "file": "10-a-reference-implementation-is-a-legitima.mp3",
       "title": "A reference implementation is a legitimate outcome",
-      "seconds": 91.285,
-      "bytes": 654456,
-      "sha256": "f4265b98412d0516d9500ad2777cd2e6b2ac3619ebb182d38dd1ee02f9fbe484",
-      "script_sha256": "5d5bc1c0997c325f7bad470a2e6a86242f372284517fcfd9d7bbcac37002ebeb",
-      "peak": 0.8967626690864563
+      "seconds": 192.601,
+      "bytes": 1366584,
+      "sha256": "316949149eb21fc8c21d7b5a229a075b9586e74ec537fa2ffcf37f10b414686f",
+      "script_sha256": "b4e75af64618c21d03e4aed18628ff17a05fa63f6a9d4c4ec8b2367aabf33794",
+      "peak": 0.9038017988204956,
+      "rendered_date": "2026-10-05"
     },
     {
       "file": "11-write-the-comparison-before-the-expansio.mp3",
       "title": "Write the comparison before the expansion",
-      "seconds": 82.901,
-      "bytes": 591864,
-      "sha256": "2fc6f109c05cfd2d8db54ccd7221c642690b895550575fffd0688fc372a0cb55",
-      "script_sha256": "4af375e189ff9aa2b25b12ddefc5ee265af8b070e5a1b3a1ce6cc171593c0dfc",
-      "peak": 0.8990066051483154
+      "seconds": 89.354,
+      "bytes": 636120,
+      "sha256": "7005e724c6eaef009a50d06131f32b867d0ddafe5d58fa2387053817beb5619d",
+      "script_sha256": "bb3501185bebb3a867b58b9eb0d8746cc16787bbbd07a9a9738e554e641a8854",
+      "peak": 0.8933773040771484,
+      "rendered_date": "2026-10-05"
     }
-  ]
+  ],
+  "render_scope": "Tracks 10 and 11 regenerated on October 5; tracks 00 through 09 retained from October 4. Per-track dates record actual synthesis dates."
 }

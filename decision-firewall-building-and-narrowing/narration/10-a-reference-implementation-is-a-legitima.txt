@@ -9,3 +9,15 @@ Start with the model-free path using Python three point twelve, the tested runti
 After running it, inspect which exact action the authorization binds and how the execution attempt connects to its receipt. Then read the seventeen declared deployment conformance checks: which cases pass, which are unsupported, and what the adapter must guarantee.
 
 For an application of my own, I would turn the lost-response example into a test: restart after downstream success, reconcile the original key, then assert one effect and no remaining reservation once success is resolved. Passing a happy-path refund would not answer that question. Production identity and protection against bypassing the controls still need deployment integration.
+
+October fifth follow-up: checks without the runtime.
+
+After publishing this, someone asked whether the conformance checks could run against plain application controls without the runtime. They couldn’t. That exposed a gap in calling the project a conformance kit: running its checks still meant using my framework.
+
+I extracted a small independent package covering stale approval, duplicate effects and recovery after a lost response. In the new development pilot, both the existing application and Decision Firewall passed all three scenarios. Six deliberately injected behavioural faults, three in each implementation, were detected. These are separate results from the earlier paired study.
+
+The package needs no Decision Firewall runtime or model. The written article includes commands to run the plain application's simulated example from a repository checkout, in a Python three point twelve virtual environment.
+
+Testing another application still takes work: its test adapter must expose the controls and an independent record of downstream effects. The linked adapter guide defines that contract. The examples use one simulated export domain; recovery reconstructs state in a fresh interpreter, without testing an operating-system crash. Three scenarios do not establish complete conformance coverage or production safety.
+
+This doesn’t establish that the framework saves work. It makes a smaller contribution available: someone can test these behaviours without adopting my runtime. That feels like a better fit for where the evidence led me.

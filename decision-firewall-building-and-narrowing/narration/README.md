@@ -1,8 +1,10 @@
 # Audio edition
 
-Regenerated for the October 4, 2026 article revision, locally on October 4, 2026 with [narrate-your-writing](https://github.com/asadani/narrate-your-writing), Kokoro ONNX, the `bm_george+bm_fable` blend, British English and speed `0.9`.
+Updated for the October 5, 2026 follow-up with [narrate-your-writing](https://github.com/asadani/narrate-your-writing), Kokoro ONNX, the `bm_george+bm_fable` blend, British English and speed `0.9`. Tracks 10 and 11 were regenerated locally on October 5; the unchanged tracks 00 through 09 retain their October 4 renders. There are 11 numbered sections plus the introduction: 12 audio parts in total.
 
 These twelve scripts are an adaptation for listening, not a verbatim HTML extraction. They retain the opening argument, both attributed quotes and the numerical comparisons from the remaining pilot table, plus the worked refund-recovery example. Navigation, visual mind-map labels, raw code, checkpoint hashes and source-link labels are omitted. Numbers are written as spoken words. The written article remains the source for executable commands and linked evidence. The spoken introduction and visible player identify the voice as synthetic.
+
+The October 5 addition in track 10 explains the runtime-independent three-scenario pilot, its six declared fault injections and its limitations. Track 11 updates the spoken evidence boundary. The earlier comparison results are unchanged. Both updated tracks rendered successfully on CUDA with CPU retry disabled; the player durations and cache keys were refreshed from the new files.
 
 The verified render used `CUDAExecutionProvider` on an NVIDIA GTX 1650 with 4 GB VRAM, ONNX Runtime GPU 1.22.0 and cuDNN 9.10.2.21. Inference-time CPU retry was disabled. An initial attempt with cuDNN 9.27 failed during convolution and attempted CPU fallback; it was stopped and all tracks were regenerated with `--force`. Those initial results are not published.
 

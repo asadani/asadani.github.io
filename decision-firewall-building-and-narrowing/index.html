@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Decision Firewall: what building an AI governance framework taught me">
 <meta name="twitter:description" content="A refund-recovery example, measured comparisons and lessons from building Decision Firewall, an open-source reference for AI action authorization and audit.">
-<meta property="article:modified_time" content="2026-10-04">
+<meta property="article:modified_time" content="2026-10-05">
 
 <script type="application/ld+json">
 {
@@ -40,7 +40,7 @@
     "name": "Anuj Sadani",
     "url": "https://anujsadani.in/"
   },
-  "dateModified": "2026-10-04",
+  "dateModified": "2026-10-05",
   "image": "https://tech.anujsadani.in/assets/profile-pic.png",
   "about": {
     "@type": "SoftwareSourceCode",
@@ -714,7 +714,7 @@ a:focus-visible, button:focus-visible, .map-scroll:focus-visible, .data-table:fo
     <h1>Decision Firewall: what building an AI governance framework taught me</h1>
     <p class="hero-deck">I built controls for model-driven actions, then tested whether packaging them as a framework helped. A lost-response refund explains what was worth keeping.</p><!-- 1–2 sentence summary, 18px muted -->
     <div class="hero-meta">
-      <span>September 30, 2026 · Updated October 4, 2026</span><!-- e.g. April 2026 -->
+      <span>September 30, 2026 · Updated October 5, 2026</span><!-- e.g. April 2026 -->
       <span class="hero-meta-sep">/</span>
       <span>Anuj Sadani · 10 min read</span><!-- e.g. source doc name or category -->
     </div>
@@ -729,7 +729,7 @@ a:focus-visible, button:focus-visible, .map-scroll:focus-visible, .data-table:fo
 <div class="ap" id="articleaudio">
   <div class="ap-hd">
     <span class="ap-ico" aria-hidden="true">&#9654;</span>
-    <div><span class="ap-kick">Audio edition</span><b>Listen to this article</b><span class="ap-sub">12 parts &middot; 19 min &middot; Kokoro synthetic voice</span></div>
+    <div><span class="ap-kick">Audio edition</span><b>Listen to this article</b><span class="ap-sub">12 parts &middot; 21 min &middot; Kokoro synthetic voice</span></div>
     <button class="ap-rate" type="button" aria-label="Playback speed">1&#215;</button>
     <button class="ap-more" type="button" aria-expanded="false">Parts</button>
   </div>
@@ -746,8 +746,8 @@ a:focus-visible, button:focus-visible, .map-scroll:focus-visible, .data-table:fo
       <li><button type="button" data-src="audio/07-the-comparison-that-changed-the-recommen.mp3?v=a1056997340e"><span class="ap-n">8</span><span class="ap-nm">The comparison that changed the recommendation</span><span class="ap-d">2:13</span></button></li>
       <li><button type="button" data-src="audio/08-i-fixed-the-defects-without-rewriting-th.mp3?v=7408cc01b380"><span class="ap-n">9</span><span class="ap-nm">I fixed the defects without rewriting the study</span><span class="ap-d">1:12</span></button></li>
       <li><button type="button" data-src="audio/09-a-useful-control-can-still-be-an-expensi.mp3?v=1032cc9ebddb"><span class="ap-n">10</span><span class="ap-nm">A useful control can still be an expensive abstraction</span><span class="ap-d">1:10</span></button></li>
-      <li><button type="button" data-src="audio/10-a-reference-implementation-is-a-legitima.mp3?v=f4265b98412d"><span class="ap-n">11</span><span class="ap-nm">A reference implementation is a legitimate outcome</span><span class="ap-d">1:31</span></button></li>
-      <li><button type="button" data-src="audio/11-write-the-comparison-before-the-expansio.mp3?v=2fc6f109c05c"><span class="ap-n">12</span><span class="ap-nm">Write the comparison before the expansion</span><span class="ap-d">1:23</span></button></li>
+      <li><button type="button" data-src="audio/10-a-reference-implementation-is-a-legitima.mp3?v=316949149eb2"><span class="ap-n">11</span><span class="ap-nm">A reference implementation is a legitimate outcome</span><span class="ap-d">3:13</span></button></li>
+      <li><button type="button" data-src="audio/11-write-the-comparison-before-the-expansio.mp3?v=7005e724c6ea"><span class="ap-n">12</span><span class="ap-nm">Write the comparison before the expansion</span><span class="ap-d">1:29</span></button></li>
   </ol>
 </div>
 <div class="ap-mini" id="ap-mini" hidden>
@@ -901,6 +901,14 @@ firewall framework --domain refunds demo
 firewall conformance decision_firewall.conformance_fixtures:deployments --save conformance.json</pre></div><div class="prose">
 <p>After running it, inspect which exact action the authorization binds and how the execution attempt connects to its receipt. Then read the <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/framework/release-tools.md">17 declared deployment conformance checks</a>: which cases pass, which are unsupported, and what the adapter must guarantee.</p>
 <p>For an application of my own, I would turn the lost-response example into a test: restart after downstream success, reconcile the original key, then assert one effect and no remaining reservation once success is resolved. Passing a happy-path refund would not answer that question. Production identity and protection against bypassing the controls still need deployment integration.</p>
+<h3 id="independent-checks">October 5 follow-up: checks without the runtime</h3>
+<p>After publishing this, someone asked whether the conformance checks could run against plain application controls without the runtime. They couldn’t. That exposed a gap in calling the project a conformance kit: running its checks still meant using my framework.</p>
+<p>I extracted a small independent package covering stale approval, duplicate effects and recovery after a lost response. In the <a href="https://github.com/asadani/decision-firewall/blob/9ed7457/docs/benchmarks/independent-conformance/summary.md">new development pilot</a>, both the existing application and Decision Firewall passed all three scenarios. Six deliberately injected behavioural faults, three in each implementation, were detected. These are separate results from the earlier paired study.</p>
+<p>The package needs no Decision Firewall runtime or model. From a repository checkout, in a Python 3.12 virtual environment, this runs the plain application's simulated example:</p>
+</div><div class="code-block"><div class="cb-label">Independent checks, simulated application</div><pre tabindex="0" aria-label="Independent conformance installation and example">python -m pip install ./conformance
+python -m control_conformance benchmarks.control_conformance.adapters:application --output report.json</pre></div><div class="prose">
+<p>Testing another application still takes work: its test adapter must expose the controls and an independent record of downstream effects. The <a href="https://github.com/asadani/decision-firewall/blob/9ed7457/conformance/README.md">adapter guide</a> defines that contract. The examples use one simulated export domain; recovery reconstructs state in a fresh interpreter, without testing an operating-system crash. Three scenarios do not establish complete conformance coverage or production safety.</p>
+<p>This doesn’t establish that the framework saves work. It makes a smaller contribution available: someone can test these behaviours without adopting my runtime. That feels like a better fit for where the evidence led me.</p>
 </div>
 </section>
 
@@ -914,7 +922,7 @@ firewall conformance decision_firewall.conformance_fixtures:deployments --save c
 </div>
 </section>
 
-<aside class="callout source-note"><div class="callout-lbl">Evidence and version boundary</div><p>Revised October 4, 2026 for a clearer walkthrough; the reported results remain the repository evidence available on September 30, 2026. The ₹800 recovery example is illustrative, not a new measured run. Links to reports and code are pinned to commit <code>a9b9a52</code>. The independent pilot evaluated an earlier snapshot; 0.3.1 fixes do not retroactively improve its results. The <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/EVIDENCE.md">evidence index</a> distinguishes historical runs, corrective checks and untested claims. Financial and deployment effects were simulated throughout. The quotes above come from my build conversation and the evaluator's report, not reconstructed interviews.</p></aside>
+<aside class="callout source-note"><div class="callout-lbl">Evidence and version boundary</div><p>Revised October 4, 2026 for a clearer walkthrough, with a dated follow-up added October 5. The original study results remain the repository evidence available on September 30, 2026, linked at commit <code>a9b9a52</code>. The new three-scenario extraction results and adapter guide are separately pinned to <code>9ed7457</code>. The ₹800 recovery example is illustrative, not a measured run. The earlier paired pilot evaluated an earlier snapshot; neither the 0.3.1 fixes nor the new extraction retroactively improve its results. The <a href="https://github.com/asadani/decision-firewall/blob/a9b9a52/docs/EVIDENCE.md">evidence index</a> distinguishes historical runs, corrective checks and untested claims. Financial and deployment effects were simulated throughout. The quotes above come from my build conversation and the evaluator's report, not reconstructed interviews.</p></aside>
 
 </main><!-- /page-wrap -->
 
