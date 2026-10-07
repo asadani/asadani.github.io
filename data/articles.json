@@ -1,5 +1,24 @@
 [
   {
+    "slug": "degrees-of-ai",
+    "title": "Degrees of AI",
+    "tags": [
+      "ai-engineering",
+      "interactive"
+    ],
+    "flavors": [
+      "agents",
+      "models",
+      "craft"
+    ],
+    "quote": "\"Degrees of AI should describe a system’s choices. They shouldn’t rank its ambition.\"",
+    "desc": "AI-native, agentic and autonomous describe different dimensions. Map product dependence, agency, authority and boundaries with a practical interactive questionnaire.",
+    "date": "2026-10-07",
+    "dateDisplay": "October 7, 2026",
+    "cta": "Read & explore",
+    "shareUrl": "https://tech.anujsadani.in/degrees-of-ai/"
+  },
+  {
     "slug": "decision-firewall-building-and-narrowing",
     "title": "Decision Firewall: what building an AI governance framework taught me",
     "tags": [

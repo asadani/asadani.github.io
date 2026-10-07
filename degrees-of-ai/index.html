@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Degrees of AI · Products, agents and human judgment</title>
+<meta name="description" content="AI-native, agentic and autonomous describe different dimensions. Map product dependence, agency, authority and boundaries with a practical interactive questionnaire.">
+<meta name="author" content="Anuj Sadani">
+<link rel="canonical" href="https://tech.anujsadani.in/degrees-of-ai/">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tech.anujsadani.in/degrees-of-ai/">
+<meta property="og:site_name" content="Anuj Sadani | Tech">
+<meta property="og:title" content="Degrees of AI">
+<meta property="og:description" content="AI-native, agentic and autonomous describe different dimensions. Map product dependence, agency, authority and boundaries with a practical interactive questionnaire.">
+<meta property="og:image" content="https://tech.anujsadani.in/assets/profile-pic.png">
+<meta property="article:published_time" content="2026-10-07">
+<meta property="article:author" content="Anuj Sadani">
+<meta name="twitter:card" content="summary_large_image">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Degrees of AI",
+  "description": "AI-native, agentic and autonomous describe different dimensions. Map product dependence, agency, authority and boundaries with a practical interactive questionnaire.",
+  "datePublished": "2026-10-07",
+  "url": "https://tech.anujsadani.in/degrees-of-ai/",
+  "mainEntityOfPage": "https://tech.anujsadani.in/degrees-of-ai/",
+  "inLanguage": "en",
+  "isPartOf": { "@id": "https://tech.anujsadani.in/#blog" },
+  "author": {
+    "@type": "Person",
+    "@id": "https://anujsadani.in/#person",
+    "name": "Anuj Sadani",
+    "url": "https://anujsadani.in/"
+  }
+}
+</script>
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/article.css">
+<style>
+.ai-diagram {margin:28px 0}.ai-diagram svg {display:block;width:100%;height:auto;min-width:620px}.ai-diagram {overflow-x:auto}.ai-diagram details {min-width:0}.ai-diagram pre {white-space:pre-wrap;font-size:12px;color:var(--text-muted)}
+#degrees-ai-questionnaire {border-top:3px solid var(--accent);padding-top:20px;color:var(--text-body)}
+#degrees-ai-questionnaire .viz-controls {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#degrees-ai-questionnaire .form-label {display:block;font-size:14px;color:var(--text-body)}
+#degrees-ai-questionnaire .form-control,#degrees-ai-questionnaire .form-select {display:block;width:100%;min-height:44px;padding:10px 12px;margin-top:6px;font:inherit;font-size:16px;border:1px solid var(--border);border-radius:5px;background:var(--surface);color:var(--text)}
+#degrees-ai-questionnaire select,#degrees-ai-questionnaire summary {cursor:pointer}
+#degrees-ai-questionnaire :focus-visible {outline:2px solid var(--accent);outline-offset:3px}
+#degrees-ai-questionnaire .ai-error {color:var(--red)}
+#degrees-ai-questionnaire #da-result {min-height:60px}
+#degrees-ai-questionnaire .da-dot {background:var(--accent)}
+#degrees-ai-questionnaire .da-cell.da-placed {background:var(--accent-bg)}
+#degrees-ai-questionnaire .da-cell {font-size:12px}
+#degrees-ai-questionnaire .table {width:100%;border-collapse:collapse;font-size:13px}
+#degrees-ai-questionnaire .table td,#degrees-ai-questionnaire .table th {padding:10px;border-bottom:1px solid var(--border);text-align:left}
+@media(max-width:600px){nav .nav-right>span:first-child {display:none}#degrees-ai-questionnaire .viz-controls {grid-template-columns:1fr}.ai-diagram {margin-left:0;margin-right:0}}
+@media(prefers-reduced-motion:reduce){* {scroll-behavior:auto!important;transition:none!important}}
+@media print {nav,#degrees-ai-questionnaire {display:none}.ai-diagram svg {min-width:0}}
+</style></head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">Anuj Sadani | Tech</a>
+  <div class="nav-right">
+    <span>AI Engineering</span>
+    <span class="nav-tag">OCT 2026</span><!-- e.g. APR 2026 -->
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <span class="theme-icon-moon" aria-hidden="true">&#9790;</span><!-- ☾ shown in light mode -->
+      <span class="theme-icon-sun" aria-hidden="true">&#9728;</span><!-- ☀ shown in dark mode -->
+    </button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">Product design · Agency · Governance</div><!-- e.g. "Linux Kernel Policy — Official" -->
+    <h1>Degrees of AI</h1>
+    <p class="hero-deck">How products depend on AI, how agents act, and where human judgment stays in control.</p><!-- 1–2 sentence summary, 18px muted -->
+    <div class="hero-meta">
+      <span>October 7, 2026</span><!-- e.g. April 2026 -->
+      <span class="hero-meta-sep">/</span>
+      <span>Anuj Sadani · Interactive essay</span><!-- e.g. source doc name or category -->
+    </div>
+  </header>
+
+<div class="toc" role="navigation" aria-label="Jump to section"><div class="toc-label">Explore</div><ol class="toc-list"><li><a href="#a-map-with-the-boundaries-written-beside-it">The map</a></li><li><a href="#ai-native-can-still-be-human-governed">Human governance</a></li><li><a href="#the-system-underneath-architecture-oversight-deployment">Architecture</a></li><li><a href="#where-i-think-this-goes-next">Future directions</a></li><li><a href="#product-assessment">Assess your product</a></li><li><a href="#sources-and-framing">Sources</a></li></ol></div><div class="prose"><p>Everyone seems to be moving toward AI-native.</p>
+<p>Except some mean adding a copilot. Some mean rebuilding the product around a model. Some mean letting agents execute workflows. And some mean reducing the need for human intervention.</p>
+<p>We keep putting these ideas on the same ladder:</p>
+<p><strong>AI-assisted → AI-first → AI-native → agentic → autonomous.</strong></p>
+<p>It looks like evolution. But the labels change the question halfway through.</p>
+<p>One describes the relationship between a person and a tool. Another describes a product strategy. Another describes how a system chooses its next action.</p>
+<p>There isn&#39;t one degree of AI. There are several.</p>
+</div><section class="section" id="the-vocabulary-is-bigger-than-the-ladder"><h2><a class="anchor" href="#the-vocabulary-is-bigger-than-the-ladder">The vocabulary is bigger than the ladder</a></h2><div class="prose"><p>The vocabulary extends well beyond AI-native and agentic. Teams use these labels to describe different changes, sometimes in the same sentence.</p>
+<p>Here is a working guide. These are useful interpretations, not standardized definitions every vendor follows.</p>
+<div class="data-table"><table>
+<thead>
+<tr>
+<th>Family</th>
+<th>Terms</th>
+<th>What they tell us</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Human-AI relationship</td>
+<td>Assisted, augmented, delegated</td>
+<td>How the person shares the work with AI.</td>
+</tr>
+<tr>
+<td>Product integration</td>
+<td>Added, enabled, powered, embedded, integrated</td>
+<td>How AI participates in an existing experience.</td>
+</tr>
+<tr>
+<td>Product orientation</td>
+<td>AI-first, AI-native</td>
+<td>How product priorities and design depend on AI.</td>
+</tr>
+<tr>
+<td>Execution</td>
+<td>Copilot, agent-assisted, agentic</td>
+<td>Whether AI supports a human-directed path or dynamically directs work.</td>
+</tr>
+<tr>
+<td>Agent-centered design</td>
+<td>Agent-native</td>
+<td>Whether agents are first-class participants in the product.</td>
+</tr>
+<tr>
+<td>Independence</td>
+<td>Autonomous, bounded autonomy</td>
+<td>Which work can proceed without routine human intervention.</td>
+</tr>
+<tr>
+<td>Execution boundary</td>
+<td>Approved tools, resources, environments and budgets</td>
+<td>Where the system may operate, regardless of how it chooses its steps.</td>
+</tr>
+<tr>
+<td>System construction</td>
+<td>Neural, generative, neuro-symbolic, compound, multi-agent</td>
+<td>What kinds of components make the system work.</td>
+</tr>
+<tr>
+<td>Oversight</td>
+<td>Human-in-the-loop, on-the-loop, out-of-the-loop</td>
+<td>Where people approve, supervise, or do not routinely intervene.</td>
+</tr>
+<tr>
+<td>Deployment</td>
+<td>Cloud, local, edge, hybrid</td>
+<td>Where computation and data processing happen.</td>
+</tr>
+</tbody></table></div>
+<p><strong>AI-assisted</strong> usually means the human performs the task while AI helps with a step. <strong>AI-augmented</strong> emphasizes expanded capability, perhaps finding patterns or comparing alternatives the person would struggle to handle alone. <strong>Delegated</strong> means handing over a bounded outcome rather than requesting every individual step.</p>
+<p>Those can overlap. A researcher can delegate a literature scan and then use its results to augment their judgment. Delegation says who owns the task for now; it doesn&#39;t establish how the implementation works.</p>
+<p><strong>AI-powered</strong> says AI contributes materially to a capability, but tells us little about the rest of the product. <strong>Embedded</strong> or <strong>integrated</strong> says AI is built into the workflow rather than accessed as a separate destination. An embedded assistant may still wait for a human prompt every time.</p>
+<p><strong>Agent-assisted</strong> puts an agent inside human-led work. <strong>Agentic</strong> describes dynamic model-directed execution. The difference is useful, but the vocabulary is loose: a product can be both.</p>
+<p>The mistake isn&#39;t using these terms. It is treating them as interchangeable measures of advancement.</p>
+</div></section><section class="section" id="remove-the-ai-what-disappears"><h2><a class="anchor" href="#remove-the-ai-what-disappears">Remove the AI. What disappears?</a></h2><div class="prose"><p>Start with two imaginary products.</p>
+<p>The first is an expense platform. It stores receipts, routes approvals, and reimburses employees. Add AI to explain a rejection or extract details from a receipt. Remove that capability and the platform still has a recognizable job.</p>
+<p>The second is a tool whose entire purpose is to turn a conversation into a working prototype. Remove the AI and you haven&#39;t removed a feature. You have removed the central proposition.</p>
+<p>That difference is more useful than counting how many screens have a sparkle icon.</p>
+<p>I would call it <strong>AI dependence</strong>: how fundamental is AI to the experience and value the product promises?</p>
+<p>The familiar vocabulary can help here, provided we treat it as working language rather than an industry standard.</p>
+<div class="data-table"><table>
+<thead>
+<tr>
+<th>Label</th>
+<th>A useful reading</th>
+<th>The limit of the label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AI-added</td>
+<td>AI is an optional addition to an established experience.</td>
+<td>An optional feature can still be technically sophisticated.</td>
+</tr>
+<tr>
+<td>AI-enabled</td>
+<td>AI makes a meaningful capability possible or materially better.</td>
+<td>The rest of the product may remain conventional.</td>
+</tr>
+<tr>
+<td>AI-first</td>
+<td>AI is a starting assumption in product decisions.</td>
+<td>A strategic priority doesn&#39;t prove architectural dependence.</td>
+</tr>
+<tr>
+<td>AI-native</td>
+<td>The central experience is designed around AI capabilities and limitations.</td>
+<td>Dependence doesn&#39;t tell us what AI may execute.</td>
+</tr>
+</tbody></table></div>
+<p>These are overlapping descriptions, not four certified levels. A product may be AI-first in strategy while still AI-added in what it actually ships. An established product can redesign a central workflow around AI. Its age doesn&#39;t settle the question.</p>
+<p>Even the removal test needs care. Removing AI might make a system economically impractical without making it technically impossible. A recommendation product may survive with crude rules but lose much of its value. Dependence has degrees too.</p>
+<p>The point is to expose the dependency, not win an argument about the badge.</p>
+</div></section><section class="section" id="who-chooses-the-next-step"><h2><a class="anchor" href="#who-chooses-the-next-step">Who chooses the next step?</a></h2><div class="prose"><p>Now imagine the expense platform has a second capability.</p>
+<p>An employee asks it to resolve a rejected claim. It checks the policy, inspects the receipt, asks for a missing detail, and chooses whether to prepare an appeal or correct the submission.</p>
+<p>The underlying product can remain an established expense system. The new workflow can still be agentic.</p>
+<p>Here the question is different: <strong>who determines the path through the task?</strong></p>
+<p>Anthropic&#39;s engineering account distinguishes predefined workflows from agents whose models dynamically direct their processes and tool use.[1] That is a useful architectural distinction, even though the word &quot;agent&quot; is used more broadly elsewhere.</p>
+<p>A fixed pipeline can contain several model calls, retrieval, tools, and a critique loop. If code determines the route, the number of calls doesn&#39;t turn it into an agent.</p>
+<p>Conversely, an agent doesn&#39;t need a grand multi-agent architecture. A model choosing actions, observing results, and adapting its next step can be enough.</p>
+<p><strong>AI-native describes how fundamentally AI defines the product. Agentic describes how the system chooses its path through a task.</strong></p>
+<p>Neither answers whether the system is allowed to finish that task without you.</p>
+</div></section><section class="section" id="choosing-a-path-isn-t-permission-to-execute-it"><h2><a class="anchor" href="#choosing-a-path-isn-t-permission-to-execute-it">Choosing a path isn't permission to execute it</a></h2><div class="prose"><p>Suppose the expense agent can investigate a rejection and prepare a corrected claim. It must still ask before submitting.</p>
+<p>It remains agentic. Its autonomy is bounded.</p>
+<p>Now suppose a conventional automated process reimburses every claim under a threshold after fixed checks. It operates without individual approval, but it doesn&#39;t dynamically choose a plan. It may not need AI at all.</p>
+<p>That gives us two counterexamples to the ladder: an agent with limited execution authority, and an independent process with no agentic reasoning.</p>
+<p><strong>Autonomy describes the degree of independence within a specified boundary.</strong></p>
+<p>The boundary matters more than the adjective. Independent for which actions? For how long? With what spending limit? When must the system stop or escalate?</p>
+<p>A coding agent might freely read files, run tests, and edit a local branch while requiring approval to merge. Calling it simply &quot;autonomous&quot; erases the most consequential part of its design.</p>
+<p>Assisted, augmented, and delegated are useful descriptions of the human&#39;s relationship to the work. They are not clean architectural categories either. You can delegate a task to a fixed workflow or to an agent. The same system can assist with one task and own another.</p>
+<p>We need to describe the actual arrangement.</p>
+</div></section><section class="section" id="ai-native-can-still-be-human-governed"><h2><a class="anchor" href="#ai-native-can-still-be-human-governed">AI-native can still be human-governed</a></h2><div class="prose"><p>There is no contradiction between a product being AI-native and people governing its decisions.</p>
+<p>AI can define the central experience while humans set policy, approve consequential actions, and retain control over releases. An AI-native coding environment might let agents investigate and implement changes, while engineers approve merges and deployments.</p>
+<p>That is <strong>AI-native with human approval gates</strong>. If the model chooses and adapts the implementation path, it is also agentic. Approval doesn&#39;t erase agency.</p>
+<p>Likewise, an established product can be <strong>AI-enabled with bounded execution</strong>. Its AI capability may operate independently inside a restricted environment while the broader product remains conventional.</p>
+<p>Consider an agent that can install dependencies only from an organization&#39;s internal npm or Python package repository. It may choose a library, run tests, and revise its approach. The allowed source of dependencies is constrained. That tells us about its execution boundary, not whether the product is AI-native.</p>
+<p>We need to separate three questions:</p>
+<div class="data-table"><table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Question</th>
+<th>Coding example</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Agency</td>
+<td>Who chooses the next step?</td>
+<td>The agent chooses a library and implementation strategy.</td>
+</tr>
+<tr>
+<td>Authority</td>
+<td>Which actions can execute without approval?</td>
+<td>It can edit a branch; merging requires a person.</td>
+</tr>
+<tr>
+<td>Boundary</td>
+<td>Which resources and environments may it use?</td>
+<td>Dependencies must come from the internal package repository.</td>
+</tr>
+</tbody></table></div>
+<p>Autonomy describes the independence that results from that arrangement. It is always independence for particular work under particular conditions.</p>
+<p>An approval gate and a resource boundary are different controls. A human-approved installation can still be restricted to an approved registry. An independent installation can be restricted to that same registry. Neither arrangement implies access to production.</p>
+<p>The restriction also needs enforcement. Configuring a preferred package source doesn&#39;t establish a closed boundary if arbitrary downloads or unapproved registries remain reachable. The profile should describe the controls the system actually encounters.</p>
+<figure class="ai-diagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 600" role="img" aria-label="Human governance, execution boundaries and approval flow"><defs><marker id="arrow-0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-subtle)"/></marker></defs><path d="M 360 94 V 117 H 360 V 140" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-0)" /><path d="M 360 214 V 237 H 360 V 260" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-0)" /><path d="M 360 334 V 357 H 245 V 380" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-0)" /><text x="302.5" y="350" text-anchor="middle" fill="var(--text-muted)" font-size="11">Outside allowed boundary</text><path d="M 360 334 V 357 H 475 V 380" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-0)" /><text x="417.5" y="350" text-anchor="middle" fill="var(--text-muted)" font-size="11">Within allowed boundary</text><path d="M 475 454 V 477 H 245 V 500" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-0)" /><text x="360" y="470" text-anchor="middle" fill="var(--text-muted)" font-size="11">Approval required</text><path d="M 475 454 V 477 H 475 V 500" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-0)" /><text x="475" y="470" text-anchor="middle" fill="var(--text-muted)" font-size="11">Already authorized</text><path d="M 350 537 H 712 V 537 H 580" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-0)" /><path d="M 350 537 H 712 V 417 H 350" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-0)" /><path d="M 580 537 H 712 V 177 H 465" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-0)" /><rect x="255" y="20" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="360" y="49" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="360" dy="0">Human-defined goal and</tspan><tspan x="360" dy="17">policy</tspan></text><rect x="255" y="140" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="360" y="169" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="360" dy="0">Agent chooses and adapts</tspan><tspan x="360" dy="17">a plan</tspan></text><rect x="255" y="260" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="360" y="289" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="360" dy="0">Check resource and</tspan><tspan x="360" dy="17">environment boundary</tspan></text><rect x="140" y="380" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="245" y="409" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="245" dy="0">Stop or request policy</tspan><tspan x="245" dy="17">exception</tspan></text><rect x="370" y="380" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="475" y="417" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="475" dy="0">Check action authority</tspan></text><rect x="140" y="500" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="245" y="537" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="245" dy="0">Human decision</tspan></text><rect x="370" y="500" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="475" y="537" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="475" dy="0">Execute and record result</tspan></text></svg><details><summary>Diagram source and text alternative</summary><pre>flowchart TD
+    G[&quot;Human-defined goal and policy&quot;] --&gt; A[&quot;Agent chooses and adapts a plan&quot;]
+    A --&gt; B[&quot;Check resource and environment boundary&quot;]
+    B --&gt;|&quot;Outside allowed boundary&quot;| S[&quot;Stop or request policy exception&quot;]
+    B --&gt;|&quot;Within allowed boundary&quot;| P[&quot;Check action authority&quot;]
+    P --&gt;|&quot;Approval required&quot;| H[&quot;Human decision&quot;]
+    P --&gt;|&quot;Already authorized&quot;| E[&quot;Execute and record result&quot;]
+    H --&gt;|&quot;Approved&quot;| E
+    H --&gt;|&quot;Declined&quot;| S
+    E --&gt; A
+</pre></details></figure>
+
+<p>This is a conceptual control flow. In an implementation, the policy and permission checks should be enforced by the surrounding system rather than depend only on the agent following instructions.</p>
+<p>Human-governed is therefore a useful qualifier. It doesn&#39;t require a new rung on the ladder. Governance can include approval before action, ongoing supervision, or preauthorized operation inside a defined boundary.</p>
+</div></section><section class="section" id="a-map-with-the-boundaries-written-beside-it"><h2><a class="anchor" href="#a-map-with-the-boundaries-written-beside-it">A map, with the boundaries written beside it</a></h2><div class="prose"><p>For an initial map, put AI dependence on one axis and model-directed agency on the other. Keep execution authority visible beside each example.</p>
+<p>The following are hypothetical configurations, not ratings of particular vendors.</p>
+<div class="data-table"><table>
+<thead>
+<tr>
+<th>Model-directed agency ↑ / AI dependence →</th>
+<th>Optional AI</th>
+<th>Meaningful AI</th>
+<th>AI-dependent core</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Agentic loop</strong></td>
+<td>An optional helper that plans and adapts a minor task.</td>
+<td>An expense agent investigating rejected claims.</td>
+<td>A coding environment centered on agents that inspect, edit, and test.</td>
+</tr>
+<tr>
+<td><strong>Model-directed steps</strong></td>
+<td>An optional helper selecting its next suggestion.</td>
+<td>A model selecting a route through a useful workflow without an adaptive execution loop.</td>
+<td>An AI-dependent product with model-selected steps but no feedback-based replanning.</td>
+</tr>
+<tr>
+<td><strong>Human/code directed</strong></td>
+<td>A conventional product with optional text rewriting.</td>
+<td>Expense software with a predefined receipt extraction step.</td>
+<td>A prompt-to-image product with a fixed generation flow.</td>
+</tr>
+</tbody></table></div>
+<p>Every row can have its own approval requirements and execution boundaries. The top row does not automatically imply permission to act independently.</p>
+<p>Products don&#39;t have to travel diagonally across this map.</p>
+<p>A team can add model-directed planning to one workflow without rebuilding the product around AI. Another can make AI central to the product while preserving a deliberately human-directed experience.</p>
+<p>The map is a conversation aid, not a scorecard. Its cells are not equally spaced measurements, and the top right corner is not a destination every product should pursue.</p>
+</div></section><section class="section" id="where-agent-native-fits"><h2><a class="anchor" href="#where-agent-native-fits">Where agent-native fits</a></h2><div class="prose"><p>Agent-native sits near the intersection of AI-native product design and agentic execution. That is a useful starting point, but it needs more substance than adding the two labels together.</p>
+<p>I would use <strong>agent-native</strong> for a product that treats agents as first-class participants. They have defined identities, scoped permissions, access to task state, and ways to hand work back to people. Its workflows anticipate partial completion, retries, interruptions, and review.</p>
+<p>An AI-native writing tool can remain a sequence of human prompts. An agent-native coding environment would instead support handing over an issue, tracking the investigation, inspecting changes, and intervening while work is underway.</p>
+<p>The design question shifts from &quot;Where do we put the chat box?&quot; to &quot;How does delegated work live inside this product?&quot;</p>
+<p>That doesn&#39;t mean humans disappear. Review, disagreement, clarification, and cancellation become important parts of the interface.</p>
+<figure class="ai-diagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" role="img" aria-label="Agent-native design dependencies"><defs><marker id="arrow-1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-subtle)"/></marker></defs><path d="M 245 94 V 117 H 360 V 140" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-1)" /><path d="M 475 94 V 117 H 360 V 140" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-1)" /><path d="M 360 214 V 237 H 130 V 260" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-1)" /><path d="M 360 214 V 237 H 360 V 260" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-1)" /><path d="M 360 214 V 237 H 590 V 260" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-1)" /><rect x="140" y="20" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="245" y="49" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="245" dy="0">Product designed around</tspan><tspan x="245" dy="17">AI</tspan></text><rect x="370" y="20" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="475" y="49" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="475" dy="0">Model-directed task</tspan><tspan x="475" dy="17">execution</tspan></text><rect x="255" y="140" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="360" y="169" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="360" dy="0">Candidate for</tspan><tspan x="360" dy="17">agent-native design</tspan></text><rect x="25" y="260" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="130" y="289" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="130" dy="0">Persistent task state and</tspan><tspan x="130" dy="17">handoffs</tspan></text><rect x="255" y="260" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="360" y="289" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="360" dy="0">Agent identity and</tspan><tspan x="360" dy="17">bounded permissions</tspan></text><rect x="485" y="260" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="590" y="289" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="590" dy="0">Human review and</tspan><tspan x="590" dy="17">intervention</tspan></text></svg><details><summary>Diagram source and text alternative</summary><pre>flowchart TD
+    P[&quot;Product designed around AI&quot;] --&gt; N[&quot;Candidate for agent-native design&quot;]
+    E[&quot;Model-directed task execution&quot;] --&gt; N
+    N --&gt; T[&quot;Persistent task state and handoffs&quot;]
+    N --&gt; B[&quot;Agent identity and bounded permissions&quot;]
+    N --&gt; H[&quot;Human review and intervention&quot;]
+</pre></details></figure>
+
+<p>This is a proposed design interpretation of agent-native, not a certification or a settled industry definition. An AI-native product with a single agent feature would not automatically satisfy it.</p>
+</div></section><section class="section" id="over-how-much-of-the-system"><h2><a class="anchor" href="#over-how-much-of-the-system">Over how much of the system?</a></h2><div class="prose"><p>There is another question hiding inside &quot;we use AI.&quot;</p>
+<p>Where?</p>
+<p>A feature, a workflow, a whole product, or several connected organizational processes?</p>
+<p>An agent might independently handle one narrow task while everything around it remains manual. Another system might assist people across an entire business without receiving permission to act independently anywhere.</p>
+<p><strong>Scope is the reach of AI participation.</strong> It doesn&#39;t automatically increase agency or autonomy.</p>
+<p>Feature, workflow, product, and organization are useful scopes to name. They aren&#39;t a compulsory sequence. An organization contains many products and workflows, each with a different profile.</p>
+<p>That&#39;s why &quot;our company is AI-native&quot; is usually too coarse to guide an engineering decision. The useful unit may be the workflow, or even the individual action.</p>
+<p>Consider the expense example again:</p>
+<div class="data-table"><table>
+<thead>
+<tr>
+<th>Part of the work</th>
+<th>Who chooses the path?</th>
+<th>What can execute independently?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Receipt extraction</td>
+<td>A predefined processing flow</td>
+<td>Extract fields and flag uncertainty.</td>
+</tr>
+<tr>
+<td>Rejection investigation</td>
+<td>The agent chooses checks and follow-ups</td>
+<td>Read policy and claim history within access limits.</td>
+</tr>
+<tr>
+<td>Corrected submission</td>
+<td>The agent can prepare the action</td>
+<td>Submission requires the employee&#39;s approval.</td>
+</tr>
+<tr>
+<td>Reimbursement</td>
+<td>A separate financial control process</td>
+<td>Payment follows its own authorization rules.</td>
+</tr>
+</tbody></table></div>
+<p>One workflow contains several arrangements. A single label loses them.</p>
+</div></section><section class="section" id="the-system-underneath-architecture-oversight-deployment"><h2><a class="anchor" href="#the-system-underneath-architecture-oversight-deployment">The system underneath: architecture, oversight, deployment</a></h2><div class="prose"><p>The product map only describes part of the arrangement. The system underneath can have its own combination of choices.</p>
+<p><strong>Neural</strong> describes a model family. <strong>Generative</strong> describes a capability to produce outputs. Neither implies that the system acts independently.</p>
+<p><strong>Neuro-symbolic</strong> combines neural methods with symbolic representations or reasoning.[2] For example, perception might identify objects and relationships, then a symbolic solver reasons over that representation. An LLM surrounded by a few validation checks is not automatically a meaningful neuro-symbolic architecture.</p>
+<p><strong>Compound AI</strong> combines interacting components such as models, retrieval, tools, and other processing steps.[3] A retrieval-and-generation pipeline can be compound without being agentic. A neuro-symbolic system can also be compound. These categories overlap.</p>
+<p><strong>Multi-agent</strong> describes an arrangement involving multiple agents. It says nothing by itself about autonomy, reliability, or whether the decomposition is useful. Several agents can run inside a tightly controlled workflow. A single agent can receive broad authority.</p>
+<p>Anthropic&#39;s account of its research system illustrates a real multi-agent implementation, but also describes coordination, evaluation, and resource tradeoffs.[4] It is evidence that the pattern can work for particular tasks, not that every application should move toward it.</p>
+<p>The architecture diagram therefore uses branches and overlapping relationships. Neural → neuro-symbolic → compound → multi-agent would incorrectly suggest that each replaces the last.</p>
+<figure class="ai-diagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 480" role="img" aria-label="Overlapping AI architecture choices"><defs><marker id="arrow-2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-subtle)"/></marker></defs><path d="M 360 94 V 117 H 130 V 140" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-2)" /><path d="M 360 94 V 117 H 360 V 140" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-2)" /><path d="M 360 94 V 117 H 590 V 140" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-2)" /><path d="M 130 214 V 237 H 130 V 260" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-2)" /><path d="M 360 214 V 237 H 360 V 260" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-2)" /><path d="M 360 214 V 297 H 245 V 380" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-2)" /><path d="M 590 214 V 237 H 590 V 260" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-2)" /><path d="M 590 214 V 297 H 475 V 380" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-2)" /><path d="M 360 334 V 357 H 245 V 380" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-2)" stroke-dasharray="4 3"/><text x="302.5" y="350" text-anchor="middle" fill="var(--text-muted)" font-size="11">can be part of</text><path d="M 580 417 H 712 V 417 H 350" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-2)" stroke-dasharray="4 3"/><rect x="255" y="20" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="360" y="57" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="360" dy="0">AI system construction</tspan></text><rect x="25" y="140" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="130" y="177" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="130" dy="0">Model capabilities</tspan></text><rect x="255" y="140" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="360" y="177" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="360" dy="0">Component composition</tspan></text><rect x="485" y="140" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="590" y="177" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="590" dy="0">Execution arrangement</tspan></text><rect x="25" y="260" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="130" y="289" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="130" dy="0">Neural and generative</tspan><tspan x="130" dy="17">models</tspan></text><rect x="255" y="260" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="360" y="289" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="360" dy="0">Neuro-symbolic</tspan><tspan x="360" dy="17">integration</tspan></text><rect x="485" y="260" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="590" y="297" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="590" dy="0">Predefined workflow</tspan></text><rect x="140" y="380" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="245" y="409" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="245" dy="0">Compound models,</tspan><tspan x="245" dy="17">retrieval and tools</tspan></text><rect x="370" y="380" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="475" y="409" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="475" dy="0">One agent or multiple</tspan><tspan x="475" dy="17">agents</tspan></text></svg><details><summary>Diagram source and text alternative</summary><pre>flowchart TD
+    S[&quot;AI system construction&quot;] --&gt; M[&quot;Model capabilities&quot;]
+    S --&gt; C[&quot;Component composition&quot;]
+    S --&gt; E[&quot;Execution arrangement&quot;]
+    M --&gt; N[&quot;Neural and generative models&quot;]
+    C --&gt; NS[&quot;Neuro-symbolic integration&quot;]
+    C --&gt; CA[&quot;Compound models, retrieval and tools&quot;]
+    E --&gt; F[&quot;Predefined workflow&quot;]
+    E --&gt; A[&quot;One agent or multiple agents&quot;]
+    NS -. &quot;can be part of&quot; .-&gt; CA
+    A -. &quot;can be part of&quot; .-&gt; CA
+</pre></details></figure>
+
+<p>Oversight belongs beside this architecture. In a <strong>human-in-the-loop</strong> arrangement, a person participates at a defined decision or approval point. <strong>Human-on-the-loop</strong> commonly means supervision with the ability to intervene. <strong>Human-out-of-the-loop</strong> means no routine human participation in the specified execution loop, not the absence of human responsibility for its design and operation.</p>
+<p>A dashboard does not establish effective supervision. Can someone understand the state, stop execution in time, and recover from the result? Those are the practical questions behind on-the-loop.</p>
+<p>Deployment is separate again. A local model can power a human-directed assistant. A cloud agent can require approval for every write. A hybrid system can keep some processing local and invoke remote services when needed. Edge deployment is not a higher degree of AI than cloud deployment, and local inference alone does not prove that data never leaves the device.</p>
+<p>The complete description is closer to this:</p>
+<p><strong>AI-native product × agentic workflow × bounded autonomy × human approval for writes × compound architecture × hybrid deployment.</strong></p>
+<p>Longer than a badge. Much more informative.</p>
+</div></section><section class="section" id="evolution-still-exists-just-along-different-paths"><h2><a class="anchor" href="#evolution-still-exists-just-along-different-paths">Evolution still exists, just along different paths</a></h2><div class="prose"><p>Rejecting one universal ladder doesn&#39;t mean nothing evolves.</p>
+<p>A product may move from an optional AI feature to workflows that assume AI is present. A person may move from asking for suggestions to handing over an outcome. A system may expand from a single model call to a composition of retrieval, planning, verification, and execution.</p>
+<p>The mistake is assuming these transitions happen together, in order, or permanently.</p>
+<p>The following diagram shows possible product and work-design transitions. Arrows mean a possible redesign, not chronology, superiority, or an obligation to proceed.</p>
+<figure class="ai-diagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 720" role="img" aria-label="Possible product and work-design evolution paths"><defs><marker id="arrow-3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-subtle)"/></marker></defs><path d="M 360 94 V 117 H 360 V 140" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-3)" /><path d="M 360 214 V 237 H 360 V 260" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-3)" /><path d="M 360 334 V 357 H 245 V 380" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-3)" /><path d="M 245 454 V 477 H 130 V 500" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-3)" /><path d="M 360 334 V 357 H 475 V 380" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-3)" /><path d="M 235 537 H 712 V 417 H 580" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-3)" /><path d="M 475 454 V 477 H 360 V 500" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-3)" /><path d="M 475 454 V 477 H 590 V 500" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-3)" /><path d="M 590 574 V 597 H 245 V 620" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-3)" /><path d="M 590 574 V 597 H 475 V 620" fill="none" stroke="var(--text-subtle)" stroke-width="1.4" marker-end="url(#arrow-3)" /><rect x="255" y="20" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="360" y="57" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="360" dy="0">Traditional product</tspan></text><rect x="255" y="140" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="360" y="177" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="360" dy="0">AI-enabled feature</tspan></text><rect x="255" y="260" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="360" y="289" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="360" dy="0">AI integrated into a</tspan><tspan x="360" dy="17">workflow</tspan></text><rect x="140" y="380" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="245" y="417" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="245" dy="0">AI-first redesign</tspan></text><rect x="370" y="380" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="475" y="417" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="475" dy="0">Bounded outcome delegated</tspan></text><rect x="25" y="500" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="130" y="537" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="130" dy="0">AI-native core experience</tspan></text><rect x="255" y="500" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="360" y="537" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="360" dy="0">Predefined execution path</tspan></text><rect x="485" y="500" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="590" y="529" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="590" dy="0">Agent chooses the task</tspan><tspan x="590" dy="17">path</tspan></text><rect x="140" y="620" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="245" y="649" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="245" dy="0">Human approves</tspan><tspan x="245" dy="17">consequential actions</tspan></text><rect x="370" y="620" width="210" height="74" rx="5" fill="var(--surface)" stroke="var(--border)"/><text x="475" y="649" fill="var(--text)" font-size="14" text-anchor="middle"><tspan x="475" dy="0">Independent execution</tspan><tspan x="475" dy="17">within limits</tspan></text></svg><details><summary>Diagram source and text alternative</summary><pre>flowchart TD
+    T[&quot;Traditional product&quot;] --&gt; X[&quot;AI-enabled feature&quot;]
+    X --&gt; I[&quot;AI integrated into a workflow&quot;]
+    I --&gt; P[&quot;AI-first redesign&quot;]
+    P --&gt; N[&quot;AI-native core experience&quot;]
+    I --&gt; D[&quot;Bounded outcome delegated&quot;]
+    N --&gt; D
+    D --&gt; W[&quot;Predefined execution path&quot;]
+    D --&gt; A[&quot;Agent chooses the task path&quot;]
+    A --&gt; L[&quot;Human approves consequential actions&quot;]
+    A --&gt; B[&quot;Independent execution within limits&quot;]
+</pre></details></figure>
+
+<p>A product can enter this picture at a different point. An AI-native product can be built from scratch. A traditional product can gain an agent without first passing through an AI-first redesign. After incidents or changing requirements, a team can reduce autonomy while keeping the same agent architecture.</p>
+<p>That last move matters. Reducing authority can be an improvement in the system&#39;s design.</p>
+</div></section><section class="section" id="what-to-measure-instead-of-the-label"><h2><a class="anchor" href="#what-to-measure-instead-of-the-label">What to measure instead of the label</a></h2><div class="prose"><p>If these are degrees, should we score them?</p>
+<p>Only when the measure has a clear denominator and a decision it will inform. I wouldn&#39;t assign a universal AI-native score or treat agents per workflow as a performance metric.</p>
+<p>For a specific workflow, observable behavior is more useful.</p>
+<div class="data-table"><table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Evidence to collect</th>
+<th>What the measure cannot prove</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AI dependence</td>
+<td>Which promised capabilities disappear or become uneconomic without AI; observed fallback performance.</td>
+<td>A larger dependency makes the product better.</td>
+</tr>
+<tr>
+<td>Agency</td>
+<td>Which planning and routing decisions are model-directed, versus fixed in code or supplied by a person.</td>
+<td>More decisions should move to the model.</td>
+</tr>
+<tr>
+<td>Autonomy</td>
+<td>Share of eligible tasks completed without intervention, broken down by action class and risk.</td>
+<td>Fewer interventions mean correct outcomes.</td>
+</tr>
+<tr>
+<td>Authority and boundary</td>
+<td>Actions requiring approval; enforced tool, resource, environment and budget restrictions.</td>
+<td>An agent&#39;s stated restrictions match its effective access.</td>
+</tr>
+<tr>
+<td>Scope</td>
+<td>Which workflow steps and systems AI can read or change.</td>
+<td>Wider reach creates more useful value.</td>
+</tr>
+<tr>
+<td>Oversight</td>
+<td>Approval coverage, escalation quality, time to detect and halt, recovery success.</td>
+<td>The presence of a reviewer ensures effective control.</td>
+</tr>
+<tr>
+<td>Outcome</td>
+<td>Verified task success, rework, end-to-end time, cost per accepted result.</td>
+<td>A faster response creates a better business outcome.</td>
+</tr>
+</tbody></table></div>
+<p>For example, a higher no-intervention completion rate can reflect improved reliability, easier tasks, or missed escalations. Measure accepted results and failures alongside it. The rate alone can&#39;t tell you which happened.</p>
+<p>Architecture and deployment need fit-for-purpose comparisons: cost, latency, failure isolation, data movement, and maintainability. They don&#39;t need maturity points.</p>
+</div></section><section class="section" id="higher-isn-t-automatically-better"><h2><a class="anchor" href="#higher-isn-t-automatically-better">Higher isn't automatically better</a></h2><div class="prose"><p>The ladder doesn&#39;t just confuse language. It smuggles in a product strategy: more AI, more agency, and less intervention must mean progress.</p>
+<p>I don&#39;t think that follows.</p>
+<p>A fixed workflow can be the right choice when the path is known. Human approval can be part of the product&#39;s value. AI can remain optional because the user needs a predictable fallback.</p>
+<p>Greater independence can save coordination time. It can also increase the amount of work a system performs before someone catches an error. Broader scope can connect a process, while also exposing more systems to a mistaken decision.</p>
+<p>These are design tradeoffs. A vocabulary that calls every increase &quot;maturity&quot; makes them harder to discuss honestly.</p>
+<p>Governance therefore belongs around the profile: permissions, evidence requirements, monitoring, escalation, and recovery. It is not another degree of AI. It makes the chosen degrees accountable.</p>
+<p>And capability is not authority. A model&#39;s ability to produce a plausible action doesn&#39;t establish the system&#39;s right to execute it.</p>
+</div></section><section class="section" id="where-i-think-this-goes-next"><h2><a class="anchor" href="#where-i-think-this-goes-next">Where I think this goes next</a></h2><div class="prose"><p>This is the future-facing part of the argument. The following are plausible directions, not a forecast that every product will follow. Existing compound systems, multi-agent implementations, and tool protocols provide evidence of the building blocks.[3][4][5] The implications below are my interpretation.</p>
+<p><strong>Products may serve two kinds of users: people and agents.</strong> A person needs navigation, explanations, and visible choices. An agent needs discoverable capabilities, structured inputs, task state, and clear permission boundaries. MCP already standardizes connections between AI applications and external tools and data.[5] Connectivity makes an agent-facing product possible; it does not make that product AI-native or establish authority to perform every exposed action.</p>
+<p>An expense product could retain its ordinary interface while allowing an external agent to prepare a claim. The application remains responsible for validating the submission and enforcing payment controls. The agent interface changes who can operate the product, not who owns its rules.</p>
+<p><strong>More work may move from requests for answers to delegated outcomes.</strong> Instead of &quot;summarize these receipts,&quot; the user asks &quot;prepare my claim and tell me what is missing.&quot; That shift requires persistent work, progress visibility, cancellation, and exception handling. The interface may become a place to supervise tasks as well as start them.</p>
+<p><strong>Autonomy may become configurable by action rather than advertised for the whole product.</strong> Read records independently. Prepare a draft independently. Submit below a defined threshold. Ask before sending money or changing an external commitment. One system can support several degrees at once.</p>
+<p><strong>Composition may matter more than the headline model.</strong> Better models can simplify some pipelines. Other tasks will still benefit from retrieval, deterministic calculations, domain models, verification, or specialized agents. Compound AI is already an established system-building idea.[3] My expectation is that successful designs will combine these selectively, rather than expand every workflow into a multi-agent network.</p>
+<p><strong>Oversight may shift from watching every step to designing and checking the operating boundary.</strong> That is only useful when people can inspect evidence, detect failures, intervene, and recover. Exception-only review can become superficial if the system fails to recognize the exceptions. Less frequent human involvement requires better system evidence, not merely more confidence in the model.</p>
+<p><strong>Deployment may remain mixed.</strong> Some tasks can benefit from local execution; others require shared systems or remote resources. Workload, data boundaries, economics, and response time will influence the split. There is no reason to assume every agent ends up entirely in the cloud or entirely on a device.</p>
+<p>Those directions will look different across domains.</p>
+<div class="data-table"><table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>A plausible next configuration</th>
+<th>The design question that matters</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Coding</td>
+<td>Agents own investigations and proposed changes; people review intent and release.</td>
+<td>What evidence makes a change ready to merge?</td>
+</tr>
+<tr>
+<td>Enterprise operations</td>
+<td>Agents coordinate work across existing products.</td>
+<td>Which system owns transaction state and authorization?</td>
+</tr>
+<tr>
+<td>Creative tools</td>
+<td>AI-native generation with both direct human control and optional delegation.</td>
+<td>How does the creator retain editorial control?</td>
+</tr>
+<tr>
+<td>Personal assistance</td>
+<td>Agents prepare and execute selected routine tasks.</td>
+<td>Which commitments need explicit approval?</td>
+</tr>
+</tbody></table></div>
+<p>These are examples of possible configurations, not claims of universal adoption. Each can coexist with simpler tools and conventional workflows.</p>
+<p>The future I expect is a mixture of profiles. A system may become more agentic while its execution boundaries become more precise. A product may become easier for agents to operate while remaining conventional underneath. A workflow may become more automated without becoming more dependent on generative AI.</p>
+<p>That gives us a better question than &quot;What comes after AI-native?&quot;</p>
+<p><strong>Which dimension changes next, what does that enable, and what new obligation does it create?</strong></p>
+</div></section><section class="section" id="product-assessment"><div class="section-label">Interactive assessment</div><h2><a class="anchor" href="#product-assessment">Place your product on the map</a></h2><div class="prose"><p>Assess one product or workflow as it behaves today. Answers stay in this page. This is a working interpretation, not a validated maturity score.</p></div><div id="degrees-ai-questionnaire">
+  <h2>Where does your product land?</h2>
+  <div class="viz-controls">
+    <label class="form-label">Product or workflow<input class="form-control" id="da-name" placeholder="e.g. Expense claim investigation"></label>
+    <label class="form-label">Assessment boundary<select class="form-select" id="da-scope"><option value="">Choose scope</option><option>Feature</option><option>Workflow</option><option>Product</option><option>Cross-product process</option><option>Organization (mixed profiles)</option></select></label>
+  </div>
+  <div class="da-map" role="img" aria-label="Product profile grid. Columns show AI dependence; rows show model-directed agency.">
+    <div class="da-map-title">Model-directed agency ↑</div>
+    <div class="da-grid" id="da-grid"></div>
+    <div class="da-map-title da-x">AI dependence →</div>
+  </div>
+  <div id="da-result" aria-live="polite">Answer the dependence and agency questions to place your product.</div>
+  <div id="da-alert" role="alert" class="ai-error"></div>
+  <hr>
+  <div id="da-questions"></div>
+  <details open>
+    <summary>Execution authority · assess each action separately</summary>
+    <div id="da-authority" class="da-fields"></div>
+  </details>
+  <details>
+    <summary>Architecture and deployment · descriptive tags</summary>
+    <div class="da-fields">
+      <label class="form-label">System composition<select class="form-select" id="da-architecture"><option value="">Not assessed</option><option>Single model call</option><option>Compound models / retrieval / tools</option><option>Neuro-symbolic integration</option><option>Compound with neuro-symbolic integration</option></select></label>
+      <label class="form-label">Agent arrangement<select class="form-select" id="da-arrangement"><option value="">Not assessed</option><option>No agents</option><option>Single agent</option><option>Multiple agents</option></select></label>
+      <label class="form-label">Deployment<select class="form-select" id="da-deployment"><option value="">Not assessed</option><option>Cloud</option><option>Local / edge</option><option>Hybrid</option></select></label>
+    </div>
+  </details>
+  <details>
+    <summary>How answers map to the grid</summary>
+    <table class="table table-sm"><thead><tr><th>Placement</th><th>Rule</th></tr></thead><tbody>
+      <tr><td>Optional AI</td><td>Removing AI preserves the central outcome and no important workflow materially depends on it.</td></tr>
+      <tr><td>Meaningful AI</td><td>Central outcome survives removal, but an important workflow materially improves with AI.</td></tr>
+      <tr><td>AI-dependent core</td><td>Removing AI eliminates the central promised outcome at viable quality and cost.</td></tr>
+      <tr><td>Human / code directed</td><td>The model does not choose the next task step.</td></tr>
+      <tr><td>Model-directed steps</td><td>The model chooses steps but does not revise its plan from execution feedback.</td></tr>
+      <tr><td>Agentic loop</td><td>The model chooses steps and adapts its plan from execution feedback.</td></tr>
+    </tbody></table>
+  </details>
+</div>
+<style>
+#degrees-ai-questionnaire .da-grid {display:grid;grid-template-columns:minmax(65px,.8fr) repeat(3,minmax(0,1fr));gap:1px;background:var(--border);margin:8px 0;}
+#degrees-ai-questionnaire .da-cell {background:var(--bg);padding:12px 6px;min-height:58px;display:flex;align-items:center;justify-content:center;text-align:center;overflow-wrap:anywhere;}
+#degrees-ai-questionnaire .da-cell.da-placed {background:color-mix(in srgb,var(--accent) 16%,var(--bg));}
+#degrees-ai-questionnaire .da-dot {display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--accent);margin-right:6px;flex-shrink:0;}
+#degrees-ai-questionnaire .da-map-title {margin-top:12px;}
+#degrees-ai-questionnaire .da-x {text-align:right; margin-bottom:14px;}
+#degrees-ai-questionnaire details {margin:16px 0;}
+#degrees-ai-questionnaire summary {font-weight:500;}
+#degrees-ai-questionnaire .da-question {display:grid;grid-template-columns:minmax(0,1fr) 112px;gap:12px;align-items:center;margin:12px 0;}
+#degrees-ai-questionnaire .da-fields {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0;}
+#degrees-ai-questionnaire #da-result {margin:12px 0;}
+#degrees-ai-questionnaire #da-result p {margin:6px 0;}
+@media(max-width:430px){#degrees-ai-questionnaire .da-fields {grid-template-columns:1fr;}#degrees-ai-questionnaire .da-question {grid-template-columns:1fr;}#degrees-ai-questionnaire .da-cell {padding:8px 4px;}}
+</style>
+<script>
+(() => {
+const root=document.getElementById('degrees-ai-questionnaire');
+const groups=[
+ {title:'AI dependence · 3 questions',open:true,items:[
+  ['core','Would removing AI eliminate the central promised outcome at viable quality and cost?'],
+  ['material','Does AI materially improve at least one important workflow?'],
+  ['design','Are core workflows designed around AI uncertainty, evaluation and fallback?']]},
+ {title:'Agency · 3 questions',open:true,items:[
+  ['steps','Does the model choose the next task step instead of following only a human or coded sequence?'],
+  ['feedback','Does it revise its plan based on execution results or changing conditions?'],
+  ['tools','Can it invoke tools to inspect or change its environment?']]},
+ {title:'Agent-native design · 3 questions',items:[
+  ['identity','Do agents have distinct identities and scoped permissions?'],
+  ['state','Can delegated tasks retain state and resume across sessions?'],
+  ['handoff','Are clarification, review and hand-back to people built into task handling?']]},
+ {title:'Execution boundary · 4 questions',items:[['resources','Are allowed tools and resources explicitly listed?'],['registry','Are package registries, data access and environments technically restricted?'],['limits','Are spending, runtime or action limits enforced?'],['enforce','Are attempts to cross boundaries denied or escalated?']]},
+ {title:'Oversight · 3 questions',items:[
+  ['visible','Can people inspect the task state and evidence behind proposed actions?'],
+  ['stop','Can a responsible person stop execution before further consequential actions?'],
+  ['recover','Is there a defined recovery or compensation process for failed actions?']]}
+];
+const questions=root.querySelector('#da-questions');
+groups.forEach(g=>{
+ const d=document.createElement('details');d.open=!!g.open;
+ const s=document.createElement('summary');s.textContent=g.title;d.appendChild(s);
+ g.items.forEach(([id,label])=>{
+ const row=document.createElement('div');row.className='da-question';
+ const l=document.createElement('label');l.className='form-label';l.htmlFor='da-'+id;l.textContent=label;
+ const select=document.createElement('select');select.className='form-select';select.id='da-'+id;
+ [['','Not sure'],['yes','Yes'],['no','No']].forEach(([v,t])=>select.add(new Option(t,v)));
+ row.append(l,select);d.append(row);
+ });questions.append(d);
+});
+const actions=[['read','Read / investigate'],['draft','Prepare drafts / proposals'],['write','Change internal records'],['commit','External commitments / payments / releases']];
+actions.forEach(([id,label])=>{
+ const l=document.createElement('label');l.className='form-label';l.textContent=label;
+ const s=document.createElement('select');s.id='da-'+id;s.className='form-select';
+ [['','Not assessed'],['none','Not permitted / not applicable'],['approval','Human approval for each action'],['independent','Independent execution']].forEach(([v,t])=>s.add(new Option(t,v)));
+ l.append(s);root.querySelector('#da-authority').append(l);
+});
+const grid=root.querySelector('#da-grid');
+const columns=['Optional AI','Meaningful AI','AI-dependent core'];
+const rows=['Agentic loop','Model-directed steps','Human / code directed'];
+function cell(text,cls=''){const d=document.createElement('div');d.className='da-cell '+cls;d.textContent=text;return d;}
+grid.append(cell(''),...columns.map(x=>cell(x)));
+rows.forEach((name,r)=>{grid.append(cell(name));columns.forEach((_,c)=>{const d=cell('');d.dataset.position=c+','+(2-r);grid.append(d);});});
+function evaluate(v){
+ const x=v.core==='yes'?2:v.core==='no'?(v.material==='yes'?1:v.material==='no'?0:null):null;
+ const y=v.steps==='no'?0:v.steps==='yes'?(v.feedback==='yes'?2:v.feedback==='no'?1:null):null;
+ const messages=[];
+ if(v.core==='yes'&&v.material==='no')messages.push('Recheck dependence: the core cannot depend on AI while no important workflow benefits from it.');
+ if(v.steps==='no'&&v.feedback==='yes')messages.push('Recheck agency: plan revision suggests model-directed steps; distinguish fixed retries from a changed plan.');
+ const candidate=x===2&&y===2&&v.design==='yes'&&['identity','state','handoff'].every(k=>v[k]==='yes');
+ return {x,y,messages,candidate};
+}
+function update(){
+ const v={};root.querySelectorAll('select').forEach(s=>v[s.id.slice(3)]=s.value);
+ const p=evaluate(v);const label=root.querySelector('#da-name').value.trim()||'Your product';
+ grid.querySelectorAll('[data-position]').forEach(d=>{d.classList.remove('da-placed');d.replaceChildren();});
+ const output=root.querySelector('#da-result');output.replaceChildren();
+ function line(t){const p=document.createElement('p');p.textContent=t;output.append(p);}
+ if(p.messages.length){line('Placement paused: resolve the conflicting answers below.');}
+ else if(p.x!==null&&p.y!==null){
+ const target=grid.querySelector('[data-position="'+p.x+','+p.y+'"]');target.classList.add('da-placed');
+ const dot=document.createElement('span');dot.className='da-dot';dot.setAttribute('aria-hidden','true');
+ target.append(dot,document.createTextNode('Here'));
+ line(label+': '+columns[p.x]+' × '+rows[2-p.y]);
+ }else{line(label+': '+(p.x===null?'Dependence not placed':columns[p.x])+' × '+(p.y===null?'Agency not placed':rows[2-p.y]));}
+ if(v.scope)line('Scope: '+v.scope);
+ if(v.scope==='Organization (mixed profiles)')line('Assess individual workflows as well; one organization-level point can hide different profiles.');
+ if(v.core==='yes')line(v.design==='yes'?'AI-native interpretation supported by core dependence and design evidence.':v.design==='no'?'AI-dependent core; AI-native design evidence is missing.':'AI-dependent core; AI-native design remains unassessed.');
+ if(p.candidate&&!p.messages.length)line('Agent-native candidate: core dependence, agentic execution, task state, identities and handoffs are present.');
+ actions.forEach(([id,label])=>{if(v[id]){const t=root.querySelector('#da-'+id).selectedOptions[0].textContent;line(label+': '+t);}});
+ const applicable=actions.filter(([id])=>v[id]&&v[id]!=='none');
+ const bounded=applicable.some(([id])=>v[id]==='bounded'||v[id]==='independent');
+ const approvals=applicable.some(([id])=>v[id]==='approval');
+ const boundaryKeys=['resources','registry','limits','enforce']; const boundaryAnswered=boundaryKeys.filter(k=>v[k]).length;if(boundaryAnswered)line('Boundary evidence: '+boundaryKeys.filter(k=>v[k]==='yes').length+' of 4 controls reported present; '+boundaryKeys.filter(k=>!v[k]).length+' unassessed.');
+ if(applicable.length)line('Oversight pattern: '+(approvals?(bounded?'mixed approval and independent execution':'human approval at selected action gates'):'independent for assessed actions')+'.');
+ if(bounded){
+ if(v.visible==='yes'&&v.stop==='yes')line('Supervisory capabilities reported: inspect and stop. Recovery: '+(v.recover==='yes'?'defined':v.recover==='no'?'missing':'unassessed')+'.');
+ else line('Supervision evidence: inspect '+(v.visible||'unassessed')+', stop '+(v.stop||'unassessed')+'.');
+ }
+ const tags=['architecture','arrangement','deployment'].map(k=>v[k]).filter(Boolean);if(tags.length)line(tags.join(' · '));
+ const warnings=p.messages.slice();
+ if(bounded&&v.enforce==='no')warnings.push('Independent execution reported without enforcement of the stated boundary.');
+ root.querySelector('#da-alert').textContent=warnings.join(' ');
+ const answered=root.querySelectorAll('select');let n=0;answered.forEach(s=>{if(s.value)n++;});
+ line(n+' / '+answered.length+' fields answered. Self-reported profile; no overall maturity score.');
+}
+root.addEventListener('change',update);root.querySelector('#da-name').addEventListener('input',update);update();
+root._evaluate=evaluate;
+})();
+</script>
+<noscript><p>The live questionnaire needs JavaScript. The checklist and placement rules below remain available.</p></noscript></section><section class="section" id="ask-for-the-profile"><h2><a class="anchor" href="#ask-for-the-profile">Ask for the profile</a></h2><div class="prose"><p>The four questions below are a useful mnemonic. To actually place a product on the map, we need a more concrete questionnaire.</p>
+<p>Assess one named product or workflow as it behaves today. Don&#39;t answer for its roadmap. If a whole organization has several different arrangements, assess those workflows separately before describing the organization.</p>
+<p>Use <strong>Yes / No / Not sure</strong> for the following checklist. Unknown answers stay unknown; they aren&#39;t silently scored as no.</p>
+<div class="data-table"><table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Checklist questions</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AI dependence</td>
+<td>Would removing AI eliminate the central promised outcome at viable quality and cost? Does AI materially improve at least one important workflow? Are core workflows designed around AI uncertainty, evaluation, and fallback?</td>
+</tr>
+<tr>
+<td>Agency</td>
+<td>Does the model choose the next task step rather than follow only a human or coded sequence? Does it revise its plan from execution results or changing conditions? Can it invoke tools to inspect or change its environment?</td>
+</tr>
+<tr>
+<td>Agent-native design</td>
+<td>Do agents have distinct identities and scoped permissions? Can delegated tasks retain state and resume across sessions? Are clarification, review, and hand-back to people built into task handling?</td>
+</tr>
+<tr>
+<td>Oversight</td>
+<td>Can people inspect task state and evidence behind proposed actions? Can a responsible person stop execution before further consequential actions? Is there a defined recovery or compensation process for failed actions?</td>
+</tr>
+<tr>
+<td>Execution boundary</td>
+<td>Are permitted tools and resources explicitly listed? Are package sources, data access and environments technically restricted? Are spending, runtime or action limits enforced? Are attempts to cross those boundaries denied or escalated?</td>
+</tr>
+</tbody></table></div>
+<p>Then classify execution authority separately for <strong>reading/investigation, draft preparation, internal record changes, and external commitments/payments/releases</strong>. Each action class can be unavailable, require approval, execute independently, or remain unassessed. Separately record which tools, resources, environments and budgets constrain it. These answers describe the actual arrangement; they do not establish that it is appropriate.</p>
+<p>Finally, select the scope, architecture, agent arrangement, and deployment. Those are descriptive tags, not points to add up.</p>
+<h3>How the checklist places the product</h3>
+<p>The horizontal axis has three descriptive positions:</p>
+<ul>
+<li><strong>Optional AI:</strong> the central outcome survives removal, and no important workflow materially benefits from AI.</li>
+<li><strong>Meaningful AI:</strong> the central outcome survives removal, but an important workflow materially improves with AI.</li>
+<li><strong>AI-dependent core:</strong> removing AI eliminates the central promised outcome at viable quality and cost.</li>
+</ul>
+<p>Core dependence plus design around AI uncertainty, evaluation, and fallback supports an <strong>AI-native interpretation</strong>. Dependence alone does not establish that design. AI-first remains an expression of priority rather than a coordinate inferred from runtime behavior.</p>
+<p>The vertical axis also has three positions:</p>
+<ul>
+<li><strong>Human/code directed:</strong> the model does not choose the next task step.</li>
+<li><strong>Model-directed steps:</strong> it chooses steps but does not revise its plan from execution feedback.</li>
+<li><strong>Agentic loop:</strong> it chooses steps and adapts its plan from execution feedback.</li>
+</ul>
+<p>Tool use is supporting context, not sufficient proof of an agentic loop. A model can also run a reasoning loop without an external write tool. These working placement rules deliberately avoid rewarding tool count.</p>
+<p>An AI-dependent core with AI-native design evidence, an agentic loop, agent identities, persistent task state, and human handoffs becomes an <strong>agent-native candidate</strong> in this proposed framing. It is a design interpretation, not a certification.</p>
+<p>Unanswered placement questions leave that axis unplaced. Conflicting answers pause placement: for example, saying AI is necessary for the central outcome while denying that it materially improves any important workflow. Such conflicts should prompt clarification, not disappear into an average.</p>
+<p>An interactive version can move the marker as these answers change. Execution authority stays visible by action class; enforced boundaries, scope and architecture sit alongside the grid. The result is an explainable profile, not a combined maturity score. These rules are an author&#39;s heuristic for discussion, not a validated assessment instrument.</p>
+<p>The questions to remember are:</p>
+<ol>
+<li>What part of its value depends on AI?</li>
+<li>Who chooses the steps through the task?</li>
+<li>Which actions can execute without human approval?</li>
+<li>Which resources, environments and budgets constrain execution?</li>
+<li>Over what part of the system does this arrangement apply?</li>
+</ol>
+<p>Those questions turn a positioning statement into something we can examine.</p>
+<p>&quot;We are AI-native&quot; tells me very little about how a product behaves. &quot;AI plans the investigation, can read these systems, stays inside these boundaries, and needs approval before changing a claim&quot; tells me enough to start a useful discussion.</p>
+<p>Degrees of AI should describe a system&#39;s choices. They shouldn&#39;t rank its ambition.</p>
+</div></section><section class="section" id="sources-and-framing"><h2><a class="anchor" href="#sources-and-framing">Sources and framing</a></h2><div class="prose"><p>[1] Anthropic, <a href="https://www.anthropic.com/engineering/building-effective-agents">Building effective agents</a>, originally published December 19, 2024. Referenced for its distinction between predefined workflows and model-directed agents. The dependence map and working definitions in this essay are the author&#39;s proposed framing, not an established taxonomy.</p>
+<p>[2] IBM Research, <a href="https://research.ibm.com/topics/neuro-symbolic-ai">Neuro-symbolic AI</a>. Referenced for the combination of neural/statistical methods and symbolic knowledge or reasoning.</p>
+<p>[3] Berkeley AI Research, <a href="https://bair.berkeley.edu/blog/2024/02/18/compound-ai-systems/">The Shift from Models to Compound AI Systems</a>, February 18, 2024. Referenced for compound system construction and its distinction from a single model.</p>
+<p>[4] Anthropic, <a href="https://www.anthropic.com/engineering/multi-agent-research-system">How we built our multi-agent research system</a>, June 13, 2025. Referenced as an implementation account, not a general claim that multi-agent systems outperform single-agent systems.</p>
+<p>[5] Model Context Protocol, <a href="https://modelcontextprotocol.io/specification/2026-07-28">Specification</a>. Referenced for connecting AI applications to external tools and data. Protocol connectivity should not be confused with application-level execution authority.</p>
+<p>The terminology tables are working interpretations. The agent-native definition, evolution paths, measurement suggestions, and future scenarios are the author&#39;s synthesis. Arrows in the diagrams are defined in their surrounding text and do not establish a universal maturity ladder.</p>
+</div></section>
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <span>Anuj Sadani | Tech · October 2026</span><!-- e.g. site name or published date -->
+  <div class="footer-refs">
+    <a href="/">Back to index</a>
+  </div>
+</footer>
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
+
+</body>
+</html>
+
