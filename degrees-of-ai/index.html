@@ -99,13 +99,14 @@
     </div>
   </header>
 
-<div class="toc" role="navigation" aria-label="Jump to section"><div class="toc-label">Explore</div><ol class="toc-list"><li><a href="#a-map-with-the-boundaries-written-beside-it">The map</a></li><li><a href="#ai-native-can-still-be-human-governed">Human governance</a></li><li><a href="#the-system-underneath-architecture-oversight-deployment">Architecture</a></li><li><a href="#where-i-think-this-goes-next">Future directions</a></li><li><a href="#product-assessment">Assess your product</a></li><li><a href="#sources-and-framing">Sources</a></li></ol></div><div class="prose"><p>Everyone seems to be moving toward AI-native.</p>
+<div class="toc" role="navigation" aria-label="Jump to section"><div class="toc-label">Explore</div><ol class="toc-list"><li><a href="#a-map-with-the-boundaries-written-beside-it">The map</a></li><li><a href="#ai-native-can-still-be-human-governed">Human governance</a></li><li><a href="#how-boundaries-fail">How boundaries fail</a></li><li><a href="#what-this-changes-for-decisions">Decisions</a></li><li><a href="#the-system-underneath-architecture-oversight-deployment">Architecture</a></li><li><a href="#where-i-think-this-goes-next">Future directions</a></li><li><a href="#product-assessment">Assess your product</a></li><li><a href="#sources-and-framing">Sources</a></li></ol></div><div class="prose"><p>Everyone seems to be moving toward AI-native.</p>
 <p>Except some mean adding a copilot. Some mean rebuilding the product around a model. Some mean letting agents execute workflows. And some mean reducing the need for human intervention.</p>
 <p>We keep putting these ideas on the same ladder:</p>
 <p><strong>AI-assisted → AI-first → AI-native → agentic → autonomous.</strong></p>
 <p>It looks like evolution. But the labels change the question halfway through.</p>
 <p>One describes the relationship between a person and a tool. Another describes a product strategy. Another describes how a system chooses its next action.</p>
 <p>There isn&#39;t one degree of AI. There are several.</p>
+<div class="callout"><div class="callout-lbl">For leaders in a hurry</div><p>AI-native, agentic and autonomous are not rungs on one ladder. They answer different questions: how much the product depends on AI, who chooses the next step, and which actions may run without a person. Describe a system by those answers, plus what it is allowed to touch, and you can compare vendors, name an owner and decide where human approval earns its cost. Three rules carry most of the weight. Capability is not authority. Controls must be enforced outside the model. Start with narrow authority and widen it as evidence accumulates. The sections on boundaries and decisions turn these rules into questions you can put to a vendor or a project team.</p></div>
 </div><section class="section" id="the-vocabulary-is-bigger-than-the-ladder"><h2><a class="anchor" href="#the-vocabulary-is-bigger-than-the-ladder">The vocabulary is bigger than the ladder</a></h2><div class="prose"><p>The vocabulary extends well beyond AI-native and agentic. Teams use these labels to describe different changes, sometimes in the same sentence.</p>
 <p>Here is a working guide. These are useful interpretations, not standardized definitions every vendor follows.</p>
 <div class="data-table"><table>
@@ -387,6 +388,40 @@
 <p>The complete description is closer to this:</p>
 <p><strong>AI-native product × agentic workflow × bounded autonomy × human approval for writes × compound architecture × hybrid deployment.</strong></p>
 <p>Longer than a badge. Much more informative.</p>
+</div></section><section class="section" id="how-boundaries-fail"><h2><a class="anchor" href="#how-boundaries-fail">How boundaries fail</a></h2><div class="prose"><p>A boundary written in a prompt is a request. A boundary enforced by the surrounding system is a control. The difference only shows up when something goes wrong, which is why the profile should record the controls a system actually meets, not the ones its documentation describes.</p>
+<p>The written boundary and the effective one drift apart in a few familiar ways.</p>
+<div class="data-table"><table>
+<thead>
+<tr>
+<th>How it fails</th>
+<th>What happens</th>
+<th>A control outside the model</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Manipulated input</td>
+<td>Instructions hidden in a document, web page or tool description steer the agent.</td>
+<td>Treat retrieved content and tool descriptions as untrusted. Confirm write actions regardless of what the text says.</td>
+</tr>
+<tr>
+<td>Borrowed permission</td>
+<td>The agent holds broader access than the person it acts for, and a request borrows it.</td>
+<td>Run tools in the requesting user&#39;s context, not a shared service account.</td>
+</tr>
+<tr>
+<td>Excess capability</td>
+<td>Tools expose more functions, permissions or autonomy than the task needs.[6]</td>
+<td>Grant the minimum function and the least privilege per task. Prefer narrow tools to open-ended ones.</td>
+</tr>
+<tr>
+<td>Silent drift</td>
+<td>A tool, package source or description changes after it was approved.</td>
+<td>Pin versions, re-review on change, and deny resources that are not listed.</td>
+</tr>
+</tbody></table></div>
+<p>Autonomy also depends on reliability that a demo does not show. A step that is right 95% of the time sounds dependable. Ten such steps in a row, if they fail independently, complete correctly about 60% of the time. That is illustrative arithmetic, not a measurement, and real steps are rarely independent. The point is that longer unattended chains need better evidence than shorter ones.</p>
+<p>For anything that touches an outside system, three properties matter as much as the model. Actions should be safe to retry, so a lost response does not charge a card twice. There should be a way to stop a run in progress. And there should be a way to undo or compensate for what already happened.</p>
+<p>Finally, keep the evidence. Record what the agent saw, what it chose, which control allowed it, and what resulted. Without that record, &quot;human-governed&quot; is a claim nobody can audit.</p>
 </div></section><section class="section" id="evolution-still-exists-just-along-different-paths"><h2><a class="anchor" href="#evolution-still-exists-just-along-different-paths">Evolution still exists, just along different paths</a></h2><div class="prose"><p>Rejecting one universal ladder doesn&#39;t mean nothing evolves.</p>
 <p>A product may move from an optional AI feature to workflows that assume AI is present. A person may move from asking for suggestions to handing over an outcome. A system may expand from a single model call to a composition of retrieval, planning, verification, and execution.</p>
 <p>The mistake is assuming these transitions happen together, in order, or permanently.</p>
@@ -462,6 +497,49 @@
 <p>These are design tradeoffs. A vocabulary that calls every increase &quot;maturity&quot; makes them harder to discuss honestly.</p>
 <p>Governance therefore belongs around the profile: permissions, evidence requirements, monitoring, escalation, and recovery. It is not another degree of AI. It makes the chosen degrees accountable.</p>
 <p>And capability is not authority. A model&#39;s ability to produce a plausible action doesn&#39;t establish the system&#39;s right to execute it.</p>
+</div></section><section class="section" id="what-this-changes-for-decisions"><h2><a class="anchor" href="#what-this-changes-for-decisions">What this changes for decisions</a></h2><div class="prose"><p>A profile earns its keep only if it changes a decision. Four decisions are worth making explicitly.</p>
+<p><strong>Match authority to reversibility, not to the label.</strong> The action classes from the questionnaire give a workable starting point. Treat these as defaults to begin from, then widen them with evidence and narrow them after incidents.</p>
+<div class="data-table"><table>
+<thead>
+<tr>
+<th>Action class</th>
+<th>Example</th>
+<th>A reasonable starting authority</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Read or investigate</td>
+<td>Read policy and claim history</td>
+<td>Independent, within access limits.</td>
+</tr>
+<tr>
+<td>Prepare a draft</td>
+<td>Draft a corrected claim</td>
+<td>Independent, with a person reviewing before it leaves.</td>
+</tr>
+<tr>
+<td>Reversible internal change</td>
+<td>Update a ticket field</td>
+<td>Independent, with logging and an undo path.</td>
+</tr>
+<tr>
+<td>Irreversible or external</td>
+<td>Send money, message a customer, release to production</td>
+<td>Approval required, or a deterministic policy limit with evidence behind it.</td>
+</tr>
+</tbody></table></div>
+<p><strong>Name an owner for each action class.</strong> Who is accountable when it goes wrong: the product owner, the approver, or the platform team? Autonomy with no named owner is not autonomy. It is orphaned risk. An approval step also only counts if the approver can evaluate what they are approving. A person who clicks through fifty requests an hour is not providing oversight.</p>
+<p><strong>Ask vendors about the profile, not the badge.</strong> &quot;Agentic&quot; and &quot;AI-native&quot; are marketing words until the answers are specific.</p>
+<ul>
+<li>Which decisions does the model make, and which are fixed in code?</li>
+<li>Which actions run without approval, by action class, and can I change that per class?</li>
+<li>What restricts tools, data, network and spend, and is it enforced outside the model?</li>
+<li>Whose permissions does the agent use?</li>
+<li>How do I stop a run in progress, and what is undone when I do?</li>
+<li>What evidence do I get for each action?</li>
+<li>What changes in the profile when you update the model or its tools, and how will I find out?</li>
+</ul>
+<p><strong>Map the profile to the frameworks your risk team already uses.</strong> The NIST AI Risk Management Framework organizes the work into govern, map, measure and manage.[7] The profile&#39;s dimensions feed the map and measure steps directly. The EU AI Act, in Article 14, requires high-risk systems to be designed so that people can effectively oversee them, including understanding their limits, recognizing automation bias, and overriding or stopping the system.[8] Whether a particular system counts as high-risk is a legal question, and this essay does not answer it. What the profile gives you is a concrete description of the oversight design to put in front of the people who do.</p>
 </div></section><section class="section" id="where-i-think-this-goes-next"><h2><a class="anchor" href="#where-i-think-this-goes-next">Where I think this goes next</a></h2><div class="prose"><p>This is the future-facing part of the argument. The following are plausible directions, not a forecast that every product will follow. Existing compound systems, multi-agent implementations, and tool protocols provide evidence of the building blocks.[3][4][5] The implications below are my interpretation.</p>
 <p><strong>Products may serve two kinds of users: people and agents.</strong> A person needs navigation, explanations, and visible choices. An agent needs discoverable capabilities, structured inputs, task state, and clear permission boundaries. MCP already standardizes connections between AI applications and external tools and data.[5] Connectivity makes an agent-facing product possible; it does not make that product AI-native or establish authority to perform every exposed action.</p>
 <p>An expense product could retain its ordinary interface while allowing an external agent to prepare a claim. The application remains responsible for validating the submission and enforcing payment controls. The agent interface changes who can operate the product, not who owns its rules.</p>
@@ -719,7 +797,10 @@ root._evaluate=evaluate;
 <p>[3] Berkeley AI Research, <a href="https://bair.berkeley.edu/blog/2024/02/18/compound-ai-systems/">The Shift from Models to Compound AI Systems</a>, February 18, 2024. Referenced for compound system construction and its distinction from a single model.</p>
 <p>[4] Anthropic, <a href="https://www.anthropic.com/engineering/multi-agent-research-system">How we built our multi-agent research system</a>, June 13, 2025. Referenced as an implementation account, not a general claim that multi-agent systems outperform single-agent systems.</p>
 <p>[5] Model Context Protocol, <a href="https://modelcontextprotocol.io/specification/2026-07-28">Specification</a>. Referenced for connecting AI applications to external tools and data. Protocol connectivity should not be confused with application-level execution authority.</p>
-<p>The terminology tables are working interpretations. The agent-native definition, evolution paths, measurement suggestions, and future scenarios are the author&#39;s synthesis. Arrows in the diagrams are defined in their surrounding text and do not establish a universal maturity ladder.</p>
+<p>[6] OWASP Gen AI Security Project, <a href="https://genai.owasp.org/llmrisk/llm062025-excessive-agency/">LLM06:2025 Excessive Agency</a>. Referenced for excessive functionality, permissions and autonomy as root causes, and for least privilege and human approval as mitigations.</p>
+<p>[7] NIST, <a href="https://www.nist.gov/itl/ai-risk-management-framework">AI Risk Management Framework</a> 1.0, released January 26, 2023. Referenced for the govern, map, measure and manage functions. NIST also published a Generative AI Profile (NIST-AI-600-1) on July 26, 2024.</p>
+<p>[8] European Union, Artificial Intelligence Act, <a href="https://artificialintelligenceact.eu/article/14/">Article 14: Human Oversight</a>. Referenced for the oversight requirements on high-risk AI systems. Whether a given system is high-risk is a legal determination this essay does not make.</p>
+<p>The terminology tables are working interpretations. The agent-native definition, evolution paths, measurement suggestions, decision defaults and future scenarios are the author&#39;s synthesis. Arrows in the diagrams are defined in their surrounding text and do not establish a universal maturity ladder.</p>
 </div></section>
 </div><!-- /page-wrap -->
 
