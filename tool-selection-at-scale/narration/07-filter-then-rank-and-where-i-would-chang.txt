@@ -14,7 +14,7 @@ The LLM does a bounded comparison over a small menu.
 
 Validation checks that the choice is supported and safe to run.
 
-The reranker then cuts roughly 30 to 50 candidates to a menu of 5 to 8. I keep the cut generous. A reranker error deletes the right tool for good, so this is the stage where I trade a few extra tokens for recall. In my paper I recommended k of 8 to 12 with the threshold doing the precision work.
+The reranker then cuts roughly 30 to 50 candidates to a menu of 5 to 8. I keep the cut generous. A reranker error deletes the right tool for good, so this is the stage where I trade a few extra tokens for recall. In my paper I recommended k of 8 to 12 with the threshold doing the precision work. The examples here use 6 because they show one-line menus; widen it if your measured menu recall is low.
 
 A common way to specify the reranker is a weighted sum over the candidate tool t, with a weight on each term:
 

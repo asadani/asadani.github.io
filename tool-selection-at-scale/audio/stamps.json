@@ -16,36 +16,36 @@
   "d": 108.1
  },
  "04-the-recall-chain": {
-  "k": "635ef11421055771",
-  "d": 68.8
+  "k": "af424ddcf3541364",
+  "d": 89.7
  },
  "05-the-catalog-is-a-product": {
-  "k": "bb02f62add7399bd",
-  "d": 103.9
+  "k": "010b4eadbd07edaf",
+  "d": 110.3
  },
  "06-discovery-per-subgoal-three-retrievers-o": {
   "k": "2567ca49d7c8971e",
   "d": 91.8
  },
  "07-filter-then-rank-and-where-i-would-chang": {
-  "k": "de31d0695202cacc",
-  "d": 148.2
+  "k": "22531e14e276e800",
+  "d": 153.4
  },
  "08-progressive-disclosure": {
-  "k": "2cfda79a9827f0df",
-  "d": 96.1
+  "k": "54a9a67ced17efaa",
+  "d": 112.2
  },
  "09-validate-iterate-recover": {
-  "k": "094b811b802cc65b",
-  "d": 106.3
+  "k": "fa83e577be211741",
+  "d": 106.4
  },
  "10-one-request-end-to-end": {
-  "k": "c8aade3b9ad81d71",
-  "d": 156.3
+  "k": "b13fdafe0cbf0a53",
+  "d": 170.7
  },
  "11-what-to-build-at-which-scale": {
-  "k": "36d3286eaabfbbdc",
-  "d": 65.9
+  "k": "fa0f9557d598bda8",
+  "d": 108.3
  },
  "12-the-short-version": {
   "k": "0ffe7b9c3821f021",

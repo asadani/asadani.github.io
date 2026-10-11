@@ -794,7 +794,7 @@
       </li>
       <li>
         <span class="pe-num">4</span>
-        <div><strong>Most failures are catalog failures.</strong> In my simulation, 72% traced back to ambiguous or cryptic tool descriptions, not to the model.</div>
+        <div><strong>Most failures are catalog failures.</strong> In my simulation, 72% of failures traced back to ambiguous or cryptic tool descriptions rather than to the model. Simulated, so test it on your own traces.</div>
       </li>
     </ul>
   </div>
@@ -820,12 +820,14 @@
   <!-- 01 -->
   
 
+
+
 <!-- ARTICLE-AUDIO:BEGIN -->
 <link rel="stylesheet" href="/assets/player.css">
 <div class="ap" id="articleaudio">
   <div class="ap-hd">
     <span class="ap-ico" aria-hidden="true">&#9654;</span>
-    <div><span class="ap-kick">Audio edition</span><b>Listen to this article</b><span class="ap-sub">13 parts &middot; 19 min</span></div>
+    <div><span class="ap-kick">Audio edition</span><b>Listen to this article</b><span class="ap-sub">13 parts &middot; 21 min</span></div>
     <button class="ap-rate" type="button" aria-label="Playback speed">1&#215;</button>
     <button class="ap-more" type="button" aria-expanded="false">Parts</button>
   </div>
@@ -836,14 +838,14 @@
       <li><button type="button" data-src="audio/01-what-the-pipeline-gets-right.mp3"><span class="ap-n">2</span><span class="ap-nm">What the pipeline gets right</span><span class="ap-d">1:27</span></button></li>
       <li><button type="button" data-src="audio/02-tools-are-not-categories.mp3"><span class="ap-n">3</span><span class="ap-nm">Tools are not categories</span><span class="ap-d">0:30</span></button></li>
       <li><button type="button" data-src="audio/03-it-is-a-context-quality-problem-not-only.mp3"><span class="ap-n">4</span><span class="ap-nm">It is a context-quality problem, not only a knowledge problem</span><span class="ap-d">1:48</span></button></li>
-      <li><button type="button" data-src="audio/04-the-recall-chain.mp3"><span class="ap-n">5</span><span class="ap-nm">The recall chain</span><span class="ap-d">1:09</span></button></li>
-      <li><button type="button" data-src="audio/05-the-catalog-is-a-product.mp3"><span class="ap-n">6</span><span class="ap-nm">The catalog is a product</span><span class="ap-d">1:44</span></button></li>
+      <li><button type="button" data-src="audio/04-the-recall-chain.mp3"><span class="ap-n">5</span><span class="ap-nm">The recall chain</span><span class="ap-d">1:30</span></button></li>
+      <li><button type="button" data-src="audio/05-the-catalog-is-a-product.mp3"><span class="ap-n">6</span><span class="ap-nm">The catalog is a product</span><span class="ap-d">1:50</span></button></li>
       <li><button type="button" data-src="audio/06-discovery-per-subgoal-three-retrievers-o.mp3"><span class="ap-n">7</span><span class="ap-nm">Discovery per subgoal, three retrievers, one pre-filter</span><span class="ap-d">1:32</span></button></li>
-      <li><button type="button" data-src="audio/07-filter-then-rank-and-where-i-would-chang.mp3"><span class="ap-n">8</span><span class="ap-nm">Filter, then rank, and where I would change the score</span><span class="ap-d">2:28</span></button></li>
-      <li><button type="button" data-src="audio/08-progressive-disclosure.mp3"><span class="ap-n">9</span><span class="ap-nm">Progressive disclosure</span><span class="ap-d">1:36</span></button></li>
+      <li><button type="button" data-src="audio/07-filter-then-rank-and-where-i-would-chang.mp3"><span class="ap-n">8</span><span class="ap-nm">Filter, then rank, and where I would change the score</span><span class="ap-d">2:33</span></button></li>
+      <li><button type="button" data-src="audio/08-progressive-disclosure.mp3"><span class="ap-n">9</span><span class="ap-nm">Progressive disclosure</span><span class="ap-d">1:52</span></button></li>
       <li><button type="button" data-src="audio/09-validate-iterate-recover.mp3"><span class="ap-n">10</span><span class="ap-nm">Validate, iterate, recover</span><span class="ap-d">1:46</span></button></li>
-      <li><button type="button" data-src="audio/10-one-request-end-to-end.mp3"><span class="ap-n">11</span><span class="ap-nm">One request, end to end</span><span class="ap-d">2:36</span></button></li>
-      <li><button type="button" data-src="audio/11-what-to-build-at-which-scale.mp3"><span class="ap-n">12</span><span class="ap-nm">What to build at which scale</span><span class="ap-d">1:06</span></button></li>
+      <li><button type="button" data-src="audio/10-one-request-end-to-end.mp3"><span class="ap-n">11</span><span class="ap-nm">One request, end to end</span><span class="ap-d">2:51</span></button></li>
+      <li><button type="button" data-src="audio/11-what-to-build-at-which-scale.mp3"><span class="ap-n">12</span><span class="ap-nm">What to build at which scale</span><span class="ap-d">1:48</span></button></li>
       <li><button type="button" data-src="audio/12-the-short-version.mp3"><span class="ap-n">13</span><span class="ap-nm">The short version</span><span class="ap-d">1:00</span></button></li>
   </ol>
 </div>
@@ -1003,6 +1005,7 @@
     </div>
     <div class="prose">
       <p>Evaluating only the LLM is misleading, and the baseline write-up says so. At scale two numbers are not enough. You need four, and you need a labeled set where the gold tool is one the user could actually call.</p>
+      <p>One caveat: the chain above starts at retrieval, but in the per-subgoal design of section 06 there is a stage before it, splitting the request into subgoals. A bad split caps everything downstream, so give it its own term, <code>R_decompose</code>: the share of requests where the gold tool is covered by some extracted subgoal.</p>
     </div>
   </div>
 
@@ -1011,7 +1014,7 @@
     <div class="section-label">05 / Control part 1</div>
     <h2><a class="anchor" href="#catalog">The catalog is a product</a></h2>
     <div class="prose">
-      <p>The first thing that breaks at scale is not the model or the index. It is the catalog. In my simulation 29 of 500 tasks failed with tool gating. Fourteen (48%) came from a query matching several semantically similar tools. Seven (24%) came from cryptic legacy descriptions. That is 72% of failures caused by what the catalog says, and the model was not the problem. It is a simulated workload, so read the proportions as a hypothesis worth testing on your own traces.</p>
+      <p>The first thing that breaks at scale is not the model or the index. It is the catalog. In my simulation 29 of 500 tasks failed with tool gating. Fourteen (48%) came from a query matching several semantically similar tools. Seven (24%) came from cryptic legacy descriptions. That is 72% of failures where what the catalog says was the proximate cause. Five more (17%) were multi-hop cases, covered below, and the last three fit none of these buckets. It is a simulated workload, so read the proportions as a hypothesis worth testing on your own traces.</p>
       <p>So keep the registry outside the prompt and give every tool a card written for retrieval, not for the implementer:</p>
     </div>
     <div class="code-block">
@@ -1078,19 +1081,19 @@
     <span class="tok-key">return</span> sorted(score, key=score.get, reverse=True)
 
 <span class="tok-key">def</span> discover(sub, ctx, index, n=40, menu=6):
-    where = {<span class="tok-str">"connection"</span>: ctx.connections, <span class="tok-str">"env"</span>: ctx.env}    <span class="tok-cmt"># static, pushed into the index</span>
+    where = {<span class="tok-str">"connection"</span>: ctx.connections, <span class="tok-str">"env"</span>: ctx.env,
+             <span class="tok-str">"scopes_within"</span>: ctx.granted_scopes}   <span class="tok-cmt"># static per session, pushed into the index</span>
     fused = rrf([
         index.vector(sub.text, n=n, where=where),
         index.bm25(sub.text, n=n, where=where),
         index.by_capability(sub.operations, n=n, where=where),
     ])[:n]
-    allowed = [t <span class="tok-key">for</span> t <span class="tok-key">in</span> fused <span class="tok-key">if</span> request_ok(t, sub, ctx)]   <span class="tok-cmt"># depends on this request</span>
+    allowed = [t <span class="tok-key">for</span> t <span class="tok-key">in</span> fused <span class="tok-key">if</span> request_ok(t, sub, ctx)]   <span class="tok-cmt"># depends only on this subgoal</span>
     ranked = reranker.score(sub, allowed)                      <span class="tok-cmt"># learned, relevance only</span>
     <span class="tok-key">return</span> prefer_cheap_within(ranked, margin=0.05)[:menu]
 
 <span class="tok-key">def</span> request_ok(tool, sub, ctx):
-    <span class="tok-key">return</span> (tool.scopes &lt;= ctx.granted_scopes
-            <span class="tok-key">and</span> (tool.risk == <span class="tok-str">"read_only"</span> <span class="tok-key">or</span> sub.mutation))</pre>
+    <span class="tok-key">return</span> (tool.risk != <span class="tok-str">"read_only"</span>) == sub.mutation   <span class="tok-cmt"># write tools for write subgoals, read tools for read</span></pre>
     </div>
   </div>
 
@@ -1110,7 +1113,7 @@
       <li><strong>Validation</strong> checks that the choice is supported and safe to run.</li>
     </ul>
     <div class="prose">
-      <p>The reranker then cuts roughly 30 to 50 candidates to a menu of 5 to 8. I keep the cut generous. A reranker error deletes the right tool for good, so this is the stage where I trade a few extra tokens for recall. In my paper I recommended k of 8 to 12 with the threshold doing the precision work.</p>
+      <p>The reranker then cuts roughly 30 to 50 candidates to a menu of 5 to 8. I keep the cut generous. A reranker error deletes the right tool for good, so this is the stage where I trade a few extra tokens for recall. In my paper I recommended k of 8 to 12 with the threshold doing the precision work. The examples here use 6 because they show one-line menus; widen it if your measured <code>R_menu</code> is low.</p>
       <p>A common way to specify the reranker is a weighted sum over the candidate tool <code>t</code>:</p>
     </div>
     <div class="code-block">
@@ -1219,7 +1222,7 @@
 4. web.search           Search public internet sources</pre>
     </div>
     <div class="prose">
-      <p>Only after it picks <code>github.search_code</code> does the system reveal that tool's full input schema. Two operational details. First, keep the summary pool in the stable prefix of the prompt and put per-turn schemas right before the user message. In my simulation this gave an 84% prompt-cache hit rate over a 30-turn session against 22% for naive full-schema injection, because the tool list stopped invalidating the cache. Second, give the model an escape hatch: a <code>search_tools</code> meta-tool it can call when the menu is wrong. Anthropic's tool search is the same idea shipped as a platform feature.</p>
+      <p>Only after it picks <code>github.search_code</code> does the system reveal that tool's full input schema. Two operational details. First, keep the summary pool in the stable prefix of the prompt and put per-turn schemas right before the user message. In my simulation this gave an 84% prompt-cache hit rate over a 30-turn session against 22% for naive full-schema injection, because the tool list stopped invalidating the cache. This only works if the schemas travel as message content after the cached prefix. On the Claude API, tool definitions sit at the front of the prefix, so changing the <code>tools</code> parameter between turns invalidates everything behind it. Second, give the model an escape hatch: a <code>search_tools</code> meta-tool it can call when the menu is wrong. Anthropic's tool search is the same idea shipped as a platform feature.</p>
       <p>Pair that with a gate: if the model calls a tool that is not in the active set, reject it with a structured error listing what is available. In my simulation the gate fired on 2.3% of turns. The model recovered on the next turn 78% of the time and asked the user a clarifying question the other 22%.</p>
     </div>
   </div>
@@ -1242,7 +1245,7 @@ retrieve Kubernetes tools        <span class="tok-cmt"># round 2: k8s.get_rollou
 read the failing pod's logs                  <span class="tok-cmt"># round 3: k8s.get_pod_logs</span></pre>
     </div>
     <div class="prose">
-      <p><strong>Name the failure class.</strong> "The agent used the wrong tool" is not a diagnosis. There are at least six distinct failures, each with a different detector and a different fix:</p>
+      <p><strong>Name the failure class.</strong> "The agent used the wrong tool" is not a diagnosis. There are at least seven distinct failures, each with a different detector and a different fix:</p>
     </div>
     <div class="data-table">
       <table class="fixed">
@@ -1263,6 +1266,11 @@ read the failing pod's logs                  <span class="tok-cmt"># round 3: k8
             <td>No suitable tool exists</td>
             <td>Gold label is "none". Abstention rate on those cases.</td>
             <td>Report the missing capability. Roadmap input.</td>
+          </tr>
+          <tr>
+            <td>Request mis-split</td>
+            <td>Low <code>R_decompose</code>: the gold tool's need is missing from, or merged into, another subgoal</td>
+            <td>Intent-extraction prompt, examples and output schema.</td>
           </tr>
           <tr>
             <td>Exists, not retrieved</td>
@@ -1321,8 +1329,8 @@ read the failing pod's logs                  <span class="tok-cmt"># round 3: k8
         </thead>
         <tbody>
           <tr><td>Intent extraction</td><td>Three subgoals: find what changed (GitHub, read), check the rollout (Kubernetes, read), post a summary (Slack, write).</td><td>The request only.</td></tr>
-          <tr><td>Retrieval, per subgoal</td><td>40 candidates each, out of 1,200. For the rollout subgoal, BM25 catches the literal word "rollout" in <code>k8s.get_rollout_status</code>, which the vector search had ranked ninth.</td><td>Nothing yet.</td></tr>
-          <tr><td>Hard filters</td><td>Rollout subgoal: 9 candidates removed because this user has no Argo CD connection, and <code>k8s.rollout_restart</code> removed because the subgoal is read-only. 30 remain.</td><td>Nothing yet.</td></tr>
+          <tr><td>Retrieval, per subgoal</td><td>40 candidates each, out of 1,200, after the connection and scope pre-filter (this user has no Argo CD connection, so those tools never enter the query). For the rollout subgoal, BM25 catches the literal word "rollout" in <code>k8s.get_rollout_status</code>, which the vector search had ranked 63rd, outside its top 40.</td><td>Nothing yet.</td></tr>
+          <tr><td>Hard filters</td><td>Rollout subgoal: <code>k8s.rollout_restart</code> and nine other write tools removed because the subgoal is read-only. 30 remain.</td><td>Nothing yet.</td></tr>
           <tr><td>Rerank</td><td>30 become a menu of 6. The <code>not_for</code> field on <code>logs.search</code> ("for Kubernetes pod logs use <code>k8s.get_pod_logs</code>") settles a near-duplicate.</td><td>Nothing yet.</td></tr>
           <tr><td>Disclosure and selection</td><td>The menu is shown at discovery level. The model picks <code>k8s.get_rollout_status</code>, and only then is its full schema revealed.</td><td>Six one-liners (about 200 tokens), then one schema (about 400).</td></tr>
           <tr><td>Validation</td><td>The required parameter <code>namespace</code> is missing. The validator returns an error, the model supplies <code>payments</code>, and the second attempt passes.</td><td>The error string.</td></tr>
@@ -1333,7 +1341,7 @@ read the failing pod's logs                  <span class="tok-cmt"># round 3: k8
     </div>
     <div class="prose">
       <p>Count the tokens with the 400-token schema assumption from earlier. Showing the whole catalog would cost about 480k tokens on every turn, more than most context windows hold. This run used three menus of about 200 tokens and three schemas of about 400, roughly 1,800 tokens, a cut of more than 99%. Those are assumptions multiplied out, not a measurement.</p>
-      <p>The more useful observation is where the LLM acted. It made two kinds of decision: splitting the request, and choosing from a menu of six. Every other step was an index, a rule or a learned ranker. That is the point of the control plane. If this run had gone wrong, it would have gone wrong in one identifiable place. Had <code>k8s.get_rollout_status</code> never been retrieved, that is a retrieval miss. Had it been retrieved and cut, that is the reranker. Had it been chosen and called badly, the validator catches it before anything runs.</p>
+      <p>The more useful observation is where the LLM acted. It made two decisions that choose tools: splitting the request, and choosing from a menu of six. It also supplied one missing parameter and drafted the Slack message, but neither of those picks a tool. Every other step was an index, a rule or a learned ranker. That is the point of the control plane. If this run had gone wrong, it would have gone wrong in one identifiable place. Had <code>k8s.get_rollout_status</code> never been retrieved, that is a retrieval miss. Had it been retrieved and cut, that is the reranker. Had it been chosen and called badly, the validator catches it before anything runs.</p>
     </div>
   </div>
 
@@ -1463,7 +1471,7 @@ read the failing pod's logs                  <span class="tok-cmt"># round 3: k8
       <figcaption>Fig. 1. Discovery is a stage separate from execution, and the reasoning model never sees the full catalog. Tags: LLM (green), LEARNED (accent), RULES and INDEX (blue). Red arrows are failure paths, the accent arrow is the loop for a new subgoal.</figcaption>
     </figure>
     <div class="prose">
-      <p>You do not need all of it. The thresholds below are my judgment from building these systems, not measured boundaries. In my simulation the full-schema baseline crossed the 70% context-utilization line at about 50 tools, which is why the first row is short.</p>
+      <p>You do not need all of it. The thresholds below are my judgment from building these systems, not measured boundaries. In my simulation the full-schema baseline crossed the 70% context-utilization line at about 50 tools, which is why the first row is short. That figure depends on the context window and on how much the system prompt and conversation already occupy, so rerun it with your own numbers.</p>
     </div>
     <div class="data-table">
       <table class="fixed">
@@ -1489,7 +1497,7 @@ read the failing pod's logs                  <span class="tok-cmt"># round 3: k8
     </div>
     <div class="callout">
       <div class="callout-lbl">Where this breaks in production</div>
-      <p>Each stage adds latency, and I have not measured a full stack end to end, so budget it before you commit. Indexes go stale when a server ships a new schema, which is why <code>schema_version</code> exists. And tool descriptions are attacker-controlled text. In my simulation, gating cut the success rate of 50 poisoned descriptions from 38% to 6%. That was a side effect of never showing irrelevant tools, not a defense, and it needs a real one.</p>
+      <p>Each stage adds latency, and I have not measured a full stack end to end, so budget it before you commit. Indexes go stale when a server ships a new schema, which is why <code>schema_version</code> exists. And tool descriptions are attacker-controlled text. In my simulation, gating cut the success rate of 50 poisoned descriptions from 38% to 6%. That was a side effect of never showing irrelevant tools, not a defense, and it needs a real one. The attacks to design for are tool poisoning (instructions hidden in a description), tool shadowing (a third-party tool describing itself to win selection over a trusted one) and a description that changes after it was approved. In the control plane that means hashing each description at approval and re-reviewing on change, treating third-party descriptions as untrusted input in catalog linting, and keeping write tools behind the risk policy whatever any description says. Log per-stage latency (p50 and p95) next to per-stage recall.</p>
     </div>
   </div>
 
