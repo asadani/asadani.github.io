@@ -773,8 +773,8 @@
   </header>
 
   <div class="banner">
-    <span class="banner-badge">Builds on</span>
-    <p>A recent write-up on RAG for LLM classification argues that embeddings find candidates, RAG supplies definitions, the LLM decides, and validation may abstain. I agree with it. This post covers what changes when the categories are tools and there are thousands of them.</p>
+    <span class="banner-badge">Starting point</span>
+    <p>The standard way to use RAG for LLM classification is a pipeline: embeddings find candidates, retrieval supplies definitions, the LLM decides, and validation may abstain. It is a sound baseline. This post covers what changes when the categories are tools and there are thousands of them.</p>
   </div>
 
   <div class="plain-english">
@@ -823,6 +823,7 @@
 
 
 
+
 <!-- ARTICLE-AUDIO:BEGIN -->
 <link rel="stylesheet" href="/assets/player.css">
 <div class="ap" id="articleaudio">
@@ -839,7 +840,7 @@
       <li><button type="button" data-src="audio/01-what-the-pipeline-gets-right.mp3"><span class="ap-n">2</span><span class="ap-nm">What the pipeline gets right</span><span class="ap-d">1:26</span></button></li>
       <li><button type="button" data-src="audio/02-tools-are-not-categories.mp3"><span class="ap-n">3</span><span class="ap-nm">Tools are not categories</span><span class="ap-d">0:30</span></button></li>
       <li><button type="button" data-src="audio/03-it-is-a-context-quality-problem-not-only.mp3"><span class="ap-n">4</span><span class="ap-nm">It is a context-quality problem, not only a knowledge problem</span><span class="ap-d">1:48</span></button></li>
-      <li><button type="button" data-src="audio/04-the-recall-chain.mp3"><span class="ap-n">5</span><span class="ap-nm">The recall chain</span><span class="ap-d">1:30</span></button></li>
+      <li><button type="button" data-src="audio/04-the-recall-chain.mp3"><span class="ap-n">5</span><span class="ap-nm">The recall chain</span><span class="ap-d">1:32</span></button></li>
       <li><button type="button" data-src="audio/05-the-catalog-is-a-product.mp3"><span class="ap-n">6</span><span class="ap-nm">The catalog is a product</span><span class="ap-d">1:50</span></button></li>
       <li><button type="button" data-src="audio/06-discovery-per-subgoal-three-retrievers-o.mp3"><span class="ap-n">7</span><span class="ap-nm">Discovery per subgoal, three retrievers, one pre-filter</span><span class="ap-d">1:32</span></button></li>
       <li><button type="button" data-src="audio/07-filter-then-rank-and-where-i-would-chang.mp3"><span class="ap-n">8</span><span class="ap-nm">Filter, then rank, and where I would change the score</span><span class="ap-d">2:33</span></button></li>
@@ -865,8 +866,8 @@
     <div class="section-label">01 / Baseline</div>
     <h2><a class="anchor" href="#baseline">What the pipeline gets right</a></h2>
     <div class="prose">
-      <p>The claim is that a reliable classifier is a pipeline, not a prompt. Embeddings find the neighborhood. Retrieval returns definitions. The LLM compares them. A validation step chooses between a category and an abstention. I agree with every stage.</p>
-      <p>The ceiling rule in that write-up deserves one extension. If the correct category is not retrieved, the LLM cannot pick it. True. It is equally true of every stage after retrieval, and that is where scale starts to hurt.</p>
+      <p>The idea is that a reliable classifier is a pipeline, not a prompt. Embeddings find the neighborhood. Retrieval returns definitions. The LLM compares them. A validation step chooses between a category and an abstention. I would keep every stage.</p>
+      <p>The pipeline has a ceiling, and it deserves one extension. If the correct category is not retrieved, the LLM cannot pick it. True. It is equally true of every stage after retrieval, and that is where scale starts to hurt.</p>
       <p>At around 100 items the plain pipeline is enough. A 100-tool catalog at roughly 400 tokens per schema is 40k tokens. That figure is the one I used in my <a href="https://arxiv.org/abs/2604.21816">Tool Attention paper</a>, and real servers run higher: the public audits I cited put the full GitHub server at about 55,000 tokens for 93 tools, close to 590 each. Forty thousand tokens is wasteful but it fits, and a single top-10 embedding lookup rarely misses.</p>
       <p>At 1,000 tools the same arithmetic gives 400k tokens. Retrieval stops being an optimization and becomes the only way in. That is the point where embed, retrieve, decide and validate is necessary and no longer sufficient. The rest of this post is about the parts I would add.</p>
     </div>
@@ -937,7 +938,7 @@
     <div class="section-label">03 / Why retrieval at all</div>
     <h2><a class="anchor" href="#context-quality">It is a context-quality problem, not only a knowledge problem</a></h2>
     <div class="prose">
-      <p>The baseline write-up frames retrieval as supplying information the model lacks. That is half of it. The other half is that a model with all the information in a crowded context still does worse, even when the right answer is technically in there.</p>
+      <p>The baseline pipeline frames retrieval as supplying information the model lacks. That is half of it. The other half is that a model with all the information in a crowded context still does worse, even when the right answer is technically in there.</p>
     </div>
     <ul class="dl">
       <li><strong>Position effects.</strong> Liu et al. (<a href="https://aclanthology.org/2024.tacl-1.9/">Lost in the Middle</a>, TACL 2024) found that accuracy is lowest when the relevant item sits in the middle of a long context. A tool list is exactly that shape.</li>
@@ -1005,7 +1006,7 @@
     <span class="tok-key">return</span> out                                      <span class="tok-cmt"># multiply the values for end-to-end</span></pre>
     </div>
     <div class="prose">
-      <p>Evaluating only the LLM is misleading, and the baseline write-up says so. At scale two numbers are not enough. You need four, and you need a labeled set where the gold tool is one the user could actually call.</p>
+      <p>Even in the baseline pipeline, evaluating only the LLM is misleading, so you track retrieval and selection separately. At scale two numbers are not enough. You need four, and you need a labeled set where the gold tool is one the user could actually call.</p>
       <p>One caveat: the chain above starts at retrieval, but in the per-subgoal design of section 06 there is a stage before it, splitting the request into subgoals. A bad split caps everything downstream, so give it its own term, <code>R_decompose</code>: the share of requests where the gold tool is covered by some extracted subgoal.</p>
     </div>
   </div>
