@@ -1,18 +1,18 @@
 {
  "00-introduction": {
-  "k": "42af482ea92be236",
-  "d": 22.6
+  "k": "7ed1e55eda19d8aa",
+  "d": 21.6
  },
  "01-what-the-pipeline-gets-right": {
-  "k": "30520bb985ef93dc",
-  "d": 87.2
+  "k": "a419e229fa423621",
+  "d": 86.0
  },
  "02-tools-are-not-categories": {
   "k": "9e4ad4a7bcb4bda9",
   "d": 30.2
  },
  "03-it-is-a-context-quality-problem-not-only": {
-  "k": "bd91cd16fa46f223",
+  "k": "e62048eb9f9d782b",
   "d": 108.1
  },
  "04-the-recall-chain": {
@@ -20,8 +20,8 @@
   "d": 89.7
  },
  "05-the-catalog-is-a-product": {
-  "k": "010b4eadbd07edaf",
-  "d": 110.3
+  "k": "78ce5e97f252c2f8",
+  "d": 109.5
  },
  "06-discovery-per-subgoal-three-retrievers-o": {
   "k": "2567ca49d7c8971e",
@@ -32,23 +32,23 @@
   "d": 153.4
  },
  "08-progressive-disclosure": {
-  "k": "54a9a67ced17efaa",
-  "d": 112.2
+  "k": "99f8b95f02cfca2c",
+  "d": 112.3
  },
  "09-validate-iterate-recover": {
   "k": "fa83e577be211741",
   "d": 106.4
  },
  "10-one-request-end-to-end": {
-  "k": "b13fdafe0cbf0a53",
-  "d": 170.7
+  "k": "7c4b6dfa3648a5f3",
+  "d": 170.6
  },
  "11-what-to-build-at-which-scale": {
   "k": "fa0f9557d598bda8",
   "d": 108.3
  },
  "12-the-short-version": {
-  "k": "0ffe7b9c3821f021",
-  "d": 60.4
+  "k": "aca65693a3e86c9a",
+  "d": 59.4
  }
 }
