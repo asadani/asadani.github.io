@@ -6,4 +6,6 @@ The word "conditional" matters. Multiplying raw retrieval recall by raw reranker
 
 Raising retrieval from 0.95 to 0.99 lifts the end result by about three points. Raising selection from 0.90 to 0.95 lifts it by about four. The weak stage is rarely the one people tune first, because retrieval is the stage everyone knows how to tune. The fix is to log four sets per request and compute the numbers per stage:
 
-Evaluating only the LLM is misleading, and the baseline write-up says so. At scale two numbers are not enough. You need four, and you need a labeled set where the gold tool is one the user could actually call.
+Even in the baseline pipeline, evaluating only the LLM is misleading, so you track retrieval and selection separately. At scale two numbers are not enough. You need four, and you need a labeled set where the gold tool is one the user could actually call.
+
+One caveat: the chain above starts at retrieval, but in the per-subgoal design of section 06 there is a stage before it, splitting the request into subgoals. A bad split caps everything downstream, so give it its own recall term, decompose recall: the share of requests where the gold tool is covered by some extracted subgoal.
