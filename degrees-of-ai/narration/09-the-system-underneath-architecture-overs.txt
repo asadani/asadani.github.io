@@ -1,0 +1,27 @@
+The system underneath: architecture, oversight, deployment.
+
+The product map only describes part of the arrangement. The system underneath can have its own combination of choices.
+
+Neural describes a model family. Generative describes a capability to produce outputs. Neither implies that the system acts independently.
+
+Neuro-symbolic combines neural methods with symbolic representations or reasoning. For example, perception might identify objects and relationships, then a symbolic solver reasons over that representation. An LLM surrounded by a few validation checks is not automatically a meaningful neuro-symbolic architecture.
+
+Compound AI combines interacting components such as models, retrieval, tools, and other processing steps. A retrieval-and-generation pipeline can be compound without being agentic. A neuro-symbolic system can also be compound. These categories overlap.
+
+Multi-agent describes an arrangement involving multiple agents. It says nothing by itself about autonomy, reliability, or whether the decomposition is useful. Several agents can run inside a tightly controlled workflow. A single agent can receive broad authority.
+
+Anthropic's account of its research system illustrates a real multi-agent implementation, but also describes coordination, evaluation, and resource tradeoffs. It is evidence that the pattern can work for particular tasks, not that every application should move toward it.
+
+The architecture diagram therefore uses branches and overlapping relationships. Neural → neuro-symbolic → compound → multi-agent would incorrectly suggest that each replaces the last.
+
+Oversight belongs beside this architecture. In a human-in-the-loop arrangement, a person participates at a defined decision or approval point. Human-on-the-loop commonly means supervision with the ability to intervene. Human-out-of-the-loop means no routine human participation in the specified execution loop, not the absence of human responsibility for its design and operation.
+
+A dashboard does not establish effective supervision. Can someone understand the state, stop execution in time, and recover from the result? Those are the practical questions behind on-the-loop.
+
+Deployment is separate again. A local model can power a human-directed assistant. A cloud agent can require approval for every write. A hybrid system can keep some processing local and invoke remote services when needed. Edge deployment is not a higher degree of AI than cloud deployment, and local inference alone does not prove that data never leaves the device.
+
+The complete description is closer to this:
+
+AI-native product × agentic workflow × bounded autonomy × human approval for writes × compound architecture × hybrid deployment.
+
+Longer than a badge. Much more informative.

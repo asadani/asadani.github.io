@@ -1,0 +1,25 @@
+Sources and framing.
+
+Anthropic, Building effective agents, originally published December 19, 2024. Referenced for its distinction between predefined workflows and model-directed agents. The dependence map and working definitions in this essay are the author's proposed framing, not an established taxonomy.
+
+IBM Research, Neuro-symbolic AI. Referenced for the combination of neural/statistical methods and symbolic knowledge or reasoning.
+
+Berkeley AI Research, The Shift from Models to Compound AI Systems, February 18, 2024. Referenced for compound system construction and its distinction from a single model.
+
+Anthropic, How we built our multi-agent research system, June 13, 2025. Referenced as an implementation account, not a general claim that multi-agent systems outperform single-agent systems.
+
+Model Context Protocol, Specification. Referenced for connecting AI applications to external tools and data. Protocol connectivity should not be confused with application-level execution authority.
+
+Oh-wasp Gen AI Security Project, L L M zero six, 2025 Excessive Agency. Referenced for excessive functionality, permissions and autonomy as root causes, and for least privilege and human approval as mitigations.
+
+Nist, AI Risk Management Framework 1.0, released January 26, 2023. Referenced for the govern, map, measure and manage functions. Nist also published a Generative AI Profile in 2024.
+
+European Union, Artificial Intelligence Act, Article 14: Human Oversight. Referenced for the oversight requirements on high-risk AI systems. Whether a given system is high-risk is a legal determination this essay does not make.
+
+Parasuraman, Sheridan and Wickens, "A model for types and levels of human interaction with automation," IEEE Transactions on Systems, Man, and Cybernetics, Part A, volume 30, 2000. Referenced for choosing levels of automation separately for each type of function.
+
+Lisanne Bainbridge, "Ironies of automation," Automatica, volume 19, 1983. Referenced for the monitoring and skill problems of people supervising automated work.
+
+Ben Green, "The flaws of policies requiring human oversight of government algorithms," Computer Law and Security Review, volume 45, 2022. Referenced for evidence that people often cannot perform the oversight functions policies assume. The expense-agent failure in this essay is a constructed example.
+
+The terminology tables are working interpretations. The agent-native definition, evolution paths, measurement suggestions, decision defaults, the worked example, future scenarios and the predictions are the author's synthesis. Arrows in the diagrams are defined in their surrounding text and do not establish a universal maturity ladder.

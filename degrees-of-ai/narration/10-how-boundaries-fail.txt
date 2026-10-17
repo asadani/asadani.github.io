@@ -1,0 +1,19 @@
+How boundaries fail.
+
+A boundary written in a prompt is a request. A boundary enforced by the surrounding system is a control. The difference only shows up when something goes wrong, which is why the profile should record the controls a system actually meets, not the ones its documentation describes.
+
+The written boundary and the effective one drift apart in a few familiar ways.
+
+The first is manipulated input. Instructions hidden in a document, a web page or a tool description steer the agent. Treat retrieved content and tool descriptions as untrusted, and confirm write actions no matter what the text says.
+
+The second is borrowed permission. The agent holds broader access than the person it acts for, and a request borrows it. Run tools in the context of the requesting user, not a shared service account.
+
+The third is excess capability. Tools expose more functions, permissions or autonomy than the task needs. Grant the minimum function and the least privilege for each task, and prefer narrow tools to open-ended ones.
+
+The fourth is silent drift. A tool, a package source or a description changes after it was approved. Pin versions, review again on every change, and deny resources that are not listed.
+
+Autonomy also depends on reliability that a demo does not show. A step that is right 95% of the time sounds dependable. Ten such steps in a row, if they fail independently, complete correctly about 60% of the time. That is illustrative arithmetic, not a measurement, and real steps are rarely independent. The point is that longer unattended chains need better evidence than shorter ones.
+
+For anything that touches an outside system, three properties matter as much as the model. Actions should be safe to retry, so a lost response does not charge a card twice. There should be a way to stop a run in progress. And there should be a way to undo or compensate for what already happened.
+
+Finally, keep the evidence. Record what the agent saw, what it chose, which control allowed it, and what resulted. Without that record, "human-governed" is a claim nobody can audit.

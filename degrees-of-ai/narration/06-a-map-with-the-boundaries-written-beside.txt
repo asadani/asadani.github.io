@@ -1,0 +1,13 @@
+A map, with the boundaries written beside it.
+
+For an initial map, put AI dependence on one axis and model-directed agency on the other. Keep execution authority visible beside each example.
+
+The following are hypothetical configurations, not ratings of particular vendors.
+
+Every row can have its own approval requirements and execution boundaries. The top row does not automatically imply permission to act independently.
+
+Products don't have to travel diagonally across this map.
+
+A team can add model-directed planning to one workflow without rebuilding the product around AI. Another can make AI central to the product while preserving a deliberately human-directed experience.
+
+The map is a conversation aid, not a scorecard. Its cells are not equally spaced measurements, and the top right corner is not a destination every product should pursue.

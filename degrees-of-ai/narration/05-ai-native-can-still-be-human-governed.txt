@@ -1,0 +1,23 @@
+AI-native can still be human-governed.
+
+There is no contradiction between a product being AI-native and people governing its decisions.
+
+AI can define the central experience while humans set policy, approve consequential actions, and retain control over releases. An AI-native coding environment might let agents investigate and implement changes, while engineers approve merges and deployments.
+
+That is AI-native with human approval gates. If the model chooses and adapts the implementation path, it is also agentic. Approval doesn't erase agency.
+
+Likewise, an established product can be AI-enabled with bounded execution. Its AI capability may operate independently inside a restricted environment while the broader product remains conventional.
+
+Consider an agent that can install dependencies only from an organization's internal npm or Python package repository. It may choose a library, run tests, and revise its approach. The allowed source of dependencies is constrained. That tells us about its execution boundary, not whether the product is AI-native.
+
+We need to separate three questions:
+
+Autonomy describes the independence that results from that arrangement. It is always independence for particular work under particular conditions.
+
+An approval gate and a resource boundary are different controls. A human-approved installation can still be restricted to an approved registry. An independent installation can be restricted to that same registry. Neither arrangement implies access to production.
+
+The restriction also needs enforcement. Configuring a preferred package source doesn't establish a closed boundary if arbitrary downloads or unapproved registries remain reachable. The profile should describe the controls the system actually encounters.
+
+This is a conceptual control flow. In an implementation, the policy and permission checks should be enforced by the surrounding system rather than depend only on the agent following instructions.
+
+Human-governed is therefore a useful qualifier. It doesn't require a new rung on the ladder. Governance can include approval before action, ongoing supervision, or preauthorized operation inside a defined boundary.

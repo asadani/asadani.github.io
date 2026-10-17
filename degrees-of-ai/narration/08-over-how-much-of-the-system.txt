@@ -1,0 +1,17 @@
+Over how much of the system?.
+
+There is another question hiding inside "we use AI."
+
+A feature, a workflow, a whole product, or several connected organizational processes?
+
+An agent might independently handle one narrow task while everything around it remains manual. Another system might assist people across an entire business without receiving permission to act independently anywhere.
+
+Scope is the reach of AI participation. It doesn't automatically increase agency or autonomy.
+
+Feature, workflow, product, and organization are useful scopes to name. They aren't a compulsory sequence. An organization contains many products and workflows, each with a different profile.
+
+That's why "our company is AI-native" is usually too coarse to guide an engineering decision. The useful unit may be the workflow, or even the individual action.
+
+Consider the expense example again:
+
+One workflow contains several arrangements. A single label loses them.

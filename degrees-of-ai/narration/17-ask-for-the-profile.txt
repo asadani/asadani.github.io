@@ -1,0 +1,67 @@
+Ask for the profile.
+
+The four questions below are a useful mnemonic. To actually place a product on the map, we need a more concrete questionnaire.
+
+Assess one named product or workflow as it behaves today. Don't answer for its roadmap. If a whole organization has several different arrangements, assess those workflows separately before describing the organization.
+
+Use Yes / No / Not sure for the following checklist. Unknown answers stay unknown; they aren't silently scored as no.
+
+AI dependence. Would removing AI eliminate the central promised outcome at viable quality and cost? Does AI materially improve at least one important workflow? Are core workflows designed around AI uncertainty, evaluation, and fallback?
+
+Agency. Does the model choose the next task step rather than follow only a human or coded sequence? Does it revise its plan from execution results or changing conditions? Can it invoke tools to inspect or change its environment?
+
+Agent-native design. Do agents have distinct identities and scoped permissions? Can delegated tasks retain state and resume across sessions? Are clarification, review, and hand-back to people built into task handling?
+
+Oversight. Can people inspect task state and evidence behind proposed actions? Can a responsible person stop execution before further consequential actions? Is there a defined recovery or compensation process for failed actions?
+
+Execution boundary. Are permitted tools and resources explicitly listed? Are package sources, data access and environments technically restricted? Are spending, runtime or action limits enforced? Are attempts to cross those boundaries denied or escalated?
+
+Then classify execution authority separately for reading/investigation, draft preparation, internal record changes, and external commitments/payments/releases. Each action class can be unavailable, require approval, execute independently, or remain unassessed. Separately record which tools, resources, environments and budgets constrain it. These answers describe the actual arrangement; they do not establish that it is appropriate.
+
+Finally, select the scope, architecture, agent arrangement, and deployment. Those are descriptive tags, not points to add up.
+
+How the checklist places the product
+
+The horizontal axis has three descriptive positions:
+
+Optional AI: the central outcome survives removal, and no important workflow materially benefits from AI.
+
+Meaningful AI: the central outcome survives removal, but an important workflow materially improves with AI.
+
+AI-dependent core: removing AI eliminates the central promised outcome at viable quality and cost.
+
+Core dependence plus design around AI uncertainty, evaluation, and fallback supports an AI-native interpretation. Dependence alone does not establish that design. AI-first remains an expression of priority rather than a coordinate inferred from runtime behavior.
+
+The vertical axis also has three positions:
+
+Human/code directed: the model does not choose the next task step.
+
+Model-directed steps: it chooses steps but does not revise its plan from execution feedback.
+
+Agentic loop: it chooses steps and adapts its plan from execution feedback.
+
+Tool use is supporting context, not sufficient proof of an agentic loop. A model can also run a reasoning loop without an external write tool. These working placement rules deliberately avoid rewarding tool count.
+
+An AI-dependent core with AI-native design evidence, an agentic loop, agent identities, persistent task state, and human handoffs becomes an agent-native candidate in this proposed framing. It is a design interpretation, not a certification.
+
+Unanswered placement questions leave that axis unplaced. Conflicting answers pause placement: for example, saying AI is necessary for the central outcome while denying that it materially improves any important workflow. Such conflicts should prompt clarification, not disappear into an average.
+
+An interactive version can move the marker as these answers change. Execution authority stays visible by action class; enforced boundaries, scope and architecture sit alongside the grid. The result is an explainable profile, not a combined maturity score. These rules are an author's heuristic for discussion, not a validated assessment instrument.
+
+The questions to remember are:
+
+What part of its value depends on AI?
+
+Who chooses the steps through the task?
+
+Which actions can execute without human approval?
+
+Which resources, environments and budgets constrain execution?
+
+Over what part of the system does this arrangement apply?
+
+Those questions turn a positioning statement into something we can examine.
+
+"We are AI-native" tells me very little about how a product behaves. "AI plans the investigation, can read these systems, stays inside these boundaries, and needs approval before changing a claim" tells me enough to start a useful discussion.
+
+Degrees of AI should describe a system's choices. They shouldn't rank its ambition.

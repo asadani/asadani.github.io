@@ -1,0 +1,13 @@
+Evolution still exists, just along different paths.
+
+Rejecting one universal ladder doesn't mean nothing evolves.
+
+A product may move from an optional AI feature to workflows that assume AI is present. A person may move from asking for suggestions to handing over an outcome. A system may expand from a single model call to a composition of retrieval, planning, verification, and execution.
+
+The mistake is assuming these transitions happen together, in order, or permanently.
+
+The following diagram shows possible product and work-design transitions. Arrows mean a possible redesign, not chronology, superiority, or an obligation to proceed.
+
+A product can enter this picture at a different point. An AI-native product can be built from scratch. A traditional product can gain an agent without first passing through an AI-first redesign. After incidents or changing requirements, a team can reduce autonomy while keeping the same agent architecture.
+
+That last move matters. Reducing authority can be an improvement in the system's design.

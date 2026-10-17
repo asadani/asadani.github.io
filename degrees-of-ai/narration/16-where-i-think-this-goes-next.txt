@@ -1,0 +1,39 @@
+Where I think this goes next.
+
+This is the future-facing part of the argument. The following are plausible directions, not a forecast that every product will follow. Existing compound systems, multi-agent implementations, and tool protocols provide evidence of the building blocks. The implications below are my interpretation.
+
+Products may serve two kinds of users: people and agents. A person needs navigation, explanations, and visible choices. An agent needs discoverable capabilities, structured inputs, task state, and clear permission boundaries. MCP already standardizes connections between AI applications and external tools and data. Connectivity makes an agent-facing product possible; it does not make that product AI-native or establish authority to perform every exposed action.
+
+An expense product could retain its ordinary interface while allowing an external agent to prepare a claim. The application remains responsible for validating the submission and enforcing payment controls. The agent interface changes who can operate the product, not who owns its rules.
+
+More work may move from requests for answers to delegated outcomes. Instead of "summarize these receipts," the user asks "prepare my claim and tell me what is missing." That shift requires persistent work, progress visibility, cancellation, and exception handling. The interface may become a place to supervise tasks as well as start them.
+
+Autonomy may become configurable by action rather than advertised for the whole product. Read records independently. Prepare a draft independently. Submit below a defined threshold. Ask before sending money or changing an external commitment. One system can support several degrees at once.
+
+Composition may matter more than the headline model. Better models can simplify some pipelines. Other tasks will still benefit from retrieval, deterministic calculations, domain models, verification, or specialized agents. Compound AI is already an established system-building idea. My expectation is that successful designs will combine these selectively, rather than expand every workflow into a multi-agent network.
+
+Oversight may shift from watching every step to designing and checking the operating boundary. That is only useful when people can inspect evidence, detect failures, intervene, and recover. Exception-only review can become superficial if the system fails to recognize the exceptions. Less frequent human involvement requires better system evidence, not merely more confidence in the model.
+
+Deployment may remain mixed. Some tasks can benefit from local execution; others require shared systems or remote resources. Workload, data boundaries, economics, and response time will influence the split. There is no reason to assume every agent ends up entirely in the cloud or entirely on a device.
+
+Those directions will look different across domains.
+
+These are examples of possible configurations, not claims of universal adoption. Each can coexist with simpler tools and conventional workflows.
+
+Directions are easy to defend when nothing could contradict them. Here is what I would expect to see by the end of 2027, and what would show me I am wrong. These are my judgments, not measurements.
+
+On products that serve both people and agents, I expect mainstream business products to document agent-facing interfaces with permissions scoped per action. I would be wrong if agent access stays limited to whole-account keys or screen automation.
+
+On autonomy set by action, I expect vendors to let administrators set approval requirements per action class. I would be wrong if the common control stays a single autonomous mode, on or off.
+
+On composition over the headline model, I expect published production designs to still mix retrieval, deterministic code and verification with the model. I would be wrong if most published designs become one model with tools and nothing else.
+
+On oversight by boundary design, I expect action logs and evidence views for agents to become a standard procurement question. I would be wrong if oversight stays a person clicking approve, with no evidence behind the click.
+
+On mixed deployment, I expect common designs to split work between local and remote execution. I would be wrong if nearly all agent workloads settle entirely in the cloud or entirely on devices.
+
+The future I expect is a mixture of profiles. A system may become more agentic while its execution boundaries become more precise. A product may become easier for agents to operate while remaining conventional underneath. A workflow may become more automated without becoming more dependent on generative AI.
+
+That gives us a better question than "What comes after AI-native?"
+
+Which dimension changes next, what does that enable, and what new obligation does it create?

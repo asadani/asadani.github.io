@@ -1,0 +1,29 @@
+What this changes for decisions.
+
+A profile earns its keep only if it changes a decision. Four decisions are worth making explicitly.
+
+Match authority to reversibility, not to the label. The action classes from the questionnaire give a workable starting point. Treat these as defaults to begin from, then widen them with evidence and narrow them after incidents.
+
+For reading and investigating, such as reading a policy and its claim history, start with independent authority, within access limits. For preparing a draft, start independent, with a person reviewing before it leaves. For a reversible internal change, such as updating a ticket field, start independent, with logging and an undo path. For anything irreversible or external, such as sending money, messaging a customer or releasing to production, require approval, or a deterministic policy limit with evidence behind it.
+
+The idea is older than generative AI. Parasuraman, Sheridan and Wickens argued that the level of automation should be chosen separately for each type of function, such as acquiring information, analyzing it, selecting a decision and carrying it out, not once for the whole system.
+
+Name an owner for each action class. Who is accountable when it goes wrong: the product owner, the approver, or the platform team? Autonomy with no named owner is not autonomy. It is orphaned risk. An approval step also only counts if the approver can evaluate what they are approving. A person who clicks through fifty requests an hour is not providing oversight. Human-factors research has warned about this for decades. Bainbridge argued that automating most of a task leaves people monitoring it, which they do poorly, and out of practice for the rare moment when they must step in. A review of 41 policies that require human oversight of government algorithms found evidence that people often cannot perform the oversight functions those policies assume.
+
+Ask vendors about the profile, not the badge. "Agentic" and "AI-native" are marketing words until the answers are specific.
+
+Which decisions does the model make, and which are fixed in code?
+
+Which actions run without approval, by action class, and can I change that per class?
+
+What restricts tools, data, network and spend, and is it enforced outside the model?
+
+Whose permissions does the agent use?
+
+How do I stop a run in progress, and what is undone when I do?
+
+What evidence do I get for each action?
+
+What changes in the profile when you update the model or its tools, and how will I find out?
+
+Map the profile to the frameworks your risk team already uses. The Nist AI Risk Management Framework organizes the work into govern, map, measure and manage. The profile's dimensions feed the map and measure steps directly. The EU AI Act, in Article 14, requires high-risk systems to be designed so that people can effectively oversee them, including understanding their limits, recognizing automation bias, and overriding or stopping the system. Whether a particular system counts as high-risk is a legal question, and this essay does not answer it. What the profile gives you is a concrete description of the oversight design to put in front of the people who do.

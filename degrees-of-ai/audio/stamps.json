@@ -1,0 +1,78 @@
+{
+ "00-introduction": {
+  "k": "35e3290393399c71",
+  "d": 11.4
+ },
+ "01-the-vocabulary-is-bigger-than-the-ladder": {
+  "k": "4e94f5eb836457de",
+  "d": 98.3
+ },
+ "02-remove-the-ai-what-disappears": {
+  "k": "da40a29e28dcbb1d",
+  "d": 97.6
+ },
+ "03-who-chooses-the-next-step": {
+  "k": "c1becc0388efae6b",
+  "d": 87.5
+ },
+ "04-choosing-a-path-isn-t-permission-to-exec": {
+  "k": "2dca7f50acb991ad",
+  "d": 94.0
+ },
+ "05-ai-native-can-still-be-human-governed": {
+  "k": "903debd610f05c25",
+  "d": 151.0
+ },
+ "06-a-map-with-the-boundaries-written-beside": {
+  "k": "ab9aeff95b84b283",
+  "d": 61.3
+ },
+ "07-where-agent-native-fits": {
+  "k": "af6885034425ad91",
+  "d": 81.9
+ },
+ "08-over-how-much-of-the-system": {
+  "k": "533b28b495d3c30a",
+  "d": 70.1
+ },
+ "09-the-system-underneath-architecture-overs": {
+  "k": "6ba6c0f274916c27",
+  "d": 194.6
+ },
+ "10-how-boundaries-fail": {
+  "k": "3df0772c31a7fe50",
+  "d": 140.0
+ },
+ "11-evolution-still-exists-just-along-differ": {
+  "k": "b92b15339aaf46bf",
+  "d": 72.7
+ },
+ "12-what-to-measure-instead-of-the-label": {
+  "k": "bd053bbc39fb5650",
+  "d": 50.6
+ },
+ "13-higher-isn-t-automatically-better": {
+  "k": "40bde00b00cd4f2f",
+  "d": 75.8
+ },
+ "14-what-this-changes-for-decisions": {
+  "k": "16b418b2ee5c2bff",
+  "d": 211.1
+ },
+ "17-ask-for-the-profile": {
+  "k": "05dfaf548d8d681d",
+  "d": 354.8
+ },
+ "15-one-failure-traced": {
+  "k": "30af4625e839f066",
+  "d": 171.1
+ },
+ "16-where-i-think-this-goes-next": {
+  "k": "ac17ec7a8403e6ac",
+  "d": 323.2
+ },
+ "18-sources-and-framing": {
+  "k": "d28aeda9422736c1",
+  "d": 201.1
+ }
+}

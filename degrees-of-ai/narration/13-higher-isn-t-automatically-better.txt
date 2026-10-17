@@ -1,0 +1,15 @@
+Higher isn't automatically better.
+
+The ladder doesn't just confuse language. It smuggles in a product strategy: more AI, more agency, and less intervention must mean progress.
+
+I don't think that follows.
+
+A fixed workflow can be the right choice when the path is known. Human approval can be part of the product's value. AI can remain optional because the user needs a predictable fallback.
+
+Greater independence can save coordination time. It can also increase the amount of work a system performs before someone catches an error. Broader scope can connect a process, while also exposing more systems to a mistaken decision.
+
+These are design tradeoffs. A vocabulary that calls every increase "maturity" makes them harder to discuss honestly.
+
+Governance therefore belongs around the profile: permissions, evidence requirements, monitoring, escalation, and recovery. It is not another degree of AI. It makes the chosen degrees accountable.
+
+And capability is not authority. A model's ability to produce a plausible action doesn't establish the system's right to execute it.

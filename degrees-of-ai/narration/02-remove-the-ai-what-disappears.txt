@@ -1,0 +1,19 @@
+Remove the AI. What disappears?.
+
+Start with two imaginary products.
+
+The first is an expense platform. It stores receipts, routes approvals, and reimburses employees. Add AI to explain a rejection or extract details from a receipt. Remove that capability and the platform still has a recognizable job.
+
+The second is a tool whose entire purpose is to turn a conversation into a working prototype. Remove the AI and you haven't removed a feature. You have removed the central proposition.
+
+That difference is more useful than counting how many screens have a sparkle icon.
+
+I would call it AI dependence: how fundamental is AI to the experience and value the product promises?
+
+The familiar vocabulary can help here, provided we treat it as working language rather than an industry standard.
+
+These are overlapping descriptions, not four certified levels. A product may be AI-first in strategy while still AI-added in what it actually ships. An established product can redesign a central workflow around AI. Its age doesn't settle the question.
+
+Even the removal test needs care. Removing AI might make a system economically impractical without making it technically impossible. A recommendation product may survive with crude rules but lose much of its value. Dependence has degrees too.
+
+The point is to expose the dependency, not win an argument about the badge.

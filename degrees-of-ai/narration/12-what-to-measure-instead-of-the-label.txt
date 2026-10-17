@@ -1,0 +1,11 @@
+What to measure instead of the label.
+
+If these are degrees, should we score them?
+
+Only when the measure has a clear denominator and a decision it will inform. I wouldn't assign a universal AI-native score or treat agents per workflow as a performance metric.
+
+For a specific workflow, observable behavior is more useful.
+
+For example, a higher no-intervention completion rate can reflect improved reliability, easier tasks, or missed escalations. Measure accepted results and failures alongside it. The rate alone can't tell you which happened.
+
+Architecture and deployment need fit-for-purpose comparisons: cost, latency, failure isolation, data movement, and maintainability. They don't need maturity points.
