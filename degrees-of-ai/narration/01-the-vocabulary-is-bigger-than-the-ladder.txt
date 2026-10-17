@@ -1,0 +1,15 @@
+The vocabulary is bigger than the ladder.
+
+The vocabulary extends well beyond AI-native and agentic. Teams use these labels to describe different changes, sometimes in the same sentence.
+
+Here is a working guide. These are useful interpretations, not standardized definitions every vendor follows.
+
+AI-assisted usually means the human performs the task while AI helps with a step. AI-augmented emphasizes expanded capability, perhaps finding patterns or comparing alternatives the person would struggle to handle alone. Delegated means handing over a bounded outcome rather than requesting every individual step.
+
+Those can overlap. A researcher can delegate a literature scan and then use its results to augment their judgment. Delegation says who owns the task for now; it doesn't establish how the implementation works.
+
+AI-powered says AI contributes materially to a capability, but tells us little about the rest of the product. Embedded or integrated says AI is built into the workflow rather than accessed as a separate destination. An embedded assistant may still wait for a human prompt every time.
+
+Agent-assisted puts an agent inside human-led work. Agentic describes dynamic model-directed execution. The difference is useful, but the vocabulary is loose: a product can be both.
+
+The mistake isn't using these terms. It is treating them as interchangeable measures of advancement.

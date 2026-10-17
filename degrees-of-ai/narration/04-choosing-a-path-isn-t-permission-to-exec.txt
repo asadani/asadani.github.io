@@ -1,0 +1,19 @@
+Choosing a path isn't permission to execute it.
+
+Suppose the expense agent can investigate a rejection and prepare a corrected claim. It must still ask before submitting.
+
+It remains agentic. Its autonomy is bounded.
+
+Now suppose a conventional automated process reimburses every claim under a threshold after fixed checks. It operates without individual approval, but it doesn't dynamically choose a plan. It may not need AI at all.
+
+That gives us two counterexamples to the ladder: an agent with limited execution authority, and an independent process with no agentic reasoning.
+
+Autonomy describes the degree of independence within a specified boundary.
+
+The boundary matters more than the adjective. Independent for which actions? For how long? With what spending limit? When must the system stop or escalate?
+
+A coding agent might freely read files, run tests, and edit a local branch while requiring approval to merge. Calling it simply "autonomous" erases the most consequential part of its design.
+
+Assisted, augmented, and delegated are useful descriptions of the human's relationship to the work. They are not clean architectural categories either. You can delegate a task to a fixed workflow or to an agent. The same system can assist with one task and own another.
+
+We need to describe the actual arrangement.

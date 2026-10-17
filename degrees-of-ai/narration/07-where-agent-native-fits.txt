@@ -1,0 +1,13 @@
+Where agent-native fits.
+
+Agent-native sits near the intersection of AI-native product design and agentic execution. That is a useful starting point, but it needs more substance than adding the two labels together.
+
+I would use agent-native for a product that treats agents as first-class participants. They have defined identities, scoped permissions, access to task state, and ways to hand work back to people. Its workflows anticipate partial completion, retries, interruptions, and review.
+
+An AI-native writing tool can remain a sequence of human prompts. An agent-native coding environment would instead support handing over an issue, tracking the investigation, inspecting changes, and intervening while work is underway.
+
+The design question shifts from "Where do we put the chat box?" to "How does delegated work live inside this product?"
+
+That doesn't mean humans disappear. Review, disagreement, clarification, and cancellation become important parts of the interface.
+
+This is a proposed design interpretation of agent-native, not a certification or a settled industry definition. An AI-native product with a single agent feature would not automatically satisfy it.

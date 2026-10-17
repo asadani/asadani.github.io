@@ -1,0 +1,27 @@
+One failure, traced.
+
+This is a constructed example, not an incident report. It reuses the expense agent from earlier, because the point is to see which controls did the work.
+
+The profile, as the vendor documented it: the agent is agentic and model-directed. It can read the employee's claim history and uploaded receipts, and it can prepare a corrected claim. It runs with the employee's own permissions. Submitting a claim is an external action and requires approval. Its tool list is explicit.
+
+Now an employee uploads a receipt PDF. Hidden in the file is a line of text telling the agent to change the payee bank account on the claim to one the sender controls.
+
+Here is what happened, step by step. First, the agent reads the receipt, and the hidden text enters its context. Nothing could stop that, because reading is permitted. The model is influenced, but nothing outside it has acted yet.
+
+Second, the agent drafts a claim with the changed payee account. Draft authority applies, and a draft does not leave the system. So this is contained, because a draft is not an action.
+
+Third, the agent asks to submit the claim. External actions need approval, and a fixed rule in code flags any payee account that differs from the one on file. This is caught by a check that does not depend on the model.
+
+Fourth, the approver sees the claim with the payee change highlighted next to the account on file, and rejects it.
+
+Afterwards, the record shows the input, the draft, the flag and the decision. The cause is traced to the receipt in minutes, not days.
+
+The model did not stop this. It did what the injected text suggested. What worked was a deterministic rule, an approval step, and evidence the approver could evaluate. The same event could have gone differently in three ways, each one a gap in the profile.
+
+If the approver had seen only "Claim ready, $84.20" and were clearing fifty an hour, the change would likely have passed.
+
+If the agent ran under a shared finance service account rather than the employee's permissions, it could have edited payee records directly, with no submission to catch.
+
+If the product had advertised "autonomous below $100" and this claim was under the limit, the approval step would never have run.
+
+After the incident, I would narrow rather than widen. Payee changes move out of the agent's reach into a separate workflow, and uploaded files are scanned for hidden text. Widening comes later, with evidence. Notice also that every control that mattered could have been named before the incident. That is what the profile is for.

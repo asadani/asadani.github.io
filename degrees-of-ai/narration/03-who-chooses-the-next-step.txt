@@ -1,0 +1,19 @@
+Who chooses the next step?.
+
+Now imagine the expense platform has a second capability.
+
+An employee asks it to resolve a rejected claim. It checks the policy, inspects the receipt, asks for a missing detail, and chooses whether to prepare an appeal or correct the submission.
+
+The underlying product can remain an established expense system. The new workflow can still be agentic.
+
+Here the question is different: who determines the path through the task?
+
+Anthropic's engineering account distinguishes predefined workflows from agents whose models dynamically direct their processes and tool use. That is a useful architectural distinction, even though the word "agent" is used more broadly elsewhere.
+
+A fixed pipeline can contain several model calls, retrieval, tools, and a critique loop. If code determines the route, the number of calls doesn't turn it into an agent.
+
+Conversely, an agent doesn't need a grand multi-agent architecture. A model choosing actions, observing results, and adapting its next step can be enough.
+
+AI-native describes how fundamentally AI defines the product. Agentic describes how the system chooses its path through a task.
+
+Neither answers whether the system is allowed to finish that task without you.
