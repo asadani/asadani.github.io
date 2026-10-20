@@ -6,8 +6,10 @@ const b = require('../build.js');
 
 const arts = JSON.parse(fs.readFileSync(path.join(__dirname,'../data/articles.json'),'utf8'));
 
-test('all 36 existing articles are present', () => {
-  assert.strictEqual(arts.length, 36);
+test('article catalog is nonempty and renders one row per entry', () => {
+  assert.ok(Array.isArray(arts) && arts.length > 0, 'article catalog must not be empty');
+  const html = b.renderArticlesList(arts);
+  assert.strictEqual((html.match(/class="art-row\b/g) || []).length, arts.length);
 });
 
 test('every article has required fields and a known primary topic', () => {

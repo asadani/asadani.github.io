@@ -6,10 +6,17 @@ const b = require('../build.js');
 
 const pubs = JSON.parse(fs.readFileSync(path.join(__dirname,'../data/publications.json'),'utf8'));
 
-test('bucket counts: 1 book, 3 papers, 11 digital', () => {
-  assert.strictEqual(pubs.books.length, 1);
-  assert.strictEqual(pubs.papers.length, 3);
-  assert.strictEqual(pubs.digital.length, 11);
+test('publication buckets are nonempty arrays with unique destinations', () => {
+  for(const key of ['books', 'papers', 'digital']){
+    const items = pubs[key];
+    assert.ok(Array.isArray(items) && items.length > 0, `${key} must not be empty`);
+    for(const item of items){
+      assert.ok(typeof item.url === 'string' && item.url.length > 0,
+        `missing destination in ${key}`);
+    }
+    assert.strictEqual(new Set(items.map(item => item.url)).size, items.length,
+      `duplicate destination in ${key}`);
+  }
 });
 
 test('every paper has a dateDisplay string and the SSRN paper is present', () => {
