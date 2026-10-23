@@ -269,7 +269,7 @@
           'm = Qwen3TTSModel.from_pretrained("Qwen/Qwen3-TTS-12Hz-0.6B-Base", device_map="mps", dtype=torch.bfloat16, attn_implementation="sdpa")',
           'wavs, sr = m.generate_voice_clone(text="Hello from my cloned voice.", language="English", ref_audio="ref.wav", ref_text="the exact words spoken in ref.wav")',
           "w = wavs[0] if isinstance(wavs, (list, tuple)) else wavs", 'sf.write("qwen-test.wav", np.asarray(w, dtype="float32").reshape(-1), sr)', "__PY__"),
-        notes: ["Use bfloat16 and sdpa attention. float16 can overflow, and flash attention needs NVIDIA hardware.", "Keep the reference clip short. A long one slows every sentence.", "Python 3.11 is used here because it is what the run used; install it with brew install python@3.11 if it is missing.", "Repos written for NVIDIA often hardcode cuda:0. Change that one device string to mps; it is the only edit they usually need."] }; } },
+        notes: ["Use bfloat16 and sdpa attention. float16 can overflow, and flash attention needs NVIDIA hardware.", "Keep the reference clip short. A long one slows every sentence.", "Python 3.11 is used here because it is what the run used; install it with brew install python@3.11 if it is missing.", "Repos written for NVIDIA often hardcode cuda:0. Changing the device to mps is usually a small edit; in narrate-your-writing it took about twenty lines."] }; } },
 
     { id: "claude", order: 140, when: function (R) { return R.on.claude; }, build: function () { return {
       title: "Install Claude Code", badges: [LOGIN, STD],

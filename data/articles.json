@@ -1,5 +1,22 @@
 [
   {
+    "slug": "windows-to-mac-ai-setup",
+    "title": "Moving an AI workstation from Windows to a Mac",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "agentic-coding",
+      "craft"
+    ],
+    "quote": "\"A coding agent cannot type your password, so the setup has to say which steps are yours.\"",
+    "desc": "I moved about 80 repos and a local AI toolchain from Windows to a new Mac, then turned the notes into an interactive guide that says which commands were run.",
+    "date": "2026-10-23",
+    "dateDisplay": "October 23, 2026",
+    "cta": "Read",
+    "shareUrl": "https://tech.anujsadani.in/windows-to-mac-ai-setup/"
+  },
+  {
     "slug": "mac-ai-dev-setup",
     "title": "Mac AI Dev Setup",
     "tags": [
@@ -11,10 +28,10 @@
       "agentic-coding"
     ],
     "quote": "\"A setup guide should say which commands were actually run.\"",
-    "desc": "Tick the tools your projects need and get tested, ordered Terminal commands to set up a Mac for AI development: toolchains, local models, Claude Code, Codex, a shared notes vault, and a scanner that reads your cloned repos.",
+    "desc": "Tick the tools your projects need and get tested, ordered Terminal commands to set up a Mac for AI work, plus a scanner that reads your cloned repos.",
     "date": "2026-10-23",
     "dateDisplay": "October 23, 2026",
-    "cta": "Open the guide",
+    "cta": "Browse",
     "shareUrl": "https://tech.anujsadani.in/mac-ai-dev-setup/"
   },
   {
@@ -34,7 +51,7 @@
     "date": "2026-10-07",
     "dateDisplay": "October 7, 2026",
     "modified": "2026-10-17",
-    "cta": "Read & explore",
+    "cta": "Read",
     "shareUrl": "https://tech.anujsadani.in/degrees-of-ai/"
   },
   {
@@ -642,7 +659,7 @@
     "desc": "37 tools, 6 clusters, one SVG — a pannable, filterable map of the 2026 AI coding ecosystem.",
     "date": "2026-04-15",
     "dateDisplay": "Apr 2026",
-    "cta": "Explore",
+    "cta": "Browse",
     "shareUrl": "https://tech.anujsadani.in/ai-agent-stack-map/"
   },
   {
@@ -742,7 +759,7 @@
     "desc": "An interactive tutorial on the Model Context Protocol. Eighteen chapters on one page, with the protocol's moving parts as things you step through rather than diagrams you look at: a wire tap that shows the real JSON-RPC frames as you advance the lifecycle, three lanes making clear who is acting at each step, the M by N problem as a dial, and a self-check that tells you which chapter to revisit. Narrated in two voices.",
     "date": "2026-09-21",
     "dateDisplay": "September 21, 2026",
-    "cta": "Start",
+    "cta": "Browse",
     "shareUrl": "https://tech.anujsadani.in/mcp-101/",
     "external": true
   },
@@ -762,7 +779,7 @@
     "desc": "Builds Teamspace, a task tracker and knowledge base behind one MCP server, and puts every layer under its own light: schemas, resources and prompts, per-request identity, stateless handlers, approvals bound to an exact operation, and a transactional idempotency guard you can break on purpose. Every frame and excerpt is captured from the running code. Narrated in two voices.",
     "date": "2026-09-21",
     "dateDisplay": "September 21, 2026",
-    "cta": "Start",
+    "cta": "Browse",
     "shareUrl": "https://tech.anujsadani.in/mcp-102/",
     "external": true
   },
@@ -782,7 +799,7 @@
     "desc": "Puts the working integration from MCP 102 under production pressure: rate limits shared across replicas, a budget that reserves before it spends, retries and idempotency, a circuit breaker, a safe URL importer, durable jobs with leases, and a deployment sketch checked against an eight-point readiness list. Narrated in two voices.",
     "date": "2026-09-21",
     "dateDisplay": "September 21, 2026",
-    "cta": "Start",
+    "cta": "Browse",
     "shareUrl": "https://tech.anujsadani.in/mcp-103/",
     "external": true
   },
@@ -803,7 +820,7 @@
     "desc": "Argues through the economics and shape of MCP at scale: two cost ledgers, tiering behind one server, when a slow lane pays for itself, semantic routing that refuses to guess, tool retrieval, gateways as a second lock rather than a replacement, and where a model belongs inside a tool. One mechanism is implemented and tested; the rest is argued, and every chapter says which. Narrated in two voices.",
     "date": "2026-09-21",
     "dateDisplay": "September 21, 2026",
-    "cta": "Start",
+    "cta": "Browse",
     "shareUrl": "https://tech.anujsadani.in/mcp-104/",
     "external": true
   },
@@ -823,7 +840,7 @@
     "desc": "An interactive field guide to agent skills, sixteen chapters on one page. A placement console asks whether a responsibility belongs in a prompt, a skill, code, a tool, MCP, retrieval or an agent; a package inspector shows what a skill file holds, down to the real frontmatter; and steppers walk the lifecycle, the four ways skills meet MCP, and the failure chain where a green tool response is still the wrong outcome. Ends with a level-one skill you can copy and use. Narrated in a synthetic voice.",
     "date": "2026-09-25",
     "dateDisplay": "September 25, 2026",
-    "cta": "Start",
+    "cta": "Browse",
     "shareUrl": "https://tech.anujsadani.in/skills-101/",
     "external": true
   }

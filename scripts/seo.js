@@ -26,6 +26,10 @@ const DRY = process.argv.includes('--dry-run');
 // Re-tag pages that predate the SEO:HEAD markers, so an identity change
 // (a new ORCID, say) reaches every page rather than only untagged ones.
 const REFRESH = process.argv.includes('--refresh');
+// Limit the page back-fill to some slugs: --only=slug-a,slug-b. Lets --refresh
+// migrate new pages without rewriting the heads of pages that were hand-tuned.
+const ONLY = (process.argv.find((a) => a.startsWith('--only=')) || '')
+  .slice('--only='.length).split(',').filter(Boolean);
 
 const read = (p) => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const readJSON = (p) => JSON.parse(read(p));
@@ -247,6 +251,7 @@ function headBlock(a, opts) {
   if (desc) out.push(`<meta property="og:description" content="${attr(desc)}">`);
   out.push(`<meta property="og:image" content="${OG_IMAGE}">`);
   if (a.date) out.push(`<meta property="article:published_time" content="${a.date}">`);
+  if (a.modified) out.push(`<meta property="article:modified_time" content="${a.modified}">`);
   out.push('<meta property="article:author" content="Anuj Sadani">');
   out.push('<meta name="twitter:card" content="summary_large_image">');
   out.push('');
@@ -263,6 +268,7 @@ function headBlock(a, opts) {
   };
   if (desc) post.description = desc;
   if (a.date) post.datePublished = a.date;
+  if (a.modified) post.dateModified = a.modified;
   if (Array.isArray(a.tags) && a.tags.length) post.keywords = a.tags.join(', ');
 
   out.push('<script type="application/ld+json">');
@@ -361,7 +367,12 @@ function applyHead(html, block, opts) {
     const end = html.indexOf(endTag, at);
     const span = end === -1 ? '' : html.slice(at, end + endTag.length);
     if (end !== -1 && /og:url/.test(span) && /application\/ld\+json/.test(span)) {
-      return { html: html.slice(0, at) + '\n' + wrapped + html.slice(end + endTag.length),
+      // The legacy span usually holds the page's only <meta name="description">.
+      // The new block omits it when it was found "outside the block", so carry
+      // it across; otherwise the migration silently deletes the description.
+      const d = span.match(/<meta\s+name=["']description["'][^>]*>/i);
+      const keep = d && !/name=["']description["']/i.test(block) ? d[0] + '\n' : '';
+      return { html: html.slice(0, at) + '\n' + keep + wrapped + html.slice(end + endTag.length),
                how: 'migrated' };
     }
     return { html, how: 'skipped' };
@@ -405,6 +416,7 @@ function patchArticles() {
   const report = { patched: [], updated: [], skipped: [], missing: [], external: [] };
 
   articles.forEach((a) => {
+    if (ONLY.length && !ONLY.includes(a.slug)) return;
     const rel = path.join(a.slug, 'index.html');
     const abs = path.join(ROOT, rel);
     if (!fs.existsSync(abs)) {
@@ -439,6 +451,7 @@ function write(rel, content) {
   console.log(`${DRY ? 'would write' : 'wrote'}  ${rel}  (${content.length} bytes)`);
 }
 
+function main() {
 write('sitemap.xml', sitemap());
 if (!process.argv.includes('--sitemap-only')) {
 write('robots.txt', robots());
@@ -465,3 +478,9 @@ if (!REFRESH) {
   console.log('   run with --refresh to migrate them onto the shared identity)');
 }
 }
+}
+
+if (require.main === module) main();
+
+// Used by scripts/build-mac-setup.js so a generated page carries the same managed head block.
+module.exports = { headBlock, applyHead, wrapBlock, MARK_RE };

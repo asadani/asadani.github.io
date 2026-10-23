@@ -210,7 +210,7 @@
       <li><strong>macOS ships Python 3.9 for its own use.</strong> Install a current Python with Homebrew and give each project its own virtual environment, so nothing touches the system one.</li>
       <li><strong>npm 11 skips dependency install scripts.</strong> That is harmless for esbuild and fsevents, but puppeteer will not download its browser. Point it at Chrome instead.</li>
       <li><strong>BasicTeX is small on purpose.</strong> When a build says <code>File 'x.sty' not found</code>, run <code>tlmgr search --global --file x.sty</code> to find the package, then install it.</li>
-      <li><strong>“Needs CUDA” usually means “written for NVIDIA”.</strong> Apple’s GPU (device <code>mps</code>) ran a 0.6B voice model faster than real time, while CPU mode did not finish. The code often hardcodes <code>cuda</code> and needs one line changed.</li>
+      <li><strong>“Needs CUDA” usually means “written for NVIDIA”.</strong> Apple’s GPU (device <code>mps</code>) ran a 0.6B voice model faster than real time, while CPU mode did not finish. The code often hardcodes <code>cuda</code>, and the fix is usually a small edit.</li>
       <li><strong>One failed download is not a failed script.</strong> A flaky DNS lookup for a package host looks like an error in your setup. Wait a minute and re-run.</li>
       <li><strong>oh-my-zsh’s installer renames your .zshrc.</strong> Pass <code>KEEP_ZSHRC=yes</code>, and write your config first so the file it keeps is the right one.</li>
       <li><strong>Guard every file write with <code>[ -f file ] ||</code>.</strong> A shared notes folder can gain files from another agent while you work, and a plain <code>cat &gt;</code> will overwrite them.</li>
