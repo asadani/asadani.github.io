@@ -1,5 +1,23 @@
 [
   {
+    "slug": "mac-ai-dev-setup",
+    "title": "Mac AI Dev Setup",
+    "tags": [
+      "tutorial",
+      "interactive"
+    ],
+    "flavors": [
+      "tutorial",
+      "agentic-coding"
+    ],
+    "quote": "\"A setup guide should say which commands were actually run.\"",
+    "desc": "Tick the tools your projects need and get tested, ordered Terminal commands to set up a Mac for AI development: toolchains, local models, Claude Code, Codex, a shared notes vault, and a scanner that reads your cloned repos.",
+    "date": "2026-10-23",
+    "dateDisplay": "October 23, 2026",
+    "cta": "Open the guide",
+    "shareUrl": "https://tech.anujsadani.in/mac-ai-dev-setup/"
+  },
+  {
     "slug": "degrees-of-ai",
     "title": "Degrees of AI",
     "tags": [

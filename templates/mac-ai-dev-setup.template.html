@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}} · {{SUBTITLE}}</title>
+<meta name="description" content="{{DESCRIPTION}}">
+<meta name="author" content="Anuj Sadani">
+<link rel="canonical" href="https://tech.anujsadani.in/{{SLUG}}/">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tech.anujsadani.in/{{SLUG}}/">
+<meta property="og:site_name" content="Anuj Sadani | Tech">
+<meta property="og:title" content="{{TITLE}}">
+<meta property="og:description" content="{{DESCRIPTION}}">
+<meta property="og:image" content="https://tech.anujsadani.in/assets/profile-pic.png">
+<meta property="article:published_time" content="{{ISO_DATE}}">
+<meta property="article:author" content="Anuj Sadani">
+<meta name="twitter:card" content="summary_large_image">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "{{TITLE}}",
+  "description": "{{DESCRIPTION}}",
+  "datePublished": "{{ISO_DATE}}",
+  "url": "https://tech.anujsadani.in/{{SLUG}}/",
+  "mainEntityOfPage": "https://tech.anujsadani.in/{{SLUG}}/",
+  "inLanguage": "en",
+  "isPartOf": { "@id": "https://tech.anujsadani.in/#blog" },
+  "author": {
+    "@type": "Person",
+    "@id": "https://anujsadani.in/#person",
+    "name": "Anuj Sadani",
+    "url": "https://anujsadani.in/"
+  }
+}
+</script>
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/article.css">
+<style>
+  /* Interactive setup guide. Colors come from the site variables in /assets/article.css.
+     Only tokens that are the same in both modes are defined here (code blocks stay dark, as on every page). */
+  :root {
+    --ms-code-fg: #E6E0D6;
+    --ms-code-dim: #8F887B;
+    --ms-copy-bg: #2A241D;
+    --ms-copy-line: #4A4034;
+    --ms-on-accent: #FFFFFF;
+  }
+  [data-theme="dark"] { --ms-on-accent: #14110D; }
+
+  .page-wrap.ms-wide { max-width: 1180px; }
+  .ms-progress { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--text-muted); margin: 0 0 28px; }
+  .ms-bar { flex: 1; max-width: 280px; height: 6px; border-radius: 3px; background: var(--bg-alt); overflow: hidden; }
+  .ms-bar > i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .25s; }
+
+  .ms-layout { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: 28px; align-items: start; }
+  @media (max-width: 880px) { .ms-layout { grid-template-columns: minmax(0, 1fr); } }
+
+  .ms-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; }
+  .ms-choose { position: sticky; top: 68px; max-height: calc(100vh - 84px); overflow: auto; }
+  @media (max-width: 880px) { .ms-choose { position: static; max-height: none; } }
+  .ms-choose > summary { list-style: none; padding: 14px 16px; font-family: var(--serif); font-weight: 600; font-size: 19px; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+  .ms-choose > summary::-webkit-details-marker { display: none; }
+  .ms-choose > summary::after { content: "\2212"; color: var(--text-muted); font-family: var(--mono); }
+  .ms-choose:not([open]) > summary::after { content: "+"; }
+  .ms-inner { padding: 0 16px 16px; display: grid; gap: 16px; }
+  .ms-lbl { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin: 0 0 6px; }
+  .ms-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ms-chip { border: 1px solid var(--border); background: var(--bg-alt); color: var(--text-body); border-radius: 999px; padding: 4px 11px; font: 500 13px var(--sans); cursor: pointer; }
+  .ms-chip:hover { border-color: var(--accent); color: var(--accent); }
+  .ms-fixed { font-size: 13px; color: var(--text-muted); background: var(--bg-alt); border-radius: 8px; padding: 9px 11px; }
+  .ms-tool { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 9px; padding: 7px 0; border-top: 1px solid var(--border-light); align-items: start; cursor: pointer; }
+  .ms-tool input { margin: 3px 0 0; accent-color: var(--accent); width: 16px; height: 16px; }
+  .ms-tool b { font-weight: 500; display: block; line-height: 1.3; color: var(--text); font-size: 14px; }
+  .ms-tool small { color: var(--text-muted); display: block; font-size: 12.5px; line-height: 1.4; }
+  .ms-tool .ms-auto { color: var(--accent); }
+  .ms-field { display: grid; gap: 4px; font-size: 13px; }
+  .ms-field span { color: var(--text-muted); }
+  .ms-field input, .ms-field select, .ms-field textarea { font: inherit; font-size: 13.5px; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 7px; padding: 7px 9px; width: 100%; min-width: 0; }
+  .ms-field textarea { font-family: var(--mono); font-size: 12.5px; min-height: 70px; resize: vertical; }
+  .ms-check { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--text-body); }
+  .ms-check input { accent-color: var(--accent); }
+  .ms-btn { border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 8px; padding: 7px 12px; font: 500 13.5px var(--sans); cursor: pointer; }
+  .ms-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .ms-btn.ms-primary { background: var(--accent); border-color: var(--accent); color: var(--ms-on-accent); }
+  .ms-btn.ms-primary:hover { color: var(--ms-on-accent); filter: brightness(1.06); }
+  .ms-msg { font-size: 12.5px; color: var(--text-muted); margin: 4px 0 0; min-height: 1em; }
+
+  .ms-plan { display: grid; gap: 16px; min-width: 0; }
+  .ms-plan-head { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; justify-content: space-between; }
+  .ms-plan-head h2 { font-family: var(--serif); font-size: 24px; color: var(--text); margin: 0; }
+  .ms-acts { display: flex; flex-wrap: wrap; gap: 8px; }
+  .ms-intro { padding: 14px 16px; font-size: 14px; color: var(--text-muted); display: grid; gap: 6px; }
+  .ms-intro b { color: var(--text); font-weight: 600; }
+  .ms-step { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; min-width: 0; scroll-margin-top: 72px; }
+  .ms-step.ms-done { opacity: .62; }
+  .ms-step header { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; padding: 14px 16px 6px; }
+  .ms-num { font-family: var(--mono); font-size: 11.5px; color: var(--text-subtle); letter-spacing: .04em; }
+  .ms-step h3 { font-family: var(--serif); font-size: 20px; line-height: 1.2; margin: 2px 0 0; color: var(--text); font-weight: 600; }
+  .ms-tick { display: flex; gap: 6px; align-items: center; font-size: 12.5px; color: var(--text-muted); white-space: nowrap; padding-top: 2px; cursor: pointer; }
+  .ms-tick input { accent-color: var(--accent); width: 16px; height: 16px; }
+  .ms-body { padding: 0 16px 16px; display: grid; gap: 10px; min-width: 0; }
+  .ms-body p { margin: 0; color: var(--text-body); font-size: 15px; }
+  .ms-badges { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ms-badge { font: 600 11.5px var(--sans); padding: 2px 8px; border-radius: 999px; background: var(--bg-alt); color: var(--text-muted); }
+  .ms-badge.warn { background: var(--accent-bg); color: var(--accent); }
+  .ms-badge.ok { background: var(--green-bg); color: var(--green); }
+  .ms-code { position: relative; background: var(--code-bg); border-radius: 8px; min-width: 0; }
+  .ms-code pre { margin: 0; padding: 12px 14px; overflow-x: auto; color: var(--ms-code-fg); font-family: var(--mono); font-size: 12.5px; line-height: 1.6; white-space: pre; tab-size: 2; background: none; border: 0; }
+  .ms-code .ms-copy { position: absolute; top: 7px; right: 7px; font: 500 12px var(--sans); padding: 3px 9px; border-radius: 6px; border: 1px solid var(--ms-copy-line); background: var(--ms-copy-bg); color: var(--ms-code-fg); cursor: pointer; }
+  .ms-code .ms-copy:hover { border-color: var(--accent-light); }
+  .ms-code .ms-tag { display: block; padding: 8px 14px 0; font: 500 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ms-code-dim); }
+  .ms-code.ms-long pre { max-height: 360px; overflow: auto; }
+  .ms-notes { font-size: 14px; }
+  .ms-notes summary { cursor: pointer; color: var(--text-muted); font-size: 13.5px; }
+  .ms-notes ul { margin: 8px 0 0; padding-left: 20px; display: grid; gap: 5px; color: var(--text-body); }
+  .ms-empty { padding: 22px 16px; color: var(--text-muted); }
+  .ms-intro code, .ms-lessons code { font-family: var(--mono); font-size: .88em; background: var(--bg-alt); padding: 1px 5px; border-radius: 4px; }
+  .ms-intro .ms-badge { vertical-align: 1px; }
+  @media (prefers-reduced-motion: reduce) { .ms-bar > i { transition: none; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="/">Anuj Sadani | Tech</a>
+  <div class="nav-right">
+    <span>{{NAV_TOPIC}}</span>
+    <span class="nav-tag">{{NAV_DATE}}</span>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <span class="theme-icon-moon" aria-hidden="true">&#9790;</span>
+      <span class="theme-icon-sun" aria-hidden="true">&#9728;</span>
+    </button>
+  </div>
+</nav>
+
+<div class="page-wrap ms-wide">
+
+  <header class="hero">
+    <div class="hero-eyebrow">{{EYEBROW}}</div>
+    <h1>{{TITLE}}</h1>
+    <p class="hero-deck">{{DECK}}</p>
+    <div class="hero-meta">
+      <span>{{DATE}}</span>
+      <span class="hero-meta-sep">/</span>
+      <span>{{META_DETAIL}}</span>
+    </div>
+  </header>
+
+  <div class="ms-progress"><span id="ms-pcount">0 of 0 steps done</span><div class="ms-bar"><i id="ms-pbar"></i></div></div>
+
+  <div class="ms-layout">
+    <details class="ms-panel ms-choose" id="ms-choose" open>
+      <summary>1 · Choose what you need</summary>
+      <div class="ms-inner">
+        <div>
+          <p class="ms-lbl">Start from</p>
+          <div class="ms-chips" id="ms-presets"></div>
+        </div>
+        <div class="ms-fixed">Always included: Xcode command line tools, Homebrew, git, GitHub CLI, jq, ripgrep, tree, and a GitHub login.</div>
+        <div id="ms-tools"></div>
+        <div id="ms-fields" style="display:grid;gap:12px"></div>
+        <div>
+          <p class="ms-lbl">Not sure what you need?</p>
+          <p class="ms-msg" style="margin:0 0 8px">Do the first steps and clone your repos, then run the scanner at the end of the plan. Paste its output here to tick the boxes for you.</p>
+          <label class="ms-field"><span>Scanner output</span><textarea id="ms-scanin" placeholder="  python       27 repo(s)&#10;  node         14 repo(s)&#10;  docker        6 repo(s)"></textarea></label>
+          <div style="margin-top:8px"><button class="ms-btn" id="ms-scanbtn" type="button">Tick from scan</button></div>
+          <p class="ms-msg" id="ms-scanmsg"></p>
+        </div>
+      </div>
+    </details>
+
+    <section class="ms-plan" aria-label="Setup plan">
+      <div class="ms-plan-head">
+        <h2>2 · Run these in order</h2>
+        <div class="ms-acts">
+          <button class="ms-btn ms-primary" id="ms-copymd" type="button">Copy plan for my AI agent</button>
+          <button class="ms-btn" id="ms-copyall" type="button">Copy all commands</button>
+        </div>
+      </div>
+      <div class="ms-panel ms-intro">
+        <span><b>Use a normal Terminal window.</b> Steps tagged <span class="ms-badge warn">Password</span> ask for your Mac password. A coding agent can’t type it for you, and neither can the <code>!</code> shortcut in Claude Code.</span>
+        <span><b>Safe to re-run.</b> Every step checks before it installs or writes, so a second run changes nothing. Files that other tools may have written are never overwritten.</span>
+        <span><b>Honest labels.</b> <span class="ms-badge ok">Run on M5 Pro</span> means the commands were executed during the real migration. <em>Tested in a scratch home</em> means they ran against a throwaway home folder. <em>Mirrors a working Mac</em> means they copy a setup that already works. <em>Standard command</em> comes from the tool’s own docs and was not run here.</span>
+      </div>
+      <div id="ms-steps"></div>
+    </section>
+  </div>
+
+  <div class="section ms-lessons" id="lessons">
+    <div class="section-label">Field notes</div>
+    <h2><a class="anchor" href="#lessons">Lessons from the move</a></h2>
+    <ul class="dl">
+      <li><strong>Open a new terminal</strong> after installing Docker, Rust, Java or LaTeX. Their PATH changes only reach new shells.</li>
+      <li><strong>macOS ships Python 3.9 for its own use.</strong> Install a current Python with Homebrew and give each project its own virtual environment, so nothing touches the system one.</li>
+      <li><strong>npm 11 skips dependency install scripts.</strong> That is harmless for esbuild and fsevents, but puppeteer will not download its browser. Point it at Chrome instead.</li>
+      <li><strong>BasicTeX is small on purpose.</strong> When a build says <code>File 'x.sty' not found</code>, run <code>tlmgr search --global --file x.sty</code> to find the package, then install it.</li>
+      <li><strong>“Needs CUDA” usually means “written for NVIDIA”.</strong> Apple’s GPU (device <code>mps</code>) ran a 0.6B voice model faster than real time, while CPU mode did not finish. The code often hardcodes <code>cuda</code> and needs one line changed.</li>
+      <li><strong>One failed download is not a failed script.</strong> A flaky DNS lookup for a package host looks like an error in your setup. Wait a minute and re-run.</li>
+      <li><strong>oh-my-zsh’s installer renames your .zshrc.</strong> Pass <code>KEEP_ZSHRC=yes</code>, and write your config first so the file it keeps is the right one.</li>
+      <li><strong>Guard every file write with <code>[ -f file ] ||</code>.</strong> A shared notes folder can gain files from another agent while you work, and a plain <code>cat &gt;</code> will overwrite them.</li>
+    </ul>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<footer>
+  <span>asadani.tech / {{FOOTER_DATE}}</span>
+  <div class="footer-refs">
+    <a href="https://github.com/asadani/asadani.github.io/tree/main/{{SLUG}}">Source and scripts</a>
+    <a href="/">&larr; back to index</a>
+  </div>
+</footer>
+
+<!-- The helper scripts shown inside some steps. Generated from {{SLUG}}/scripts/*.sh by scripts/build-mac-setup.js. -->
+<script type="text/plain" id="tpl-scan">@@SCAN@@</script>
+<script type="text/plain" id="tpl-setup">@@SETUP@@</script>
+<script type="text/plain" id="tpl-link">@@LINK@@</script>
+
+<script src="steps.js"></script>
+<script>
+(function () {
+  "use strict";
+  var M = window.MacSetup;
+  var $ = function (s) { return document.querySelector(s); };
+  if (!M) { $("#ms-steps").textContent = "The step logic did not load. Reload the page."; return; }
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+  var SCR = { scan: $("#tpl-scan").textContent.trim(), setup: $("#tpl-setup").textContent.trim(), link: $("#tpl-link").textContent.trim() };
+
+  var S = { sel: {}, vals: {}, done: {} };
+  var KEY = "mac-ai-dev-setup-v1";
+  function load() { try { var r = JSON.parse(localStorage.getItem(KEY) || "null"); if (r) { S.sel = r.sel || {}; S.vals = r.vals || {}; S.done = r.done || {}; } } catch (e) {} }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+  var V = function (id) { return M.valueOf(S.vals, id); };
+  var P = { R: { on: {}, auto: {} }, steps: [] };
+
+  function renderChoose() {
+    var R = P.R, groups = []; M.TOOLS.forEach(function (t) { if (groups.indexOf(t.g) < 0) groups.push(t.g); });
+    var h = "";
+    groups.forEach(function (g) {
+      h += '<p class="ms-lbl" style="margin-top:12px">' + esc(g) + "</p>";
+      M.TOOLS.filter(function (t) { return t.g === g; }).forEach(function (t) {
+        var on = !!R.on[t.id], isAuto = !!R.auto[t.id] && !S.sel[t.id];
+        var src = isAuto ? M.TOOLS.filter(function (x) { return x.id === R.auto[t.id]; })[0] : null;
+        h += '<label class="ms-tool"><input type="checkbox" data-tool="' + t.id + '"' + (on ? " checked" : "") + (isAuto ? " disabled" : "") + '><span><b>' + esc(t.label) + "</b><small>" + esc(t.why) + (isAuto ? ' <span class="ms-auto">· needed by ' + esc(src ? src.label : "another choice") + "</span>" : "") + "</small></span></label>";
+      });
+    });
+    $("#ms-tools").innerHTML = h;
+    var f = "";
+    M.FIELDS.forEach(function (x) {
+      var show = !x.when || x.when.some(function (w) { return R.on[w]; });
+      if (show && x.showIf) { for (var k in x.showIf) if (V(k) !== x.showIf[k]) show = false; }
+      if (!show) return;
+      var v = S.vals[x.id] === undefined ? x.def : S.vals[x.id];
+      if (x.bool) f += '<label class="ms-check"><input type="checkbox" data-field="' + x.id + '"' + (v === "1" ? " checked" : "") + "> " + esc(x.label) + "</label>";
+      else if (x.opts) f += '<label class="ms-field"><span>' + esc(x.label) + '</span><select data-field="' + x.id + '">' + x.opts.map(function (o) { return '<option value="' + esc(o) + '"' + (o === v ? " selected" : "") + ">" + esc(x.optLabels ? x.optLabels[o] : o) + "</option>"; }).join("") + "</select></label>";
+      else if (x.area) f += '<label class="ms-field"><span>' + esc(x.label) + '</span><textarea data-field="' + x.id + '" placeholder="' + esc(x.ph || "") + '">' + esc(S.vals[x.id] || "") + "</textarea></label>";
+      else f += '<label class="ms-field"><span>' + esc(x.label) + '</span><input data-field="' + x.id + '" value="' + esc(S.vals[x.id] === undefined ? "" : S.vals[x.id]) + '" placeholder="' + esc(x.ph || x.def || "") + '" autocomplete="off" spellcheck="false"></label>';
+    });
+    $("#ms-fields").innerHTML = f;
+  }
+  function badgeHtml(b) { return '<span class="ms-badge ' + b.k + '">' + esc(b.t) + "</span>"; }
+  function renderSteps() {
+    var h = "", doneN = 0, steps = P.steps;
+    steps.forEach(function (s, i) {
+      var d = !!S.done[s.id]; if (d) doneN++;
+      var long = (s.cmds.split("\n").length > 16) ? " ms-long" : "";
+      h += '<article class="ms-step' + (d ? " ms-done" : "") + '" id="step-' + s.id + '"><header><div><span class="ms-num">STEP ' + (i + 1) + '</span><h3>' + esc(s.title) + '</h3></div><label class="ms-tick"><input type="checkbox" data-done="' + s.id + '"' + (d ? " checked" : "") + "> Done</label></header>";
+      h += '<div class="ms-body"><div class="ms-badges">' + s.badges.map(badgeHtml).join("") + "</div><p>" + esc(s.why) + "</p>";
+      h += '<div class="ms-code' + long + '"><span class="ms-tag">Run</span><button class="ms-copy" type="button" data-copy="c" data-i="' + i + '">Copy</button><pre><code>' + esc(s.cmds) + "</code></pre></div>";
+      if (s.verify) h += '<div class="ms-code"><span class="ms-tag">Check it worked</span><button class="ms-copy" type="button" data-copy="v" data-i="' + i + '">Copy</button><pre><code>' + esc(s.verify) + "</code></pre></div>";
+      if (s.notes && s.notes.length) h += '<details class="ms-notes"><summary>Notes and gotchas</summary><ul>' + s.notes.map(function (n) { return "<li>" + esc(n) + "</li>"; }).join("") + "</ul></details>";
+      h += "</div></article>";
+    });
+    $("#ms-steps").innerHTML = h || '<div class="ms-panel ms-empty">Nothing selected yet.</div>';
+    $("#ms-pcount").textContent = doneN + " of " + steps.length + " steps done";
+    $("#ms-pbar").style.width = steps.length ? Math.round(100 * doneN / steps.length) + "%" : "0";
+  }
+  function renderPresets() {
+    $("#ms-presets").innerHTML = M.PRESETS.map(function (p, i) { return '<button class="ms-chip" type="button" data-preset="' + i + '">' + esc(p.n) + "</button>"; }).join("");
+  }
+  function refresh(keepChoose) { P = M.plan(S, SCR); if (!keepChoose) renderChoose(); renderSteps(); save(); }
+
+  function copyText(text, btn) {
+    var done = function (ok) { if (btn) { var o = btn.textContent; btn.textContent = ok ? "Copied" : "Press ⌘C"; setTimeout(function () { btn.textContent = o; }, 1400); } };
+    var fallback = function () {
+      var ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand("copy"); } catch (e) {} document.body.removeChild(ta); done(ok);
+    };
+    try { navigator.clipboard.writeText(text).then(function () { done(true); }, fallback); } catch (e) { fallback(); }
+  }
+  function manual(s) { return s.badges.some(function (b) { return b.t === "Password" || b.t === "Opens a window" || b.t === "Browser login"; }); }
+  function allCommands() {
+    return "# Generated by Mac AI Dev Setup. Paste into Terminal (zsh) one step at a time.\n# Steps that need you are commented out: run those by hand in a normal Terminal window.\n\n" + P.steps.map(function (s, i) {
+      var body = manual(s) ? s.cmds.split("\n").map(function (l) { return "# " + l; }).join("\n") : s.cmds;
+      return "# ---- Step " + (i + 1) + ": " + s.title + (manual(s) ? "  (RUN BY HAND)" : "") + "\n" + body + "\n";
+    }).join("\n");
+  }
+  function planMarkdown() {
+    var head = "# Mac setup plan\n\nYou are helping set up a macOS developer machine. Work through the steps in order.\n\n- Run each command block, then its check. Stop and report if a check fails.\n- Steps marked MANUAL need the user: a Mac password, a dialog or a browser login. You cannot answer those prompts, so ask the user to run that step in a normal Terminal window and tell you when it is done.\n- Every block is safe to re-run. Do not overwrite existing files; the blocks already guard against it.\n- A failed package download can be a temporary network problem. Retry once before changing anything.\n\n";
+    return head + P.steps.map(function (s, i) {
+      var m = manual(s);
+      return "## Step " + (i + 1) + ": " + s.title + (m ? " (MANUAL)" : "") + "\n\n" + s.why + "\n\n```bash\n" + s.cmds + "\n```\n" + (s.verify ? "\nCheck:\n\n```bash\n" + s.verify + "\n```\n" : "") + (s.notes && s.notes.length ? "\nNotes:\n" + s.notes.map(function (n) { return "- " + n; }).join("\n") + "\n" : "");
+    }).join("\n");
+  }
+
+  document.addEventListener("click", function (e) {
+    var t = e.target;
+    if (t.matches("[data-copy]")) { var s = P.steps[+t.getAttribute("data-i")]; copyText(t.getAttribute("data-copy") === "c" ? s.cmds : s.verify, t); }
+    else if (t.matches("[data-preset]")) { var p = M.PRESETS[+t.getAttribute("data-preset")]; S.sel = {}; p.s.forEach(function (id) { S.sel[id] = true; }); refresh(); }
+    else if (t.id === "ms-copyall") copyText(allCommands(), t);
+    else if (t.id === "ms-copymd") copyText(planMarkdown(), t);
+    else if (t.id === "ms-scanbtn") scanTick();
+  });
+  document.addEventListener("change", function (e) {
+    var t = e.target;
+    if (t.matches("[data-tool]")) { S.sel[t.getAttribute("data-tool")] = t.checked; refresh(); }
+    else if (t.matches("[data-done]")) { S.done[t.getAttribute("data-done")] = t.checked; renderSteps(); save(); }
+    else if (t.matches("[data-field]")) { var id = t.getAttribute("data-field"); S.vals[id] = t.type === "checkbox" ? (t.checked ? "1" : "0") : t.value; refresh(id !== "mode"); }
+  });
+  document.addEventListener("input", function (e) {
+    var t = e.target;
+    if (t.matches("input[data-field], textarea[data-field]") && t.type !== "checkbox") { S.vals[t.getAttribute("data-field")] = t.value; P = M.plan(S, SCR); renderSteps(); save(); }
+  });
+
+  function scanTick() {
+    var txt = $("#ms-scanin").value, found = {}, missed = [];
+    txt.split("\n").forEach(function (l) { var m = l.match(/^\s*([a-z-]+)\s+\d+\s+repo/); if (m) found[m[1]] = true; });
+    var map = { node: "node", pnpm: "node", yarn: "node", python: "python", rust: "rust", java: "java", docker: "docker", ffmpeg: "ffmpeg", pandoc: "pandoc", latex: "latex", mermaid: "mermaid", kokoro: "kokoro", whisper: "whisper", qwen: "qwen", ollama: "ollama", "claude-skill": "ccskills" };
+    var n = 0; Object.keys(found).forEach(function (k) { if (map[k]) { S.sel[map[k]] = true; n++; } else if (["env-file", "mcp", "ml-heavy", "browser"].indexOf(k) < 0) missed.push(k); });
+    $("#ms-scanmsg").textContent = n ? ("Ticked " + n + " item" + (n > 1 ? "s" : "") + "." + (missed.length ? " Not covered here: " + missed.join(", ") + ". Install those with brew by hand." : "")) : "No tool lines found. Paste the part under “Tools needed”.";
+    refresh();
+  }
+
+  load();
+  if (!Object.keys(S.sel).length && !Object.keys(S.vals).length) { M.PRESETS[0].s.forEach(function (id) { S.sel[id] = true; }); }
+  renderPresets(); refresh();
+})();
+</script>
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
+
+</body>
+</html>
