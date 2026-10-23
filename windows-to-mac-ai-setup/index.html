@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moving an AI workstation from Windows to a Mac</title>
+<meta name="description" content="I moved about 80 repos and a local AI toolchain from Windows to a new Mac, then turned the notes into an interactive guide that says which commands were run.">
+<!-- SEO:HEAD -->
+<meta name="author" content="Anuj Sadani">
+<link rel="canonical" href="https://tech.anujsadani.in/windows-to-mac-ai-setup/">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tech.anujsadani.in/windows-to-mac-ai-setup/">
+<meta property="og:site_name" content="Anuj Sadani | Tech">
+<meta property="og:title" content="Moving an AI workstation from Windows to a Mac">
+<meta property="og:description" content="I moved about 80 repos and a local AI toolchain from Windows to a new Mac, then turned the notes into an interactive guide that says which commands were run.">
+<meta property="og:image" content="https://tech.anujsadani.in/assets/profile-pic.png">
+<meta property="article:published_time" content="2026-10-23">
+<meta property="article:author" content="Anuj Sadani">
+<meta name="twitter:card" content="summary_large_image">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://anujsadani.in/#person",
+      "name": "Anuj Sadani",
+      "givenName": "Anuj",
+      "familyName": "Sadani",
+      "url": "https://anujsadani.in/",
+      "image": "https://tech.anujsadani.in/assets/profile-pic.png",
+      "jobTitle": "Senior Vice President, GenAI Platform",
+      "description": "Anuj Sadani is Senior Vice President, GenAI Platform at Citi in Pune, India. He builds enterprise generative-AI systems -- RAG platforms, agentic workflows, and evaluation pipelines -- and leads the engineers who build them. He writes about AI engineering, infrastructure, and security, and is the author of The Clean Vibe Coder.",
+      "sameAs": [
+        "https://anujsadani.in/",
+        "https://tech.anujsadani.in/",
+        "https://github.com/asadani",
+        "https://linkedin.com/in/anujsadani",
+        "https://medium.com/@anuj.sadani",
+        "https://devpandaandvibedragon.substack.com/",
+        "https://ko-fi.com/anujsadani",
+        "https://www.amazon.com/stores/Anuj-Sadani/author/B0H34JHLSB",
+        "https://orcid.org/0009-0001-0124-3181"
+      ],
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Citi",
+        "url": "https://www.citigroup.com/"
+      },
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "Government College of Engineering, Amravati"
+      },
+      "homeLocation": {
+        "@type": "Place",
+        "name": "Pune, India"
+      },
+      "knowsAbout": [
+        "AI engineering",
+        "Retrieval-augmented generation",
+        "Agentic workflows",
+        "LLM evaluation",
+        "Intelligent document processing",
+        "Machine learning infrastructure",
+        "Software engineering leadership"
+      ],
+      "identifier": {
+        "@type": "PropertyValue",
+        "propertyID": "ORCID",
+        "value": "0009-0001-0124-3181"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Moving an AI workstation from Windows to a Mac",
+      "url": "https://tech.anujsadani.in/windows-to-mac-ai-setup/",
+      "mainEntityOfPage": "https://tech.anujsadani.in/windows-to-mac-ai-setup/",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://tech.anujsadani.in/#blog"
+      },
+      "author": {
+        "@id": "https://anujsadani.in/#person"
+      },
+      "publisher": {
+        "@id": "https://anujsadani.in/#person"
+      },
+      "description": "I moved about 80 repos and a local AI toolchain from Windows to a new Mac, then turned the notes into an interactive guide that says which commands were run.",
+      "datePublished": "2026-10-23",
+      "keywords": "ai-engineering"
+    }
+  ]
+}
+</script>
+<!-- /SEO:HEAD -->
+<!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/article.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">Anuj Sadani | Tech</a>
+  <div class="nav-right">
+    <span>Field note</span>
+    <span class="nav-tag">OCT 2026</span><!-- e.g. APR 2026 -->
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <span class="theme-icon-moon" aria-hidden="true">&#9790;</span><!-- ☾ shown in light mode -->
+      <span class="theme-icon-sun" aria-hidden="true">&#9728;</span><!-- ☀ shown in dark mode -->
+    </button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">Field note</div>
+    <h1>Moving an AI workstation from Windows to a Mac</h1>
+    <p class="hero-deck">A new Mac, about 80 repos, and one question: which of these projects needs which tool. The answer became an interactive guide.</p>
+    <div class="hero-meta">
+      <span>October 2026</span>
+      <span class="hero-meta-sep">/</span>
+      <span>Setup, short read</span>
+    </div>
+  </header>
+
+  <div class="section" id="problem">
+    <div class="section-label"><a href="#problem">01 · The problem</a></div>
+    <h2><a class="anchor" href="#problem">The repos came across. The tools did not.</a></h2>
+    <div class="prose">
+      <p>I moved to a new MacBook after years on Windows. Getting about 80 repositories onto it took one clone loop. Getting them to run took much longer, because a repo does not say which of Node, Python, Rust, Java, Docker, LaTeX, ffmpeg or a speech model it needs. You find out one failed command at a time.</p>
+      <p>So I stopped installing and started measuring. I wrote a scanner that reads the manifests in the cloned repos and reports what each one needs. It installs nothing. On my machine it found Python in 27 repos, Node in 17 (counting the pnpm ones) and Docker in 6, and it named the rest. I installed what the repos I use needed, one step at a time, with a check after each.</p>
+    </div>
+  </div>
+
+  <div class="section" id="lessons">
+    <div class="section-label"><a href="#lessons">02 · What was not obvious</a></div>
+    <h2><a class="anchor" href="#lessons">Three things I would have guessed wrong</a></h2>
+    <ul class="dl">
+      <li><strong>A coding agent cannot type your password, so the setup has to say which steps are yours.</strong> Homebrew casks such as BasicTeX run an installer with sudo, and an agent's shell has no terminal to ask. Those steps stay with you, and the plan should mark them.</li>
+      <li><strong>Guard every write.</strong> At one point my agent overwrote an AGENTS.md that Codex had written moments earlier, because it used a plain <code>cat &gt;</code>. I recovered the text from Codex's session log. Every file the guide writes now starts with a check that the file does not already exist.</li>
+      <li><strong>"Needs CUDA" often means "written for NVIDIA".</strong> A 0.6B voice-cloning model ran at 0.66 to 0.82 times real time on the Mac's GPU. On the CPU, a six-sentence test had not finished after 28 minutes. The repo hardcoded <code>cuda:0</code>. Adding an <code>mps</code> option took about twenty lines.</li>
+    </ul>
+    <div class="code-block">
+      <div class="cb-label">The pattern every write in the guide follows</div>
+      <pre>[ -f ~/.config/ghostty/config ] || cat &gt; ~/.config/ghostty/config &lt;&lt;'EOF'
+copy-on-select = clipboard
+EOF</pre>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-lbl">Try it</div>
+    <p>The guide is at <a href="/mac-ai-dev-setup/">tech.anujsadani.in/mac-ai-dev-setup</a>. Tick what your projects need and copy the plan, or paste your own scanner output to tick the boxes for you. Each step carries a label saying how it was verified: run on the Mac, tested in a scratch home folder, or a standard command that was not run here. The scripts and tests are in the site repository.</p>
+  </div>
+
+  <div class="section" id="limits">
+    <div class="section-label"><a href="#limits">03 · Limits</a></div>
+    <h2><a class="anchor" href="#limits">One machine, one measurement</a></h2>
+    <div class="prose">
+      <p>This is a short note from a single move. The Mac is an M5 Pro with 24 GB of memory, and the speeds above are one measurement on it, not a benchmark. The Homebrew, Claude Code and Docker installs in the guide are standard commands I did not re-run for it, and the guide says so on those steps.</p>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <span>asadani.tech / October 2026</span><!-- e.g. site name or published date -->
+  <div class="footer-refs">
+    <a href="/mac-ai-dev-setup/">The interactive guide</a>
+    <a href="/">&larr; back to index</a>
+  </div>
+</footer>
+
+<!-- Toggle wiring: flip data-theme on click and remember the choice. -->
+<script>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
+
+</body>
+</html>

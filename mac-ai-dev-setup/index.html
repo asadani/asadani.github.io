@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mac AI Dev Setup · Tick what you need, get the commands</title>
-<meta name="description" content="Tick the tools your projects need and get tested, ordered Terminal commands to set up a Mac for AI development: toolchains, local models, Claude Code, Codex, a shared notes vault, and a scanner that reads your cloned repos.">
+<meta name="description" content="Tick the tools your projects need and get tested, ordered Terminal commands to set up a Mac for AI work, plus a scanner that reads your cloned repos.">
+<!-- SEO:HEAD -->
 <meta name="author" content="Anuj Sadani">
 <link rel="canonical" href="https://tech.anujsadani.in/mac-ai-dev-setup/">
 
@@ -12,7 +13,7 @@
 <meta property="og:url" content="https://tech.anujsadani.in/mac-ai-dev-setup/">
 <meta property="og:site_name" content="Anuj Sadani | Tech">
 <meta property="og:title" content="Mac AI Dev Setup">
-<meta property="og:description" content="Tick the tools your projects need and get tested, ordered Terminal commands to set up a Mac for AI development: toolchains, local models, Claude Code, Codex, a shared notes vault, and a scanner that reads your cloned repos.">
+<meta property="og:description" content="Tick the tools your projects need and get tested, ordered Terminal commands to set up a Mac for AI work, plus a scanner that reads your cloned repos.">
 <meta property="og:image" content="https://tech.anujsadani.in/assets/profile-pic.png">
 <meta property="article:published_time" content="2026-10-23">
 <meta property="article:author" content="Anuj Sadani">
@@ -21,22 +22,79 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Mac AI Dev Setup",
-  "description": "Tick the tools your projects need and get tested, ordered Terminal commands to set up a Mac for AI development: toolchains, local models, Claude Code, Codex, a shared notes vault, and a scanner that reads your cloned repos.",
-  "datePublished": "2026-10-23",
-  "url": "https://tech.anujsadani.in/mac-ai-dev-setup/",
-  "mainEntityOfPage": "https://tech.anujsadani.in/mac-ai-dev-setup/",
-  "inLanguage": "en",
-  "isPartOf": { "@id": "https://tech.anujsadani.in/#blog" },
-  "author": {
-    "@type": "Person",
-    "@id": "https://anujsadani.in/#person",
-    "name": "Anuj Sadani",
-    "url": "https://anujsadani.in/"
-  }
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://anujsadani.in/#person",
+      "name": "Anuj Sadani",
+      "givenName": "Anuj",
+      "familyName": "Sadani",
+      "url": "https://anujsadani.in/",
+      "image": "https://tech.anujsadani.in/assets/profile-pic.png",
+      "jobTitle": "Senior Vice President, GenAI Platform",
+      "description": "Anuj Sadani is Senior Vice President, GenAI Platform at Citi in Pune, India. He builds enterprise generative-AI systems -- RAG platforms, agentic workflows, and evaluation pipelines -- and leads the engineers who build them. He writes about AI engineering, infrastructure, and security, and is the author of The Clean Vibe Coder.",
+      "sameAs": [
+        "https://anujsadani.in/",
+        "https://tech.anujsadani.in/",
+        "https://github.com/asadani",
+        "https://linkedin.com/in/anujsadani",
+        "https://medium.com/@anuj.sadani",
+        "https://devpandaandvibedragon.substack.com/",
+        "https://ko-fi.com/anujsadani",
+        "https://www.amazon.com/stores/Anuj-Sadani/author/B0H34JHLSB",
+        "https://orcid.org/0009-0001-0124-3181"
+      ],
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Citi",
+        "url": "https://www.citigroup.com/"
+      },
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "Government College of Engineering, Amravati"
+      },
+      "homeLocation": {
+        "@type": "Place",
+        "name": "Pune, India"
+      },
+      "knowsAbout": [
+        "AI engineering",
+        "Retrieval-augmented generation",
+        "Agentic workflows",
+        "LLM evaluation",
+        "Intelligent document processing",
+        "Machine learning infrastructure",
+        "Software engineering leadership"
+      ],
+      "identifier": {
+        "@type": "PropertyValue",
+        "propertyID": "ORCID",
+        "value": "0009-0001-0124-3181"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Mac AI Dev Setup",
+      "url": "https://tech.anujsadani.in/mac-ai-dev-setup/",
+      "mainEntityOfPage": "https://tech.anujsadani.in/mac-ai-dev-setup/",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://tech.anujsadani.in/#blog"
+      },
+      "author": {
+        "@id": "https://anujsadani.in/#person"
+      },
+      "publisher": {
+        "@id": "https://anujsadani.in/#person"
+      },
+      "description": "Tick the tools your projects need and get tested, ordered Terminal commands to set up a Mac for AI work, plus a scanner that reads your cloned repos.",
+      "datePublished": "2026-10-23",
+      "keywords": "tutorial, interactive"
+    }
+  ]
 }
 </script>
+<!-- /SEO:HEAD -->
 <!-- Set theme before first paint: saved choice wins, else OS preference. No flash. -->
 <script>
   (function () {
@@ -210,7 +268,7 @@
       <li><strong>macOS ships Python 3.9 for its own use.</strong> Install a current Python with Homebrew and give each project its own virtual environment, so nothing touches the system one.</li>
       <li><strong>npm 11 skips dependency install scripts.</strong> That is harmless for esbuild and fsevents, but puppeteer will not download its browser. Point it at Chrome instead.</li>
       <li><strong>BasicTeX is small on purpose.</strong> When a build says <code>File 'x.sty' not found</code>, run <code>tlmgr search --global --file x.sty</code> to find the package, then install it.</li>
-      <li><strong>“Needs CUDA” usually means “written for NVIDIA”.</strong> Apple’s GPU (device <code>mps</code>) ran a 0.6B voice model faster than real time, while CPU mode did not finish. The code often hardcodes <code>cuda</code> and needs one line changed.</li>
+      <li><strong>“Needs CUDA” usually means “written for NVIDIA”.</strong> Apple’s GPU (device <code>mps</code>) ran a 0.6B voice model faster than real time, while CPU mode did not finish. The code often hardcodes <code>cuda</code>, and the fix is usually a small edit.</li>
       <li><strong>One failed download is not a failed script.</strong> A flaky DNS lookup for a package host looks like an error in your setup. Wait a minute and re-run.</li>
       <li><strong>oh-my-zsh’s installer renames your .zshrc.</strong> Pass <code>KEEP_ZSHRC=yes</code>, and write your config first so the file it keeps is the right one.</li>
       <li><strong>Guard every file write with <code>[ -f file ] ||</code>.</strong> A shared notes folder can gain files from another agent while you work, and a plain <code>cat &gt;</code> will overwrite them.</li>

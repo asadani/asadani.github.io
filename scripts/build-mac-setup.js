@@ -47,7 +47,12 @@ function build() {
     if (!html.includes(`@@${key}@@`)) throw new Error(`Template is missing the @@${key}@@ slot`);
     html = html.replace(`@@${key}@@`, () => body);
   }
-  return html;
+  // Same managed head block (canonical, Open Graph, Person + BlogPosting JSON-LD) that
+  // scripts/seo.js writes into every other page, so a later seo.js run changes nothing.
+  const seo = require('./seo.js');
+  const res = seo.applyHead(html, seo.headBlock(entry, { needsDescription: false }), { refresh: true });
+  if (res.how === 'skipped' || res.how === 'no-title') throw new Error(`could not apply the SEO head block (${res.how})`);
+  return res.html;
 }
 
 if (require.main === module) {

@@ -1,5 +1,22 @@
 [
   {
+    "slug": "windows-to-mac-ai-setup",
+    "title": "Moving an AI workstation from Windows to a Mac",
+    "tags": [
+      "ai-engineering"
+    ],
+    "flavors": [
+      "agentic-coding",
+      "craft"
+    ],
+    "quote": "\"A coding agent cannot type your password, so the setup has to say which steps are yours.\"",
+    "desc": "I moved about 80 repos and a local AI toolchain from Windows to a new Mac, then turned the notes into an interactive guide that says which commands were run.",
+    "date": "2026-10-23",
+    "dateDisplay": "October 23, 2026",
+    "cta": "Read",
+    "shareUrl": "https://tech.anujsadani.in/windows-to-mac-ai-setup/"
+  },
+  {
     "slug": "mac-ai-dev-setup",
     "title": "Mac AI Dev Setup",
     "tags": [
@@ -11,7 +28,7 @@
       "agentic-coding"
     ],
     "quote": "\"A setup guide should say which commands were actually run.\"",
-    "desc": "Tick the tools your projects need and get tested, ordered Terminal commands to set up a Mac for AI development: toolchains, local models, Claude Code, Codex, a shared notes vault, and a scanner that reads your cloned repos.",
+    "desc": "Tick the tools your projects need and get tested, ordered Terminal commands to set up a Mac for AI work, plus a scanner that reads your cloned repos.",
     "date": "2026-10-23",
     "dateDisplay": "October 23, 2026",
     "cta": "Open the guide",
