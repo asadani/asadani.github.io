@@ -1,5 +1,25 @@
 [
   {
+    "slug": "ai-output-field-guide",
+    "title": "AI Output Field Guide",
+    "tags": [
+      "interactive",
+      "tutorial",
+      "ai-engineering"
+    ],
+    "flavors": [
+      "tutorial",
+      "craft"
+    ],
+    "quote": "“Choose the form. Understand the work.”",
+    "desc": "Explore 30 standards, frameworks, and methods for clearer AI output. Learn their history and purpose, try 90 short drills, and take practical templates into your own work.",
+    "date": "2026-10-25",
+    "dateDisplay": "October 25, 2026",
+    "cta": "Browse",
+    "shareUrl": "https://tech.anujsadani.in/ai-output-field-guide/",
+    "external": true
+  },
+  {
     "slug": "windows-to-mac-ai-setup",
     "title": "Moving an AI workstation from Windows to a Mac",
     "tags": [
