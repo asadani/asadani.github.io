@@ -1,5 +1,26 @@
 [
   {
+    "slug": "understanding-debias",
+    "title": "Beyond Similarity: A Guide to Embedding Debiasing",
+    "tags": [
+      "interactive",
+      "tutorial",
+      "ai-engineering"
+    ],
+    "flavors": [
+      "tutorial",
+      "models",
+      "research"
+    ],
+    "quote": "“Similarity is evidence, not a verdict.”",
+    "desc": "An interactive guide to embedding geometry, hubness, and score correction. Explore the concept map and score lab, then examine a frozen Qwen3 intent-assignment benchmark—including where correction lost.",
+    "date": "2026-10-30",
+    "dateDisplay": "October 30, 2026",
+    "cta": "Browse",
+    "shareUrl": "https://tech.anujsadani.in/understanding-debias/",
+    "external": true
+  },
+  {
     "slug": "ai-output-field-guide",
     "title": "AI Output Field Guide",
     "tags": [

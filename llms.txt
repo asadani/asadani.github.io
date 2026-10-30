@@ -8,6 +8,7 @@ Author profile: https://anujsadani.in
 
 ## Essays
 
+- [Beyond Similarity: A Guide to Embedding Debiasing](https://tech.anujsadani.in/understanding-debias/): An interactive guide to embedding geometry, hubness, and score correction. Explore the concept map and score lab, then examine a frozen Qwen3 intent-assignment benchmark—including where correction lost.
 - [AI Output Field Guide](https://tech.anujsadani.in/ai-output-field-guide/): Explore 30 standards, frameworks, and methods for clearer AI output. Learn their history and purpose, try 90 short drills, and take practical templates into your own work.
 - [Moving an AI workstation from Windows to a Mac](https://tech.anujsadani.in/windows-to-mac-ai-setup/): I moved about 80 repos and a local AI toolchain from Windows to a new Mac, then turned the notes into an interactive guide that says which commands were run.
 - [Mac AI Dev Setup](https://tech.anujsadani.in/mac-ai-dev-setup/): Tick the tools your projects need and get tested, ordered Terminal commands to set up a Mac for AI work, plus a scanner that reads your cloned repos.
