@@ -13,8 +13,8 @@ The verified render used `CUDAExecutionProvider` on an NVIDIA GTX 1650 with 4 GB
 To rerender from a checkout of `narrate-your-writing`, using its GPU environment:
 
 ```sh
-python narrate.py ../asadani.github.io/decision-firewall-building-and-narrowing/narration \
-  --out ../asadani.github.io/decision-firewall-building-and-narrowing/audio \
+python narrate.py ../../sites/asadani.github.io/decision-firewall-building-and-narrowing/narration \
+  --out ../../sites/asadani.github.io/decision-firewall-building-and-narrowing/audio \
   --engine kokoro --device cuda --voice bm_george+bm_fable --speed 0.9
 ```
 
