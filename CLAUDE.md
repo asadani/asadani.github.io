@@ -106,3 +106,9 @@ color-scheme: dark
 - `.data-table` — scrollable wrapper with striped hover. For controlled column widths use `<table class="fixed">` + a `<colgroup>` of `<col style="width:..%">` (fixed layout is what makes colgroup widths actually hold — auto layout ignores them). First `<td>` per row auto-bolds as the row label. Alignment helpers on `<th>` **and** its `<td>`s: `.center`, `.num` (right-aligned, tabular figures, no-wrap), `.nowrap`. Value classes: `.td-yes` (green), `.td-no` (red), `.td-mono` (mono accent).
 - `<footer>` — surface, border-top. Left: plain text. Right: links.
 - **Homepage article tagging:** maintain `tags` and `flavors` in `data/articles.json`, then run `node build.js`. The build generates each row's `data-tags`, `data-flavors`, visible flavor chips, and the flavor filter buttons. Buttons appear only for flavors used by at least three articles. Primary topic mappings live in `build.js` (`TOPICS`); homepage layout and client-side search/filter behavior live in `templates/index.template.html`. Topic + Flavor + search combine with AND. Do not edit generated rows or flavor buttons directly in `index.html`.
+
+---
+
+## Repo layout and registry
+
+Local repos are grouped by kind under `~/Projects/<owner>/<kind>/<repo>` (`books`, `papers`, `journals`, `products`, `tools`, `skills`, `tutorials`, `sites`). The registry lives in the private repo `project-registry` (`~/Projects/asadani/tools/project-registry/repos.json`, resolver `scripts/repo-path.sh <slug>`). It is deliberately not in this repo, because this site is public and the registry names private repos. Do not hardcode `~/Projects/...` paths in scripts or articles, and add a registry row when creating a new repo. Never rename a repo: books and tools are served at `tech.anujsadani.in/<slug>/`, so the repo name is the public URL.

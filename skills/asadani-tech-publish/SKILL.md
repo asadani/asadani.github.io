@@ -1,6 +1,6 @@
 ---
 name: asadani-tech-publish
-description: Turn a technical idea into a researched, challenged, site-ready article for tech.anujsadani.in using this repository's canonical design system and publishing workflow. Use for new essays, article rewrites, or preparing an article for publication. Do not publish, commit, push, or open a PR without explicit user approval.
+description: Turn a technical idea into a researched, challenged, site-ready article for tech.anujsadani.in using this repository's canonical design system and publishing workflow. Use for new essays, article rewrites, or preparing an article for publication. Can also prepare and schedule DEV.to and Medium copies of a live article (see references/syndication.md). Do not publish, commit, push, open a PR, or schedule a syndicated post without explicit user approval.
 ---
 
 # Asadani Tech Publish
@@ -136,6 +136,10 @@ Before any commit, push, merge, PR, or other remote mutation:
 - ask for explicit approval unless the user already explicitly instructed that exact publishing action.
 
 Prefer a branch + PR for substantial new articles when the user has not requested a direct commit to the default branch.
+
+### 10. Syndicate (optional, after the article is live)
+
+When asked to cross-post, follow `references/syndication.md`: `scripts/syndicate.py prepare <slug>`, review and edit the package, `schedule <slug> --dry-run`, then schedule on DEV.to only with approval. Medium is a manual hand-off, never automated.
 
 ## Definition of done
 
